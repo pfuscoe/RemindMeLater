@@ -1,4 +1,4 @@
-package com.bearworks.reminderbear.ui.main;
+package patrick.fuscoe.remindmelater.ui.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -11,7 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bearworks.reminderbear.R;
+import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ui.main.PageViewModel;
 
 /**
  * A placeholder fragment containing a simple view.

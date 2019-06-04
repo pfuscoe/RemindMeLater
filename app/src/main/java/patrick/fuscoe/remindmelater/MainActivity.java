@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        ViewPager viewPager = findViewById(R.id.view_main_viewpager);
         viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
+        TabLayout tabs = findViewById(R.id.view_main_tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
