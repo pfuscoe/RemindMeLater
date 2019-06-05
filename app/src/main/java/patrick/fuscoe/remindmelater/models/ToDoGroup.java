@@ -26,7 +26,7 @@ public class ToDoGroup {
     }
 
 
-    public void addItem(ToDoItem toDoItem)
+    public void addToDoItem(ToDoItem toDoItem)
     {
         toDoItems.add(toDoItem);
         totalItems++;
@@ -37,7 +37,7 @@ public class ToDoGroup {
         }
     }
 
-    /* Getters */
+    /** Getters **/
     public String getTitle() {
         return title;
     }
@@ -63,7 +63,7 @@ public class ToDoGroup {
     }
 
 
-    /* Setters */
+    /** Setters **/
     public void setTitle(String title) {
         this.title = title;
     }
