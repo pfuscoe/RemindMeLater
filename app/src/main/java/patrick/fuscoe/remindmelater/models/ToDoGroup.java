@@ -13,6 +13,10 @@ public class ToDoGroup {
     private ArrayList<ToDoItem> toDoItems;
 
 
+    public ToDoGroup() {
+
+    }
+
     public ToDoGroup(String title, String iconName, boolean shared)
     {
         this.title = title;

@@ -13,6 +13,10 @@ public class HistoryItem {
     public static final String DISMISS = "Dismiss";
 
 
+    public HistoryItem() {
+
+    }
+
     public HistoryItem(Date dateOfAction, String actionTaken)
     {
         this.dateOfAction = dateOfAction;

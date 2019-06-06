@@ -12,6 +12,10 @@ public class Recurrance {
     private static final String YEARS = "Years";
 
 
+    public Recurrance() {
+
+    }
+
     public Recurrance(int recurValue, String recurType)
     {
         this.recurValue = recurValue;

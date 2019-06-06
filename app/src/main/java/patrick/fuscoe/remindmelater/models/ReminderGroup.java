@@ -13,6 +13,10 @@ public class ReminderGroup {
     private ArrayList<ReminderItem> reminderItems;
 
 
+    public ReminderGroup() {
+
+    }
+
     public ReminderGroup(String title, String iconName)
     {
         this.title = title;

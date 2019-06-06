@@ -21,6 +21,10 @@ public class ReminderItem {
     private ArrayList<HistoryItem> historyItems;
 
 
+    public ReminderItem() {
+
+    }
+
     public ReminderItem(String itemName, int daysAway, Recurrance recurrance, Date nextOccurance, String description)
     {
         this.itemName = itemName;

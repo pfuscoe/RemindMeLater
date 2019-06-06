@@ -6,6 +6,10 @@ public class ToDoItem {
     private int priority;
 
 
+    public ToDoItem() {
+
+    }
+
     public ToDoItem(String itemName, int priority)
     {
         this.itemName = itemName;
