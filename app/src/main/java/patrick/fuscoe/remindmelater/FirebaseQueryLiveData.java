@@ -1,52 +1,71 @@
 package patrick.fuscoe.remindmelater;
 
 import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import android.os.Handler;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
+import javax.annotation.Nullable;
 
-    private static final String LOG_TAG = "FirebaseQueryLiveData";
+public class FirebaseQueryLiveData extends LiveData<QuerySnapshot> {
+    public static final String TAG = "FbaseQueryLiveData";
 
-    private final Query query;
+    private Query query;
     private final MyValueEventListener listener = new MyValueEventListener();
+    private ListenerRegistration listenerRegistration;
+
+    private boolean listenerRemovePending = false;
+    private final Handler handler = new Handler();
 
     public FirebaseQueryLiveData(Query query) {
         this.query = query;
     }
 
-    public FirebaseQueryLiveData(DatabaseReference ref) {
-        this.query = ref;
-    }
+    private final Runnable removeListener = new Runnable() {
+        @Override
+        public void run() {
+            listenerRegistration.remove();
+            listenerRemovePending = false;
+        }
+    };
 
     @Override
     protected void onActive() {
-        Log.d(LOG_TAG, "onActive");
-        query.addValueEventListener(listener);
+        super.onActive();
+
+        Log.d(TAG, "onActive");
+        if (listenerRemovePending) {
+            handler.removeCallbacks(removeListener);
+        }
+        else {
+            listenerRegistration = query.addSnapshotListener(listener);
+        }
+        listenerRemovePending = false;
     }
 
     @Override
     protected void onInactive() {
-        Log.d(LOG_TAG, "onInactive");
-        query.removeEventListener(listener);
+        super.onInactive();
+
+        Log.d(TAG, "onInactive: ");
+        // Listener removal is schedule on a two second delay
+        handler.postDelayed(removeListener, 2000);
+        listenerRemovePending = true;
     }
 
-    private class MyValueEventListener implements ValueEventListener {
+    private class MyValueEventListener implements EventListener<QuerySnapshot> {
         @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot);
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.e(LOG_TAG, "Can't listen to query " + query, databaseError.toException());
+        public void onEvent(@Nullable QuerySnapshot querySnapshot, @Nullable FirebaseFirestoreException e) {
+            if (e != null){
+                Log.e(TAG, "Can't listen to query snapshots: " + querySnapshot + ":::" + e.getMessage());
+                return;
+            }
+            setValue(querySnapshot);
         }
     }
-
 }
