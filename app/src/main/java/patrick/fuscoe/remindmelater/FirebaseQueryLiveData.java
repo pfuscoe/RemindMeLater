@@ -13,7 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import javax.annotation.Nullable;
 
 public class FirebaseQueryLiveData extends LiveData<QuerySnapshot> {
-    public static final String TAG = "FbaseQueryLiveData";
+    public static final String TAG = "FirebaseQueryLiveData";
 
     private Query query;
     private final MyValueEventListener listener = new MyValueEventListener();
