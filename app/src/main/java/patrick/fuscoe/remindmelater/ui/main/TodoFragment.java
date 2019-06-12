@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater.ui.main;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.firebase.firestore.QuerySnapshot;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ui.main.PageViewModel;
@@ -55,5 +58,25 @@ public class TodoFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ToDoGroupViewModel viewModel = ViewModelProviders.of(this).get(ToDoGroupViewModel.class);
+
+        LiveData<QuerySnapshot> liveData = viewModel.getQuerySnapshotLiveData();
+
+        liveData.observe(getViewLifecycleOwner(), new Observer<QuerySnapshot>() {
+            @Override
+            public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots != null)
+                {
+                    // TODO: Update UI with values from the snapshot
+                }
+            }
+        });
+
     }
 }
