@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Reminder Bear</string>
+    <string name="app_name">Remind Me Later</string>
     <string name="tab_todo">To Do</string>
     <string name="tab_reminder">Reminders</string>
     <string name="sign_in_cancelled">Sign In Cancelled</string>
