@@ -122,9 +122,14 @@ public class ToDoFragment extends Fragment {
                     // This probably means converting data from snapshot form
                     // into list of ToDoGroups then update data display
 
+                    UpdateToDoGroupsDisplay();
                 }
             }
         });
 
     }
+
+    // TODO: Commit changes in onPause method
+    // i.e. add, delete, unsubscribe, reorder or any changes to icon & title
+
 }
