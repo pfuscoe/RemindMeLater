@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import patrick.fuscoe.remindmelater.R;
-import patrick.fuscoe.remindmelater.ui.main.PageViewModel;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -24,7 +23,7 @@ public class ToDoFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private ToDoGroupViewModel toDoGroupViewModel;
+    private ToDoGroupsViewModel toDoGroupsViewModel;
 
     public static ToDoFragment newInstance(int index) {
         ToDoFragment fragment = new ToDoFragment();
@@ -54,9 +53,9 @@ public class ToDoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        toDoGroupViewModel = ViewModelProviders.of(this).get(ToDoGroupViewModel.class);
+        toDoGroupsViewModel = ViewModelProviders.of(this).get(ToDoGroupsViewModel.class);
 
-        LiveData<QuerySnapshot> liveData = toDoGroupViewModel.getQuerySnapshotLiveData();
+        LiveData<QuerySnapshot> liveData = toDoGroupsViewModel.getQuerySnapshotLiveData();
 
         liveData.observe(getViewLifecycleOwner(), new Observer<QuerySnapshot>() {
             @Override
