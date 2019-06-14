@@ -118,10 +118,12 @@ public class ToDoFragment extends Fragment {
             public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots != null)
                 {
-                    // TODO: Update UI views with values from the snapshot
+                    // Update UI views with values from the snapshot
                     // This probably means converting data from snapshot form
                     // into list of ToDoGroups then update data display
 
+                    toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
+                    UpdateToDoGroupsDisplay();
                 }
             }
         });

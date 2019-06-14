@@ -10,6 +10,8 @@ public class ToDoGroup {
     private int numPriorityOneItems;
     private int totalItems;
 
+    private String[] subscribers;
+
     private ArrayList<ToDoItem> toDoItemArrayList;
     private ToDoItem[] toDoItems;
 
@@ -67,6 +69,10 @@ public class ToDoGroup {
 
     public int getTotalItems() {
         return totalItems;
+    }
+
+    public String[] getSubscribers() {
+        return subscribers;
     }
 
     public ArrayList<ToDoItem> getToDoItemArrayList() {
