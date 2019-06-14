@@ -42,6 +42,12 @@ public class ToDoGroup {
         }
     }
 
+    public void saveToDoItemArray()
+    {
+        ToDoItem[] toDoItemArray = new ToDoItem[toDoItemArrayList.size()];
+        toDoItems = toDoItemArrayList.toArray(toDoItemArray);
+    }
+
     /** Getters **/
     public String getTitle() {
         return title;
