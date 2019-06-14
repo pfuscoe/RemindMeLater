@@ -127,6 +127,8 @@ public class ToDoFragment extends Fragment {
                 }
             }
         });
-
     }
+
+    // TODO: Override onPause() to write data to cloud
+
 }
