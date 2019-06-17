@@ -3,8 +3,6 @@ package patrick.fuscoe.remindmelater.ui.main;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,11 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
@@ -120,12 +116,23 @@ public class ToDoFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_main_user_settings :
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_add:
+                addToDoGroup();
+
+            case R.id.menu_main_user_settings:
                 Log.d(TAG, "- Menu item selected: " + item.getItemId());
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void addToDoGroup()
+    {
+        Log.d(TAG, "- Add Button pressed");
+
+        
     }
 
     @Override

@@ -2,6 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.csci571.pfcs571hw9.MainActivity">
+
+    <item
+        android:id="@+id/menu_main_add"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_menu_add"
+        android:title="Add Button" />
+
     <item
         android:id="@+id/menu_main_user_settings"
         android:orderInCategory="100"
