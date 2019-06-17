@@ -1,18 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.csci571.pfcs571hw9.MainActivity">
+    tools:context="patrick.fuscoe.remindmelater.MainActivity">
 
     <item
         android:id="@+id/menu_main_add"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_menu_add"
-        android:title="Add Button" />
+        android:orderInCategory="100"
+        android:title="Add Button"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_main_user_settings"
         android:orderInCategory="100"
         android:title="@string/menu_main_user_settings"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
 </menu>
