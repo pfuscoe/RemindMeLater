@@ -10,7 +10,10 @@ public class ToDoGroup {
     private int numPriorityOneItems;
     private int totalItems;
 
-    private ArrayList<ToDoItem> toDoItems;
+    private String[] subscribers;
+
+    private ArrayList<ToDoItem> toDoItemArrayList;
+    private ToDoItem[] toDoItems;
 
 
     public ToDoGroup() {
@@ -26,19 +29,25 @@ public class ToDoGroup {
         this.numPriorityOneItems = 0;
         this.totalItems = 0;
 
-        this.toDoItems = new ArrayList<>();
+        this.toDoItemArrayList = new ArrayList<>();
     }
 
 
     public void addToDoItem(ToDoItem toDoItem)
     {
-        toDoItems.add(toDoItem);
+        toDoItemArrayList.add(toDoItem);
         totalItems++;
 
         if (toDoItem.getPriority() == 1)
         {
             numPriorityOneItems++;
         }
+    }
+
+    public void saveToDoItemArray()
+    {
+        ToDoItem[] toDoItemArray = new ToDoItem[toDoItemArrayList.size()];
+        toDoItems = toDoItemArrayList.toArray(toDoItemArray);
     }
 
     /** Getters **/
@@ -62,10 +71,18 @@ public class ToDoGroup {
         return totalItems;
     }
 
-    public ArrayList<ToDoItem> getToDoItems() {
-        return toDoItems;
+    public String[] getSubscribers() {
+        return subscribers;
     }
 
+    public ArrayList<ToDoItem> getToDoItemArrayList() {
+        return toDoItemArrayList;
+    }
+
+    public ToDoItem[] getToDoItems()
+    {
+        return toDoItems;
+    }
 
     /** Setters **/
     public void setTitle(String title) {
