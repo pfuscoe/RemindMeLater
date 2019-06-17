@@ -123,6 +123,7 @@ public class ToDoFragment extends Fragment {
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, "- Menu item selected: " + item.getItemId());
+
             default:
                 return super.onOptionsItemSelected(item);
         }
