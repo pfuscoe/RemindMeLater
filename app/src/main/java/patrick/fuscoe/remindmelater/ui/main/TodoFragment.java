@@ -11,7 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -84,6 +88,9 @@ public class ToDoFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_to_do_groups, container, false);
 
+        // Setup Toolbar
+        setHasOptionsMenu(true);
+
         // Setup RecyclerView
         toDoGroupsRecyclerView = root.findViewById(R.id.view_to_do_groups_recycler);
         toDoGroupsRecyclerView.setHasFixedSize(true);
@@ -103,6 +110,22 @@ public class ToDoFragment extends Fragment {
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
 
         toDoGroupsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main_user_settings :
+                Log.d(TAG, "- Menu item selected: " + item.getItemId());
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
