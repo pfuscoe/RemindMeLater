@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
@@ -76,6 +77,7 @@ public class ToDoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        toDoGroupList = new ArrayList<>();
     }
 
     @Override
@@ -98,6 +100,30 @@ public class ToDoFragment extends Fragment {
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
 
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        toDoGroupsViewModel = ViewModelProviders.of(this).get(ToDoGroupsViewModel.class);
+
+        LiveData<QuerySnapshot> liveData = toDoGroupsViewModel.getQuerySnapshotLiveData();
+
+        liveData.observe(getViewLifecycleOwner(), new Observer<QuerySnapshot>() {
+            @Override
+            public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots != null)
+                {
+                    // Update UI views with values from the snapshot
+                    // This probably means converting data from snapshot form
+                    // into list of ToDoGroups then update data display
+
+                    toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
+                    UpdateToDoGroupsDisplay();
+                }
+            }
+        });
     }
 
     public void UpdateToDoGroupsDisplay()
@@ -134,30 +160,6 @@ public class ToDoFragment extends Fragment {
         Log.d(TAG, "- Add Button pressed");
 
 
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        toDoGroupsViewModel = ViewModelProviders.of(this).get(ToDoGroupsViewModel.class);
-
-        LiveData<QuerySnapshot> liveData = toDoGroupsViewModel.getQuerySnapshotLiveData();
-
-        liveData.observe(getViewLifecycleOwner(), new Observer<QuerySnapshot>() {
-            @Override
-            public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
-                if (queryDocumentSnapshots != null)
-                {
-                    // Update UI views with values from the snapshot
-                    // This probably means converting data from snapshot form
-                    // into list of ToDoGroups then update data display
-
-                    toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
-                    UpdateToDoGroupsDisplay();
-                }
-            }
-        });
     }
 
     // TODO: Override onPause() to write data to cloud
