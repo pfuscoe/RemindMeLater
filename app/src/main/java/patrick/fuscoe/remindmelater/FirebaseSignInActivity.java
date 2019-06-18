@@ -17,7 +17,7 @@ import java.util.List;
 public class FirebaseSignInActivity extends AppCompatActivity {
 
     public static final String TAG = "Firebase Sign In Activity";
-    private static final int RC_SIGN_IN = 82953;
+    private static final int RC_SIGN_IN = 223;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
