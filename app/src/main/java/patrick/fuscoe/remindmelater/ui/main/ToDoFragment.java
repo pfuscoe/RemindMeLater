@@ -133,7 +133,7 @@ public class ToDoFragment extends Fragment {
     {
         Log.d(TAG, "- Add Button pressed");
 
-        
+
     }
 
     @Override
