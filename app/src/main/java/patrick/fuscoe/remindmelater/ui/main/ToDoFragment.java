@@ -31,7 +31,7 @@ public class ToDoFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static final String TAG = "ToDoFragment";
+    public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
