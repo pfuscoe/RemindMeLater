@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="patrick.fuscoe.remindmelater.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout_main"
@@ -21,6 +21,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name" />
 
+        <!--
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -31,6 +32,7 @@
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             android:textColor="@android:color/white" />
+            -->
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
