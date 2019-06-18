@@ -47,6 +47,8 @@ public class ToDoFragment extends Fragment {
         @Override
         public void toDoGroupClicked(View v, int position) {
 
+            Log.d(TAG, "- To Do Group " + position + " clicked");
+
             // TODO: Setup ToDoGroup click action
 
             /*

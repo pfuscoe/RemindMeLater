@@ -20,10 +20,10 @@ public class ToDoGroupsViewModel extends ViewModel {
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
     private static final String userID = auth.getCurrentUser().getUid();
 
-    private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final CollectionReference toDoGroups = db.collection("toDoGroups");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference toDoGroups = db.collection("todogroups");
 
-    private static final Query toDoGroupsQuery = toDoGroups.whereArrayContains("subscriptions", userID);
+    private final Query toDoGroupsQuery = toDoGroups.whereArrayContains("subscriptions", userID);
 
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(toDoGroupsQuery);
 
