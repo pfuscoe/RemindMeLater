@@ -122,6 +122,7 @@ public class ToDoFragment extends Fragment {
                     // into list of ToDoGroups then update data display
 
                     toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
+                    Log.d(TAG, "- toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
                 }
             }
