@@ -1,6 +1,8 @@
 package patrick.fuscoe.remindmelater.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ToDoGroup {
 
@@ -13,14 +15,15 @@ public class ToDoGroup {
     private String[] subscribers;
 
     private ArrayList<ToDoItem> toDoItemArrayList;
-    private ToDoItem[] toDoItems;
+    private Map<String, Object> toDoItems;
+    private ToDoItem[] toDoItemsArray;
 
 
     public ToDoGroup() {
 
     }
 
-    public ToDoGroup(String title, String iconName, boolean shared)
+    public ToDoGroup(String title, String iconName, boolean shared, String userId)
     {
         this.title = title;
         this.iconName = iconName;
@@ -30,7 +33,10 @@ public class ToDoGroup {
         this.numPriorityOneItems = 0;
         this.totalItems = 0;
 
+        this.subscribers = new String[]{userId};
+
         this.toDoItemArrayList = new ArrayList<>();
+        this.toDoItems = new HashMap<>();
     }
 
 
@@ -45,11 +51,26 @@ public class ToDoGroup {
         }
     }
 
+    public void saveToDoItems()
+    {
+        Map<String, Object> toDoItemsTemp = new HashMap<>();
+
+        for (int i = 0; i < toDoItemArrayList.size(); i++)
+        {
+            ToDoItem item = toDoItemArrayList.get(i);
+            toDoItemsTemp.put(item.getItemName(), item.getPriority());
+        }
+
+        toDoItems = toDoItemsTemp;
+    }
+
+    /*
     public void saveToDoItemArray()
     {
         ToDoItem[] toDoItemArray = new ToDoItem[toDoItemArrayList.size()];
         toDoItems = toDoItemArrayList.toArray(toDoItemArray);
     }
+    */
 
     /** Getters **/
     public String getTitle() {
@@ -80,8 +101,12 @@ public class ToDoGroup {
         return toDoItemArrayList;
     }
 
-    public ToDoItem[] getToDoItems()
+    public ToDoItem[] getToDoItemsArray()
     {
+        return toDoItemsArray;
+    }
+
+    public Map<String, Object> getToDoItems() {
         return toDoItems;
     }
 

@@ -22,9 +22,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +42,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
+
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -168,7 +172,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void addToDoGroup(String title)
     {
-        ToDoGroup toDoGroup = new ToDoGroup(title, "default", false);
+        ToDoGroup toDoGroup = new ToDoGroup(title, "default", false, auth.getUid());
 
         buildToDoGroupDoc(toDoGroup);
 
@@ -178,9 +182,17 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
     {
-        // TODO: build to do group doc
+        Map<String, Object> toDoGroupDoc = new HashMap<>();
+        toDoGroupDoc.put("title", toDoGroup.getTitle());
+        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
+        toDoGroupDoc.put("shared", toDoGroup.isShared());
+        toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
+        toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
+        toDoGroupDoc.put("subscribers", toDoGroup.getSubscribers());
 
-        return null;
+        toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+
+        return toDoGroupDoc;
     }
 
     // TODO: Override onPause() to write data to cloud
