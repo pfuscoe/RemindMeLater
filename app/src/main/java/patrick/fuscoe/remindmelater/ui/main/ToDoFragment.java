@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
@@ -169,8 +170,17 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     {
         ToDoGroup toDoGroup = new ToDoGroup(title, "default", false);
 
+        buildToDoGroupDoc(toDoGroup);
+
         Log.d(TAG, "- To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group added: " + title, Toast.LENGTH_LONG).show();
+    }
+
+    private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
+    {
+        // TODO: build to do group doc
+
+        return null;
     }
 
     // TODO: Override onPause() to write data to cloud
