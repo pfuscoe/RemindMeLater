@@ -22,7 +22,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -43,7 +48,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
 
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -174,7 +181,21 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     {
         ToDoGroup toDoGroup = new ToDoGroup(title, "default", false, auth.getUid());
 
-        buildToDoGroupDoc(toDoGroup);
+        Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+
+        toDoGroupsCollectionRef.add(toDoGroupDoc)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
         Log.d(TAG, "- To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group added: " + title, Toast.LENGTH_LONG).show();
