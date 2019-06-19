@@ -24,6 +24,7 @@ public class ToDoGroup {
     {
         this.title = title;
         this.iconName = iconName;
+
         this.shared = shared;
 
         this.numPriorityOneItems = 0;

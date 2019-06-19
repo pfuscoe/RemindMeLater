@@ -167,9 +167,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void addToDoGroup(String title)
     {
-        Log.d(TAG, "- Add Button pressed");
+        ToDoGroup toDoGroup = new ToDoGroup(title, "default", false);
 
-
+        Log.d(TAG, "- To Do Group " + title + " added");
+        Toast.makeText(getContext(), "To Do Group added: " + title, Toast.LENGTH_LONG).show();
     }
 
     // TODO: Override onPause() to write data to cloud
