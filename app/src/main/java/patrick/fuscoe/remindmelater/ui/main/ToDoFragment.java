@@ -1,12 +1,15 @@
 package patrick.fuscoe.remindmelater.ui.main;
 
+import android.app.Dialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -24,11 +29,12 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
+import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ToDoFragment extends Fragment {
+public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -148,7 +154,8 @@ public class ToDoFragment extends Fragment {
         switch (item.getItemId())
         {
             case R.id.menu_main_add:
-                addToDoGroup();
+                Log.d(TAG, "- Add Button pressed");
+                showAddToDoGroupDialog();
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, "- Menu item selected: " + item.getItemId());
@@ -158,7 +165,7 @@ public class ToDoFragment extends Fragment {
         }
     }
 
-    private void addToDoGroup()
+    private void addToDoGroup(String title)
     {
         Log.d(TAG, "- Add Button pressed");
 
@@ -166,5 +173,28 @@ public class ToDoFragment extends Fragment {
     }
 
     // TODO: Override onPause() to write data to cloud
+
+
+    public void showAddToDoGroupDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new AddToDoGroupDialogFragment();
+        dialog.show(getChildFragmentManager(), AddToDoGroupDialogFragment.TAG);
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the AddToDoGroupDialogFragment.AddToDoGroupDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Dialog dialogView = dialog.getDialog();
+        EditText viewAddToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
+        String newTitle = viewAddToDoGroupTitle.getText().toString();
+        addToDoGroup(newTitle);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Toast.makeText(getContext(), "Add To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+    }
 
 }

@@ -13,6 +13,7 @@ import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
 public class AddToDoGroupDialogFragment extends DialogFragment {
 
+    public static final String TAG = "patrick.fuscoe.remindmelater.AddToDoGroupDialogFragment";
 
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
@@ -36,10 +37,9 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(ToDoFragment.TAG
-                    + " must implement NoticeDialogListener");
+                    + " must implement AddToDoGroupDialogListener");
         }
     }
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -54,8 +54,7 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // TODO: Get title from EditText and call onDialogPositiveClick
-
+                        listener.onDialogPositiveClick(AddToDoGroupDialogFragment.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
