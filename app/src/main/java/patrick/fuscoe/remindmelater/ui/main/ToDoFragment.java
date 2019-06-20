@@ -139,7 +139,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     // This probably means converting data from snapshot form
                     // into list of ToDoGroups then update data display
 
+                    // TODO: replace below with loop - or restructure queries to reduce reads
                     toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
+
                     Log.d(TAG, "- toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
                 }

@@ -59,7 +59,8 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        AddToDoGroupDialogFragment.this.getDialog().cancel();
+                        listener.onDialogNegativeClick(AddToDoGroupDialogFragment.this);
+                        //AddToDoGroupDialogFragment.this.getDialog().cancel();
                     }
                 });
         return builder.create();
