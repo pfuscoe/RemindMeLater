@@ -1,6 +1,7 @@
 package patrick.fuscoe.remindmelater.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,16 +28,37 @@ public class ToDoGroup {
     {
         this.title = title;
         this.iconName = iconName;
-
         this.shared = shared;
-
         this.numPriorityOneItems = 0;
         this.totalItems = 0;
-
         this.subscribers = new String[]{userId};
 
         this.toDoItemArrayList = new ArrayList<>();
         this.toDoItems = new HashMap<>();
+    }
+
+    public ToDoGroup(String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
+    {
+        this.title = title;
+        this.iconName = iconName;
+        this.shared = shared;
+        this.numPriorityOneItems = numPriorityOneItems;
+        this.subscribers = subscribers;
+        this.toDoItems = toDoItems;
+
+        this.totalItems = toDoItems.size();
+
+        this.toDoItemArrayList = new ArrayList<>();
+
+        for (Map.Entry<String, Object> entry : toDoItems.entrySet())
+        {
+            ToDoItem item = new ToDoItem(entry.getKey(), (int) entry.getValue());
+            toDoItemArrayList.add(item);
+        }
+
+        Collections.sort(toDoItemArrayList);
+
+        // could add cleared item storage to more easily re-add done items
     }
 
 

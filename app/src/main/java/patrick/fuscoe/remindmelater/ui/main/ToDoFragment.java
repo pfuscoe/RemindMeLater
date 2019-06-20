@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -140,7 +141,14 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     // into list of ToDoGroups then update data display
 
                     // TODO: replace below with loop - or restructure queries to reduce reads
-                    toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
+                    //toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
+
+                    List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                    {
+                        
+                    }
+
 
                     Log.d(TAG, "- toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
