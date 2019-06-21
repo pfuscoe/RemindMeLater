@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ToDoGroup {
 
+    private String id;
     private String title;
     private String iconName;
     private boolean shared;
@@ -39,6 +40,7 @@ public class ToDoGroup {
 
     public ToDoGroup(String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
     {
+        this.id = id;
         this.title = title;
         this.iconName = iconName;
         this.shared = shared;
@@ -132,6 +134,10 @@ public class ToDoGroup {
         return toDoItems;
     }
 
+    public String getId() {
+        return id;
+    }
+
     /** Setters **/
     public void setTitle(String title) {
         this.title = title;
@@ -151,5 +157,9 @@ public class ToDoGroup {
 
     public void setTotalItems(int totalItems) {
         this.totalItems = totalItems;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

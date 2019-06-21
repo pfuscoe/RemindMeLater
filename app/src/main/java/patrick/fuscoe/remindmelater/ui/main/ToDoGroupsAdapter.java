@@ -73,7 +73,11 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        // TODO: Load data into views
+        ToDoGroup toDoGroup = toDoGroupList.get(position);
+
+        holder.viewToDoGroupTitle.setText(toDoGroup.getTitle());
+
+        // TODO: Load icons and numbers
     }
 
     // Return the size of your dataset (invoked by the layout manager)

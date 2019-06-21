@@ -67,7 +67,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         @Override
         public void toDoGroupClicked(View v, int position) {
 
-            Log.d(TAG, "- To Do Group " + position + " clicked");
+            Log.d(TAG, ": To Do Group " + position + " clicked");
 
             // TODO: Setup ToDoGroup click action
 
@@ -141,26 +141,27 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     // This probably means converting data from snapshot form
                     // into list of ToDoGroups then update data display
 
-                    // TODO: replace below with loop - or restructure queries to reduce reads
-                    //toDoGroupList = queryDocumentSnapshots.toObjects(ToDoGroup.class);
-
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
+
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
                     {
                         String id = doc.getId();
                         String title = doc.getString("title");
                         String iconName = doc.getString("iconName");
+                        //if (doc.getBoolean("shared") != null)
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
                         int totalItems = doc.get("totalItems", int.class);
                         String[] subscribers = doc.get("subscribers", String[].class);
                         Map<String, Object> toDoItems = doc.get("toDoItems", Map.class);
 
-                        //ToDoItem toDoItem = ToDoItem()
+                        ToDoGroup toDoGroup = new ToDoGroup(title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
+                        toDoGroupDocs.add(toDoGroup);
                     }
 
+                    toDoGroupList = toDoGroupDocs;
 
-                    Log.d(TAG, "- toDoGroupList size: " + toDoGroupList.size());
+                    Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
                 }
             }
@@ -186,11 +187,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         switch (item.getItemId())
         {
             case R.id.menu_main_add:
-                Log.d(TAG, "- Add Button pressed");
+                Log.d(TAG, ": Add Button pressed");
                 showAddToDoGroupDialog();
 
             case R.id.menu_main_user_settings:
-                Log.d(TAG, "- Menu item selected: " + item.getItemId());
+                Log.d(TAG, ": Menu item selected: " + item.getItemId());
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -199,7 +200,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void addToDoGroup(String title)
     {
-        ToDoGroup toDoGroup = new ToDoGroup(title, "default", false, auth.getUid());
+        final ToDoGroup toDoGroup = new ToDoGroup(title, "default", false, auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
 
@@ -207,17 +208,18 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "- DocumentSnapshot written with ID: " + documentReference.getId());
+                        toDoGroup.setId(documentReference.getId());
+                        Log.d(TAG, ": DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "- Error adding document", e);
+                        Log.w(TAG, ": Error adding document", e);
                     }
                 });
 
-        Log.d(TAG, "- To Do Group " + title + " added");
+        Log.d(TAG, ": To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group added: " + title, Toast.LENGTH_LONG).show();
     }
 
