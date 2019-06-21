@@ -38,6 +38,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
+import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 
 /**
@@ -146,7 +147,16 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
                     {
-                        
+                        String id = doc.getId();
+                        String title = doc.getString("title");
+                        String iconName = doc.getString("iconName");
+                        boolean shared = doc.getBoolean("shared");
+                        int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
+                        int totalItems = doc.get("totalItems", int.class);
+                        String[] subscribers = doc.get("subscribers", String[].class);
+                        Map<String, Object> toDoItems = doc.get("toDoItems", Map.class);
+
+                        //ToDoItem toDoItem = ToDoItem()
                     }
 
 
