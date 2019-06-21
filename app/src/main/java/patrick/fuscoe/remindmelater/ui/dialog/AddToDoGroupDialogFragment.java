@@ -33,7 +33,8 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the AddToDoGroupDialogListener so we can send events to the host
-            listener = (AddToDoGroupDialogListener) context;
+            //listener = (AddToDoGroupDialogListener) context;
+            listener = (AddToDoGroupDialogListener) getTargetFragment();
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(ToDoFragment.TAG

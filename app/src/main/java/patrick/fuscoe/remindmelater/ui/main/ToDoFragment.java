@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -243,8 +244,12 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public void showAddToDoGroupDialog() {
         // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = new AddToDoGroupDialogFragment();
-        dialog.show(getChildFragmentManager(), AddToDoGroupDialogFragment.TAG);
+        FragmentManager fm = getFragmentManager();
+        AddToDoGroupDialogFragment dialogFrag = new AddToDoGroupDialogFragment();
+
+        dialogFrag.setTargetFragment(ToDoFragment.this, 300);
+        //dialogFrag.show(getChildFragmentManager(), AddToDoGroupDialogFragment.TAG);
+        dialogFrag.show(fm, AddToDoGroupDialogFragment.TAG);
     }
 
     // The dialog fragment receives a reference to this Activity through the
