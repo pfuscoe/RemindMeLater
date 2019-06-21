@@ -154,8 +154,13 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
                         int totalItems = doc.get("totalItems", int.class);
-                        String[] subscribers = doc.get("subscribers", String[].class);
-                        Map<String, Object> toDoItems = doc.get("toDoItems", Map.class);
+
+                        ArrayList<String> subscribersList = (ArrayList<String>) doc.get("subscribers");
+
+                        //String[] subscribers = doc.get("subscribers", String[].class);
+                        String[] subscribers = subscribersList.toArray(new String[0]);
+
+                        Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
 
                         ToDoGroup toDoGroup = new ToDoGroup(title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
