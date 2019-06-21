@@ -33,6 +33,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -232,7 +233,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
-        toDoGroupDoc.put("subscribers", toDoGroup.getSubscribers());
+        toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
         toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
 
