@@ -161,6 +161,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         String[] subscribers = subscribersList.toArray(new String[0]);
 
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
+                        //Map<String, Object> toDoItems = (Map) doc.get("toDoItems");
+                        //Map<String, ToDoItem> toDoItems = (Map<String, ToDoItem>) doc.get("toDoItems", )
 
                         ToDoGroup toDoGroup = new ToDoGroup(title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
