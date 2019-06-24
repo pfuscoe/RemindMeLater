@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -145,7 +146,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
 
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                    //for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
                     {
                         String id = doc.getId();
                         String title = doc.getString("title");
@@ -160,7 +162,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         //String[] subscribers = doc.get("subscribers", String[].class);
                         String[] subscribers = subscribersList.toArray(new String[0]);
 
+                        //GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>();
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
+
                         //Map<String, Object> toDoItems = (Map) doc.get("toDoItems");
                         //Map<String, ToDoItem> toDoItems = (Map<String, ToDoItem>) doc.get("toDoItems", )
 
