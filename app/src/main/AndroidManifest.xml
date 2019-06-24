@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ToDoItemListActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="patrick.fuscoe.remindmelater.MainActivity" />
+        </activity>
+        <activity
             android:name=".FirebaseSignInActivity"
             android:label="@string/app_name">
             <intent-filter>
@@ -21,8 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

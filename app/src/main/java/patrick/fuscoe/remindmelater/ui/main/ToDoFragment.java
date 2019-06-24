@@ -159,14 +159,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                         ArrayList<String> subscribersList = (ArrayList<String>) doc.get("subscribers");
 
-                        //String[] subscribers = doc.get("subscribers", String[].class);
                         String[] subscribers = subscribersList.toArray(new String[0]);
 
-                        //GenericTypeIndicator<Map<String, Object>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Object>>();
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
-
-                        //Map<String, Object> toDoItems = (Map) doc.get("toDoItems");
-                        //Map<String, ToDoItem> toDoItems = (Map<String, ToDoItem>) doc.get("toDoItems", )
 
                         ToDoGroup toDoGroup = new ToDoGroup(title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
@@ -191,6 +186,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
