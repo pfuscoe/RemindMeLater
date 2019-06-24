@@ -1,11 +1,15 @@
 package patrick.fuscoe.remindmelater.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ToDoGroup {
+
+    public static final String TAG = "patrick.fuscoe.remindmelater.ToDoGroup";
 
     private String id;
     private String title;
@@ -54,7 +58,10 @@ public class ToDoGroup {
 
         for (Map.Entry<String, Object> entry : toDoItems.entrySet())
         {
-            ToDoItem item = new ToDoItem(entry.getKey(), (int) entry.getValue());
+            String priorityString = entry.getValue().toString();
+            Integer priority = Integer.valueOf(priorityString);
+            Log.d(TAG, "ToDoItem key/value: " + entry.getKey() + ", " + priority);
+            ToDoItem item = new ToDoItem(entry.getKey(), priority);
             toDoItemArrayList.add(item);
         }
 
