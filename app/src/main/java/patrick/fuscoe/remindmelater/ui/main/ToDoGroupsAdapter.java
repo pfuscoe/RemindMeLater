@@ -1,7 +1,9 @@
 package patrick.fuscoe.remindmelater.ui.main;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -80,6 +82,11 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         holder.viewToDoGroupTitle.setText(toDoGroup.getTitle());
 
         // TODO: Load icons and numbers
+        holder.viewToDoGroupNumCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_1_circle));
+        holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.redDark));
+
+        holder.viewToDoGroupNumBox.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_5_box_multiple_outline));
+        holder.viewToDoGroupNumBox.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
