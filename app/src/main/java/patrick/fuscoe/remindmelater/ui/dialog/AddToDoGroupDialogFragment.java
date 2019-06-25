@@ -51,6 +51,7 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_add_to_do_group, null))
+                .setTitle(R.string.dialog_add_to_do_group_title)
                 // Add action buttons
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
