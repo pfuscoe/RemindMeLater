@@ -1,6 +1,7 @@
 package patrick.fuscoe.remindmelater.ui.main;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,6 +57,7 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public ToDoGroupsViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {

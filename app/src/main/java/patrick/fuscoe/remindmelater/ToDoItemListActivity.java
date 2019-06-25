@@ -8,12 +8,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.models.ToDoItem;
+import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
 
 public class ToDoItemListActivity extends AppCompatActivity {
 
@@ -66,7 +70,8 @@ public class ToDoItemListActivity extends AppCompatActivity {
         toDoItemListLayoutManager = new LinearLayoutManager(this);
         toDoItemListRecyclerView.setLayoutManager(toDoItemListLayoutManager);
 
-
+        toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, this, toDoItemClickListener);
+        toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
 
 
         /*
@@ -84,6 +89,34 @@ public class ToDoItemListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("placeholder");
     }
 
+    public void UpdateToDoItemListDisplay()
+    {
+        toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, this, toDoItemClickListener);
+        toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
 
+        toDoItemListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_add:
+                Log.d(TAG, ": Add Button pressed");
+
+            case R.id.menu_main_user_settings:
+                Log.d(TAG, ": Menu item selected: " + item.getItemId());
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

@@ -11,4 +11,5 @@
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_to_do_item_list">ToDoItemListActivity</string>
+    <string name="to_do_item_placeholder">To Do Item Placeholder</string>
 </resources>
