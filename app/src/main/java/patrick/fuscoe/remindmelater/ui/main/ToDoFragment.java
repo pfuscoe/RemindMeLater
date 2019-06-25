@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
@@ -52,6 +55,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
+
+    public static final String TO_DO_GROUP = "patrick.fuscoe.remindmelater.TO_DO_GROUP";
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -72,16 +77,16 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
             Log.d(TAG, ": To Do Group " + position + " clicked");
 
-            // TODO: Setup ToDoGroup click action
+            ToDoGroup toDoGroup = toDoGroupList.get(position);
 
-            /*
-            String viewItemURLString = similarItemsList.get(position).getViewItemURLString();
+            Intent intent = new Intent(getContext(), ToDoItemListActivity.class);
 
-            // might need try statement
-            Uri page = Uri.parse(viewItemURLString);
-            Intent intent = new Intent(Intent.ACTION_VIEW, page);
+            Gson gson = new Gson();
+
+            String toDoGroupString = gson.toJson(toDoGroup);
+            intent.putExtra(TO_DO_GROUP, toDoGroupString);
+
             startActivity(intent);
-            */
         }
     };
 

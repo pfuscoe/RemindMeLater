@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,10 +14,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
+import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
 
 public class ToDoItemListActivity extends AppCompatActivity {
@@ -28,6 +35,7 @@ public class ToDoItemListActivity extends AppCompatActivity {
     private RecyclerView.Adapter toDoItemListAdapter;
     private RecyclerView.LayoutManager toDoItemListLayoutManager;
 
+    private ToDoGroup toDoGroup;
     private List<ToDoItem> toDoItemList;
 
 
@@ -61,7 +69,15 @@ public class ToDoItemListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_to_do_item_list);
         setSupportActionBar(toolbar);
 
-        toDoItemList = new ArrayList<>();
+        // Get To Do Group from intent
+        Intent intent = getIntent();
+        Gson gson = new Gson();
+        Type dataType = new TypeToken<ToDoGroup>(){}.getType();
+
+        String toDoGroupString = intent.getStringExtra(ToDoFragment.TO_DO_GROUP);
+        toDoGroup = gson.fromJson(toDoGroupString, dataType);
+
+        toDoItemList = toDoGroup.getToDoItemArrayList();
 
         // Setup RecyclerView
         toDoItemListRecyclerView = findViewById(R.id.view_to_do_item_list_recycler);
@@ -86,7 +102,7 @@ public class ToDoItemListActivity extends AppCompatActivity {
         */
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("placeholder");
+        getSupportActionBar().setTitle(toDoGroup.getTitle());
     }
 
     public void UpdateToDoItemListDisplay()
