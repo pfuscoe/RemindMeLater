@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_add_to_do_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp">
+
+    <EditText
+        android:id="@+id/dialog_add_to_do_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="@string/hint_enter_item_name"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/dialog_add_to_do_item_label_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/dialog_add_to_do_item_label_priority"
+        android:textSize="16sp" />
+
+    <RadioGroup
+        android:id="@+id/dialog_add_to_do_item_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/dialog_add_to_do_item_radio_high"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/redDark"
+            android:text="@string/dialog_add_to_do_item_label_radio_high"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/dialog_add_to_do_item_radio_medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dialog_add_to_do_item_label_radio_medium" />
+
+        <RadioButton
+            android:id="@+id/dialog_add_to_do_item_radio_low"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dialog_add_to_do_item_label_radio_low" />
+    </RadioGroup>
+
+</LinearLayout>
