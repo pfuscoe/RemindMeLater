@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater.ui.todoitem;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,13 +77,36 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
 
         holder.viewToDoItemName.setText(toDoItem.getItemName());
 
-        // TODO: Load icons and numbers
+        // TODO: Load priority icon
+        int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
+        holder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
+
+        int itemPriorityIconColorId = selectItemPriorityIconColor(toDoItem.getPriority());
+        holder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return toDoItemList.size();
+    }
+
+    private int selectItemPriorityIconColor(int priority)
+    {
+        switch (priority)
+        {
+            case 1:
+                return R.color.redDark;
+
+            case 2:
+                return R.color.orangeDark;
+
+            case 3:
+                return R.color.blueDark;
+
+            default:
+                return R.color.redDark;
+        }
     }
 
 }
