@@ -82,6 +82,9 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         holder.viewToDoGroupTitle.setText(toDoGroup.getTitle());
 
         // TODO: Load icons and numbers
+        holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.home));
+        holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
+
         holder.viewToDoGroupNumCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_1_circle));
         holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.redDark));
 
