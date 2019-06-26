@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -20,6 +21,9 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -41,6 +45,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoItemListActivity";
 
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private RecyclerView toDoItemListRecyclerView;
     private RecyclerView.Adapter toDoItemListAdapter;
@@ -172,6 +177,29 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         return toDoGroupDoc;
     }
 
+    private void commitToDoGroup()
+    {
+        Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+
+        db.collection("todogroups").document(toDoGroupId)
+                .set(toDoGroupDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        Log.d(TAG, ": To Do Group " + toDoGroup.getTitle() + " updated");
+        Toast.makeText(this, "To Do Group updated: " + toDoGroup.getTitle(), Toast.LENGTH_LONG).show();
+    }
+
     public void showAddToDoItemDialog() {
         // Create an instance of the dialog fragment and show it
         //FragmentManager fm = getFragmentManager();
@@ -223,4 +251,11 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
     // TODO: commit ToDoGroup to cloud onPause()
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        commitToDoGroup();
+    }
 }
