@@ -17,4 +17,5 @@
     <string name="dialog_add_to_do_item_label_radio_high">High</string>
     <string name="dialog_add_to_do_item_label_radio_medium">Medium</string>
     <string name="dialog_add_to_do_item_label_radio_low">Low</string>
+    <string name="dialog_add_to_do_item_title">Add New To Do Item</string>
 </resources>

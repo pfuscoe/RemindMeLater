@@ -1,9 +1,12 @@
 package patrick.fuscoe.remindmelater;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,20 +16,25 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
+import patrick.fuscoe.remindmelater.ui.dialog.AddToDoItemDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
 
-public class ToDoItemListActivity extends AppCompatActivity {
+public class ToDoItemListActivity extends AppCompatActivity implements AddToDoItemDialogFragment.AddToDoItemDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoItemListActivity";
 
@@ -126,12 +134,70 @@ public class ToDoItemListActivity extends AppCompatActivity {
         {
             case R.id.menu_main_add:
                 Log.d(TAG, ": Add Button pressed");
+                showAddToDoItemDialog();
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void addToDoItem(String itemName, int priority)
+    {
+        toDoItemList.add(new ToDoItem(itemName, priority));
+        Collections.sort(toDoItemList);
+
+        UpdateToDoItemListDisplay();
+    }
+
+    public void showAddToDoItemDialog() {
+        // Create an instance of the dialog fragment and show it
+        //FragmentManager fm = getFragmentManager();
+        AddToDoItemDialogFragment dialogFrag = new AddToDoItemDialogFragment();
+
+        //dialogFrag.setTargetFragment(ToDoItemListActivity.this, 300);
+        dialogFrag.show(getSupportFragmentManager(), AddToDoItemDialogFragment.TAG);
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the AddToDoGroupDialogFragment.AddToDoGroupDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Dialog dialogView = dialog.getDialog();
+
+        EditText viewAddToDoItemName = dialogView.findViewById(R.id.dialog_add_to_do_item_name);
+        String newItemName = viewAddToDoItemName.getText().toString();
+
+        RadioGroup radioGroupPriority = dialogView.findViewById(R.id.dialog_add_to_do_item_radio_group);
+        int radioPriorityCheckedId = radioGroupPriority.getCheckedRadioButtonId();
+        int priority = processRadioPrioritySelection(radioPriorityCheckedId);
+
+        addToDoItem(newItemName, priority);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Toast.makeText(this, "Add To Do Item Cancelled", Toast.LENGTH_SHORT).show();
+    }
+
+    private int processRadioPrioritySelection(int radioPriorityCheckedId)
+    {
+        switch (radioPriorityCheckedId)
+        {
+            case R.id.dialog_add_to_do_item_radio_high:
+                return 1;
+
+            case R.id.dialog_add_to_do_item_radio_medium:
+                return 2;
+
+            case R.id.dialog_add_to_do_item_radio_low:
+                return 3;
+
+            default:
+                return 1;
         }
     }
 
