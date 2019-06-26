@@ -135,9 +135,6 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
             case 8:
                 return "numeric_8_circle";
 
-            case 9:
-                return "numeric_9_circle";
-
             default:
                 return "numeric_9_plus_circle";
         }
@@ -150,10 +147,10 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         switch (totalItems)
         {
             case 0:
-                return "numeric_0_box_outline";
+                return "numeric_0_box_multiple_outline";
 
             case 1:
-                return "numeric_1_box_outline";
+                return "numeric_1_box_multiple_outline";
 
             case 2:
                 return "numeric_2_box_multiple_outline";
@@ -175,9 +172,6 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
 
             case 8:
                 return "numeric_8_box_multiple_outline";
-
-            case 9:
-                return "numeric_9_plus_box_multiple_outline";
 
             default:
                 return "numeric_9_plus_box_multiple_outline";
