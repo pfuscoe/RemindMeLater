@@ -205,13 +205,13 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         //FragmentManager fm = getFragmentManager();
         AddToDoItemDialogFragment dialogFrag = new AddToDoItemDialogFragment();
 
-        //dialogFrag.setTargetFragment(ToDoItemListActivity.this, 300);
+        //dialogFrag.set(ToDoItemListActivity.this, 300);
         dialogFrag.show(getSupportFragmentManager(), AddToDoItemDialogFragment.TAG);
     }
 
     // The dialog fragment receives a reference to this Activity through the
     // Fragment.onAttach() callback, which it uses to call the following methods
-    // defined by the AddToDoGroupDialogFragment.AddToDoGroupDialogListener interface
+    // defined by the AddToDoItemDialogFragment.AddToDoItemDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Dialog dialogView = dialog.getDialog();
