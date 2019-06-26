@@ -81,6 +81,9 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
 
         holder.viewToDoGroupTitle.setText(toDoGroup.getTitle());
 
+        String numBoxIconString = selectNumBoxIconName(toDoGroup);
+        String numCircleIconString = selectNumCircleIconName(toDoGroup);
+
         // TODO: Load icons and numbers
         holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.home));
         holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
@@ -96,6 +99,90 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
     @Override
     public int getItemCount() {
         return toDoGroupList.size();
+    }
+
+
+    private String selectNumCircleIconName(ToDoGroup toDoGroup)
+    {
+        int numPriorityOneItems = toDoGroup.getNumPriorityOneItems();
+
+        switch (numPriorityOneItems)
+        {
+            case 0:
+                return "numeric_0_circle";
+
+            case 1:
+                return "numeric_1_circle";
+
+            case 2:
+                return "numeric_2_circle";
+
+            case 3:
+                return "numeric_3_circle";
+
+            case 4:
+                return "numeric_4_circle";
+
+            case 5:
+                return "numeric_5_circle";
+
+            case 6:
+                return "numeric_6_circle";
+
+            case 7:
+                return "numeric_7_circle";
+
+            case 8:
+                return "numeric_8_circle";
+
+            case 9:
+                return "numeric_9_circle";
+
+            default:
+                return "numeric_9_plus_circle";
+        }
+    }
+
+    private String selectNumBoxIconName(ToDoGroup toDoGroup)
+    {
+        int totalItems = toDoGroup.getTotalItems();
+
+        switch (totalItems)
+        {
+            case 0:
+                return "numeric_0_box_outline";
+
+            case 1:
+                return "numeric_1_box_outline";
+
+            case 2:
+                return "numeric_2_box_multiple_outline";
+
+            case 3:
+                return "numeric_3_box_multiple_outline";
+
+            case 4:
+                return "numeric_4_box_multiple_outline";
+
+            case 5:
+                return "numeric_5_box_multiple_outline";
+
+            case 6:
+                return "numeric_6_box_multiple_outline";
+
+            case 7:
+                return "numeric_7_box_multiple_outline";
+
+            case 8:
+                return "numeric_8_box_multiple_outline";
+
+            case 9:
+                return "numeric_9_plus_box_multiple_outline";
+
+            default:
+                return "numeric_9_plus_box_multiple_outline";
+        }
+
     }
 
 }
