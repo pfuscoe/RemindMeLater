@@ -51,14 +51,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dialog_add_to_do_item_label_radio_medium" />
+            android:buttonTint="@color/orangeDark"
+            android:text="@string/dialog_add_to_do_item_label_radio_medium"
+            android:textSize="16sp" />
 
         <RadioButton
             android:id="@+id/dialog_add_to_do_item_radio_low"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dialog_add_to_do_item_label_radio_low" />
+            android:buttonTint="@color/blueDark"
+            android:text="@string/dialog_add_to_do_item_label_radio_low"
+            android:textSize="16sp" />
     </RadioGroup>
 
 </LinearLayout>
