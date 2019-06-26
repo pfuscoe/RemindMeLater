@@ -221,4 +221,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         }
     }
 
+    // TODO: commit ToDoGroup to cloud onPause()
+
 }
