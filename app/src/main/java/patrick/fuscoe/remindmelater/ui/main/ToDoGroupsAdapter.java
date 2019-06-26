@@ -61,7 +61,7 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public ToDoGroupsViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public ToDoGroupsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
@@ -73,7 +73,7 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ToDoGroupsViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ToDoGroupsViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
@@ -88,10 +88,14 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.home));
         holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
-        holder.viewToDoGroupNumCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_1_circle));
+        int numCircleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());
+        holder.viewToDoGroupNumCircle.setImageResource(numCircleIconId);
+        //holder.viewToDoGroupNumCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numCircleIconId));
         holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.redDark));
 
-        holder.viewToDoGroupNumBox.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_5_box_multiple_outline));
+        int numBoxIconId = context.getResources().getIdentifier(numBoxIconString, "drawable", context.getPackageName());
+        holder.viewToDoGroupNumBox.setImageResource(numBoxIconId);
+        //holder.viewToDoGroupNumBox.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_5_box_multiple_outline));
         holder.viewToDoGroupNumBox.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
     }
 
