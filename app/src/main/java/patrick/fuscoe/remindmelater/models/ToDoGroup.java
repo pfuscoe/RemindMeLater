@@ -74,12 +74,16 @@ public class ToDoGroup {
     public void addToDoItem(ToDoItem toDoItem)
     {
         toDoItemArrayList.add(toDoItem);
+        Collections.sort(toDoItemArrayList);
         totalItems++;
 
         if (toDoItem.getPriority() == 1)
         {
             numPriorityOneItems++;
         }
+
+        // Update HashMap
+        toDoItems.put(toDoItem.getItemName(), toDoItem.getPriority());
     }
 
     public void saveToDoItems()
@@ -168,5 +172,9 @@ public class ToDoGroup {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setToDoItemArrayList(ArrayList<ToDoItem> toDoItemArrayList) {
+        this.toDoItemArrayList = toDoItemArrayList;
     }
 }

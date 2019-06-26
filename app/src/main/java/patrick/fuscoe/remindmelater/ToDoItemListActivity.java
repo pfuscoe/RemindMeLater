@@ -25,8 +25,11 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
@@ -44,6 +47,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
     private RecyclerView.LayoutManager toDoItemListLayoutManager;
 
     private ToDoGroup toDoGroup;
+    private String toDoGroupId;
     private List<ToDoItem> toDoItemList;
 
 
@@ -86,6 +90,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         toDoGroup = gson.fromJson(toDoGroupString, dataType);
 
         toDoItemList = toDoGroup.getToDoItemArrayList();
+        toDoGroupId = toDoGroup.getId();
 
         // Setup RecyclerView
         toDoItemListRecyclerView = findViewById(R.id.view_to_do_item_list_recycler);
@@ -146,10 +151,25 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
     public void addToDoItem(String itemName, int priority)
     {
-        toDoItemList.add(new ToDoItem(itemName, priority));
-        Collections.sort(toDoItemList);
+        toDoGroup.addToDoItem(new ToDoItem(itemName, priority));
+        toDoItemList = toDoGroup.getToDoItemArrayList();
 
         UpdateToDoItemListDisplay();
+    }
+
+    private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
+    {
+        Map<String, Object> toDoGroupDoc = new HashMap<>();
+        toDoGroupDoc.put("title", toDoGroup.getTitle());
+        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
+        toDoGroupDoc.put("shared", toDoGroup.isShared());
+        toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
+        toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
+        toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
+
+        toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+
+        return toDoGroupDoc;
     }
 
     public void showAddToDoItemDialog() {
