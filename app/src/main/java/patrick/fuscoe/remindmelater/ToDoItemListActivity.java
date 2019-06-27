@@ -96,6 +96,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         toDoItemList = toDoGroup.getToDoItemArrayList();
         toDoGroupId = toDoGroup.getId();
+        Log.d(TAG, "toDoGroupId: " + toDoGroupId);
 
         // Setup RecyclerView
         toDoItemListRecyclerView = findViewById(R.id.view_to_do_item_list_recycler);
