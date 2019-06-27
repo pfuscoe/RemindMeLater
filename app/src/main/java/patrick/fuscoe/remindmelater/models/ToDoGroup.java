@@ -29,8 +29,9 @@ public class ToDoGroup {
 
     }
 
-    public ToDoGroup(String title, String iconName, boolean shared, String userId)
+    public ToDoGroup(String id, String title, String iconName, boolean shared, String userId)
     {
+        this.id = id;
         this.title = title;
         this.iconName = iconName;
         this.shared = shared;
@@ -42,7 +43,7 @@ public class ToDoGroup {
         this.toDoItems = new HashMap<>();
     }
 
-    public ToDoGroup(String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
+    public ToDoGroup(String id, String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
     {
         this.id = id;
         this.title = title;

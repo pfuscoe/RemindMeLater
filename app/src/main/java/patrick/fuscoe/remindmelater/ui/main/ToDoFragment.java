@@ -168,7 +168,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
 
-                        ToDoGroup toDoGroup = new ToDoGroup(title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
+                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
                     }
 
@@ -214,22 +214,25 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void addToDoGroup(String title)
     {
-        final ToDoGroup toDoGroup = new ToDoGroup(title, "default", false, auth.getUid());
+        DocumentReference docRef = toDoGroupsCollectionRef.document();
+        String docId = docRef.getId();
+
+        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, "default", false, auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
 
-        toDoGroupsCollectionRef.add(toDoGroupDoc)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        toDoGroupsCollectionRef.document(docId)
+                .set(toDoGroupDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        toDoGroup.setId(documentReference.getId());
-                        Log.d(TAG, ": DocumentSnapshot written with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, ": Error adding document", e);
+                        Log.w(TAG, "Error writing document", e);
                     }
                 });
 
