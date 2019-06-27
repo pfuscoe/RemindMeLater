@@ -84,7 +84,7 @@ public class ToDoGroup {
         }
 
         // Update HashMap
-        toDoItems.put(toDoItem.getItemName(), toDoItem.getPriority());
+        toDoItems.put(toDoItem.getItemName(), String.valueOf(toDoItem.getPriority()));
     }
 
     public void saveToDoItems()
