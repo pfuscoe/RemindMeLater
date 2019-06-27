@@ -20,7 +20,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @Override
     public int compareTo(ToDoItem o)
     {
-        int priorityComp = o.getPriority() - this.getPriority();
+        int priorityComp = this.getPriority() - o.getPriority();
 
         if (priorityComp != 0)
         {
@@ -28,7 +28,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         else
         {
-            return o.getItemName().compareTo(this.getItemName());
+            return this.getItemName().compareTo(o.getItemName());
         }
     }
 
