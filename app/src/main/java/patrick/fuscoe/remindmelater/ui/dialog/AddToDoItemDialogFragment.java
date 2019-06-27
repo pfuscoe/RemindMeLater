@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
-import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
 public class AddToDoItemDialogFragment extends DialogFragment {
 
@@ -34,7 +33,7 @@ public class AddToDoItemDialogFragment extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the listener so we can send events to the host
-            listener = (AddToDoItemDialogListener) getTargetFragment();
+            listener = (AddToDoItemDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(ToDoItemListActivity.TAG
