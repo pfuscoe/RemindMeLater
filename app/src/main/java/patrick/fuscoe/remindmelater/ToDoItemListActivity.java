@@ -55,6 +55,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
     private String toDoGroupId;
     private List<ToDoItem> toDoItemList;
 
+    private boolean hasChanged;
 
     private ToDoItemClickListener toDoItemClickListener = new ToDoItemClickListener() {
         @Override
@@ -97,6 +98,8 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         toDoItemList = toDoGroup.getToDoItemArrayList();
         toDoGroupId = toDoGroup.getId();
         Log.d(TAG, "toDoGroupId: " + toDoGroupId);
+
+        hasChanged = false;
 
         // Setup RecyclerView
         toDoItemListRecyclerView = findViewById(R.id.view_to_do_item_list_recycler);
@@ -160,6 +163,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         toDoGroup.addToDoItem(new ToDoItem(itemName, priority));
         toDoItemList = toDoGroup.getToDoItemArrayList();
 
+        hasChanged = true;
         UpdateToDoItemListDisplay();
     }
 
@@ -250,13 +254,12 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         }
     }
 
-    // TODO: commit ToDoGroup to cloud onPause()
-
-
     @Override
     protected void onPause() {
         super.onPause();
 
-        commitToDoGroup();
+        if (hasChanged) {
+            commitToDoGroup();
+        }
     }
 }
