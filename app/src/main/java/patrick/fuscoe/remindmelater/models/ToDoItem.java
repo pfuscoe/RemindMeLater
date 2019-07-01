@@ -7,7 +7,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     private String itemName;
     private int priority;
     private Timestamp timestamp;
-    private boolean isDone;
+    private boolean done;
 
 
     public ToDoItem() {
@@ -19,7 +19,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.itemName = itemName;
         this.priority = priority;
         this.timestamp = Timestamp.now();
-        this.isDone = false;
+        this.done = false;
     }
 
 
@@ -46,6 +46,14 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public int getPriority()
     {
         return this.priority;
+    }
+
+    public Timestamp getTimestamp() {
+        return this.timestamp;
+    }
+
+    public boolean isDone() {
+        return this.done;
     }
 
 }
