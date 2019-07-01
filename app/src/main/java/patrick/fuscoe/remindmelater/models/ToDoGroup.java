@@ -98,7 +98,7 @@ public class ToDoGroup {
         }
         */
 
-        Collections.sort(toDoItemArrayList);
+        //Collections.sort(toDoItemArrayList);
 
         // could add cleared item storage to more easily re-add done items
     }
@@ -107,7 +107,7 @@ public class ToDoGroup {
     public void addToDoItem(ToDoItem toDoItem)
     {
         toDoItemArrayList.add(toDoItem);
-        Collections.sort(toDoItemArrayList);
+        //Collections.sort(toDoItemArrayList);
         totalItems++;
 
         if (toDoItem.getPriority() == 1)

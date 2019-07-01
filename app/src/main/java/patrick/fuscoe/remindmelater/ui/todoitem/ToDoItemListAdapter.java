@@ -11,15 +11,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
+import patrick.fuscoe.remindmelater.comparator.SortToDoItemByDate;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 
 public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapter.ToDoItemViewHolder> {
 
+    private static final int TYPE_HEADER_TO_DO = 0;
+    private static final int TYPE_HEADER_DONE = 1;
+    private static final int TYPE_ITEM_TO_DO = 2;
+    private static final int TYPE_ITEM_DONE = 3;
+
     private List<ToDoItem> toDoItemList;
+    private List<ToDoItem> toDoItemListDone;
+    private int numItemsToDo;
+    private int numItemsDone;
     private Context context;
 
     private static ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener;
@@ -47,9 +58,29 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
         }
     }
 
-    public ToDoItemListAdapter(List<ToDoItem> toDoItemList, Context context, ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener)
+    public ToDoItemListAdapter(List<ToDoItem> toDoItemListUnsorted, Context context, ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener)
     {
-        this.toDoItemList = toDoItemList;
+        this.toDoItemList = new ArrayList<>();
+        this.toDoItemListDone = new ArrayList<>();
+
+        for (ToDoItem item : toDoItemListUnsorted)
+        {
+            if (item.isDone())
+            {
+                toDoItemListDone.add(item);
+            }
+            else
+            {
+                toDoItemList.add(item);
+            }
+        }
+
+        Collections.sort(toDoItemList);
+        Collections.sort(toDoItemListDone, new SortToDoItemByDate());
+
+        this.numItemsToDo = toDoItemList.size();
+        this.numItemsDone = toDoItemListDone.size();
+
         this.context = context;
         this.toDoItemClickListener = toDoItemClickListener;
     }
@@ -89,6 +120,26 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
     @Override
     public int getItemCount() {
         return toDoItemList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0)
+        {
+            return TYPE_HEADER_TO_DO;
+        }
+        else if (0 < position && position < numItemsToDo)
+        {
+            return TYPE_ITEM_TO_DO;
+        }
+        else if (position == numItemsToDo)
+        {
+            return TYPE_HEADER_DONE;
+        }
+        else
+        {
+            return TYPE_ITEM_DONE;
+        }
     }
 
     private int selectItemPriorityIconColor(int priority)
