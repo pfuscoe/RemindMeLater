@@ -22,6 +22,14 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.done = false;
     }
 
+    public ToDoItem(String itemName, int priority, Timestamp timestamp, boolean done)
+    {
+        this.itemName = itemName;
+        this.priority = priority;
+        this.timestamp = timestamp;
+        this.done = done;
+    }
+
 
     @Override
     public int compareTo(ToDoItem o)

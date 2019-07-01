@@ -2,6 +2,8 @@ package patrick.fuscoe.remindmelater.models;
 
 import android.util.Log;
 
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,6 +59,7 @@ public class ToDoGroup {
 
         this.toDoItemArrayList = new ArrayList<>();
 
+        /*
         for (Map.Entry<String, Object> entry : toDoItems.entrySet())
         {
             String priorityString = entry.getValue().toString();
@@ -65,6 +68,35 @@ public class ToDoGroup {
             ToDoItem item = new ToDoItem(entry.getKey(), priority);
             toDoItemArrayList.add(item);
         }
+        */
+
+        HashMap<String, HashMap<String, Object>> toDoItemsMap = new HashMap<String, HashMap<String, Object>>();
+
+        for (Map.Entry<String, Object> entry : toDoItems.entrySet())
+        {
+            HashMap<String, Object> toDoItemMap = new HashMap<>();
+            String itemName = entry.getKey();
+            toDoItemsMap.put(itemName, (HashMap<String, Object>) entry.getValue());
+            int priority = Math.toIntExact((long)toDoItemsMap.get(itemName).get("priority"));
+            Timestamp timestamp = (Timestamp) toDoItemsMap.get(itemName).get("timestamp");
+            boolean done = (boolean) toDoItemsMap.get(itemName).get("done");
+
+            ToDoItem item = new ToDoItem(itemName, priority, timestamp, done);
+            toDoItemArrayList.add(item);
+        }
+
+        /*
+        for (Map.Entry<String, Object> entry : toDoItems.entrySet())
+        {
+            String itemName = entry.getKey();
+
+            HashMap<String, ToDoItem> map = new HashMap<>();
+            map = entry.getValue().
+
+
+            //String priorityString = entry.
+        }
+        */
 
         Collections.sort(toDoItemArrayList);
 

@@ -170,6 +170,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
     {
         Map<String, Object> toDoGroupDoc = new HashMap<>();
+
         toDoGroupDoc.put("title", toDoGroup.getTitle());
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
@@ -177,7 +178,20 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
-        toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+        Map<String, Object> toDoItemsMap = new HashMap<>();
+
+        for (ToDoItem item : toDoItemList)
+        {
+            Map<String, Object> toDoItemMap = new HashMap<>();
+            toDoItemMap.put("priority", item.getPriority());
+            toDoItemMap.put("timestamp", item.getTimestamp());
+            toDoItemMap.put("done", item.isDone());
+
+            toDoItemsMap.put(item.getItemName(), toDoItemMap);
+        }
+
+        //toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+        toDoGroupDoc.put("toDoItems", toDoItemsMap);
 
         return toDoGroupDoc;
     }
