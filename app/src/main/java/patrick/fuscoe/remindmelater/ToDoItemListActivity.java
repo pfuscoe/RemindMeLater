@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.comparator.SortToDoItemByDate;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoItemDialogFragment;
@@ -54,6 +55,8 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
     private ToDoGroup toDoGroup;
     private String toDoGroupId;
     private List<ToDoItem> toDoItemList;
+    private List<ToDoItem> toDoItemListDone;
+    private List<ToDoItem> toDoItemListUnsorted;
 
     private boolean hasChanged;
 
@@ -95,7 +98,9 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         String toDoGroupString = intent.getStringExtra(ToDoFragment.TO_DO_GROUP);
         toDoGroup = gson.fromJson(toDoGroupString, dataType);
 
-        toDoItemList = toDoGroup.getToDoItemArrayList();
+        toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
+        splitAndSortToDoItems();
+
         toDoGroupId = toDoGroup.getId();
         Log.d(TAG, "toDoGroupId: " + toDoGroupId);
 
@@ -108,7 +113,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         toDoItemListLayoutManager = new LinearLayoutManager(this);
         toDoItemListRecyclerView.setLayoutManager(toDoItemListLayoutManager);
 
-        toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, this, toDoItemClickListener);
+        toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, toDoItemListDone, this, toDoItemClickListener);
         toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
 
 
@@ -129,7 +134,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
     public void UpdateToDoItemListDisplay()
     {
-        toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, this, toDoItemClickListener);
+        toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, toDoItemListDone, this, toDoItemClickListener);
         toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
 
         toDoItemListAdapter.notifyDataSetChanged();
@@ -158,10 +163,34 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         }
     }
 
+    public void splitAndSortToDoItems()
+    {
+        toDoItemList = new ArrayList<>();
+        toDoItemListDone = new ArrayList<>();
+
+        for (ToDoItem item : toDoItemListUnsorted)
+        {
+            if (item.isDone())
+            {
+                toDoItemListDone.add(item);
+            }
+            else
+            {
+                toDoItemList.add(item);
+            }
+        }
+
+        Collections.sort(toDoItemList);
+        Collections.sort(toDoItemListDone, new SortToDoItemByDate());
+    }
+
     public void addToDoItem(String itemName, int priority)
     {
-        toDoGroup.addToDoItem(new ToDoItem(itemName, priority));
-        toDoItemList = toDoGroup.getToDoItemArrayList();
+        ToDoItem newItem = new ToDoItem(itemName, priority);
+
+        toDoGroup.addToDoItem(newItem);
+        toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
+        splitAndSortToDoItems();
 
         hasChanged = true;
         UpdateToDoItemListDisplay();

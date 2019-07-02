@@ -111,25 +111,13 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public ToDoItemListAdapter(List<ToDoItem> toDoItemListUnsorted, Context context, ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener)
+    public ToDoItemListAdapter(List<ToDoItem> toDoItemList, List<ToDoItem> toDoItemListDone, Context context, ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener)
     {
-        this.toDoItemList = new ArrayList<>();
-        this.toDoItemListDone = new ArrayList<>();
+        //this.toDoItemList = new ArrayList<>();
+        //this.toDoItemListDone = new ArrayList<>();
 
-        for (ToDoItem item : toDoItemListUnsorted)
-        {
-            if (item.isDone())
-            {
-                toDoItemListDone.add(item);
-            }
-            else
-            {
-                toDoItemList.add(item);
-            }
-        }
-
-        Collections.sort(toDoItemList);
-        Collections.sort(toDoItemListDone, new SortToDoItemByDate());
+        this.toDoItemList = toDoItemList;
+        this.toDoItemListDone = toDoItemListDone;
 
         this.numItemsToDo = toDoItemList.size();
         this.numItemsDone = toDoItemListDone.size();
@@ -171,26 +159,46 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new ToDoItemDoneViewHolder(v);
         }
 
-        throw new RuntimeException("No view holder type match found in " + TAG);
+        throw new RuntimeException("No view holder type match - onCreateViewHolder - " + TAG);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position)
+    {
+        if (holder instanceof ToDoItemHeaderViewHolder)
+        {
+            // do nothing
+        }
+        else if (holder instanceof ToDoItemViewHolder)
+        {
+            ToDoItem item = toDoItemList.get(position - 1);
+            ToDoItemViewHolder viewHolder = (ToDoItemViewHolder) holder;
 
-        // TODO: Rework for various types
+            viewHolder.viewToDoItemName.setText(item.getItemName());
 
-        ToDoItem toDoItem = toDoItemList.get(position);
+            int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
+            viewHolder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
+            int itemPriorityIconColorId = selectItemPriorityIconColor(item.getPriority());
+            viewHolder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
+        }
+        else if (holder instanceof ToDoItemDoneHeaderViewHolder)
+        {
+            // do nothing
+        }
+        else if (holder instanceof ToDoItemDoneViewHolder)
+        {
+            ToDoItem item = toDoItemListDone.get(position - numItemsToDo - 2);
+            ToDoItemDoneViewHolder viewHolder = (ToDoItemDoneViewHolder) holder;
 
-        holder.viewToDoItemName.setText(toDoItem.getItemName());
+            viewHolder.viewToDoItemDoneName.setText(item.getItemName());
 
-        int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
-        holder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
+            int itemPriorityIconId = context.getResources().getIdentifier("checkbox_marked_outline", "drawable", context.getPackageName());
+            viewHolder.viewToDoItemDonePriorityIcon.setImageResource(itemPriorityIconId);
+            viewHolder.viewToDoItemDonePriorityIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
+        }
 
-        int itemPriorityIconColorId = selectItemPriorityIconColor(toDoItem.getPriority());
-        holder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
+        throw new RuntimeException("No view holder type match - onBindViewHolder - " + TAG);
     }
 
     @Override
