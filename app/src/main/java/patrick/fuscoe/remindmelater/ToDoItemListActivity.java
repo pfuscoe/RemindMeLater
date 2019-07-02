@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -114,10 +115,14 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         // Setup RecyclerView
         toDoItemListRecyclerView = findViewById(R.id.view_to_do_item_list_recycler);
-        toDoItemListRecyclerView.setHasFixedSize(true);
+        toDoItemListRecyclerView.setHasFixedSize(false);
 
         toDoItemListLayoutManager = new LinearLayoutManager(this);
         toDoItemListRecyclerView.setLayoutManager(toDoItemListLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(toDoItemListRecyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        toDoItemListRecyclerView.addItemDecoration(dividerItemDecoration);
 
         toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, toDoItemListDone, this, toDoItemClickListener);
         toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
