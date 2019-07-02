@@ -147,7 +147,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         else if (viewType == TYPE_HEADER_DONE)
         {
             ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_to_do_item_header, parent, false);
+                    .inflate(R.layout.row_to_do_item_done_header, parent, false);
 
             return new ToDoItemDoneHeaderViewHolder(v);
         }
@@ -192,7 +192,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         else if (holder instanceof ToDoItemDoneHeaderViewHolder)
         {
             ToDoItemDoneHeaderViewHolder viewHolder = (ToDoItemDoneHeaderViewHolder) holder;
-            //viewHolder.viewToDoItemDoneHeaderLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            viewHolder.viewToDoItemDoneHeaderLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
 
             return;
         }
