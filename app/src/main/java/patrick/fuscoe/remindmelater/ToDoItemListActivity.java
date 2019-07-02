@@ -74,12 +74,12 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
             }
             else if (position <= numItemsToDo)
             {
-                ToDoItem item = toDoItemList.get(position + 1);
+                ToDoItem item = toDoItemList.get(position - 1);
                 markToDoItemDone(item);
             }
             else
             {
-                ToDoItem item = toDoItemListDone.get(position + 2);
+                ToDoItem item = toDoItemListDone.get(position - numItemsToDo - 2);
                 markToDoItemNotDone(item);
             }
         }
