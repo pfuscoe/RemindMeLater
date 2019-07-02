@@ -20,7 +20,9 @@ import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.comparator.SortToDoItemByDate;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 
-public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapter.ToDoItemViewHolder> {
+public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final String TAG = "patrick.fuscoe.remindmelater.ToDoItemListAdapter";
 
     private static final int TYPE_HEADER_TO_DO = 0;
     private static final int TYPE_HEADER_DONE = 1;
@@ -35,21 +37,72 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
 
     private static ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener;
 
+    public static class ToDoItemHeaderViewHolder extends RecyclerView.ViewHolder {
+
+        ConstraintLayout viewToDoItemHeaderLayout;
+        TextView viewToDoItemHeader;
+
+        public ToDoItemHeaderViewHolder(View v)
+        {
+            super(v);
+
+            viewToDoItemHeaderLayout = v.findViewById(R.id.view_to_do_item_header_layout);
+            viewToDoItemHeader = v.findViewById(R.id.view_to_do_item_header);
+        }
+    }
+
     public static class ToDoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ConstraintLayout viewToDoItemLayout;
         ImageView viewToDoItemPriorityIcon;
         TextView viewToDoItemName;
 
-        public ToDoItemViewHolder(View toDoItemView)
+        public ToDoItemViewHolder(View v)
         {
-            super(toDoItemView);
+            super(v);
 
-            toDoItemView.setOnClickListener(this);
+            v.setOnClickListener(this);
 
-            viewToDoItemLayout = toDoItemView.findViewById(R.id.view_to_do_item_layout);
-            viewToDoItemPriorityIcon = toDoItemView.findViewById(R.id.view_to_do_item_priority_icon);
-            viewToDoItemName = toDoItemView.findViewById(R.id.view_to_do_item_name);
+            viewToDoItemLayout = v.findViewById(R.id.view_to_do_item_layout);
+            viewToDoItemPriorityIcon = v.findViewById(R.id.view_to_do_item_priority_icon);
+            viewToDoItemName = v.findViewById(R.id.view_to_do_item_name);
+        }
+
+        @Override
+        public void onClick(View v) {
+            toDoItemClickListener.toDoItemClicked(v, this.getLayoutPosition());
+        }
+    }
+
+    public static class ToDoItemDoneHeaderViewHolder extends RecyclerView.ViewHolder {
+
+        ConstraintLayout viewToDoItemDoneHeaderLayout;
+        TextView viewToDoItemDoneHeader;
+
+        public ToDoItemDoneHeaderViewHolder(View v)
+        {
+            super(v);
+
+            viewToDoItemDoneHeaderLayout = v.findViewById(R.id.view_to_do_item_done_header_layout);
+            viewToDoItemDoneHeader = v.findViewById(R.id.view_to_do_item_done_header);
+        }
+    }
+
+    public static class ToDoItemDoneViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        ConstraintLayout viewToDoItemDoneLayout;
+        ImageView viewToDoItemDonePriorityIcon;
+        TextView viewToDoItemDoneName;
+
+        public ToDoItemDoneViewHolder(View v)
+        {
+            super(v);
+
+            v.setOnClickListener(this);
+
+            viewToDoItemDoneLayout = v.findViewById(R.id.view_to_do_item_done_layout);
+            viewToDoItemDonePriorityIcon = v.findViewById(R.id.view_to_do_item_done_priority_icon);
+            viewToDoItemDoneName = v.findViewById(R.id.view_to_do_item_done_name);
         }
 
         @Override
@@ -85,24 +138,49 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
         this.toDoItemClickListener = toDoItemClickListener;
     }
 
-    // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public ToDoItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        // create a new view
-        ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_to_do_item, parent, false);
+        if (viewType == TYPE_HEADER_TO_DO)
+        {
+            ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.row_to_do_item_header, parent, false);
 
-        ToDoItemViewHolder vh = new ToDoItemViewHolder(v);
-        return vh;
+            return new ToDoItemHeaderViewHolder(v);
+        }
+        else if (viewType == TYPE_ITEM_TO_DO)
+        {
+            ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.row_to_do_item, parent, false);
+
+            return new ToDoItemViewHolder(v);
+        }
+        else if (viewType == TYPE_HEADER_DONE)
+        {
+            ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.row_to_do_item_header, parent, false);
+
+            return new ToDoItemDoneHeaderViewHolder(v);
+        }
+        else if (viewType == TYPE_ITEM_DONE)
+        {
+            ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.row_to_do_item_done, parent, false);
+
+            return new ToDoItemDoneViewHolder(v);
+        }
+
+        throw new RuntimeException("No view holder type match found in " + TAG);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull ToDoItemViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+
+        // TODO: Rework for various types
 
         ToDoItem toDoItem = toDoItemList.get(position);
 

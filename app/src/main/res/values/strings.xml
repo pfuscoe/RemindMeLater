@@ -18,4 +18,6 @@
     <string name="dialog_add_to_do_item_label_radio_medium">Medium</string>
     <string name="dialog_add_to_do_item_label_radio_low">Low</string>
     <string name="dialog_add_to_do_item_title">Add New To Do Item</string>
+    <string name="to_do_item_header">TO DO</string>
+    <string name="to_do_item_done_header">DONE</string>
 </resources>
