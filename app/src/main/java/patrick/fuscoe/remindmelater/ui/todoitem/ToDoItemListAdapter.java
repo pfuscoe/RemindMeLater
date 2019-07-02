@@ -108,7 +108,6 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
 
         holder.viewToDoItemName.setText(toDoItem.getItemName());
 
-        // TODO: Load priority icon
         int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
         holder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
 
@@ -116,7 +115,6 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
         holder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
     }
 
-    // Total items are all ToDoItems and 2 headers
     @Override
     public int getItemCount() {
         if (numItemsDone > 0) {
@@ -134,11 +132,11 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
         {
             return TYPE_HEADER_TO_DO;
         }
-        else if (0 < position && position < numItemsToDo)
+        else if (0 < position && position <= numItemsToDo)
         {
             return TYPE_ITEM_TO_DO;
         }
-        else if (position == numItemsToDo)
+        else if (position == numItemsToDo + 1)
         {
             return TYPE_HEADER_DONE;
         }
