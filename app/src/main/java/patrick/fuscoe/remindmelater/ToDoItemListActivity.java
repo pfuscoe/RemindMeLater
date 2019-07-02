@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -203,12 +204,27 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
     public void markToDoItemDone(ToDoItem toDoItem)
     {
-        // TODO: Setup method markToDoItemDone
+        toDoItem.setDone(true);
+        toDoItem.setTimestamp(Timestamp.now());
+        toDoItemListDone.add(0, toDoItem);
+
+        toDoItemList.remove(toDoItem);
+
+        hasChanged = true;
+        UpdateToDoItemListDisplay();
     }
 
     public void markToDoItemNotDone(ToDoItem toDoItem)
     {
-        // TODO: Setup method markToDoItemNotDone
+        toDoItem.setDone(false);
+        toDoItem.setTimestamp(Timestamp.now());
+        toDoItemList.add(toDoItem);
+        Collections.sort(toDoItemList);
+
+        toDoItemListDone.remove(toDoItem);
+
+        hasChanged = true;
+        UpdateToDoItemListDisplay();
     }
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
@@ -224,7 +240,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         Map<String, Object> toDoItemsMap = new HashMap<>();
 
-        for (ToDoItem item : toDoItemList)
+        for (ToDoItem item : toDoItemListUnsorted)
         {
             Map<String, Object> toDoItemMap = new HashMap<>();
             toDoItemMap.put("priority", item.getPriority());

@@ -64,4 +64,19 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return this.done;
     }
 
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
 }
