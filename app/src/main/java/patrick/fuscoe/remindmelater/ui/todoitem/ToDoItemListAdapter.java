@@ -168,7 +168,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     {
         if (holder instanceof ToDoItemHeaderViewHolder)
         {
-            // do nothing
+            return;
         }
         else if (holder instanceof ToDoItemViewHolder)
         {
@@ -184,7 +184,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         else if (holder instanceof ToDoItemDoneHeaderViewHolder)
         {
-            // do nothing
+            return;
         }
         else if (holder instanceof ToDoItemDoneViewHolder)
         {

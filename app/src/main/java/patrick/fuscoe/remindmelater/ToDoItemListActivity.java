@@ -65,17 +65,22 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         public void toDoItemClicked(View v, int position) {
 
             Log.d(TAG, ": To Do Item at pos: " + position + " clicked");
+            int numItemsToDo = toDoItemList.size();
 
-            // TODO: Setup ToDoItem click action
-
-            /*
-            String viewItemURLString = similarItemsList.get(position).getViewItemURLString();
-
-            // might need try statement
-            Uri page = Uri.parse(viewItemURLString);
-            Intent intent = new Intent(Intent.ACTION_VIEW, page);
-            startActivity(intent);
-            */
+            if (position == 0 || position == numItemsToDo + 1)
+            {
+                return;
+            }
+            else if (position <= numItemsToDo)
+            {
+                ToDoItem item = toDoItemList.get(position + 1);
+                markToDoItemDone(item);
+            }
+            else
+            {
+                ToDoItem item = toDoItemListDone.get(position + 2);
+                markToDoItemNotDone(item);
+            }
         }
     };
 
@@ -194,6 +199,16 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         hasChanged = true;
         UpdateToDoItemListDisplay();
+    }
+
+    public void markToDoItemDone(ToDoItem toDoItem)
+    {
+        // TODO: Setup method markToDoItemDone
+    }
+
+    public void markToDoItemNotDone(ToDoItem toDoItem)
+    {
+        // TODO: Setup method markToDoItemNotDone
     }
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
