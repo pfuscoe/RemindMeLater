@@ -116,10 +116,16 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<ToDoItemListAdapte
         holder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Total items are all ToDoItems and 2 headers
     @Override
     public int getItemCount() {
-        return toDoItemList.size();
+        if (numItemsDone > 0) {
+            return numItemsToDo + numItemsDone + 2;
+        }
+        else
+        {
+            return numItemsToDo + 1;
+        }
     }
 
     @Override
