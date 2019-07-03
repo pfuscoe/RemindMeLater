@@ -42,7 +42,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ConstraintLayout viewToDoItemHeaderLayout;
         TextView viewToDoItemHeader;
 
-        public ToDoItemHeaderViewHolder(View v)
+        ToDoItemHeaderViewHolder(View v)
         {
             super(v);
 
@@ -57,7 +57,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView viewToDoItemPriorityIcon;
         TextView viewToDoItemName;
 
-        public ToDoItemViewHolder(View v)
+        ToDoItemViewHolder(View v)
         {
             super(v);
 
@@ -79,7 +79,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ConstraintLayout viewToDoItemDoneHeaderLayout;
         TextView viewToDoItemDoneHeader;
 
-        public ToDoItemDoneHeaderViewHolder(View v)
+        ToDoItemDoneHeaderViewHolder(View v)
         {
             super(v);
 
@@ -94,7 +94,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView viewToDoItemDonePriorityIcon;
         TextView viewToDoItemDoneName;
 
-        public ToDoItemDoneViewHolder(View v)
+        ToDoItemDoneViewHolder(View v)
         {
             super(v);
 

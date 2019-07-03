@@ -71,7 +71,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
             if (position == 0 || position == numItemsToDo + 1)
             {
-                return;
+                // do nothing
             }
             else if (position <= numItemsToDo)
             {
