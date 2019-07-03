@@ -280,6 +280,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
                     }
                 });
 
+        hasChanged = false;
         Log.d(TAG, ": To Do Group " + toDoGroup.getTitle() + " updated");
         Toast.makeText(this, "To Do Group updated: " + toDoGroup.getTitle(), Toast.LENGTH_LONG).show();
     }

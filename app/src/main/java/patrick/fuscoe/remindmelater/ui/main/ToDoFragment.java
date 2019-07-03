@@ -70,6 +70,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private List<ToDoGroup> toDoGroupList;
 
+    private boolean hasChanged;
+
 
     private ToDoGroupClickListener toDoGroupClickListener = new ToDoGroupClickListener() {
         @Override
@@ -108,6 +110,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         super.onCreate(savedInstanceState);
 
         toDoGroupList = new ArrayList<>();
+        hasChanged = false;
     }
 
     @Override
