@@ -11,13 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
-import patrick.fuscoe.remindmelater.comparator.SortToDoItemByDate;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 
 public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -113,9 +110,6 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public ToDoItemListAdapter(List<ToDoItem> toDoItemList, List<ToDoItem> toDoItemListDone, Context context, ToDoItemListActivity.ToDoItemClickListener toDoItemClickListener)
     {
-        //this.toDoItemList = new ArrayList<>();
-        //this.toDoItemListDone = new ArrayList<>();
-
         this.toDoItemList = toDoItemList;
         this.toDoItemListDone = toDoItemListDone;
 

@@ -47,9 +47,6 @@ import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
