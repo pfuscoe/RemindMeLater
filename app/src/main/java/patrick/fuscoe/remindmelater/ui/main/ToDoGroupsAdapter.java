@@ -1,7 +1,6 @@
 package patrick.fuscoe.remindmelater.ui.main;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -32,7 +31,7 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         ImageView viewToDoGroupNumCircle;
         ImageView viewToDoGroupNumBox;
 
-        public ToDoGroupsViewHolder(View toDoGroupsView)
+        ToDoGroupsViewHolder(View toDoGroupsView)
         {
             super(toDoGroupsView);
 
@@ -67,8 +66,7 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_category, parent, false);
 
-        ToDoGroupsViewHolder vh = new ToDoGroupsViewHolder(v);
-        return vh;
+        return new ToDoGroupsViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -87,13 +85,13 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.home));
         holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
-        int numCircleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());
-        holder.viewToDoGroupNumCircle.setImageResource(numCircleIconId);
+        int circleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());
+        holder.viewToDoGroupNumCircle.setImageResource(circleIconId);
         //holder.viewToDoGroupNumCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numCircleIconId));
         holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.redDark));
 
-        int numBoxIconId = context.getResources().getIdentifier(numBoxIconString, "drawable", context.getPackageName());
-        holder.viewToDoGroupNumBox.setImageResource(numBoxIconId);
+        int boxIconId = context.getResources().getIdentifier(numBoxIconString, "drawable", context.getPackageName());
+        holder.viewToDoGroupNumBox.setImageResource(boxIconId);
         //holder.viewToDoGroupNumBox.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_5_box_multiple_outline));
         holder.viewToDoGroupNumBox.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
     }
