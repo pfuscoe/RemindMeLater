@@ -57,23 +57,18 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         this.toDoGroupClickListener = toDoGroupClickListener;
     }
 
-    // Create new views (invoked by the layout manager)
     @NonNull
     @Override
     public ToDoGroupsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_category, parent, false);
 
         return new ToDoGroupsViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull ToDoGroupsViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
 
         ToDoGroup toDoGroup = toDoGroupList.get(position);
 
@@ -87,21 +82,17 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
 
         int circleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());
         holder.viewToDoGroupNumCircle.setImageResource(circleIconId);
-        //holder.viewToDoGroupNumCircle.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numCircleIconId));
         holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.redDark));
 
         int boxIconId = context.getResources().getIdentifier(numBoxIconString, "drawable", context.getPackageName());
         holder.viewToDoGroupNumBox.setImageResource(boxIconId);
-        //holder.viewToDoGroupNumBox.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.numeric_5_box_multiple_outline));
         holder.viewToDoGroupNumBox.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return toDoGroupList.size();
     }
-
 
     private String selectNumCircleIconName(ToDoGroup toDoGroup)
     {
