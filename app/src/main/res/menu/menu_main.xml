@@ -11,6 +11,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_main_edit"
+        android:icon="@drawable/ic_menu_edit"
+        android:orderInCategory="100"
+        android:title="Edit Button"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_main_user_settings"
         android:orderInCategory="100"
         android:title="@string/menu_main_user_settings"

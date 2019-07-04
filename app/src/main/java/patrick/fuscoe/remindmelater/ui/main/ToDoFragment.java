@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,11 +42,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
+
+import static android.support.v4.app.ActivityCompat.invalidateOptionsMenu;
 
 public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
 
@@ -67,6 +71,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private List<ToDoGroup> toDoGroupList;
 
+    private boolean editMode;
     private boolean hasChanged;
 
 
@@ -107,6 +112,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         super.onCreate(savedInstanceState);
 
         toDoGroupList = new ArrayList<>();
+        editMode = false;
         hasChanged = false;
     }
 
@@ -183,8 +189,16 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public void UpdateToDoGroupsDisplay()
     {
-        toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
-        toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
+        if (!editMode)
+        {
+            toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
+            toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
+        }
+        else
+        {
+            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
+            toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
+        }
 
         toDoGroupsAdapter.notifyDataSetChanged();
     }
@@ -194,6 +208,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
+        // TODO: set edit icon based on mode
     }
 
     @Override
@@ -203,6 +219,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             case R.id.menu_main_add:
                 Log.d(TAG, ": Add Button pressed");
                 showAddToDoGroupDialog();
+
+            case R.id.menu_main_edit:
+                Log.d(TAG, ": Edit Button pressed");
+                toggleEditMode();
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
@@ -282,6 +302,15 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         Toast.makeText(getContext(), "Add To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+    }
+
+    public void toggleEditMode()
+    {
+        // TODO: implement edit mode toggling
+        editMode = !editMode;
+        requireActivity().invalidateOptionsMenu();
+
+        UpdateToDoGroupsDisplay();
     }
 
 }
