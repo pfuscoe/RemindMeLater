@@ -78,7 +78,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private boolean editMode;
     private boolean hasChanged;
 
-    private ItemTouchHelper itemTouchHelper;
+    private ItemTouchHelper toDoGroupEditItemTouchHelper;
 
 
     private ToDoGroupClickListener toDoGroupClickListener = new ToDoGroupClickListener() {
@@ -100,31 +100,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         }
     };
 
-    private ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
-        @Override
-        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            return (ItemTouchHelper.UP | ItemTouchHelper.DOWN);
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
-            //dragged.getAdapterPosition();
-            //target.getAdapterPosition();
-            //Collections.swap();
-            //toDoGroupsAdapter.notifyItemMoved(fromPosition, toPosition);
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
-        }
-    };
-
     private ToDoGroupDragListener toDoGroupDragListener = new ToDoGroupDragListener() {
         @Override
         public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-            // TODO: implement drag logic
+            toDoGroupEditItemTouchHelper.startDrag(viewHolder);
         }
     };
 
@@ -173,7 +152,24 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
 
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder dragged, @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = dragged.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+                Collections.swap(toDoGroupList, fromPosition, toPosition);
+                toDoGroupsAdapter.notifyItemMoved(fromPosition, toPosition);
+                return false;
+            }
 
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+            }
+        };
+
+        toDoGroupEditItemTouchHelper = new ItemTouchHelper(callback);
+        toDoGroupEditItemTouchHelper.attachToRecyclerView(toDoGroupsRecyclerView);
 
         return root;
     }
@@ -236,7 +232,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         }
         else
         {
-            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
+            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener, toDoGroupDragListener);
             toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
         }
 

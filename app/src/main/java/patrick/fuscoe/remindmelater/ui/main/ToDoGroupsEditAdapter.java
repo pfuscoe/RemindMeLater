@@ -3,9 +3,11 @@ package patrick.fuscoe.remindmelater.ui.main;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,7 +26,7 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
     private static ToDoFragment.ToDoGroupClickListener toDoGroupClickListener;
     private static ToDoFragment.ToDoGroupDragListener toDoGroupDragListener;
 
-    public static class ToDoGroupsEditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ToDoGroupsEditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener {
 
         CardView viewToDoGroupCard;
         ImageView viewToDoGroupIcon;
@@ -43,20 +45,34 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
             viewToDoGroupDragIcon = v.findViewById(R.id.view_card_category_num_box);
 
             viewToDoGroupEditIcon.setOnClickListener(this);
-            viewToDoGroupDragIcon.setOnClickListener(this);
+            viewToDoGroupDragIcon.setOnTouchListener(this);
         }
 
         @Override
         public void onClick(View view) {
             toDoGroupClickListener.toDoGroupClicked(view, this.getLayoutPosition());
         }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
+            {
+                toDoGroupDragListener.onStartDrag(this);
+            }
+            else if (event.getActionMasked() == MotionEvent.ACTION_UP)
+            {
+                v.performClick();
+            }
+            return false;
+        }
     }
 
-    public ToDoGroupsEditAdapter(List<ToDoGroup> toDoGroupList, Context context, ToDoFragment.ToDoGroupClickListener toDoGroupClickListener)
+    public ToDoGroupsEditAdapter(List<ToDoGroup> toDoGroupList, Context context, ToDoFragment.ToDoGroupClickListener toDoGroupClickListener, ToDoFragment.ToDoGroupDragListener toDoGroupDragListener)
     {
         this.toDoGroupList = toDoGroupList;
         this.context = context;
         this.toDoGroupClickListener = toDoGroupClickListener;
+        this.toDoGroupDragListener = toDoGroupDragListener;
     }
 
     @NonNull
