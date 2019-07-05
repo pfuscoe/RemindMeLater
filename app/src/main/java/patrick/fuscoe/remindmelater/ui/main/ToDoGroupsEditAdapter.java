@@ -22,6 +22,7 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
     private Context context;
 
     private static ToDoFragment.ToDoGroupClickListener toDoGroupClickListener;
+    private static ToDoFragment.ToDoGroupDragListener toDoGroupDragListener;
 
     public static class ToDoGroupsEditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
