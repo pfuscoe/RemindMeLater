@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -209,7 +210,16 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
-        // TODO: set edit icon based on mode
+        MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
+
+        if (editMode)
+        {
+            viewIconEdit.setIcon(R.drawable.ic_menu_list);
+        }
+        else
+        {
+            viewIconEdit.setIcon(R.drawable.ic_menu_edit);
+        }
     }
 
     @Override
