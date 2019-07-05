@@ -89,14 +89,14 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
             ToDoGroup toDoGroup = toDoGroupList.get(position);
 
-            Intent intent = new Intent(getContext(), ToDoItemListActivity.class);
-
-            Gson gson = new Gson();
-
-            String toDoGroupString = gson.toJson(toDoGroup);
-            intent.putExtra(TO_DO_GROUP, toDoGroupString);
-
-            startActivity(intent);
+            if (!editMode)
+            {
+                Intent intent = new Intent(getContext(), ToDoItemListActivity.class);
+                Gson gson = new Gson();
+                String toDoGroupString = gson.toJson(toDoGroup);
+                intent.putExtra(TO_DO_GROUP, toDoGroupString);
+                startActivity(intent);
+            }
         }
     };
 
