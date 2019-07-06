@@ -52,6 +52,7 @@ import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 
 import static android.support.v4.app.ActivityCompat.invalidateOptionsMenu;
 
@@ -75,6 +76,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private List<ToDoGroup> toDoGroupList;
 
+    private ToDoGroup toDoGroupToEdit;
+
     private boolean editMode;
     private boolean hasChanged;
 
@@ -96,6 +99,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 String toDoGroupString = gson.toJson(toDoGroup);
                 intent.putExtra(TO_DO_GROUP, toDoGroupString);
                 startActivity(intent);
+            }
+            else
+            {
+                toDoGroupToEdit = toDoGroupList.get(position);
+                showEditToDoGroupDialog();
             }
         }
     };
@@ -323,7 +331,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     // TODO: Override onPause() to write data to cloud
 
 
-    public void showAddToDoGroupDialog() {
+    public void showAddToDoGroupDialog()
+    {
         // Create an instance of the dialog fragment and show it
         FragmentManager fm = getFragmentManager();
         AddToDoGroupDialogFragment dialogFrag = new AddToDoGroupDialogFragment();
@@ -333,20 +342,48 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         dialogFrag.show(fm, AddToDoGroupDialogFragment.TAG);
     }
 
+    public void showEditToDoGroupDialog()
+    {
+        EditToDoGroupDialogFragment dialogFragment = new EditToDoGroupDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", toDoGroupToEdit.getTitle());
+        bundle.putString("iconName", toDoGroupToEdit.getIconName());
+
+        dialogFragment.setTargetFragment(ToDoFragment.this, 300);
+        dialogFragment.show(getFragmentManager(), EditToDoGroupDialogFragment.TAG);
+    }
+
     // The dialog fragment receives a reference to this Activity through the
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the AddToDoGroupDialogFragment.AddToDoGroupDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        Dialog dialogView = dialog.getDialog();
-        EditText viewAddToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
-        String newTitle = viewAddToDoGroupTitle.getText().toString();
-        addToDoGroup(newTitle);
+        if (dialog instanceof AddToDoGroupDialogFragment)
+        {
+            Dialog dialogView = dialog.getDialog();
+            EditText viewAddToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
+            String newTitle = viewAddToDoGroupTitle.getText().toString();
+            addToDoGroup(newTitle);
+        }
+        else if (dialog instanceof EditToDoGroupDialogFragment)
+        {
+            Dialog dialogView = dialog.getDialog();
+            EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
+            String newTitle = viewEditToDoGroupTitle.getText().toString();
+            toDoGroupToEdit.setTitle(newTitle);
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        Toast.makeText(getContext(), "Add To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+        if (dialog instanceof AddToDoGroupDialogFragment)
+        {
+            Toast.makeText(getContext(), "Add To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (dialog instanceof EditToDoGroupDialogFragment)
+        {
+            Toast.makeText(getContext(), "Edit To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void toggleEditMode()
