@@ -371,6 +371,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
             String newTitle = viewEditToDoGroupTitle.getText().toString();
             toDoGroupToEdit.setTitle(newTitle);
+
+            Toast.makeText(getContext(), "To Do Group Settings Saved", Toast.LENGTH_SHORT).show();
+
+            // TODO: commit changes
         }
     }
 
