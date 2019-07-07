@@ -56,7 +56,7 @@ import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 
 import static android.support.v4.app.ActivityCompat.invalidateOptionsMenu;
 
-public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
+public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener, EditToDoGroupDialogFragment.EditToDoGroupDialogListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -345,10 +345,12 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     public void showEditToDoGroupDialog()
     {
         EditToDoGroupDialogFragment dialogFragment = new EditToDoGroupDialogFragment();
+
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToEdit.getTitle());
         bundle.putString("iconName", toDoGroupToEdit.getIconName());
 
+        dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);
         dialogFragment.show(getFragmentManager(), EditToDoGroupDialogFragment.TAG);
     }
@@ -373,6 +375,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             toDoGroupToEdit.setTitle(newTitle);
 
             Toast.makeText(getContext(), "To Do Group Settings Saved", Toast.LENGTH_SHORT).show();
+            UpdateToDoGroupsDisplay();
 
             // TODO: commit changes
         }
