@@ -24,15 +24,14 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
     private Context context;
 
     private static ToDoFragment.ToDoGroupClickListener toDoGroupClickListener;
-    private static ToDoFragment.ToDoGroupDragListener toDoGroupDragListener;
 
-    public static class ToDoGroupsEditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener {
+    public static class ToDoGroupsEditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CardView viewToDoGroupCard;
         ImageView viewToDoGroupIcon;
         TextView viewToDoGroupTitle;
         ImageView viewToDoGroupEditIcon;
-        ImageView viewToDoGroupDragIcon;
+        ImageView viewToDoGroupDeleteIcon;
 
         ToDoGroupsEditViewHolder(View v)
         {
@@ -42,37 +41,23 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
             viewToDoGroupIcon = v.findViewById(R.id.view_card_category_icon);
             viewToDoGroupTitle = v.findViewById(R.id.view_card_category_title);
             viewToDoGroupEditIcon = v.findViewById(R.id.view_card_category_num_circle);
-            viewToDoGroupDragIcon = v.findViewById(R.id.view_card_category_num_box);
+            viewToDoGroupDeleteIcon = v.findViewById(R.id.view_card_category_num_box);
 
             viewToDoGroupEditIcon.setOnClickListener(this);
-            viewToDoGroupDragIcon.setOnTouchListener(this);
+            viewToDoGroupDeleteIcon.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             toDoGroupClickListener.toDoGroupClicked(view, this.getLayoutPosition());
         }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
-            {
-                toDoGroupDragListener.onStartDrag(this);
-            }
-            else if (event.getActionMasked() == MotionEvent.ACTION_UP)
-            {
-                v.performClick();
-            }
-            return false;
-        }
     }
 
-    public ToDoGroupsEditAdapter(List<ToDoGroup> toDoGroupList, Context context, ToDoFragment.ToDoGroupClickListener toDoGroupClickListener, ToDoFragment.ToDoGroupDragListener toDoGroupDragListener)
+    public ToDoGroupsEditAdapter(List<ToDoGroup> toDoGroupList, Context context, ToDoFragment.ToDoGroupClickListener toDoGroupClickListener)
     {
         this.toDoGroupList = toDoGroupList;
         this.context = context;
         this.toDoGroupClickListener = toDoGroupClickListener;
-        this.toDoGroupDragListener = toDoGroupDragListener;
     }
 
     @NonNull
@@ -100,9 +85,9 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
         holder.viewToDoGroupEditIcon.setImageResource(editIconId);
         holder.viewToDoGroupEditIcon.setColorFilter(ContextCompat.getColor(context, R.color.black));
 
-        int dragIconId = context.getResources().getIdentifier("action_drag", "drawable", context.getPackageName());
-        holder.viewToDoGroupDragIcon.setImageResource(dragIconId);
-        holder.viewToDoGroupDragIcon.setColorFilter(ContextCompat.getColor(context, R.color.black));
+        int dragIconId = context.getResources().getIdentifier("action_delete", "drawable", context.getPackageName());
+        holder.viewToDoGroupDeleteIcon.setImageResource(dragIconId);
+        holder.viewToDoGroupDeleteIcon.setColorFilter(ContextCompat.getColor(context, R.color.black));
     }
 
     @Override

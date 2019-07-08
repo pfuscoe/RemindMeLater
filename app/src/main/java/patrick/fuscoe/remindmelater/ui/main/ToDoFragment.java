@@ -235,7 +235,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     {
         if (editMode)
         {
-            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener, toDoGroupDragListener);
+            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
             toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
         }
         else if (reorderMode)
