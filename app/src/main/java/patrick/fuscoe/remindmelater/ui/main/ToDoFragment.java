@@ -54,9 +54,7 @@ import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 
-import static android.support.v4.app.ActivityCompat.invalidateOptionsMenu;
-
-public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener, EditToDoGroupDialogFragment.EditToDoGroupDialogListener {
+public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -79,9 +77,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private ToDoGroup toDoGroupToEdit;
 
     private boolean editMode;
+    private boolean reorderMode;
     private boolean hasChanged;
 
-    private ItemTouchHelper toDoGroupEditItemTouchHelper;
+    private ItemTouchHelper toDoGroupReorderItemTouchHelper;
 
 
     private ToDoGroupClickListener toDoGroupClickListener = new ToDoGroupClickListener() {
@@ -111,7 +110,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private ToDoGroupDragListener toDoGroupDragListener = new ToDoGroupDragListener() {
         @Override
         public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-            toDoGroupEditItemTouchHelper.startDrag(viewHolder);
+            toDoGroupReorderItemTouchHelper.startDrag(viewHolder);
         }
     };
 
@@ -138,6 +137,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
         toDoGroupList = new ArrayList<>();
         editMode = false;
+        reorderMode = false;
         hasChanged = false;
     }
 
@@ -176,8 +176,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             }
         };
 
-        toDoGroupEditItemTouchHelper = new ItemTouchHelper(callback);
-        toDoGroupEditItemTouchHelper.attachToRecyclerView(toDoGroupsRecyclerView);
+        toDoGroupReorderItemTouchHelper = new ItemTouchHelper(callback);
+        toDoGroupReorderItemTouchHelper.attachToRecyclerView(toDoGroupsRecyclerView);
 
         return root;
     }
@@ -233,14 +233,19 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public void UpdateToDoGroupsDisplay()
     {
-        if (!editMode)
+        if (editMode)
         {
-            toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
+            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener, toDoGroupDragListener);
+            toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
+        }
+        else if (reorderMode)
+        {
+            toDoGroupsAdapter = new ToDoGroupsReorderAdapter(toDoGroupList, getContext(), toDoGroupDragListener);
             toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
         }
         else
         {
-            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener, toDoGroupDragListener);
+            toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
             toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
         }
 
@@ -279,6 +284,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
+
+            case R.id.menu_main_reorder:
+                Log.d(TAG, ": Reorder menu item selected");
+                // TODO: setup mode switching for reorder
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -345,12 +354,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     public void showEditToDoGroupDialog()
     {
         EditToDoGroupDialogFragment dialogFragment = new EditToDoGroupDialogFragment();
-
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToEdit.getTitle());
         bundle.putString("iconName", toDoGroupToEdit.getIconName());
 
-        dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);
         dialogFragment.show(getFragmentManager(), EditToDoGroupDialogFragment.TAG);
     }
@@ -375,7 +382,6 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             toDoGroupToEdit.setTitle(newTitle);
 
             Toast.makeText(getContext(), "To Do Group Settings Saved", Toast.LENGTH_SHORT).show();
-            UpdateToDoGroupsDisplay();
 
             // TODO: commit changes
         }

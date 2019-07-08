@@ -7,19 +7,25 @@
         android:id="@+id/menu_main_add"
         android:icon="@drawable/ic_menu_add"
         android:orderInCategory="100"
-        android:title="Add Button"
+        android:title="Add New Group"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_main_edit"
         android:icon="@drawable/ic_menu_edit"
         android:orderInCategory="100"
-        android:title="Edit Button"
+        android:title="Edit Group"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_main_user_settings"
         android:orderInCategory="100"
         android:title="@string/menu_main_user_settings"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/menu_main_reorder"
+        android:orderInCategory="100"
+        android:title="Reorder Groups"
         app:showAsAction="collapseActionView" />
 </menu>
