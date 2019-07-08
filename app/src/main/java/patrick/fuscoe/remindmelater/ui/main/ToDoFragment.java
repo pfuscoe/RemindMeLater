@@ -52,6 +52,7 @@ import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 
 public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
@@ -332,8 +333,26 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void deleteToDoGroup(ToDoGroup toDoGroup)
     {
-        // TODO: implement delete and commit
         String docId = toDoGroup.getId();
+        String groupTitle = toDoGroup.getTitle();
+
+        toDoGroupsCollectionRef.document(docId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+
+        Log.d(TAG, ": To Do Group " + groupTitle + " deleted");
+        Toast.makeText(getContext(), "To Do Group Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
     }
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
@@ -378,7 +397,12 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public void showDeleteToDoGroupDialog()
     {
-        // TODO: setup delete confirm dialog
+        DeleteToDoGroupDialogFragment dialogFragment = new DeleteToDoGroupDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", toDoGroupToDelete.getTitle());
+
+        dialogFragment.setTargetFragment(ToDoFragment.this, 300);
+        dialogFragment.show(getFragmentManager(), DeleteToDoGroupDialogFragment.TAG);
     }
 
     // The dialog fragment receives a reference to this Activity through the
@@ -403,6 +427,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             Toast.makeText(getContext(), "To Do Group Settings Saved", Toast.LENGTH_SHORT).show();
 
             // TODO: commit changes
+        }
+        else if (dialog instanceof DeleteToDoGroupDialogFragment)
+        {
+            deleteToDoGroup(toDoGroupToDelete);
         }
     }
 
