@@ -75,6 +75,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private List<ToDoGroup> toDoGroupList;
 
     private ToDoGroup toDoGroupToEdit;
+    private ToDoGroup toDoGroupToDelete;
 
     private boolean editMode;
     private boolean reorderMode;
@@ -99,10 +100,17 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 intent.putExtra(TO_DO_GROUP, toDoGroupString);
                 startActivity(intent);
             }
-            else
+            // User clicked pencil icon from editMode
+            else if (v.getId() == R.id.view_card_category_num_circle)
             {
                 toDoGroupToEdit = toDoGroupList.get(position);
                 showEditToDoGroupDialog();
+            }
+            // User clicked delete icon from editMode
+            else if (v.getId() == R.id.view_card_category_num_box)
+            {
+                toDoGroupToDelete = toDoGroupList.get(position);
+                deleteToDoGroup(toDoGroupToDelete);
             }
         }
     };
@@ -287,7 +295,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
             case R.id.menu_main_reorder:
                 Log.d(TAG, ": Reorder menu item selected");
-                // TODO: setup mode switching for reorder
+                enterReorderMode();
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -320,6 +328,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
         Log.d(TAG, ": To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group added: " + title, Toast.LENGTH_LONG).show();
+    }
+
+    private void deleteToDoGroup(ToDoGroup toDoGroup)
+    {
+        // TODO: implement delete and commit
     }
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
@@ -410,6 +423,16 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         {
             editMode = true;
         }
+
+        requireActivity().invalidateOptionsMenu();
+
+        UpdateToDoGroupsDisplay();
+    }
+
+    public void enterReorderMode()
+    {
+        editMode = true;
+        reorderMode = true;
 
         requireActivity().invalidateOptionsMenu();
 
