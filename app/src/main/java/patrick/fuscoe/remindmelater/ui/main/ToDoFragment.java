@@ -110,7 +110,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             else if (v.getId() == R.id.view_card_category_num_box)
             {
                 toDoGroupToDelete = toDoGroupList.get(position);
-                deleteToDoGroup(toDoGroupToDelete);
+                showDeleteToDoGroupDialog();
             }
         }
     };
@@ -333,6 +333,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private void deleteToDoGroup(ToDoGroup toDoGroup)
     {
         // TODO: implement delete and commit
+        String docId = toDoGroup.getId();
     }
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
@@ -373,6 +374,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);
         dialogFragment.show(getFragmentManager(), EditToDoGroupDialogFragment.TAG);
+    }
+
+    public void showDeleteToDoGroupDialog()
+    {
+        // TODO: setup delete confirm dialog
     }
 
     // The dialog fragment receives a reference to this Activity through the

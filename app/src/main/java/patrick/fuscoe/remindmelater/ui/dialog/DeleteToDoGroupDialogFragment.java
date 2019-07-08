@@ -14,25 +14,25 @@ import android.widget.EditText;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
-public class EditToDoGroupDialogFragment extends DialogFragment {
+public class DeleteToDoGroupDialogFragment extends DialogFragment {
 
-    public static final String TAG = "patrick.fuscoe.remindmelater.EditToDoGroupDialogFragment";
+    public static final String TAG = "patrick.fuscoe.remindmelater.DeleteToDoGroupDialogFragment";
 
-    public interface EditToDoGroupDialogListener {
+    public interface DeleteToDoGroupDialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    EditToDoGroupDialogListener listener;
+    DeleteToDoGroupDialogListener listener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (EditToDoGroupDialogListener) getTargetFragment();
+            listener = (DeleteToDoGroupDialogListener) getTargetFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(ToDoFragment.TAG
-                    + " must implement EditToDoGroupDialogListener");
+                    + " must implement DeleteToDoGroupDialogListener");
         }
     }
 
@@ -40,27 +40,21 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View v = inflater.inflate(R.layout.dialog_add_to_do_group, null);
 
         Bundle bundle = getArguments();
         String groupTitle = bundle.getString("title");
-        String groupIconName = bundle.getString("iconName");
 
-        EditText viewGroupTitle = v.findViewById(R.id.dialog_add_to_do_group_title);
-        viewGroupTitle.setText(groupTitle);
-
-        builder.setView(v)
-                .setTitle(R.string.dialog_edit_to_do_group_title)
+        builder.setTitle(R.string.dialog_delete_to_do_group_title)
+                .setMessage("Are you sure you want to delete " + groupTitle + "?  This action cannot be undone!")
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogPositiveClick(EditToDoGroupDialogFragment.this);
+                        listener.onDialogPositiveClick(DeleteToDoGroupDialogFragment.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogNegativeClick(EditToDoGroupDialogFragment.this);
+                        listener.onDialogNegativeClick(DeleteToDoGroupDialogFragment.this);
                     }
                 });
         return builder.create();
