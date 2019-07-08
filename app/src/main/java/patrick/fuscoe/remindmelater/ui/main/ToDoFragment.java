@@ -233,14 +233,14 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public void UpdateToDoGroupsDisplay()
     {
-        if (editMode)
-        {
-            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
-            toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
-        }
-        else if (reorderMode)
+        if (reorderMode)
         {
             toDoGroupsAdapter = new ToDoGroupsReorderAdapter(toDoGroupList, getContext(), toDoGroupDragListener);
+            toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
+        }
+        else if (editMode)
+        {
+            toDoGroupsAdapter = new ToDoGroupsEditAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
             toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
         }
         else
@@ -401,7 +401,16 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     public void toggleEditMode()
     {
-        editMode = !editMode;
+        if (editMode)
+        {
+            reorderMode = false;
+            editMode = false;
+        }
+        else
+        {
+            editMode = true;
+        }
+
         requireActivity().invalidateOptionsMenu();
 
         UpdateToDoGroupsDisplay();
