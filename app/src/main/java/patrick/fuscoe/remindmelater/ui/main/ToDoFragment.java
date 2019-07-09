@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,6 +52,7 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
+import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
@@ -69,6 +71,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
     private final CollectionReference usersCollectionRef = db.collection("users");
+    private final String userId = auth.getUid();
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -76,6 +79,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private ToDoGroupsViewModel toDoGroupsViewModel;
 
+    private UserProfile userProfile;
     private List<ToDoGroup> toDoGroupList;
 
     private ToDoGroup toDoGroupToEdit;
@@ -148,6 +152,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         super.onCreate(savedInstanceState);
 
         toDoGroupList = new ArrayList<>();
+
         editMode = false;
         reorderMode = false;
         userFieldChanged = false;
@@ -403,7 +408,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         return toDoGroupDoc;
     }
 
-    private Map<String, Object> buildUserDoc()
+    private Map<String, Object> buildUserDoc(UserProfile userProfile)
     {
         // TODO: build user doc
     }

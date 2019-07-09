@@ -3,25 +3,25 @@ package patrick.fuscoe.remindmelater.models;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class User {
+public class UserProfile {
 
     private String id;
     private String displayName;
     private String[] subscriptions;
 
 
-    public User() {
+    public UserProfile() {
 
     }
 
-    public User(String id, String displayName)
+    public UserProfile(String id, String displayName)
     {
         this.id = id;
         this.displayName = displayName;
         this.subscriptions = new String[]{};
     }
 
-    public User(String id, String displayName, String[] subscriptions)
+    public UserProfile(String id, String displayName, String[] subscriptions)
     {
         this.id = id;
         this.displayName = displayName;

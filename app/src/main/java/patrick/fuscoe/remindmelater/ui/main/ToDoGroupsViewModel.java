@@ -18,12 +18,12 @@ import patrick.fuscoe.remindmelater.FirebaseQueryLiveData;
 public class ToDoGroupsViewModel extends ViewModel {
 
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private static final String userID = auth.getCurrentUser().getUid();
+    private static final String userId = auth.getCurrentUser().getUid();
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroups = db.collection("todogroups");
 
-    private final Query toDoGroupsQuery = toDoGroups.whereArrayContains("subscribers", userID);
+    private final Query toDoGroupsQuery = toDoGroups.whereArrayContains("subscribers", userId);
 
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(toDoGroupsQuery);
 
