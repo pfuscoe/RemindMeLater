@@ -55,7 +55,9 @@ import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 
-public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener {
+public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener,
+        EditToDoGroupDialogFragment.EditToDoGroupDialogListener,
+        DeleteToDoGroupDialogFragment.DeleteToDoGroupDialogListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -265,7 +267,6 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
 
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
 
@@ -277,6 +278,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         {
             viewIconEdit.setIcon(R.drawable.ic_menu_edit);
         }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -286,17 +289,21 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             case R.id.menu_main_add:
                 Log.d(TAG, ": Add Button pressed");
                 showAddToDoGroupDialog();
+                return true;
 
             case R.id.menu_main_edit:
                 Log.d(TAG, ": Edit Button pressed");
                 toggleEditMode();
+                return true;
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
+                return true;
 
             case R.id.menu_main_reorder:
                 Log.d(TAG, ": Reorder menu item selected");
                 enterReorderMode();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -391,6 +398,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         bundle.putString("title", toDoGroupToEdit.getTitle());
         bundle.putString("iconName", toDoGroupToEdit.getIconName());
 
+        dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);
         dialogFragment.show(getFragmentManager(), EditToDoGroupDialogFragment.TAG);
     }
@@ -401,6 +409,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToDelete.getTitle());
 
+        dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);
         dialogFragment.show(getFragmentManager(), DeleteToDoGroupDialogFragment.TAG);
     }
@@ -423,6 +432,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
             String newTitle = viewEditToDoGroupTitle.getText().toString();
             toDoGroupToEdit.setTitle(newTitle);
+
+            UpdateToDoGroupsDisplay();
 
             Toast.makeText(getContext(), "To Do Group Settings Saved", Toast.LENGTH_SHORT).show();
 

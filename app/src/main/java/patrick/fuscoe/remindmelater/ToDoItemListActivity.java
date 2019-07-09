@@ -165,9 +165,11 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
             case R.id.menu_main_add:
                 Log.d(TAG, ": Add Button pressed");
                 showAddToDoItemDialog();
+                return true;
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
