@@ -68,6 +68,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
+    private final CollectionReference usersCollectionRef = db.collection("users");
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -82,7 +83,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private boolean editMode;
     private boolean reorderMode;
-    private boolean hasChanged;
+    private boolean userFieldChanged;
 
     private ItemTouchHelper toDoGroupReorderItemTouchHelper;
 
@@ -149,7 +150,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         toDoGroupList = new ArrayList<>();
         editMode = false;
         reorderMode = false;
-        hasChanged = false;
+        userFieldChanged = false;
     }
 
     @Override
@@ -402,8 +403,22 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         return toDoGroupDoc;
     }
 
-    // TODO: Override onPause() to write data to cloud
+    private Map<String, Object> buildUserDoc()
+    {
+        // TODO: build user doc
+    }
 
+    // TODO: Override onPause() to write data to cloud
+    @Override
+    public void onPause() {
+        if (userFieldChanged)
+        {
+            commitUserDoc();
+            userFieldChanged = false;
+        }
+
+        super.onPause();
+    }
 
     public void showAddToDoGroupDialog()
     {

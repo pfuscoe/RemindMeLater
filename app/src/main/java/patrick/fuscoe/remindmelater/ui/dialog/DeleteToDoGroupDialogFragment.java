@@ -45,7 +45,7 @@ public class DeleteToDoGroupDialogFragment extends DialogFragment {
         String groupTitle = bundle.getString("title");
 
         builder.setTitle(R.string.dialog_delete_to_do_group_title)
-                .setMessage("Are you sure you want to delete " + groupTitle + "?\n\n  This action cannot be undone!")
+                .setMessage("Are you sure you want to delete " + groupTitle + "?\n\nThis action cannot be undone!")
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
