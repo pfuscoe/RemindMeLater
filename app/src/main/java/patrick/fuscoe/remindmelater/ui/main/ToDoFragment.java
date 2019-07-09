@@ -335,7 +335,32 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 });
 
         Log.d(TAG, ": To Do Group " + title + " added");
-        Toast.makeText(getContext(), "To Do Group added: " + title, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "To Do Group Added: " + title, Toast.LENGTH_LONG).show();
+    }
+
+    private void editToDoGroup(ToDoGroup toDoGroup)
+    {
+        String docId = toDoGroup.getId();
+
+        Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+
+        toDoGroupsCollectionRef.document(docId)
+                .set(toDoGroupDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        Log.d(TAG, ": To Do Group " + toDoGroup.getTitle() + " saved");
+        Toast.makeText(getContext(), "To Do Group Saved: " + toDoGroup.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     private void deleteToDoGroup(ToDoGroup toDoGroup)
@@ -433,11 +458,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
             String newTitle = viewEditToDoGroupTitle.getText().toString();
             toDoGroupToEdit.setTitle(newTitle);
 
-            UpdateToDoGroupsDisplay();
-
-            Toast.makeText(getContext(), "To Do Group Settings Saved", Toast.LENGTH_SHORT).show();
-
-            // TODO: commit changes
+            editToDoGroup(toDoGroupToEdit);
         }
         else if (dialog instanceof DeleteToDoGroupDialogFragment)
         {
