@@ -70,8 +70,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
-    private final CollectionReference usersCollectionRef = db.collection("users");
+
     private final String userId = auth.getUid();
+    private final DocumentReference userDocRef = db.collection("users").document(userId);
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -435,15 +436,37 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private Map<String, Object> buildUserDoc(UserProfile userProfile)
     {
-        // TODO: build user doc
+        Map<String, Object> userProfileDoc = new HashMap<>();
+        userProfileDoc.put("displayName", userProfile.getDisplayName());
+        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
+
+        return userProfileDoc;
     }
 
-    // TODO: Override onPause() to write data to cloud
+    private void commitUserDoc(Map<String, Object> userProfileDoc)
+    {
+        userDocRef.set(userProfileDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+    }
+
     @Override
     public void onPause() {
         if (userFieldChanged)
         {
-            commitUserDoc();
+            commitUserDoc(buildUserDoc(userProfile));
             userFieldChanged = false;
         }
 
