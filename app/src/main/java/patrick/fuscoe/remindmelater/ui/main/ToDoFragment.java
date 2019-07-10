@@ -78,6 +78,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private RecyclerView.LayoutManager toDoGroupsLayoutManager;
 
     private ToDoGroupsViewModel toDoGroupsViewModel;
+    private UserProfileViewModel userProfileViewModel;
 
     private UserProfile userProfile;
     private List<ToDoGroup> toDoGroupList;
@@ -204,10 +205,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         super.onActivityCreated(savedInstanceState);
 
         toDoGroupsViewModel = ViewModelProviders.of(this).get(ToDoGroupsViewModel.class);
+        LiveData<QuerySnapshot> toDoGroupsLiveData = toDoGroupsViewModel.getQuerySnapshotLiveData();
 
-        LiveData<QuerySnapshot> liveData = toDoGroupsViewModel.getQuerySnapshotLiveData();
-
-        liveData.observe(getViewLifecycleOwner(), new Observer<QuerySnapshot>() {
+        toDoGroupsLiveData.observe(getViewLifecycleOwner(), new Observer<QuerySnapshot>() {
             @Override
             public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots != null)
@@ -243,6 +243,31 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
+                }
+            }
+        });
+
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        LiveData<DocumentSnapshot> userProfileLiveData = userProfileViewModel.getDocumentSnapshotLiveData();
+
+        userProfileLiveData.observe(getViewLifecycleOwner(), new Observer<DocumentSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot != null)
+                {
+                    Map<String, Object> docMap = documentSnapshot.getData();
+
+                    String id = documentSnapshot.getId();
+                    String displayName = documentSnapshot.getString("displayName");
+
+                    ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
+                    String[] subscriptions = new String[subscriptionsList.size()];
+                    subscriptions = subscriptionsList.toArray(subscriptions);
+
+                    userProfile = new UserProfile(id, displayName, subscriptions);
+
+                    Log.d(TAG, "UserProfile loaded");
+                    // TODO: Update display with UserProfile info
                 }
             }
         });
