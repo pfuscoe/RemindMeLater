@@ -188,6 +188,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 toDoGroupsAdapter.notifyItemMoved(fromPosition, toPosition);
 
                 // TODO: check order and set flag if changed
+                checkToDoGroupOrder();
 
                 return false;
             }
@@ -275,6 +276,41 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 }
             }
         });
+    }
+
+    public void checkToDoGroupOrder()
+    {
+        String[] subscriptions = userProfile.getSubscriptions();
+
+        for (int i = 0; i < toDoGroupList.size(); i++)
+        {
+            ToDoGroup toDoGroup = toDoGroupList.get(i);
+
+            if (!toDoGroup.getId().equals(subscriptions[i]))
+            {
+                userFieldChanged = true;
+            }
+        }
+
+        if (userFieldChanged)
+        {
+            updateToDoGroupOrder();
+        }
+    }
+
+    public void updateToDoGroupOrder()
+    {
+        int numGroups = toDoGroupList.size();
+        String[] newSubscriptionsArray = new String[numGroups];
+
+        for (int i = 0; i < numGroups; i++)
+        {
+            ToDoGroup toDoGroup = toDoGroupList.get(i);
+
+            newSubscriptionsArray[i] = toDoGroup.getId();
+        }
+
+        userProfile.setSubscriptions(newSubscriptionsArray);
     }
 
     public void UpdateToDoGroupsDisplay()
