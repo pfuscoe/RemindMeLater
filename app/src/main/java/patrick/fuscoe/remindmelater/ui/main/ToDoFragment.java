@@ -265,15 +265,29 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     String id = documentSnapshot.getId();
                     String displayName = documentSnapshot.getString("displayName");
 
+                    /*
+                    String[] temp = new String[]{};
+                    temp = (String[]) documentSnapshot.get("subscriptions");
+                    Log.d(TAG, temp.toString());
+                    */
+
                     ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
+
+                    Log.d(TAG, "subscriptionsList: " + subscriptionsList);
+
                     String[] subscriptions = new String[subscriptionsList.size()];
                     subscriptions = subscriptionsList.toArray(subscriptions);
+
+                    for (int i = 0; i < subscriptions.length; i++) {
+                        Log.d("subscriptions item: ", subscriptions[i]);
+                    }
 
                     userProfile = new UserProfile(id, displayName, subscriptions);
 
                     Log.d(TAG, "UserProfile loaded");
                     // TODO: Update display with UserProfile info
                     //requireActivity().getActionBar().setTitle("Hello, " + userProfile.getDisplayName());
+                    ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
                 }
             }
         });
