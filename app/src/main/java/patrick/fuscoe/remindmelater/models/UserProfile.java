@@ -36,6 +36,11 @@ public class UserProfile {
         subscriptions = tempList.toArray(subscriptions);
     }
 
+    public void removeSubscription(String groupId)
+    {
+        // TODO: implement remove subscription
+    }
+
     /** Getters and Setters **/
     public String getId() {
         return id;

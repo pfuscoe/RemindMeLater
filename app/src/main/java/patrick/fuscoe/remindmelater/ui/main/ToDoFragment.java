@@ -273,6 +273,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     Log.d(TAG, "UserProfile loaded");
                     // TODO: Update display with UserProfile info
+                    requireActivity().getActionBar().setTitle("Hello, " + userProfile.getDisplayName());
                 }
             }
         });
@@ -384,8 +385,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private void addToDoGroup(String title)
     {
         DocumentReference docRef = toDoGroupsCollectionRef.document();
-        String docId = docRef.getId();
-
+        final String docId = docRef.getId();
         final ToDoGroup toDoGroup = new ToDoGroup(docId, title, "default", false, auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
@@ -396,6 +396,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
+                        userProfile.addSubscription(docId);
+                        userFieldChanged = true;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -404,6 +406,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
+
 
         Log.d(TAG, ": To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group Added: " + title, Toast.LENGTH_LONG).show();
@@ -445,6 +448,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        // TODO: update user profile
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
