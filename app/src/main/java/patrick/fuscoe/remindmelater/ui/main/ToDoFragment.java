@@ -273,7 +273,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     Log.d(TAG, "UserProfile loaded");
                     // TODO: Update display with UserProfile info
-                    requireActivity().getActionBar().setTitle("Hello, " + userProfile.getDisplayName());
+                    //requireActivity().getActionBar().setTitle("Hello, " + userProfile.getDisplayName());
                 }
             }
         });
