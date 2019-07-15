@@ -484,7 +484,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void deleteToDoGroup(ToDoGroup toDoGroup)
     {
-        String docId = toDoGroup.getId();
+        final String docId = toDoGroup.getId();
         String groupTitle = toDoGroup.getTitle();
 
         toDoGroupsCollectionRef.document(docId)
@@ -494,6 +494,9 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         // TODO: update user profile
+                        userProfile.removeSubscription(docId);
+                        userFieldChanged = true;
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

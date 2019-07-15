@@ -38,7 +38,9 @@ public class UserProfile {
 
     public void removeSubscription(String groupId)
     {
-        // TODO: implement remove subscription
+        ArrayList<String> tempList = new ArrayList<>(Arrays.asList(subscriptions));
+        tempList.remove(groupId);
+        subscriptions = tempList.toArray(subscriptions);
     }
 
     /** Getters and Setters **/
