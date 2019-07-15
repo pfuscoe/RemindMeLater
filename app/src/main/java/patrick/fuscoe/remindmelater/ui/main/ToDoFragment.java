@@ -246,6 +246,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     toDoGroupList = toDoGroupDocs;
 
+                    updateToDoGroupDisplayOnReorder();
+
                     Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
                 }
@@ -284,10 +286,14 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     userProfile = new UserProfile(id, displayName, subscriptions);
 
+                    updateToDoGroupDisplayOnReorder();
+
                     Log.d(TAG, "UserProfile loaded");
                     // TODO: Update display with UserProfile info
                     //requireActivity().getActionBar().setTitle("Hello, " + userProfile.getDisplayName());
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
+
+                    UpdateToDoGroupsDisplay();
                 }
             }
         });
@@ -326,6 +332,31 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         }
 
         userProfile.setSubscriptions(newSubscriptionsArray);
+    }
+
+    public void updateToDoGroupDisplayOnReorder()
+    {
+        if (userProfile != null)
+        {
+            List<ToDoGroup> tempList = new ArrayList<>(toDoGroupList);
+            List<ToDoGroup> reorderedList = new ArrayList<>();
+            String[] subscriptions = userProfile.getSubscriptions();
+
+            for (int i = 0; i < subscriptions.length; i++)
+            {
+                String id = subscriptions[i];
+
+                for (ToDoGroup group : tempList)
+                {
+                    if (id.equals(group.getId()))
+                    {
+                        reorderedList.add(group);
+                    }
+                }
+            }
+
+            toDoGroupList = reorderedList;
+        }
     }
 
     public void UpdateToDoGroupsDisplay()
