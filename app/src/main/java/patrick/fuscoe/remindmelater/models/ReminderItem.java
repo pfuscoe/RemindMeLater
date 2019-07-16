@@ -1,18 +1,15 @@
 package patrick.fuscoe.remindmelater.models;
 
-import android.location.Address;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ReminderItem {
 
     private String itemName;
     private int daysAway;
-
-    private Recurrance recurrance;
-
-    private Date nextOccurance;
+    private Recurrence recurrence;
+    private Calendar nextOccurance;
     private String description;
 
     //private Address address;
@@ -25,11 +22,11 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String itemName, int daysAway, Recurrance recurrance, Date nextOccurance, String description)
+    public ReminderItem(String itemName, int daysAway, Recurrence recurrence, Calendar nextOccurance, String description)
     {
         this.itemName = itemName;
         this.daysAway = daysAway;
-        this.recurrance = recurrance;
+        this.recurrence = recurrence;
         this.nextOccurance = nextOccurance;
         this.description = description;
 
@@ -51,11 +48,11 @@ public class ReminderItem {
         return daysAway;
     }
 
-    public Recurrance getRecurrance() {
-        return recurrance;
+    public Recurrence getRecurrence() {
+        return recurrence;
     }
 
-    public Date getNextOccurance() {
+    public Calendar getNextOccurance() {
         return nextOccurance;
     }
 
@@ -81,11 +78,11 @@ public class ReminderItem {
         this.daysAway = daysAway;
     }
 
-    public void setRecurrance(Recurrance recurrance) {
-        this.recurrance = recurrance;
+    public void setRecurrence(Recurrence recurrence) {
+        this.recurrence = recurrence;
     }
 
-    public void setNextOccurance(Date nextOccurance) {
+    public void setNextOccurance(Calendar nextOccurance) {
         this.nextOccurance = nextOccurance;
     }
 
