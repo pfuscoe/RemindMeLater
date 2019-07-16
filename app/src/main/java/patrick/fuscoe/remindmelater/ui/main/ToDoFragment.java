@@ -225,13 +225,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
 
-                    //for (QueryDocumentSnapshot doc : queryDocumentSnapshots)
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
                     {
                         String id = doc.getId();
                         String title = doc.getString("title");
                         String iconName = doc.getString("iconName");
-                        //if (doc.getBoolean("shared") != null)
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
                         int totalItems = doc.get("totalItems", int.class);
@@ -272,12 +270,6 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     String id = documentSnapshot.getId();
                     String displayName = documentSnapshot.getString("displayName");
 
-                    /*
-                    String[] temp = new String[]{};
-                    temp = (String[]) documentSnapshot.get("subscriptions");
-                    Log.d(TAG, temp.toString());
-                    */
-
                     ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
 
                     Log.d(TAG, "subscriptionsList: " + subscriptionsList);
@@ -294,8 +286,6 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     updateToDoGroupDisplayOnReorder();
 
                     Log.d(TAG, "UserProfile loaded");
-                    // TODO: Update display with UserProfile info
-                    //requireActivity().getActionBar().setTitle("Hello, " + userProfile.getDisplayName());
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
 
                     UpdateToDoGroupsDisplay();
