@@ -90,6 +90,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     private boolean editMode;
     private boolean reorderMode;
     private boolean userFieldChanged;
+    private boolean groupAdded;
 
     private ItemTouchHelper toDoGroupReorderItemTouchHelper;
 
@@ -158,6 +159,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         editMode = false;
         reorderMode = false;
         userFieldChanged = false;
+        groupAdded = false;
     }
 
     @Override
@@ -246,7 +248,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     toDoGroupList = toDoGroupDocs;
 
-                    updateToDoGroupDisplayOnReorder();
+                    if (!groupAdded)
+                    {
+                        updateToDoGroupDisplayOnReorder();
+                    }
 
                     Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     UpdateToDoGroupsDisplay();
@@ -380,6 +385,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         toDoGroupsAdapter.notifyDataSetChanged();
     }
 
+    private void UpdateUserProfileDisplay()
+    {
+        
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -429,6 +439,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void addToDoGroup(String title)
     {
+        groupAdded = true;
+
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
         final ToDoGroup toDoGroup = new ToDoGroup(docId, title, "default", false, auth.getUid());
@@ -443,6 +455,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         userProfile.addSubscription(docId);
                         userFieldChanged = true;
+                        groupAdded = false;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
