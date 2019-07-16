@@ -1,15 +1,15 @@
 package patrick.fuscoe.remindmelater.models;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ReminderItem {
 
     private String itemName;
-    private int daysAway;
-    private Recurrence recurrence;
+    private Period recurrence;
     private Calendar nextOccurance;
+    private String category;
     private String description;
 
     //private Address address;
@@ -22,12 +22,12 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String itemName, int daysAway, Recurrence recurrence, Calendar nextOccurance, String description)
+    public ReminderItem(String itemName, Period recurrence, Calendar nextOccurance, String category, String description)
     {
         this.itemName = itemName;
-        this.daysAway = daysAway;
         this.recurrence = recurrence;
         this.nextOccurance = nextOccurance;
+        this.category = category;
         this.description = description;
 
         this.snoozed = false;
@@ -44,16 +44,16 @@ public class ReminderItem {
         return itemName;
     }
 
-    public int getDaysAway() {
-        return daysAway;
-    }
-
-    public Recurrence getRecurrence() {
+    public Period getRecurrence() {
         return recurrence;
     }
 
     public Calendar getNextOccurance() {
         return nextOccurance;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public String getDescription() {
@@ -74,16 +74,16 @@ public class ReminderItem {
         this.itemName = itemName;
     }
 
-    public void setDaysAway(int daysAway) {
-        this.daysAway = daysAway;
-    }
-
-    public void setRecurrence(Recurrence recurrence) {
+    public void setRecurrence(Period recurrence) {
         this.recurrence = recurrence;
     }
 
     public void setNextOccurance(Calendar nextOccurance) {
         this.nextOccurance = nextOccurance;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setDescription(String description) {
