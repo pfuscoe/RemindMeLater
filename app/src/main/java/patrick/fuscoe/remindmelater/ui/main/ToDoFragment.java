@@ -29,8 +29,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.data.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -38,6 +40,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -429,14 +432,19 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
     private void addToDoGroup(String title)
     {
-        groupAdded = true;
+        //groupAdded = true;
 
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
         final ToDoGroup toDoGroup = new ToDoGroup(docId, title, "default", false, auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+        userProfile.addSubscription(docId);
+        Map<String, Object> userProfileDoc = buildUserDoc(userProfile);
 
+        commitAddToDoGroupBatch(docId, toDoGroupDoc, userProfileDoc);
+
+        /*
         toDoGroupsCollectionRef.document(docId)
                 .set(toDoGroupDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -454,7 +462,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
-
+        */
 
         Log.d(TAG, ": To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group Added: " + title, Toast.LENGTH_LONG).show();
@@ -490,13 +498,18 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         final String docId = toDoGroup.getId();
         String groupTitle = toDoGroup.getTitle();
 
+        userProfile.removeSubscription(docId);
+        Map<String, Object> userProfileDoc = buildUserDoc(userProfile);
+
+        commitDeleteToDoGroupBatch(docId, userProfileDoc);
+
+        /*
         toDoGroupsCollectionRef.document(docId)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        // TODO: update user profile
                         userProfile.removeSubscription(docId);
                         userFieldChanged = true;
 
@@ -508,6 +521,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
+        */
 
         Log.d(TAG, ": To Do Group " + groupTitle + " deleted");
         Toast.makeText(getContext(), "To Do Group Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
@@ -554,6 +568,38 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 });
 
         Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+    }
+
+    private void commitAddToDoGroupBatch(String groupId, Map<String, Object> toDoGroupDoc, Map<String, Object> userProfileDoc)
+    {
+        WriteBatch batch = db.batch();
+        DocumentReference groupRef = toDoGroupsCollectionRef.document(groupId);
+
+        batch.set(groupRef, toDoGroupDoc);
+        batch.set(userDocRef, userProfileDoc);
+
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "Batch successfully written!");
+            }
+        });
+    }
+
+    private void commitDeleteToDoGroupBatch(String groupId, Map<String, Object> userProfileDoc)
+    {
+        WriteBatch batch = db.batch();
+        DocumentReference groupRef = toDoGroupsCollectionRef.document(groupId);
+
+        batch.delete(groupRef);
+        batch.set(userDocRef, userProfileDoc);
+
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "Delete To Do Group Batch successfully finished!");
+            }
+        });
     }
 
     @Override
