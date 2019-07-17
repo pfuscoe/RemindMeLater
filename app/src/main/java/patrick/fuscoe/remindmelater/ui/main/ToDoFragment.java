@@ -223,7 +223,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 if (queryDocumentSnapshots != null)
                 {
                     // Update UI views with values from the snapshot
-                    // This probably means converting data from snapshot form
+                    // Convert data from snapshot form
                     // into list of ToDoGroups then update data display
 
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
@@ -249,12 +249,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     toDoGroupList = toDoGroupDocs;
 
-                    if (!groupAdded)
-                    {
-                        updateToDoGroupDisplayOnReorder();
-                    }
-
                     Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
+                    updateToDoGroupDisplayOnReorder();
                     UpdateToDoGroupsDisplay();
                 }
             }
@@ -286,11 +282,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                     userProfile = new UserProfile(id, displayName, subscriptions);
 
-                    updateToDoGroupDisplayOnReorder();
-
                     Log.d(TAG, "UserProfile loaded");
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
 
+                    updateToDoGroupDisplayOnReorder();
                     UpdateToDoGroupsDisplay();
                 }
             }
