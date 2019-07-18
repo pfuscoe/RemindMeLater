@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,7 @@ public class RemindersFragment extends Fragment {
     private UserProfileViewModel userProfileViewModel;
 
     private UserProfile userProfile;
-    private List<ReminderItem> reminderList;
+    private List<ReminderItem> reminderItemList;
 
     private boolean editMode;
 
@@ -103,6 +104,13 @@ public class RemindersFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // TODO: setup recycler view
+        remindersRecyclerView = root.findViewById(R.id.view_reminders_recycler);
+        remindersRecyclerView.setHasFixedSize(true);
+
+        remindersLayoutManager = new LinearLayoutManager(getContext());
+        remindersRecyclerView.setLayoutManager(remindersLayoutManager);
+
+
 
         return root;
     }

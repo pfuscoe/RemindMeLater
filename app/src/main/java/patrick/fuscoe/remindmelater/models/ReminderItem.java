@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater.models;
 
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,12 +9,13 @@ public class ReminderItem {
 
     private String itemName;
     private Period recurrence;
-    private Calendar nextOccurance;
+    private LocalDate nextOccurance;
     private String category;
     private String description;
 
     //private Address address;
 
+    private int daysAway;
     private boolean snoozed;
     private ArrayList<HistoryItem> historyItems;
 
@@ -22,7 +24,7 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String itemName, Period recurrence, Calendar nextOccurance, String category, String description)
+    public ReminderItem(String itemName, Period recurrence, LocalDate nextOccurance, String category, String description)
     {
         this.itemName = itemName;
         this.recurrence = recurrence;
@@ -30,8 +32,15 @@ public class ReminderItem {
         this.category = category;
         this.description = description;
 
+        updateDaysAway(nextOccurance);
         this.snoozed = false;
         this.historyItems = new ArrayList<>();
+    }
+
+    public void updateDaysAway(LocalDate nextOccurance)
+    {
+        LocalDate now = LocalDate.now();
+        Period diff = Period.between(now, nextOccurance);
     }
 
     public void addToHistory(HistoryItem historyItem)
@@ -48,7 +57,7 @@ public class ReminderItem {
         return recurrence;
     }
 
-    public Calendar getNextOccurance() {
+    public LocalDate getNextOccurance() {
         return nextOccurance;
     }
 
@@ -78,7 +87,7 @@ public class ReminderItem {
         this.recurrence = recurrence;
     }
 
-    public void setNextOccurance(Calendar nextOccurance) {
+    public void setNextOccurance(LocalDate nextOccurance) {
         this.nextOccurance = nextOccurance;
     }
 
