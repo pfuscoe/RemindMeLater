@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,10 +18,13 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
@@ -38,6 +42,7 @@ public class RemindersFragment extends Fragment {
 
     private final String userId = auth.getUid();
     private final DocumentReference userDocRef = db.collection("users").document(userId);
+    private String remindersDocId;
 
     private RecyclerView remindersRecyclerView;
     private RecyclerView.Adapter remindersAdapter;
@@ -91,26 +96,20 @@ public class RemindersFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_reminders, container, false);
 
-        /*
-        final TextView textView = root.findViewById(R.id.section_label);
-        pageViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        */
-
         setHasOptionsMenu(true);
 
-        // TODO: setup recycler view
         remindersRecyclerView = root.findViewById(R.id.view_reminders_recycler);
         remindersRecyclerView.setHasFixedSize(true);
 
         remindersLayoutManager = new LinearLayoutManager(getContext());
         remindersRecyclerView.setLayoutManager(remindersLayoutManager);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(remindersRecyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        remindersRecyclerView.addItemDecoration(dividerItemDecoration);
 
+        remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
+        remindersRecyclerView.setAdapter(remindersAdapter);
 
         return root;
     }
@@ -128,6 +127,20 @@ public class RemindersFragment extends Fragment {
                 if (queryDocumentSnapshots != null)
                 {
                     // TODO: Update UI views with data from snapshot
+                    List<ReminderItem> reminderListFromDoc = new ArrayList<>();
+
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
+                    {
+                        remindersDocId = doc.getId();
+
+                        Map<String, Object> docMap = doc.getData();
+
+                        for (Map.Entry<String, Object> entry : docMap.entrySet())
+                        {
+                            
+                        }
+
+                    }
                 }
             }
         });

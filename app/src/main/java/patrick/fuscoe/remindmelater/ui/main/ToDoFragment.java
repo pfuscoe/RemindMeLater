@@ -190,7 +190,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                 Collections.swap(toDoGroupList, fromPosition, toPosition);
                 toDoGroupsAdapter.notifyItemMoved(fromPosition, toPosition);
 
-                // TODO: check order and set flag if changed
+                // Check order and set flag if changed
                 checkToDoGroupOrder();
 
                 return false;
