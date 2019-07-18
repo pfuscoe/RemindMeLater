@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater.ui.main;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 
@@ -68,9 +71,14 @@ public class RemindersFragment extends Fragment {
             Log.d(TAG, ": Reminder " + position + " clicked");
             ReminderItem reminderItem = reminderItemList.get(position);
 
+            // Open details activity for reminder item clicked
             if (!editMode)
             {
-
+                Intent intent = new Intent(getContext(), ReminderDetailsActivity.class);
+                Gson gson = new Gson();
+                String reminderItemString = gson.toJson(reminderItem);
+                intent.putExtra(REMINDERS, reminderItemString);
+                startActivity(intent);
             }
         }
     };
