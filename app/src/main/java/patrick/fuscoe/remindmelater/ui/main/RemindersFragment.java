@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,13 @@ public class RemindersFragment extends Fragment {
         @Override
         public void reminderClicked(View v, int position) {
             // TODO: implement reminder click action
+            Log.d(TAG, ": Reminder " + position + " clicked");
+            ReminderItem reminderItem = reminderItemList.get(position);
+
+            if (!editMode)
+            {
+
+            }
         }
     };
 
