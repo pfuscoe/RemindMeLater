@@ -47,6 +47,6 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(reminderItem.getTitle());
 
-        
+        // TODO: setup views, fields, buttons, etc.
     }
 }
