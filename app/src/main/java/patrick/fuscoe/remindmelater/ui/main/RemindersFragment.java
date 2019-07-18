@@ -22,7 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -126,7 +129,7 @@ public class RemindersFragment extends Fragment {
             public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots != null)
                 {
-                    // TODO: Update UI views with data from snapshot
+                    // Update UI views with data from snapshot
                     List<ReminderItem> reminderListFromDoc = new ArrayList<>();
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
@@ -138,14 +141,37 @@ public class RemindersFragment extends Fragment {
                         for (Map.Entry<String, Object> entry : docMap.entrySet())
                         {
                             String title = entry.getKey();
-                            
-                        }
+                            HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
+                            String recurrenceString = (String) reminderItemMap.get("recurrence");
+                            Period recurrence = Period.parse(recurrenceString);
+
+                            String nextOccurrenceString = (String) reminderItemMap.get("nextOccurrence");
+                            LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
+
+                            String category = (String) reminderItemMap.get("category");
+
+                            String description = (String) reminderItemMap.get("description");
+
+                            ReminderItem reminderItem = new ReminderItem(title, recurrence, nextOccurrence, category, description);
+                            reminderListFromDoc.add(reminderItem);
+                        }
                     }
+
+                    reminderItemList = reminderListFromDoc;
+                    updateRemindersDisplay();
                 }
             }
         });
 
         // TODO: implement user profile observer
+    }
+
+    public void updateRemindersDisplay()
+    {
+        remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
+        remindersRecyclerView.setAdapter(remindersAdapter);
+
+        remindersAdapter.notifyDataSetChanged();
     }
 }

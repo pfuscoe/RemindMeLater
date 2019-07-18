@@ -9,7 +9,7 @@ public class ReminderItem {
 
     private String title;
     private Period recurrence;
-    private LocalDate nextOccurance;
+    private LocalDate nextOccurrence;
     private String category;
     private String description;
 
@@ -24,23 +24,23 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String title, Period recurrence, LocalDate nextOccurance, String category, String description)
+    public ReminderItem(String title, Period recurrence, LocalDate nextOccurrence, String category, String description)
     {
         this.title = title;
         this.recurrence = recurrence;
-        this.nextOccurance = nextOccurance;
+        this.nextOccurrence = nextOccurrence;
         this.category = category;
         this.description = description;
 
-        updateDaysAway(nextOccurance);
+        updateDaysAway(nextOccurrence);
         this.snoozed = false;
         this.historyItems = new ArrayList<>();
     }
 
-    public void updateDaysAway(LocalDate nextOccurance)
+    public void updateDaysAway(LocalDate nextOccurrence)
     {
         LocalDate now = LocalDate.now();
-        Period diff = Period.between(now, nextOccurance);
+        Period diff = Period.between(now, nextOccurrence);
 
         daysAway = diff.getDays();
     }
@@ -59,8 +59,8 @@ public class ReminderItem {
         return recurrence;
     }
 
-    public LocalDate getNextOccurance() {
-        return nextOccurance;
+    public LocalDate getNextOccurrence() {
+        return nextOccurrence;
     }
 
     public String getCategory() {
@@ -93,8 +93,8 @@ public class ReminderItem {
         this.recurrence = recurrence;
     }
 
-    public void setNextOccurance(LocalDate nextOccurance) {
-        this.nextOccurance = nextOccurance;
+    public void setNextOccurance(LocalDate nextOccurrence) {
+        this.nextOccurrence = nextOccurrence;
     }
 
     public void setCategory(String category) {
