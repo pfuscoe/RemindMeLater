@@ -137,6 +137,7 @@ public class RemindersFragment extends Fragment {
 
                         for (Map.Entry<String, Object> entry : docMap.entrySet())
                         {
+                            String title = entry.getKey();
                             
                         }
 
