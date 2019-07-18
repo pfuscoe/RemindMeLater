@@ -65,9 +65,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         DeleteToDoGroupDialogFragment.DeleteToDoGroupDialogListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
-
     public static final String TO_DO_GROUP = "patrick.fuscoe.remindmelater.TO_DO_GROUP";
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();

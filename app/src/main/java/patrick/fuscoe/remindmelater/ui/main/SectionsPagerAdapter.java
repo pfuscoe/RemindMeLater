@@ -35,7 +35,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
         else
         {
-            return PlaceholderFragment.newInstance(position + 1);
+            return RemindersFragment.newInstance(position + 1);
         }
     }
 
