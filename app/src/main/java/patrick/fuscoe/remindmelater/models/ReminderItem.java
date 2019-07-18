@@ -7,7 +7,7 @@ import java.util.Calendar;
 
 public class ReminderItem {
 
-    private String itemName;
+    private String title;
     private Period recurrence;
     private LocalDate nextOccurance;
     private String category;
@@ -24,9 +24,9 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String itemName, Period recurrence, LocalDate nextOccurance, String category, String description)
+    public ReminderItem(String title, Period recurrence, LocalDate nextOccurance, String category, String description)
     {
-        this.itemName = itemName;
+        this.title = title;
         this.recurrence = recurrence;
         this.nextOccurance = nextOccurance;
         this.category = category;
@@ -41,6 +41,8 @@ public class ReminderItem {
     {
         LocalDate now = LocalDate.now();
         Period diff = Period.between(now, nextOccurance);
+
+        daysAway = diff.getDays();
     }
 
     public void addToHistory(HistoryItem historyItem)
@@ -49,8 +51,8 @@ public class ReminderItem {
     }
 
     /** Getters **/
-    public String getItemName() {
-        return itemName;
+    public String getTitle() {
+        return title;
     }
 
     public Period getRecurrence() {
@@ -69,6 +71,10 @@ public class ReminderItem {
         return description;
     }
 
+    public int getDaysAway() {
+        return daysAway;
+    }
+
     public boolean isSnoozed() {
         return snoozed;
     }
@@ -79,8 +85,8 @@ public class ReminderItem {
 
 
     /** Setters **/
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setRecurrence(Period recurrence) {
