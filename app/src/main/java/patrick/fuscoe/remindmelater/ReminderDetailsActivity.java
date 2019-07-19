@@ -22,6 +22,9 @@ public class ReminderDetailsActivity extends AppCompatActivity implements Adapte
 
     private ReminderItem reminderItem;
 
+    private String recurrenceInterval;
+    private int recurrenceNum;
+
     private ReminderDetailsClickListener reminderDetailsClickListener = new ReminderDetailsClickListener() {
         @Override
         public void saveDetailsClicked() {
@@ -37,6 +40,10 @@ public class ReminderDetailsActivity extends AppCompatActivity implements Adapte
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
+        if (view.getId() == R.id.view_reminder_details_recurrence_spinner)
+        {
+            recurrenceInterval = (String) parent.getItemAtPosition(pos);
+        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
