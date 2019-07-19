@@ -21,4 +21,54 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <EditText
+            android:id="@+id/view_reminder_details_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/view_reminder_details_recurrence_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_title" />
+
+        <EditText
+            android:id="@+id/view_reminder_details_recurrence_num"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="##"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_label"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_title" />
+
+        <Spinner
+            android:id="@+id/view_reminder_details_recurrence_spinner"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_num"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_title" />
+    </android.support.constraint.ConstraintLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>
