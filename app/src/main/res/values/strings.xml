@@ -24,4 +24,10 @@
     <string name="save">Save</string>
     <string name="dialog_delete_to_do_group_title">Delete To Do Group</string>
     <string name="delete">Delete</string>
+    <string-array name="array_recurrence">
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+        <item>Years</item>
+    </string-array>
 </resources>
