@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +23,8 @@ import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
     private ReminderItem reminderItem;
 
@@ -78,5 +84,29 @@ public class ReminderDetailsActivity extends AppCompatActivity implements Adapte
         viewRecurrenceSpinner.setAdapter(recurrenceAdapter);
         viewRecurrenceSpinner.setOnItemSelectedListener(this);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_add:
+                Log.d(TAG, ": Add Button pressed");
+                return true;
+
+            case R.id.menu_main_user_settings:
+                Log.d(TAG, ": Menu item selected: " + item.getItemId());
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

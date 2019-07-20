@@ -68,6 +68,55 @@
             android:layout_marginTop="32dp"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_num"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_title" />
+
+        <TextView
+            android:id="@+id/view_reminder_details_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/reminder_details_next_occurrence_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_label" />
+
+        <TextView
+            android:id="@+id/view_reminder_details_date_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_date_label"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_label" />
+
+        <Button
+            android:id="@+id/view_reminder_details_date_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/reminder_details_date_button_text"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_date_display"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_label" />
+
+        <TextView
+            android:id="@+id/view_reminder_details_description_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/reminder_details_description_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+
     </android.support.constraint.ConstraintLayout>
 
 

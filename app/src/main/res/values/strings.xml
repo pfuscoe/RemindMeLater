@@ -24,6 +24,9 @@
     <string name="save">Save</string>
     <string name="dialog_delete_to_do_group_title">Delete To Do Group</string>
     <string name="delete">Delete</string>
+    <string name="reminder_details_next_occurrence_label">Next:</string>
+    <string name="reminder_details_date_button_text">Set Date</string>
+    <string name="reminder_details_description_label">Description</string>
     <string-array name="array_recurrence">
         <item>Days</item>
         <item>Weeks</item>
