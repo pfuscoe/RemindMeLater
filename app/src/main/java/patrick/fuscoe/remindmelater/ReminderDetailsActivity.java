@@ -26,7 +26,7 @@ import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderDetailsActivity extends AppCompatActivity
-        implements AdapterView.OnItemSelectedListener, Button.OnClickListener {
+        implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
@@ -44,10 +44,21 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private Button btnCancel;
     private Button btnSave;
 
-    private Button.OnClickListener buttonClickListener = new Button.OnClickListener() {
+    private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            
+            switch (v.getId())
+            {
+                case R.id.view_reminder_details_date_button:
+                    return;
+
+                case R.id.view_reminder_details_button_cancel:
+                    return;
+
+                case R.id.view_reminder_details_button_save:
+                    return;
+
+            }
         }
     };
 
@@ -94,10 +105,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(reminderItem.getTitle());
 
-        // TODO: setup views, fields, buttons, etc.
+        // Setup views, fields, buttons, etc.
         viewTitle = findViewById(R.id.view_reminder_details_title);
         viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
+        viewDescription = findViewById(R.id.view_reminder_details_description);
 
         // Setup Recurrence Spinner
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
@@ -109,8 +121,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         // Setup Buttons
         btnSetDate = findViewById(R.id.view_reminder_details_date_button);
-        btnSetDate.setOnClickListener(this);
-
+        btnSetDate.setOnClickListener(btnClickListener);
+        btnCancel = findViewById(R.id.view_reminder_details_button_cancel);
+        btnCancel.setOnClickListener(btnClickListener);
+        btnSave = findViewById(R.id.view_reminder_details_button_save);
+        btnSave.setOnClickListener(btnClickListener);
 
     }
 
