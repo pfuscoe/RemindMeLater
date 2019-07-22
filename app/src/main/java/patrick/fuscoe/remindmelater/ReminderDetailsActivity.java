@@ -15,11 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
@@ -31,6 +33,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
     private ReminderItem reminderItem;
+    private LocalDate dateShown;
 
     private String recurrenceInterval;
     private int recurrenceNum;
@@ -50,28 +53,24 @@ public class ReminderDetailsActivity extends AppCompatActivity
             switch (v.getId())
             {
                 case R.id.view_reminder_details_date_button:
+                    openDatePicker();
                     return;
 
                 case R.id.view_reminder_details_button_cancel:
+                    Log.d(TAG, ": Add/Edit Reminder Cancelled");
+                    Toast.makeText(getApplicationContext(), "Add/Edit Reminder Cancelled", Toast.LENGTH_LONG).show();
+                    onBackPressed();
                     return;
 
                 case R.id.view_reminder_details_button_save:
+                    Log.d(TAG, ": Reminder " + reminderItem.getTitle() + " saved");
+                    Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
+                    saveReminder();
                     return;
 
             }
         }
     };
-
-    private ReminderDetailsClickListener reminderDetailsClickListener = new ReminderDetailsClickListener() {
-        @Override
-        public void saveDetailsClicked() {
-            // TODO: update reminder item
-        }
-    };
-
-    public interface ReminderDetailsClickListener {
-        void saveDetailsClicked();
-    }
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
@@ -126,6 +125,17 @@ public class ReminderDetailsActivity extends AppCompatActivity
         btnCancel.setOnClickListener(btnClickListener);
         btnSave = findViewById(R.id.view_reminder_details_button_save);
         btnSave.setOnClickListener(btnClickListener);
+
+        updateFields();
+
+    }
+
+    public void updateFields()
+    {
+        viewTitle.setText(reminderItem.getTitle());
+
+
+        //viewRecurrenceNum.setText();
 
     }
 
