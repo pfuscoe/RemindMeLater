@@ -17,6 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -31,6 +34,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
+
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference remindersCollectionRef = db.collection("reminders");
+    private final String userId = auth.getUid();
 
     private ReminderItem reminderItem;
     private LocalDate dateShown;
@@ -133,10 +141,28 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void updateFields()
     {
         viewTitle.setText(reminderItem.getTitle());
+        viewRecurrenceNum.setText(reminderItem.getRecurrenceNum());
+        viewDateDisplay.setText(reminderItem.getNextOccurrence().toString());
+        viewDescription.setText(reminderItem.getDescription());
 
+        switch (reminderItem.getRecurrenceInterval())
+        {
+            case "Days":
+                viewRecurrenceSpinner.setSelection(0);
+                break;
 
-        //viewRecurrenceNum.setText();
+            case "Weeks":
+                viewRecurrenceSpinner.setSelection(1);
+                break;
 
+            case "Months":
+                viewRecurrenceSpinner.setSelection(2);
+                break;
+
+            case "Years":
+                viewRecurrenceSpinner.setSelection(3);
+
+        }
     }
 
     @Override
@@ -162,4 +188,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void openDatePicker()
+    {
+        // TODO: Setup DatePickerDialog
+    }
+
+    public void saveReminder()
+    {
+        // TODO: commit and close activity
+    }
+
 }

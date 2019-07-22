@@ -1,5 +1,7 @@
 package patrick.fuscoe.remindmelater.models;
 
+import android.util.Log;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -8,13 +10,15 @@ import java.util.Calendar;
 public class ReminderItem {
 
     private String title;
-    private Period recurrence;
     private LocalDate nextOccurrence;
     private String category;
     private String description;
 
     //private Address address;
+    private int recurrenceNum;
+    private String recurrenceInterval;
 
+    private Period recurrence;
     private int daysAway;
     private boolean snoozed;
     private ArrayList<HistoryItem> historyItems;
@@ -24,14 +28,16 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String title, Period recurrence, LocalDate nextOccurrence, String category, String description)
+    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, LocalDate nextOccurrence, String category, String description)
     {
         this.title = title;
-        this.recurrence = recurrence;
+        this.recurrenceNum = recurrenceNum;
+        this.recurrenceInterval = recurrenceInterval;
         this.nextOccurrence = nextOccurrence;
         this.category = category;
         this.description = description;
 
+        updateRecurrencePeriod();
         updateDaysAway(nextOccurrence);
         this.snoozed = false;
         this.historyItems = new ArrayList<>();
@@ -45,6 +51,28 @@ public class ReminderItem {
         daysAway = diff.getDays();
     }
 
+    public void updateRecurrencePeriod()
+    {
+        switch (recurrenceInterval)
+        {
+            case "Days":
+                recurrence = Period.ofDays(recurrenceNum);
+                return;
+
+            case "Weeks":
+                recurrence = Period.ofWeeks(recurrenceNum);
+                return;
+
+            case "Months":
+                recurrence = Period.ofMonths(recurrenceNum);
+                return;
+
+            case "Years":
+                recurrence = Period.ofYears(recurrenceNum);
+                return;
+        }
+    }
+
     public void addToHistory(HistoryItem historyItem)
     {
         historyItems.add(historyItem);
@@ -53,6 +81,14 @@ public class ReminderItem {
     /** Getters **/
     public String getTitle() {
         return title;
+    }
+
+    public int getRecurrenceNum() {
+        return recurrenceNum;
+    }
+
+    public String getRecurrenceInterval() {
+        return recurrenceInterval;
     }
 
     public Period getRecurrence() {
@@ -89,11 +125,15 @@ public class ReminderItem {
         this.title = title;
     }
 
-    public void setRecurrence(Period recurrence) {
-        this.recurrence = recurrence;
+    public void setRecurrenceNum(int recurrenceNum) {
+        this.recurrenceNum = recurrenceNum;
     }
 
-    public void setNextOccurance(LocalDate nextOccurrence) {
+    public void setRecurrenceInterval(String recurrenceInterval) {
+        this.recurrenceInterval = recurrenceInterval;
+    }
+
+    public void setNextOccurrence(LocalDate nextOccurrence) {
         this.nextOccurrence = nextOccurrence;
     }
 

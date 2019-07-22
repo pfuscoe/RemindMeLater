@@ -162,6 +162,9 @@ public class RemindersFragment extends Fragment {
                             String recurrenceString = (String) reminderItemMap.get("recurrence");
                             Period recurrence = Period.parse(recurrenceString);
 
+                            int recurrenceNum = (int) reminderItemMap.get("recurrenceNum");
+                            String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
+
                             String nextOccurrenceString = (String) reminderItemMap.get("nextOccurrence");
                             LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
 
@@ -169,7 +172,7 @@ public class RemindersFragment extends Fragment {
 
                             String description = (String) reminderItemMap.get("description");
 
-                            ReminderItem reminderItem = new ReminderItem(title, recurrence, nextOccurrence, category, description);
+                            ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval, nextOccurrence, category, description);
                             reminderListFromDoc.add(reminderItem);
                         }
                     }
