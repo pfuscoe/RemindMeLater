@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +25,8 @@ import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
-public class ReminderDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class ReminderDetailsActivity extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener, Button.OnClickListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
@@ -30,6 +34,22 @@ public class ReminderDetailsActivity extends AppCompatActivity implements Adapte
 
     private String recurrenceInterval;
     private int recurrenceNum;
+
+    private EditText viewTitle;
+    private EditText viewRecurrenceNum;
+    private Spinner viewRecurrenceSpinner;
+    private TextView viewDateDisplay;
+    private Button btnSetDate;
+    private EditText viewDescription;
+    private Button btnCancel;
+    private Button btnSave;
+
+    private Button.OnClickListener buttonClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            
+        }
+    };
 
     private ReminderDetailsClickListener reminderDetailsClickListener = new ReminderDetailsClickListener() {
         @Override
@@ -75,14 +95,22 @@ public class ReminderDetailsActivity extends AppCompatActivity implements Adapte
         getSupportActionBar().setTitle(reminderItem.getTitle());
 
         // TODO: setup views, fields, buttons, etc.
+        viewTitle = findViewById(R.id.view_reminder_details_title);
+        viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
+        viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
 
         // Setup Recurrence Spinner
-        Spinner viewRecurrenceSpinner = (Spinner) findViewById(R.id.view_reminder_details_recurrence_spinner);
+        viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
         ArrayAdapter<CharSequence> recurrenceAdapter = ArrayAdapter.createFromResource(this,
                 R.array.array_recurrence, android.R.layout.simple_spinner_item);
         recurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         viewRecurrenceSpinner.setAdapter(recurrenceAdapter);
         viewRecurrenceSpinner.setOnItemSelectedListener(this);
+
+        // Setup Buttons
+        btnSetDate = findViewById(R.id.view_reminder_details_date_button);
+        btnSetDate.setOnClickListener(this);
+
 
     }
 
