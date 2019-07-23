@@ -33,10 +33,11 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
+import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderDetailsActivity extends AppCompatActivity
-        implements AdapterView.OnItemSelectedListener {
+        implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
@@ -60,36 +61,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private Button btnCancel;
     private Button btnSave;
 
-
-    public static class DatePickerDialogFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
-                    this, year, month, day);
-
-            // Allow only future dates to be chosen
-            Calendar yesterday = Calendar.getInstance();
-            yesterday.add(Calendar.DATE, -1);
-
-            datePickerDialog.getDatePicker().setMinDate(yesterday.getTimeInMillis());
-
-            return datePickerDialog;
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            // TODO: Setup date set action
-        }
-    }
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
@@ -115,7 +86,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
             }
         }
     };
-
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
@@ -229,8 +199,20 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void openDatePicker()
     {
         // TODO: Setup DatePickerDialog
-        DialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
-        datePickerDialogFragment.show(getSupportFragmentManager(), "datePicker");
+        DialogFragment dialogFragment = new DatePickerDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        setNextOccurrenceDate(localDate);
+    }
+
+    public void setNextOccurrenceDate(LocalDate localDate)
+    {
+        reminderItem.setNextOccurrence(localDate);
+        viewDateDisplay.setText(localDate.toString());
     }
 
     public void saveReminder()
