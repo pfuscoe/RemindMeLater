@@ -41,7 +41,8 @@ public class RemindersFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     public static final String TAG = "patrick.fuscoe.remindmelater.RemindersFragment";
-    public static final String REMINDERS = "patrick.fuscoe.remindmelater.REMINDERS";
+    public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
+    public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -77,7 +78,8 @@ public class RemindersFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ReminderDetailsActivity.class);
                 Gson gson = new Gson();
                 String reminderItemString = gson.toJson(reminderItem);
-                intent.putExtra(REMINDERS, reminderItemString);
+                intent.putExtra(REMINDER_ITEM, reminderItemString);
+                intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
                 startActivity(intent);
             }
         }

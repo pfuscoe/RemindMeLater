@@ -22,8 +22,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -31,6 +34,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
@@ -45,6 +50,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
     private final String userId = auth.getUid();
+    private String remindersDocId;
+    private DocumentReference remindersDocRef;
 
     private ReminderItem reminderItem;
     private LocalDate dateShown;
@@ -113,8 +120,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         Gson gson = new Gson();
         Type dataType = new TypeToken<ReminderItem>(){}.getType();
 
-        String reminderItemString = intent.getStringExtra(RemindersFragment.REMINDERS);
+        String reminderItemString = intent.getStringExtra(RemindersFragment.REMINDER_ITEM);
         reminderItem = gson.fromJson(reminderItemString, dataType);
+
+        remindersDocId = intent.getStringExtra(RemindersFragment.REMINDERS_DOC_ID);
+        remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(reminderItem.getTitle());
@@ -198,7 +208,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void openDatePicker()
     {
-        // TODO: Setup DatePickerDialog
         DialogFragment dialogFragment = new DatePickerDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "datePicker");
     }
@@ -215,9 +224,39 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay.setText(localDate.toString());
     }
 
+    public void updateReminderItemObject()
+    {
+        // TODO: get values from fields and update reminderItem
+    }
+
     public void saveReminder()
     {
-        // TODO: commit and close activity
+        updateReminderItemObject();
+
+        HashMap<String, Object> reminderItemMap = new HashMap<>();
+        reminderItemMap.put("recurrence", reminderItem.getRecurrence().toString());
+        reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
+        reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
+        reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence().toString());
+        reminderItemMap.put("category", reminderItem.getCategory());
+        reminderItemMap.put("description", reminderItem.getDescription());
+
+        remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
+                        Toast.makeText(getApplicationContext(), "Reminder Item Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating reminders document", e);
+                    }
+                });
+
+        onBackPressed();
     }
 
 }
