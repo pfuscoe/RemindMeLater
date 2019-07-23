@@ -1,6 +1,10 @@
 package patrick.fuscoe.remindmelater;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,9 +30,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.Calendar;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
-import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderDetailsActivity extends AppCompatActivity
@@ -55,6 +60,37 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private Button btnCancel;
     private Button btnSave;
 
+
+    public static class DatePickerDialogFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
+                    this, year, month, day);
+
+            // Allow only future dates to be chosen
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.add(Calendar.DATE, -1);
+
+            datePickerDialog.getDatePicker().setMinDate(yesterday.getTimeInMillis());
+
+            return datePickerDialog;
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            // TODO: Setup date set action
+        }
+    }
+
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -79,6 +115,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
             }
         }
     };
+
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
@@ -192,6 +229,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void openDatePicker()
     {
         // TODO: Setup DatePickerDialog
+        DialogFragment datePickerDialogFragment = new DatePickerDialogFragment();
+        datePickerDialogFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void saveReminder()
