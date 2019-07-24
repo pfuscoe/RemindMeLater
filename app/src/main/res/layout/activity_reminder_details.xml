@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
-            android:text="TextView"
+            android:text="@string/reminder_details_recurrence_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_title" />
 
@@ -62,7 +62,7 @@
 
         <Spinner
             android:id="@+id/view_reminder_details_recurrence_spinner"
-            android:layout_width="92dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
