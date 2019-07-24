@@ -55,7 +55,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:text="##"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_label"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_title" />

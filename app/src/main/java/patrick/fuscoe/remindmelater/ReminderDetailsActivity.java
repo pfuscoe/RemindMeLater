@@ -224,9 +224,22 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay.setText(localDate.toString());
     }
 
+    // Get values from fields and update reminderItem object
     public void updateReminderItemObject()
     {
-        // TODO: get values from fields and update reminderItem
+        String title = viewTitle.getText().toString();
+        String recurrenceNumString = viewRecurrenceNum.getText().toString();
+        int recurrenceNum = Integer.parseInt(recurrenceNumString);
+        String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
+        String nextOccurrenceString = viewDateDisplay.getText().toString();
+        LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
+        String description = viewDescription.getText().toString();
+
+        reminderItem.setTitle(title);
+        reminderItem.setRecurrenceNum(recurrenceNum);
+        reminderItem.setRecurrenceInterval(recurrenceInterval);
+        reminderItem.setNextOccurrence(nextOccurrence);
+        reminderItem.setDescription(description);
     }
 
     public void saveReminder()
