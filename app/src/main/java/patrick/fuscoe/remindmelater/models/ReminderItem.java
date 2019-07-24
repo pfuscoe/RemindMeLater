@@ -10,7 +10,7 @@ import java.util.Calendar;
 public class ReminderItem {
 
     private String title;
-    private LocalDate nextOccurrence;
+    private String nextOccurrence;  // LocalDate String format
     private String category;
     private String description;
 
@@ -28,7 +28,7 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, LocalDate nextOccurrence, String category, String description)
+    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence, String category, String description)
     {
         this.title = title;
         this.recurrenceNum = recurrenceNum;
@@ -43,10 +43,11 @@ public class ReminderItem {
         this.historyItems = new ArrayList<>();
     }
 
-    public void updateDaysAway(LocalDate nextOccurrence)
+    public void updateDaysAway(String nextOccurrence)
     {
         LocalDate now = LocalDate.now();
-        Period diff = Period.between(now, nextOccurrence);
+        LocalDate next = LocalDate.parse(nextOccurrence);
+        Period diff = Period.between(now, next);
 
         daysAway = diff.getDays();
     }
@@ -95,7 +96,7 @@ public class ReminderItem {
         return recurrence;
     }
 
-    public LocalDate getNextOccurrence() {
+    public String getNextOccurrence() {
         return nextOccurrence;
     }
 
@@ -133,7 +134,7 @@ public class ReminderItem {
         this.recurrenceInterval = recurrenceInterval;
     }
 
-    public void setNextOccurrence(LocalDate nextOccurrence) {
+    public void setNextOccurrence(String nextOccurrence) {
         this.nextOccurrence = nextOccurrence;
     }
 

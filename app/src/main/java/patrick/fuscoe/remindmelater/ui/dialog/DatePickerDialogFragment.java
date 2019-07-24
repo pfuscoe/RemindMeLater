@@ -43,10 +43,10 @@ public class DatePickerDialogFragment extends DialogFragment
                 this, year, month, day);
 
         // Allow only future dates to be chosen
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DATE, -1);
+        Calendar today = Calendar.getInstance();
+        //yesterday.add(Calendar.DATE, -1);
 
-        datePickerDialog.getDatePicker().setMinDate(yesterday.getTimeInMillis());
+        datePickerDialog.getDatePicker().setMinDate(today.getTimeInMillis());
 
         return datePickerDialog;
     }

@@ -175,9 +175,9 @@ public class RemindersFragment extends Fragment {
                                 Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
                                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
 
-                                String nextOccurrenceString = (String) reminderItemMap.get("nextOccurrence");
-                                LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
-                                Log.d(TAG, ": nextOccurrence.toString: " + nextOccurrence.toString());
+                                String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
+                                //LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
+                                //Log.d(TAG, ": nextOccurrence.toString: " + nextOccurrence.toString());
 
                                 String category = (String) reminderItemMap.get("category");
 

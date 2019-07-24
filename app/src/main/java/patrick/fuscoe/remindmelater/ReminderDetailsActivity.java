@@ -221,8 +221,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void setNextOccurrenceDate(LocalDate localDate)
     {
-        reminderItem.setNextOccurrence(localDate);
-        viewDateDisplay.setText(localDate.toString());
+        String date = localDate.toString();
+        reminderItem.setNextOccurrence(date);
+        viewDateDisplay.setText(date);
     }
 
     // Get values from fields and update reminderItem object
@@ -232,8 +233,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         String recurrenceNumString = viewRecurrenceNum.getText().toString();
         int recurrenceNum = Integer.parseInt(recurrenceNumString);
         String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
-        String nextOccurrenceString = viewDateDisplay.getText().toString();
-        LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
+        String nextOccurrence = viewDateDisplay.getText().toString();
+        //LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
         String description = viewDescription.getText().toString();
 
         reminderItem.setTitle(title);
@@ -251,7 +252,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("recurrence", reminderItem.getRecurrence().toString());
         reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
-        reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence().toString());
+        reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("description", reminderItem.getDescription());
 
