@@ -158,7 +158,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void updateFields()
     {
         viewTitle.setText(reminderItem.getTitle());
-        viewRecurrenceNum.setText(reminderItem.getRecurrenceNum());
+        viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         viewDateDisplay.setText(reminderItem.getNextOccurrence().toString());
         viewDescription.setText(reminderItem.getDescription());
 
