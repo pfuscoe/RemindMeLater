@@ -101,6 +101,8 @@ public class RemindersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        reminderItemList = new ArrayList<>();
+
         /*
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
         int index = 1;
@@ -150,36 +152,43 @@ public class RemindersFragment extends Fragment {
                     // Update UI views with data from snapshot
                     List<ReminderItem> reminderListFromDoc = new ArrayList<>();
 
+                    Log.d(TAG, ": queryDocumentSnapshots size: " + queryDocumentSnapshots.size());
+
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
                     {
                         remindersDocId = doc.getId();
+                        Log.d(TAG, ": remindersDocId: " + remindersDocId);
 
                         Map<String, Object> docMap = doc.getData();
 
                         for (Map.Entry<String, Object> entry : docMap.entrySet())
                         {
-                            String title = entry.getKey();
-                            HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
+                            if (!entry.getKey().contentEquals("userId"))
+                            {
+                                String title = entry.getKey();
+                                HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
-                            String recurrenceString = (String) reminderItemMap.get("recurrence");
-                            Period recurrence = Period.parse(recurrenceString);
+                                String recurrenceString = (String) reminderItemMap.get("recurrence");
+                                Period recurrence = Period.parse(recurrenceString);
 
-                            int recurrenceNum = (int) reminderItemMap.get("recurrenceNum");
-                            String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
+                                int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
+                                String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
 
-                            String nextOccurrenceString = (String) reminderItemMap.get("nextOccurrence");
-                            LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
+                                String nextOccurrenceString = (String) reminderItemMap.get("nextOccurrence");
+                                LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
 
-                            String category = (String) reminderItemMap.get("category");
+                                String category = (String) reminderItemMap.get("category");
 
-                            String description = (String) reminderItemMap.get("description");
+                                String description = (String) reminderItemMap.get("description");
 
-                            ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval, nextOccurrence, category, description);
-                            reminderListFromDoc.add(reminderItem);
+                                ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval, nextOccurrence, category, description);
+                                reminderListFromDoc.add(reminderItem);
+                            }
                         }
                     }
 
                     reminderItemList = reminderListFromDoc;
+                    Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
                     updateRemindersDisplay();
                 }
             }

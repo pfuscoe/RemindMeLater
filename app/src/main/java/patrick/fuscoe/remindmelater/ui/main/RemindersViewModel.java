@@ -20,7 +20,7 @@ public class RemindersViewModel extends ViewModel {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference reminders = db.collection("reminders");
 
-    private final Query remindersQuery = reminders.whereArrayContains("userId", userId);
+    private final Query remindersQuery = reminders.whereEqualTo("userId", userId);
 
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(remindersQuery);
 
