@@ -159,6 +159,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     {
         viewTitle.setText(reminderItem.getTitle());
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
+        Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence().toString());
         viewDateDisplay.setText(reminderItem.getNextOccurrence().toString());
         viewDescription.setText(reminderItem.getDescription());
 
