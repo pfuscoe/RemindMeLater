@@ -34,4 +34,6 @@
         <item>Months</item>
         <item>Years</item>
     </string-array>
+    <string name="reminder_details_category_label">Select Category:</string>
+    <string name="reminder_details_category_add">Add New Category</string>
 </resources>
