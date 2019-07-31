@@ -12,11 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import java.util.List;
+
 import patrick.fuscoe.remindmelater.R;
 
 public class AddReminderCategoryDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.AddReminderCategoryDialogFragment";
+
+    private List<Integer> categoryIconList;
+    private int selectedIcon;
+    private int selectedIconPos;
 
     public interface CategoryIconClickListener {
         void onIconClicked(View v, int position);
@@ -26,6 +32,7 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
         @Override
         public void onIconClicked(View v, int position) {
             // TODO: implement icon clicked action (check the box.., notifyItemChanged)
+
         }
     };
 
