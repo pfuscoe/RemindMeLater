@@ -1,9 +1,12 @@
 package patrick.fuscoe.remindmelater.ui.dialog;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -16,6 +19,8 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
     private Context context;
     private int selectedIcon;
     private int selectedIconPos;
+
+    private static AddReminderCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener;
 
     public static class IconViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -36,8 +41,38 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
 
         @Override
         public void onClick(View v) {
-
+            categoryIconClickListener.onIconClicked(v, this.getLayoutPosition());
         }
     }
 
+    public CategoryIconSelectAdapter(List<Integer> categoryIconList, Context context,
+                                     AddReminderCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener)
+    {
+        this.categoryIconList = categoryIconList;
+        this.context = context;
+        this.categoryIconClickListener = categoryIconClickListener;
+    }
+
+    @NonNull
+    @Override
+    public IconViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+        ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.grid_item_icon_select, viewGroup, false);
+
+        return new IconViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull IconViewHolder holder, final int position) {
+
+        Integer categoryIconId = categoryIconList.get(position);
+
+        holder.viewCategoryIcon.setImageResource(categoryIconId);
+    }
+
+    @Override
+    public int getItemCount() {
+        return categoryIconList.size();
+    }
 }

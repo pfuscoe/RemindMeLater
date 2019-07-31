@@ -18,12 +18,23 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.AddReminderCategoryDialogFragment";
 
+    public interface CategoryIconClickListener {
+        void onIconClicked(View v, int position);
+    }
+
+    private CategoryIconClickListener categoryIconClickListener = new CategoryIconClickListener() {
+        @Override
+        public void onIconClicked(View v, int position) {
+            // TODO: implement icon clicked action (check the box.., notifyItemChanged)
+        }
+    };
+
+    AddReminderCategoryDialogListener listener;
+
     public interface AddReminderCategoryDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
         void onDialogNegativeClick(DialogFragment dialog);
     }
-
-    AddReminderCategoryDialogListener listener;
 
     @Override
     public void onAttach(Context context) {
