@@ -16,6 +16,7 @@ import patrick.fuscoe.remindmelater.R;
 public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIconSelectAdapter.IconViewHolder> {
 
     private List<Integer> categoryIconList;
+    private List<Boolean> categoryIconListIsChecked;
     private Context context;
     private int selectedIcon;
     private int selectedIconPos;
@@ -69,6 +70,17 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
         Integer categoryIconId = categoryIconList.get(position);
 
         holder.viewCategoryIcon.setImageResource(categoryIconId);
+
+        if (categoryIconListIsChecked.get(position))
+        {
+            holder.viewCategoryIconCheckbox.setImageResource(R.drawable.checkbox_marked);
+            holder.viewCategoryIconCheckbox.setColorFilter(context.getColor(R.color.blueDark));
+        }
+        else
+        {
+            holder.viewCategoryIconCheckbox.setImageResource(R.drawable.checkbox_blank_outline);
+            holder.viewCategoryIconCheckbox.setColorFilter(context.getColor(R.color.greyLight));
+        }
     }
 
     @Override

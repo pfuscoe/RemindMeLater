@@ -15,12 +15,14 @@ import android.widget.EditText;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
 public class AddReminderCategoryDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.AddReminderCategoryDialogFragment";
 
     private List<Integer> categoryIconList;
+    private List<Boolean> categoryIconListIsChecked;
     private int selectedIcon;
     private int selectedIconPos;
 
@@ -59,6 +61,10 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_category_edit, null);
+
+        CategoryIconSet categoryIconSet = new CategoryIconSet();
+        categoryIconList = categoryIconSet.getCategoryIconList();
+        categoryIconListIsChecked = categoryIconSet.getCategoryIconListIsChecked();
 
         //Bundle bundle = getArguments();
 
