@@ -7,6 +7,7 @@ import patrick.fuscoe.remindmelater.R;
 public class CategoryIconSet {
 
     private ArrayList<Integer> categoryIconList;
+    private ArrayList<Boolean> categoryIconListIsChecked;
 
 
     public CategoryIconSet()
@@ -14,6 +15,7 @@ public class CategoryIconSet {
         categoryIconList = new ArrayList<>();
 
         populateList();
+        buildCheckboxList();
     }
 
     private void populateList()
@@ -40,7 +42,21 @@ public class CategoryIconSet {
 
     }
 
+    private void buildCheckboxList()
+    {
+        categoryIconListIsChecked = new ArrayList<>();
+
+        for (int i = 0; i < categoryIconList.size(); i++)
+        {
+            categoryIconListIsChecked.add(false);
+        }
+    }
+
     public ArrayList<Integer> getCategoryIconList() {
         return categoryIconList;
+    }
+
+    public ArrayList<Boolean> getCategoryIconListIsChecked() {
+        return categoryIconListIsChecked;
     }
 }
