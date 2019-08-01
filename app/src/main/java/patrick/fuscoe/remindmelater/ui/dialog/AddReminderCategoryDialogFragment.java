@@ -39,7 +39,6 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
     private CategoryIconClickListener categoryIconClickListener = new CategoryIconClickListener() {
         @Override
         public void onIconClicked(View v, int position) {
-            // TODO: implement icon clicked action (check the box.., notifyItemChanged)
             int oldPos = selectedIconPos;
             selectedIconPos = position;
 
@@ -55,9 +54,11 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
             {
                 categoryIconListIsChecked.set(position, true);
                 selectedIcon = categoryIconList.get(position);
+
                 // notify old pos changed
                 categoryIconRecyclerAdapter.notifyItemChanged(oldPos);
             }
+
             // notify new pos changed
             categoryIconRecyclerAdapter.notifyItemChanged(position);
         }

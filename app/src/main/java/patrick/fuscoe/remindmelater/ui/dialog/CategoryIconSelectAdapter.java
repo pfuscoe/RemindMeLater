@@ -18,8 +18,6 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
     private List<Integer> categoryIconList;
     private List<Boolean> categoryIconListIsChecked;
     private Context context;
-    //private int selectedIcon;
-    //private int selectedIconPos;
 
     private static AddReminderCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener;
 
