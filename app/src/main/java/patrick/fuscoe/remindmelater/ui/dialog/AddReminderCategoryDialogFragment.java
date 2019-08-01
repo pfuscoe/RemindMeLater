@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -26,6 +28,10 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
     private int selectedIcon;
     private int selectedIconPos;
 
+    private RecyclerView categoryIconRecycler;
+    private RecyclerView.LayoutManager categoryIconRecyclerLayoutManager;
+    private RecyclerView.Adapter categoryIconRecyclerAdapter;
+
     public interface CategoryIconClickListener {
         void onIconClicked(View v, int position);
     }
@@ -34,7 +40,26 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
         @Override
         public void onIconClicked(View v, int position) {
             // TODO: implement icon clicked action (check the box.., notifyItemChanged)
+            int oldPos = selectedIconPos;
+            selectedIconPos = position;
 
+            categoryIconListIsChecked.set(oldPos, false);
+
+            if (oldPos == position)
+            {
+                //categoryIconListIsChecked.set(position, false);
+                selectedIcon = -1;
+                selectedIconPos = -1;
+            }
+            else
+            {
+                categoryIconListIsChecked.set(position, true);
+                selectedIcon = categoryIconList.get(position);
+                // notify old pos changed
+                categoryIconRecyclerAdapter.notifyItemChanged(oldPos);
+            }
+            // notify new pos changed
+            categoryIconRecyclerAdapter.notifyItemChanged(position);
         }
     };
 
@@ -66,11 +91,22 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
         categoryIconList = categoryIconSet.getCategoryIconList();
         categoryIconListIsChecked = categoryIconSet.getCategoryIconListIsChecked();
 
+        selectedIcon = -1;
+        selectedIconPos = -1;
+
         //Bundle bundle = getArguments();
 
         EditText viewCategoryName = v.findViewById(R.id.dialog_category_edit_name);
 
-        // TODO: Setup recycler and adapter
+        categoryIconRecycler = v.findViewById(R.id.dialog_category_edit_recycler);
+        categoryIconRecycler.setHasFixedSize(true);
+
+        categoryIconRecyclerLayoutManager = new GridLayoutManager(getContext(), 5);
+        categoryIconRecycler.setLayoutManager(categoryIconRecyclerLayoutManager);
+
+        categoryIconRecyclerAdapter = new CategoryIconSelectAdapter(categoryIconList,
+                categoryIconListIsChecked, getContext(), categoryIconClickListener);
+        categoryIconRecycler.setAdapter(categoryIconRecyclerAdapter);
 
         builder.setView(v)
                 .setTitle(R.string.dialog_add_reminder_category_title)

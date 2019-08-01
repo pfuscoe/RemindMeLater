@@ -18,8 +18,8 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
     private List<Integer> categoryIconList;
     private List<Boolean> categoryIconListIsChecked;
     private Context context;
-    private int selectedIcon;
-    private int selectedIconPos;
+    //private int selectedIcon;
+    //private int selectedIconPos;
 
     private static AddReminderCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener;
 
@@ -46,10 +46,11 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
         }
     }
 
-    public CategoryIconSelectAdapter(List<Integer> categoryIconList, Context context,
+    public CategoryIconSelectAdapter(List<Integer> categoryIconList, List<Boolean> categoryIconListIsChecked, Context context,
                                      AddReminderCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener)
     {
         this.categoryIconList = categoryIconList;
+        this.categoryIconListIsChecked = categoryIconListIsChecked;
         this.context = context;
         this.categoryIconClickListener = categoryIconClickListener;
     }
