@@ -180,10 +180,12 @@ public class RemindersFragment extends Fragment {
                                 //Log.d(TAG, ": nextOccurrence.toString: " + nextOccurrence.toString());
 
                                 String category = (String) reminderItemMap.get("category");
+                                int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
 
                                 String description = (String) reminderItemMap.get("description");
 
-                                ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval, nextOccurrence, category, description);
+                                ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
+                                        recurrenceInterval, nextOccurrence, category, categoryIcon, description);
                                 reminderListFromDoc.add(reminderItem);
                             }
                         }
