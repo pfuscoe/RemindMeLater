@@ -12,6 +12,7 @@ public class ReminderItem {
     private String title;
     private String nextOccurrence;  // LocalDate String format
     private String category;
+    private int categoryIcon;
     private String description;
 
     //private Address address;
@@ -28,13 +29,14 @@ public class ReminderItem {
 
     }
 
-    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence, String category, String description)
+    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence, String category, int categoryIcon, String description)
     {
         this.title = title;
         this.recurrenceNum = recurrenceNum;
         this.recurrenceInterval = recurrenceInterval;
         this.nextOccurrence = nextOccurrence;
         this.category = category;
+        this.categoryIcon = categoryIcon;
         this.description = description;
 
         updateRecurrencePeriod();
@@ -104,6 +106,10 @@ public class ReminderItem {
         return category;
     }
 
+    public int getCategoryIcon() {
+        return categoryIcon;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -140,6 +146,10 @@ public class ReminderItem {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public void setCategoryIcon(int categoryIcon) {
+        this.categoryIcon = categoryIcon;
     }
 
     public void setDescription(String description) {

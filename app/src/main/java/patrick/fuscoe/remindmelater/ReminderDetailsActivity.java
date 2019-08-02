@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private int recurrenceNum;
 
     private EditText viewTitle;
+    private ImageView viewCategoryIcon;
     private EditText viewRecurrenceNum;
     private Spinner viewRecurrenceSpinner;
     private TextView viewDateDisplay;
@@ -137,6 +139,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         // Setup views, fields, buttons, etc.
         viewTitle = findViewById(R.id.view_reminder_details_title);
+        viewCategoryIcon = findViewById(R.id.view_reminder_details_category_icon);
         viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewDescription = findViewById(R.id.view_reminder_details_description);
@@ -164,6 +167,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void updateFields()
     {
         viewTitle.setText(reminderItem.getTitle());
+        viewCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
@@ -290,12 +294,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void onDialogPositiveClick(DialogFragment dialog) {
         if (dialog instanceof AddReminderCategoryDialogFragment)
         {
-            // TODO: grab field data and create category
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
-            String newTitle = viewCategoryName.getText().toString();
+            String categoryName = viewCategoryName.getText().toString();
+            int selectedIcon = ((AddReminderCategoryDialogFragment) dialog).getSelectedIcon();
 
-            
+            reminderItem.setCategory(categoryName);
+            reminderItem.setCategoryIcon(selectedIcon);
+
+            // TODO: save new category to object / user profile
         }
     }
 

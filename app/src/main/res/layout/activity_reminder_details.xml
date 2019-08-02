@@ -49,7 +49,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/view_reminder_details_category_button"
+            android:id="@+id/view_reminder_details_category_icon"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="8dp"
@@ -67,7 +67,7 @@
             android:text="@string/reminder_details_category_add"
             android:textColor="@color/blueDark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_button" />
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_icon" />
 
         <TextView
             android:id="@+id/view_reminder_details_recurrence_label"

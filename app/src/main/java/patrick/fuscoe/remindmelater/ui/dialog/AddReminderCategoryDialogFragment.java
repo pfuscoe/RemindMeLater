@@ -125,4 +125,7 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    public int getSelectedIcon() {
+        return selectedIcon;
+    }
 }
