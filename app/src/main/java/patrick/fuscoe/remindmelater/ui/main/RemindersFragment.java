@@ -181,6 +181,7 @@ public class RemindersFragment extends Fragment {
 
                                 String category = (String) reminderItemMap.get("category");
                                 int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+                                Log.d(TAG, ": categoryIcon: " + categoryIcon);
 
                                 String description = (String) reminderItemMap.get("description");
 

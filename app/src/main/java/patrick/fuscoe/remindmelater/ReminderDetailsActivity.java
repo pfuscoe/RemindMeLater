@@ -167,11 +167,20 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void updateFields()
     {
         viewTitle.setText(reminderItem.getTitle());
-        viewCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
         viewDescription.setText(reminderItem.getDescription());
+
+        if (reminderItem.getCategoryIcon() == -1)
+        {
+            viewCategoryIcon.setImageResource(R.drawable.category_note);
+        }
+        else
+        {
+            viewCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
+        }
+
 
         switch (reminderItem.getRecurrenceInterval())
         {
