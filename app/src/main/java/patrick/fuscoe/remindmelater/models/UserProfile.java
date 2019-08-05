@@ -2,12 +2,14 @@ package patrick.fuscoe.remindmelater.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class UserProfile {
 
     private String id;
     private String displayName;
     private String[] subscriptions;
+    private HashMap<String, Integer> reminderCategories;
 
 
     public UserProfile() {
@@ -19,13 +21,15 @@ public class UserProfile {
         this.id = id;
         this.displayName = displayName;
         this.subscriptions = new String[]{};
+        this.reminderCategories = new HashMap<>();
     }
 
-    public UserProfile(String id, String displayName, String[] subscriptions)
+    public UserProfile(String id, String displayName, String[] subscriptions, HashMap<String, Integer> reminderCategories)
     {
         this.id = id;
         this.displayName = displayName;
         this.subscriptions = subscriptions;
+        this.reminderCategories = reminderCategories;
     }
 
 
