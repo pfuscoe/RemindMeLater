@@ -78,7 +78,7 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (AddReminderCategoryDialogListener) getTargetFragment();
+            listener = (AddReminderCategoryDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Host must implement AddReminderCategoryDialogListener");
         }
