@@ -64,6 +64,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     private EditText viewTitle;
     private ImageView viewCategoryIcon;
+    private TextView viewAddNewCategory;
     private EditText viewRecurrenceNum;
     private Spinner viewRecurrenceSpinner;
     private TextView viewDateDisplay;
@@ -152,7 +153,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurrenceSpinner.setAdapter(recurrenceAdapter);
         viewRecurrenceSpinner.setOnItemSelectedListener(this);
 
-        // Setup Buttons
+        // Setup Buttons and View Click Listeners
+        viewAddNewCategory = findViewById(R.id.view_reminder_details_category_add);
+        viewAddNewCategory.setOnClickListener(btnClickListener);
         btnSetDate = findViewById(R.id.view_reminder_details_date_button);
         btnSetDate.setOnClickListener(btnClickListener);
         btnCancel = findViewById(R.id.view_reminder_details_button_cancel);

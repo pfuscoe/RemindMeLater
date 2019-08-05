@@ -42,7 +42,10 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
             int oldPos = selectedIconPos;
             selectedIconPos = position;
 
-            categoryIconListIsChecked.set(oldPos, false);
+            if (oldPos != -1)
+            {
+                categoryIconListIsChecked.set(oldPos, false);
+            }
 
             if (oldPos == position)
             {
