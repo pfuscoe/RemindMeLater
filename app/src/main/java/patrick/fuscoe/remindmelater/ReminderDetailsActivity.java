@@ -282,6 +282,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
         reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
         reminderItemMap.put("category", reminderItem.getCategory());
+        reminderItemMap.put("categoryIcon", reminderItem.getCategoryIcon());
         reminderItemMap.put("description", reminderItem.getDescription());
 
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
