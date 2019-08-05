@@ -270,6 +270,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItem.setRecurrenceInterval(recurrenceInterval);
         reminderItem.setNextOccurrence(nextOccurrence);
         reminderItem.setDescription(description);
+
+        reminderItem.updateRecurrencePeriod();
+        reminderItem.updateDaysAway(nextOccurrence);
     }
 
     public void saveReminder()
@@ -314,6 +317,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             reminderItem.setCategory(categoryName);
             reminderItem.setCategoryIcon(selectedIcon);
+
+            viewCategoryIcon.setImageResource(selectedIcon);
 
             // TODO: save new category to object / user profile
         }
