@@ -69,6 +69,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     private EditText viewTitle;
     private ImageView viewCategoryIcon;
+    private Spinner viewCategorySpinner;
     private TextView viewAddNewCategory;
     private EditText viewRecurrenceNum;
     private Spinner viewRecurrenceSpinner;
@@ -116,6 +117,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
         {
             recurrenceInterval = (String) parent.getItemAtPosition(pos);
         }
+        else if (view.getId() == R.id.view_reminder_details_category_spinner)
+        {
+
+        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -153,6 +158,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewDescription = findViewById(R.id.view_reminder_details_description);
+
+        // TODO: Setup category select spinner
+        viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
+
+        viewCategorySpinner.setOnItemSelectedListener(this);
 
         // Setup Recurrence Spinner
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
