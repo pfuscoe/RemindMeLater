@@ -34,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -314,6 +315,30 @@ public class ReminderDetailsActivity extends AppCompatActivity
         onBackPressed();
     }
 
+    public void saveUserProfile()
+    {
+        Map<String, Object> userProfileDoc = new HashMap<>();
+        userProfileDoc.put("displayName", userProfile.getDisplayName());
+        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
+        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
+
+        userDocRef.set(userProfileDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         if (dialog instanceof AddReminderCategoryDialogFragment)
@@ -328,9 +353,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             viewCategoryIcon.setImageResource(selectedIcon);
 
-            // TODO: save new category to object / user profile
             userProfile.addReminderCategory(categoryName, selectedIcon);
             saveUserProfile();
+            Toast.makeText(getApplicationContext(), "New Reminder Category Added: " + categoryName, Toast.LENGTH_SHORT).show();
         }
     }
 
