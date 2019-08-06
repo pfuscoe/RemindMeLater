@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
@@ -43,6 +44,7 @@ public class RemindersFragment extends Fragment {
     public static final String TAG = "patrick.fuscoe.remindmelater.RemindersFragment";
     public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
+    public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -78,8 +80,10 @@ public class RemindersFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ReminderDetailsActivity.class);
                 Gson gson = new Gson();
                 String reminderItemString = gson.toJson(reminderItem);
+                String userProfileString = gson.toJson(userProfile);
                 intent.putExtra(REMINDER_ITEM, reminderItemString);
                 intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
+                intent.putExtra(USER_PROFILE, userProfileString);
                 startActivity(intent);
             }
         }
@@ -199,7 +203,40 @@ public class RemindersFragment extends Fragment {
             }
         });
 
-        // TODO: implement user profile observer
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        LiveData<DocumentSnapshot> userProfileLiveData = userProfileViewModel.getDocumentSnapshotLiveData();
+
+        userProfileLiveData.observe(getViewLifecycleOwner(), new Observer<DocumentSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot != null)
+                {
+                    Map<String, Object> docMap = documentSnapshot.getData();
+
+                    String id = documentSnapshot.getId();
+                    String displayName = documentSnapshot.getString("displayName");
+
+                    ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
+
+                    Log.d(TAG, "subscriptionsList: " + subscriptionsList);
+
+                    String[] subscriptions = new String[subscriptionsList.size()];
+                    subscriptions = subscriptionsList.toArray(subscriptions);
+
+                    for (int i = 0; i < subscriptions.length; i++) {
+                        Log.d("subscriptions item: ", subscriptions[i]);
+                    }
+
+                    Map<String, Integer> reminderCategories =
+                            (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+
+                    userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
+
+                    Log.d(TAG, "UserProfile loaded");
+                    ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
+                }
+            }
+        });
     }
 
     public void updateRemindersDisplay()

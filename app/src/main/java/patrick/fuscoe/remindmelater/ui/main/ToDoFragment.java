@@ -278,7 +278,10 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                         Log.d("subscriptions item: ", subscriptions[i]);
                     }
 
-                    userProfile = new UserProfile(id, displayName, subscriptions);
+                    Map<String, Integer> reminderCategories =
+                            (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+
+                    userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
 
                     Log.d(TAG, "UserProfile loaded");
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
@@ -540,6 +543,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         Map<String, Object> userProfileDoc = new HashMap<>();
         userProfileDoc.put("displayName", userProfile.getDisplayName());
         userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
+        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
 
         return userProfileDoc;
     }

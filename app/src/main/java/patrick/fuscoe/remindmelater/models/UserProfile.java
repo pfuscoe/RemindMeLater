@@ -3,13 +3,14 @@ package patrick.fuscoe.remindmelater.models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserProfile {
 
     private String id;
     private String displayName;
     private String[] subscriptions;
-    private HashMap<String, Integer> reminderCategories;
+    private Map<String, Integer> reminderCategories;
 
 
     public UserProfile() {
@@ -24,7 +25,7 @@ public class UserProfile {
         this.reminderCategories = new HashMap<>();
     }
 
-    public UserProfile(String id, String displayName, String[] subscriptions, HashMap<String, Integer> reminderCategories)
+    public UserProfile(String id, String displayName, String[] subscriptions, Map<String, Integer> reminderCategories)
     {
         this.id = id;
         this.displayName = displayName;
@@ -45,6 +46,16 @@ public class UserProfile {
         ArrayList<String> tempList = new ArrayList<>(Arrays.asList(subscriptions));
         tempList.remove(groupId);
         subscriptions = tempList.toArray(subscriptions);
+    }
+
+    public void addReminderCategory(String categoryName, Integer categoryIcon)
+    {
+        reminderCategories.put(categoryName, categoryIcon);
+    }
+
+    public void removeReminderCategory(String categoryName)
+    {
+        reminderCategories.remove(categoryName);
     }
 
     /** Getters and Setters **/
@@ -70,5 +81,9 @@ public class UserProfile {
 
     public void setSubscriptions(String[] subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public Map<String, Integer> getReminderCategories() {
+        return reminderCategories;
     }
 }

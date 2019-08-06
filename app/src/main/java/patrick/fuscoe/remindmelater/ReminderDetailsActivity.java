@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
+import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
@@ -53,10 +54,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
     private final String userId = auth.getUid();
+    private final DocumentReference userDocRef = db.collection("users").document(userId);
+
     private String remindersDocId;
     private DocumentReference remindersDocRef;
 
     private ReminderItem reminderItem;
+    private UserProfile userProfile;
     private LocalDate dateShown;
 
     private String recurrenceInterval;
@@ -127,13 +131,17 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         Gson gson = new Gson();
-        Type dataType = new TypeToken<ReminderItem>(){}.getType();
 
+        Type dataTypeReminderItem = new TypeToken<ReminderItem>(){}.getType();
         String reminderItemString = intent.getStringExtra(RemindersFragment.REMINDER_ITEM);
-        reminderItem = gson.fromJson(reminderItemString, dataType);
+        reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
 
         remindersDocId = intent.getStringExtra(RemindersFragment.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
+
+        Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
+        String userProfileString = intent.getStringExtra(RemindersFragment.USER_PROFILE);
+        userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(reminderItem.getTitle());
@@ -321,6 +329,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
             viewCategoryIcon.setImageResource(selectedIcon);
 
             // TODO: save new category to object / user profile
+            userProfile.addReminderCategory(categoryName, selectedIcon);
+            saveUserProfile();
         }
     }
 
