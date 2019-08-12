@@ -68,6 +68,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
     public static final String TO_DO_GROUP = "patrick.fuscoe.remindmelater.TO_DO_GROUP";
 
+    public static final int DEFAULT_CATEGORY_ICON = R.drawable.category_note;
+
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
@@ -230,7 +232,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
                     {
                         String id = doc.getId();
                         String title = doc.getString("title");
-                        String iconName = doc.getString("iconName");
+                        //String iconName = doc.getString("iconName");
+                        int iconId = Math.toIntExact(doc.getLong("iconId"));
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
                         int totalItems = doc.get("totalItems", int.class);
@@ -241,7 +244,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
 
-                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
+                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconId, shared, numPriorityOneItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
                     }
 
@@ -432,7 +435,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
 
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
-        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, "default", false, auth.getUid());
+        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, DEFAULT_CATEGORY_ICON, false, auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
         userProfile.addSubscription(docId);
@@ -527,7 +530,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     {
         Map<String, Object> toDoGroupDoc = new HashMap<>();
         toDoGroupDoc.put("title", toDoGroup.getTitle());
-        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
+        toDoGroupDoc.put("iconId", toDoGroup.getIconId());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());

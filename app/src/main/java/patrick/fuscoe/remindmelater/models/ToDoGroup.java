@@ -16,6 +16,7 @@ public class ToDoGroup {
     private String id;
     private String title;
     private String iconName;
+    private int iconId;
     private boolean shared;
     private int numPriorityOneItems;
     private int totalItems;
@@ -31,11 +32,11 @@ public class ToDoGroup {
 
     }
 
-    public ToDoGroup(String id, String title, String iconName, boolean shared, String userId)
+    public ToDoGroup(String id, String title, int iconId, boolean shared, String userId)
     {
         this.id = id;
         this.title = title;
-        this.iconName = iconName;
+        this.iconId = iconId;
         this.shared = shared;
         this.numPriorityOneItems = 0;
         this.totalItems = 0;
@@ -45,11 +46,11 @@ public class ToDoGroup {
         this.toDoItems = new HashMap<>();
     }
 
-    public ToDoGroup(String id, String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
+    public ToDoGroup(String id, String title, int iconId, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
     {
         this.id = id;
         this.title = title;
-        this.iconName = iconName;
+        this.iconId = iconId;
         this.shared = shared;
         this.numPriorityOneItems = numPriorityOneItems;
         this.subscribers = subscribers;
@@ -58,17 +59,6 @@ public class ToDoGroup {
         this.totalItems = toDoItems.size();
 
         this.toDoItemArrayList = new ArrayList<>();
-
-        /*
-        for (Map.Entry<String, Object> entry : toDoItems.entrySet())
-        {
-            String priorityString = entry.getValue().toString();
-            Integer priority = Integer.valueOf(priorityString);
-            Log.d(TAG, "ToDoItem key/value: " + entry.getKey() + ", " + priority);
-            ToDoItem item = new ToDoItem(entry.getKey(), priority);
-            toDoItemArrayList.add(item);
-        }
-        */
 
         HashMap<String, HashMap<String, Object>> toDoItemsMap = new HashMap<String, HashMap<String, Object>>();
 
@@ -84,21 +74,6 @@ public class ToDoGroup {
             ToDoItem item = new ToDoItem(itemName, priority, timestamp, done);
             toDoItemArrayList.add(item);
         }
-
-        /*
-        for (Map.Entry<String, Object> entry : toDoItems.entrySet())
-        {
-            String itemName = entry.getKey();
-
-            HashMap<String, ToDoItem> map = new HashMap<>();
-            map = entry.getValue().
-
-
-            //String priorityString = entry.
-        }
-        */
-
-        //Collections.sort(toDoItemArrayList);
 
         // could add cleared item storage to more easily re-add done items
     }
@@ -132,21 +107,14 @@ public class ToDoGroup {
         toDoItems = toDoItemsTemp;
     }
 
-    /*
-    public void saveToDoItemArray()
-    {
-        ToDoItem[] toDoItemArray = new ToDoItem[toDoItemArrayList.size()];
-        toDoItems = toDoItemArrayList.toArray(toDoItemArray);
-    }
-    */
 
     /** Getters **/
     public String getTitle() {
         return title;
     }
 
-    public String getIconName() {
-        return iconName;
+    public int getIconId() {
+        return iconId;
     }
 
     public boolean isShared() {
@@ -187,8 +155,8 @@ public class ToDoGroup {
         this.title = title;
     }
 
-    public void setIconName(String iconName) {
-        this.iconName = iconName;
+    public void setIconId(int iconId) {
+        this.iconId = iconId;
     }
 
     public void setShared(boolean shared) {
