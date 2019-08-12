@@ -44,6 +44,7 @@ import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
+import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 
 public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener,
@@ -159,10 +160,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewDescription = findViewById(R.id.view_reminder_details_description);
 
-        // TODO: Setup category select spinner
+        // Setup category select spinner
         viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
-
         viewCategorySpinner.setOnItemSelectedListener(this);
+        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter =
+                new ReminderCategorySpinnerAdapter(getApplicationContext(), userProfile.getReminderCategories());
+        viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
 
         // Setup Recurrence Spinner
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
