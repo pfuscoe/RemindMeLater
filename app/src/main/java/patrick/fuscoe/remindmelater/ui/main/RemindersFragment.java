@@ -70,7 +70,6 @@ public class RemindersFragment extends Fragment {
     private ReminderClickListener reminderClickListener = new ReminderClickListener() {
         @Override
         public void reminderClicked(View v, int position) {
-            // TODO: implement reminder click action
             Log.d(TAG, ": Reminder " + position + " clicked");
             ReminderItem reminderItem = reminderItemList.get(position);
 
