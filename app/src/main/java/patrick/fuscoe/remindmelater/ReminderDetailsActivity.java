@@ -116,13 +116,18 @@ public class ReminderDetailsActivity extends AppCompatActivity
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        if (view.getId() == R.id.view_reminder_details_recurrence_spinner)
+        if (parent.getId() == R.id.view_reminder_details_recurrence_spinner)
         {
             recurrenceInterval = (String) parent.getItemAtPosition(pos);
+            Log.d(TAG, ": Recurrence Interval changed.");
         }
-        else if (view.getId() == R.id.view_reminder_details_category_spinner)
+        else if (parent.getId() == R.id.view_reminder_details_category_spinner)
         {
-            // TODO: Set new category
+            ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(pos);
+            reminderItem.setCategory(reminderCategory.getCategoryName());
+            reminderItem.setCategoryIcon(reminderCategory.getIconId());
+            viewCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
+            Log.d(TAG, ": Reminder Category Changed.");
         }
     }
 
@@ -164,11 +169,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         // Setup category select spinner
         viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
-        viewCategorySpinner.setOnItemSelectedListener(this);
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter =
                 new ReminderCategorySpinnerAdapter(getApplicationContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
         setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
+        viewCategorySpinner.setOnItemSelectedListener(this);
+        //reminderCategorySpinnerAdapter.notifyDataSetChanged();
 
         // Setup Recurrence Spinner
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);

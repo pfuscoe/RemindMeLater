@@ -52,7 +52,8 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        //return null;
+        return reminderCategories.get(position);
     }
 
     @Override
