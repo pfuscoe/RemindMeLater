@@ -37,8 +37,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddReminderCategoryDialogFragment;
@@ -120,7 +122,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
         else if (view.getId() == R.id.view_reminder_details_category_spinner)
         {
-
+            // TODO: Set new category
         }
     }
 
@@ -166,6 +168,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter =
                 new ReminderCategorySpinnerAdapter(getApplicationContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
+        setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
 
         // Setup Recurrence Spinner
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
@@ -187,6 +190,27 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         updateFields();
 
+    }
+
+    public void setCategorySpinnerSelection(ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter)
+    {
+        List<ReminderCategory> reminderCategoryList = reminderCategorySpinnerAdapter.getReminderCategories();
+
+        //ReminderCategory reminderCategory = new ReminderCategory("Main", R.drawable.category_note);
+        int categoryPosition = 0;
+        int counter = 0;
+
+        for (ReminderCategory item : reminderCategoryList)
+        {
+            if (item.getIconId() == reminderItem.getCategoryIcon())
+            {
+                categoryPosition = counter;
+                //reminderCategory = item;
+            }
+            counter++;
+        }
+
+        viewCategorySpinner.setSelection(categoryPosition);
     }
 
     public void updateFields()

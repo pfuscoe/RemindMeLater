@@ -629,7 +629,8 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         EditToDoGroupDialogFragment dialogFragment = new EditToDoGroupDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToEdit.getTitle());
-        bundle.putString("iconName", toDoGroupToEdit.getIconName());
+        //bundle.putString("iconName", toDoGroupToEdit.getIconName());
+        Log.d(TAG, ": called showEditToDoGroupDialog");
 
         dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);

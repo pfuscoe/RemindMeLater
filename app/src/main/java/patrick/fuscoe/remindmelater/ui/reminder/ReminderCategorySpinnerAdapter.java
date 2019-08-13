@@ -73,4 +73,8 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public List<ReminderCategory> getReminderCategories() {
+        return reminderCategories;
+    }
 }
