@@ -45,7 +45,7 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         String groupTitle = bundle.getString("title");
-        String groupIconName = bundle.getString("iconName");
+        int groupIconId = bundle.getInt("iconId");
 
         EditText viewGroupTitle = v.findViewById(R.id.dialog_add_to_do_group_title);
         viewGroupTitle.setText(groupTitle);
