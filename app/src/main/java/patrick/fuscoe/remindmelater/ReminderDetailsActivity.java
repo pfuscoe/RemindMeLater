@@ -1,6 +1,5 @@
 package patrick.fuscoe.remindmelater;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -35,7 +34,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +41,14 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
-import patrick.fuscoe.remindmelater.ui.dialog.AddReminderCategoryDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 
 public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener,
-        AddReminderCategoryDialogFragment.AddReminderCategoryDialogListener {
+        AddCategoryDialogFragment.AddReminderCategoryDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
@@ -283,7 +281,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void openAddReminderCategoryDialog()
     {
-        DialogFragment dialogFragment = new AddReminderCategoryDialogFragment();
+        DialogFragment dialogFragment = new AddCategoryDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "addReminderCategory");
     }
 
@@ -384,12 +382,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        if (dialog instanceof AddReminderCategoryDialogFragment)
+        if (dialog instanceof AddCategoryDialogFragment)
         {
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String categoryName = viewCategoryName.getText().toString();
-            int selectedIcon = ((AddReminderCategoryDialogFragment) dialog).getSelectedIcon();
+            int selectedIcon = ((AddCategoryDialogFragment) dialog).getSelectedIcon();
 
             reminderItem.setCategory(categoryName);
             reminderItem.setCategoryIcon(selectedIcon);
@@ -404,7 +402,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        if (dialog instanceof AddReminderCategoryDialogFragment)
+        if (dialog instanceof AddCategoryDialogFragment)
         {
             Toast.makeText(getApplicationContext(), "Add Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
         }

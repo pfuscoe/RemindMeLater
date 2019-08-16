@@ -19,9 +19,9 @@ import java.util.List;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
-public class AddReminderCategoryDialogFragment extends DialogFragment {
+public class AddCategoryDialogFragment extends DialogFragment {
 
-    public static final String TAG = "patrick.fuscoe.remindmelater.AddReminderCategoryDialogFragment";
+    public static final String TAG = "patrick.fuscoe.remindmelater.AddCategoryDialogFragment";
 
     private List<Integer> categoryIconList;
     private List<Boolean> categoryIconListIsChecked;
@@ -117,12 +117,12 @@ public class AddReminderCategoryDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogPositiveClick(AddReminderCategoryDialogFragment.this);
+                        listener.onDialogPositiveClick(AddCategoryDialogFragment.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogNegativeClick(AddReminderCategoryDialogFragment.this);
+                        listener.onDialogNegativeClick(AddCategoryDialogFragment.this);
                     }
                 });
         return builder.create();
