@@ -56,11 +56,12 @@ import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 
-public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment.AddToDoGroupDialogListener,
+public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.AddCategoryDialogListener,
         EditToDoGroupDialogFragment.EditToDoGroupDialogListener,
         DeleteToDoGroupDialogFragment.DeleteToDoGroupDialogListener {
 
@@ -429,13 +430,13 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         }
     }
 
-    private void addToDoGroup(String title)
+    private void addToDoGroup(String title, int selectedIconId)
     {
         //groupAdded = true;
 
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
-        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, DEFAULT_CATEGORY_ICON, false, auth.getUid());
+        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconId, false, auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
         userProfile.addSubscription(docId);
@@ -617,11 +618,11 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     {
         // Create an instance of the dialog fragment and show it
         FragmentManager fm = getFragmentManager();
-        AddToDoGroupDialogFragment dialogFrag = new AddToDoGroupDialogFragment();
+        AddCategoryDialogFragment dialogFrag = new AddCategoryDialogFragment();
 
         dialogFrag.setTargetFragment(ToDoFragment.this, 300);
-        //dialogFrag.show(getChildFragmentManager(), AddToDoGroupDialogFragment.TAG);
-        dialogFrag.show(fm, AddToDoGroupDialogFragment.TAG);
+        //dialogFrag.show(getChildFragmentManager(), AddCategoryDialogFragment.TAG);
+        dialogFrag.show(fm, AddCategoryDialogFragment.TAG);
     }
 
     public void showEditToDoGroupDialog()
@@ -630,6 +631,7 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToEdit.getTitle());
         //bundle.putString("iconName", toDoGroupToEdit.getIconName());
+        bundle.putInt("iconId", toDoGroupToEdit.getIconId());
         Log.d(TAG, ": called showEditToDoGroupDialog");
 
         dialogFragment.setArguments(bundle);
@@ -653,12 +655,13 @@ public class ToDoFragment extends Fragment implements AddToDoGroupDialogFragment
     // defined by the AddToDoGroupDialogFragment.AddToDoGroupDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        if (dialog instanceof AddToDoGroupDialogFragment)
+        if (dialog instanceof AddCategoryDialogFragment)
         {
             Dialog dialogView = dialog.getDialog();
-            EditText viewAddToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
-            String newTitle = viewAddToDoGroupTitle.getText().toString();
-            addToDoGroup(newTitle);
+            EditText viewCategoryEditName = dialogView.findViewById(R.id.dialog_category_edit_name);
+            String newTitle = viewCategoryEditName.getText().toString();
+            int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
+            addToDoGroup(newTitle, selectedIconId);
         }
         else if (dialog instanceof EditToDoGroupDialogFragment)
         {

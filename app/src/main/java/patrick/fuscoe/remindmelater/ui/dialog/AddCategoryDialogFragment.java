@@ -67,9 +67,9 @@ public class AddCategoryDialogFragment extends DialogFragment {
         }
     };
 
-    AddReminderCategoryDialogListener listener;
+    AddCategoryDialogListener listener;
 
-    public interface AddReminderCategoryDialogListener {
+    public interface AddCategoryDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
         void onDialogNegativeClick(DialogFragment dialog);
     }
@@ -78,9 +78,9 @@ public class AddCategoryDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (AddReminderCategoryDialogListener) context;
+            listener = (AddCategoryDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException("Host must implement AddReminderCategoryDialogListener");
+            throw new ClassCastException("Host must implement AddCategoryDialogListener");
         }
     }
 
@@ -113,7 +113,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
         categoryIconRecycler.setAdapter(categoryIconRecyclerAdapter);
 
         builder.setView(v)
-                .setTitle(R.string.dialog_add_reminder_category_title)
+                .setTitle(R.string.dialog_add_category_title)
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -128,7 +128,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public int getSelectedIcon() {
+    public int getSelectedIconId() {
         return selectedIcon;
     }
 }

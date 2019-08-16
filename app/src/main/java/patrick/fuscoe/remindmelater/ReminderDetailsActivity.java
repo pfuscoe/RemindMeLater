@@ -48,7 +48,7 @@ import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 
 public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener,
-        AddCategoryDialogFragment.AddReminderCategoryDialogListener {
+        AddCategoryDialogFragment.AddCategoryDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
@@ -387,14 +387,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String categoryName = viewCategoryName.getText().toString();
-            int selectedIcon = ((AddCategoryDialogFragment) dialog).getSelectedIcon();
+            int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
 
             reminderItem.setCategory(categoryName);
-            reminderItem.setCategoryIcon(selectedIcon);
+            reminderItem.setCategoryIcon(selectedIconId);
 
-            viewCategoryIcon.setImageResource(selectedIcon);
+            viewCategoryIcon.setImageResource(selectedIconId);
 
-            userProfile.addReminderCategory(categoryName, selectedIcon);
+            userProfile.addReminderCategory(categoryName, selectedIconId);
             saveUserProfile();
             Toast.makeText(getApplicationContext(), "New Reminder Category Added: " + categoryName, Toast.LENGTH_SHORT).show();
         }
