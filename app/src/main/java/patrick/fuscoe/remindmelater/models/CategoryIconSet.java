@@ -164,4 +164,15 @@ public class CategoryIconSet {
     public ArrayList<Boolean> getCategoryIconListIsChecked() {
         return categoryIconListIsChecked;
     }
+
+    public void markSelected(Integer iconId)
+    {
+        for (int i = 0; i < categoryIconList.size(); i++)
+        {
+            if (iconId == categoryIconList.get(i))
+            {
+                categoryIconListIsChecked.set(i, true);
+            }
+        }
+    }
 }

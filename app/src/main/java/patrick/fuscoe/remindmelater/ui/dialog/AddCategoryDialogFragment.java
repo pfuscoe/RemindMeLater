@@ -108,7 +108,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
         categoryIconRecyclerLayoutManager = new GridLayoutManager(getContext(), 5);
         categoryIconRecycler.setLayoutManager(categoryIconRecyclerLayoutManager);
 
-        categoryIconRecyclerAdapter = new CategoryIconSelectAdapter(categoryIconList,
+        categoryIconRecyclerAdapter = new AddCategoryIconSelectAdapter(categoryIconList,
                 categoryIconListIsChecked, getContext(), categoryIconClickListener);
         categoryIconRecycler.setAdapter(categoryIconRecyclerAdapter);
 

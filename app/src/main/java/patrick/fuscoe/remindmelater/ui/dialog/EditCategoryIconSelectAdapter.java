@@ -13,13 +13,13 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
 
-public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIconSelectAdapter.IconViewHolder> {
+public class EditCategoryIconSelectAdapter extends RecyclerView.Adapter<EditCategoryIconSelectAdapter.IconViewHolder> {
 
     private List<Integer> categoryIconList;
     private List<Boolean> categoryIconListIsChecked;
     private Context context;
 
-    private static AddCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener;
+    private static EditToDoGroupDialogFragment.CategoryIconClickListener categoryIconClickListener;
 
     public static class IconViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -44,8 +44,8 @@ public class CategoryIconSelectAdapter extends RecyclerView.Adapter<CategoryIcon
         }
     }
 
-    public CategoryIconSelectAdapter(List<Integer> categoryIconList, List<Boolean> categoryIconListIsChecked, Context context,
-                                     AddCategoryDialogFragment.CategoryIconClickListener categoryIconClickListener)
+    public EditCategoryIconSelectAdapter(List<Integer> categoryIconList, List<Boolean> categoryIconListIsChecked, Context context,
+                                         EditToDoGroupDialogFragment.CategoryIconClickListener categoryIconClickListener)
     {
         this.categoryIconList = categoryIconList;
         this.categoryIconListIsChecked = categoryIconListIsChecked;

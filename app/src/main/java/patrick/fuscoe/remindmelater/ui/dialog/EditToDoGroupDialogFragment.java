@@ -102,6 +102,7 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
         //selectedIconPos = -1;
 
         CategoryIconSet categoryIconSet = new CategoryIconSet();
+        categoryIconSet.markSelected(selectedIcon);
         categoryIconList = categoryIconSet.getCategoryIconList();
         categoryIconListIsChecked = categoryIconSet.getCategoryIconListIsChecked();
 
@@ -111,7 +112,7 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
         categoryIconRecyclerLayoutManager = new GridLayoutManager(getContext(), 5);
         categoryIconRecycler.setLayoutManager(categoryIconRecyclerLayoutManager);
 
-        categoryIconRecyclerAdapter = new CategoryIconSelectAdapter(categoryIconList, categoryIconListIsChecked, getContext(), categoryIconClickListener);
+        categoryIconRecyclerAdapter = new EditCategoryIconSelectAdapter(categoryIconList, categoryIconListIsChecked, getContext(), categoryIconClickListener);
         categoryIconRecycler.setAdapter(categoryIconRecyclerAdapter);
 
 
