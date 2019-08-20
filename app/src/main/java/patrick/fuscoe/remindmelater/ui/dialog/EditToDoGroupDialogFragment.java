@@ -132,4 +132,7 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    public int getSelectedIconId() {
+        return selectedIcon;
+    }
 }

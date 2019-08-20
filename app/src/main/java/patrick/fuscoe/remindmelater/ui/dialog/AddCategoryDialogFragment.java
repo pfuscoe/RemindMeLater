@@ -10,13 +10,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import java.util.List;
 
+import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
 public class AddCategoryDialogFragment extends DialogFragment {
@@ -78,7 +81,18 @@ public class AddCategoryDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (AddCategoryDialogListener) context;
+            if (context instanceof ReminderDetailsActivity)
+            {
+                listener = (AddCategoryDialogListener) context;
+            }
+            else if (context instanceof MainActivity)
+            {
+                listener = (AddCategoryDialogListener) getTargetFragment();
+            }
+            else
+            {
+                Log.d(TAG, ": Unable to setup listener due to unrecognized context");
+            }
         } catch (ClassCastException e) {
             throw new ClassCastException("Host must implement AddCategoryDialogListener");
         }

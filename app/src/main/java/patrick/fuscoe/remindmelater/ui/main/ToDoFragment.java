@@ -617,12 +617,13 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     public void showAddToDoGroupDialog()
     {
         // Create an instance of the dialog fragment and show it
-        FragmentManager fm = getFragmentManager();
+        //FragmentManager fm = getFragmentManager();
         AddCategoryDialogFragment dialogFrag = new AddCategoryDialogFragment();
 
         dialogFrag.setTargetFragment(ToDoFragment.this, 300);
         //dialogFrag.show(getChildFragmentManager(), AddCategoryDialogFragment.TAG);
-        dialogFrag.show(fm, AddCategoryDialogFragment.TAG);
+        //dialogFrag.show(getActivity().getSupportFragmentManager(), AddCategoryDialogFragment.TAG);
+        dialogFrag.show(getFragmentManager(), AddCategoryDialogFragment.TAG);
     }
 
     public void showEditToDoGroupDialog()
