@@ -77,7 +77,7 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
         String numBoxIconString = selectNumBoxIconName(toDoGroup);
         String numCircleIconString = selectNumCircleIconName(toDoGroup);
 
-        holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.home));
+        holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, toDoGroup.getIconId()));
         holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
         int circleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());

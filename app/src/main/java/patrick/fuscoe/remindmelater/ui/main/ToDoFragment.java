@@ -667,9 +667,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         else if (dialog instanceof EditToDoGroupDialogFragment)
         {
             Dialog dialogView = dialog.getDialog();
-            EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_add_to_do_group_title);
+            EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_category_edit_name);
             String newTitle = viewEditToDoGroupTitle.getText().toString();
+            int selectedIconId = ((EditToDoGroupDialogFragment) dialog).getSelectedIconId();
             toDoGroupToEdit.setTitle(newTitle);
+            toDoGroupToEdit.setIconId(selectedIconId);
 
             editToDoGroup(toDoGroupToEdit);
         }
