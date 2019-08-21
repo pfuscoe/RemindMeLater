@@ -1,10 +1,14 @@
 package patrick.fuscoe.remindmelater.models;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import patrick.fuscoe.remindmelater.R;
 
 public class CategoryIconSet {
+
+    public static final String TAG = "patrick.fuscoe.remindmelater.CategoryIconSet";
 
     private ArrayList<Integer> categoryIconList;
     private ArrayList<Boolean> categoryIconListIsChecked;
@@ -167,11 +171,14 @@ public class CategoryIconSet {
 
     public void markSelected(Integer iconId)
     {
+        //Log.d(TAG, ": markSelected called with iconId: " + iconId);
+
         for (int i = 0; i < categoryIconList.size(); i++)
         {
-            if (iconId == categoryIconList.get(i))
+            if (iconId.equals(categoryIconList.get(i)))
             {
                 categoryIconListIsChecked.set(i, true);
+                //Log.d(TAG, ": Icon checked at pos: " + i);
             }
         }
     }
