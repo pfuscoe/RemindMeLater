@@ -1,5 +1,7 @@
 package patrick.fuscoe.remindmelater;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        loadReminderAlarms();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -50,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
     public void setActionBarTitle(String title)
     {
         getSupportActionBar().setTitle(title);
+    }
+
+    public void loadReminderAlarms()
+    {
+        SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        // TODO: Read from shared preferences using getString to get nextOccurrence
     }
 
 }

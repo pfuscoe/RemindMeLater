@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -242,5 +244,42 @@ public class RemindersFragment extends Fragment {
         remindersRecyclerView.setAdapter(remindersAdapter);
 
         remindersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_add:
+                Log.d(TAG, ": Add Button pressed");
+                addReminder();
+                return true;
+
+            case R.id.menu_main_user_settings:
+                Log.d(TAG, ": Menu item selected: " + item.getItemId());
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void addReminder()
+    {
+        String title = "New Reminder";
+        int recurrenceNum = 7;
+        String recurrenceInterval = "Days";
+
+        LocalDate nextOccurrenceLocalDate = LocalDate.now().plusDays(recurrenceNum);
+        String nextOccurrence = nextOccurrenceLocalDate.toString();
+
+        String category = "default";
+        int categoryIcon = R.drawable.category_note;
+        String description = "";
+
+        ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval,
+                nextOccurrence, category, categoryIcon, description);
+
+        // TODO: open reminder details activity, make sure cloud fields synced
     }
 }
