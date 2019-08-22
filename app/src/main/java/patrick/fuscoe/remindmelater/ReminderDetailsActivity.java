@@ -167,8 +167,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         // Setup category select spinner
         viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
-        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter =
-                new ReminderCategorySpinnerAdapter(getApplicationContext(), userProfile.getReminderCategories());
+        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
+                getApplicationContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
         setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
         viewCategorySpinner.setOnItemSelectedListener(this);
@@ -193,7 +193,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
         btnSave.setOnClickListener(btnClickListener);
 
         updateFields();
+    }
 
+    public void updateCategorySelectSpinner()
+    {
+        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
+                getApplicationContext(), userProfile.getReminderCategories());
+        viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
+        setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
+        viewCategorySpinner.setOnItemSelectedListener(this);
     }
 
     public void setCategorySpinnerSelection(ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter)
@@ -293,7 +301,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
         setNextOccurrenceDate(localDate);
     }
 
@@ -396,6 +404,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             userProfile.addReminderCategory(categoryName, selectedIconId);
             saveUserProfile();
+            updateCategorySelectSpinner();
             Toast.makeText(getApplicationContext(), "New Reminder Category Added: " + categoryName, Toast.LENGTH_SHORT).show();
         }
     }
