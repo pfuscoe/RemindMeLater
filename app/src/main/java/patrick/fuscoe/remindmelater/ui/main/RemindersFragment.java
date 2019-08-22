@@ -106,6 +106,8 @@ public class RemindersFragment extends Fragment {
 
         reminderItemList = new ArrayList<>();
 
+        editMode = false;
+
         /*
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
         int index = 1;
@@ -280,6 +282,15 @@ public class RemindersFragment extends Fragment {
         ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval,
                 nextOccurrence, category, categoryIcon, description);
 
-        // TODO: open reminder details activity, make sure cloud fields synced
+        reminderItemList.add(reminderItem);
+
+        Intent intent = new Intent(getContext(), ReminderDetailsActivity.class);
+        Gson gson = new Gson();
+        String reminderItemString = gson.toJson(reminderItem);
+        String userProfileString = gson.toJson(userProfile);
+        intent.putExtra(REMINDER_ITEM, reminderItemString);
+        intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
+        intent.putExtra(USER_PROFILE, userProfileString);
+        startActivity(intent);
     }
 }
