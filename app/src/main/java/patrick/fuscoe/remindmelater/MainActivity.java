@@ -19,14 +19,24 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
 
+    public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
+    public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
+    public static final int DEFAULT_REMINDER_TIME_HOUR = 10;
+    public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
+
+    public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderBroadcastIds;
+
+    public static int reminderTimeHour;
+    public static int reminderTimeMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadUserPreferences();
         loadReminderAlarms();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -63,24 +73,34 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
     }
 
+    public void loadUserPreferences()
+    {
+        userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
+
+        reminderTimeHour = userPreferences.getInt(USER_PREF_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_HOUR);
+        reminderTimeMinute = userPreferences.getInt(USER_PREF_REMINDER_TIME_MINUTE, DEFAULT_REMINDER_TIME_MINUTE);
+    }
+
     public void loadReminderAlarms()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         // TODO: Read from shared preferences using getString to get nextOccurrence
-        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
-        for (Map.Entry<String, ?> entry : reminderBroadcastIdMap.entrySet())
-        {
-
-        }
-
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
 
         for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
         {
 
         }
+
+        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
+
+        for (Map.Entry<String, ?> entry : reminderBroadcastIdMap.entrySet())
+        {
+
+        }
+
     }
 
 }

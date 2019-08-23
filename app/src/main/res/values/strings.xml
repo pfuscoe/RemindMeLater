@@ -40,4 +40,5 @@
     <string name="dialog_add_category_title">Add New Category</string>
     <string name="reminders_file_key">patrick.fuscoe.remindmelater.REMINDERS</string>
     <string name="reminder_broadcast_ids_file_key">patrick.fuscoe.remindmelater.REMINDER_BROADCAST_IDS</string>
+    <string name="user_preferences_file_key">patrick.fuscoe.remindmelater.USER_PREFERENCES</string>
 </resources>
