@@ -372,11 +372,21 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void saveReminderToSharedPreferences()
     {
-        SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = reminderAlarmStorage.edit();
+        //SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderAlarmStorage = MainActivity.reminderAlarmStorage;
+        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
 
-        editor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
-        editor.apply();
+        reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
+        reminderAlarmEditor.apply();
+
+        //SharedPreferences reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderBroadcastIds = MainActivity.reminderBroadcastIds;
+        SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
+
+        int broadcastId = (int) System.currentTimeMillis();
+        // TODO: Add check for existing id
+        reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
+        reminderBroadcastIdEditor.apply();
 
         // TODO: using apply() for async saving. Check if commit() needed
     }

@@ -11,9 +11,16 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import java.util.Map;
+
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
+
+    public static SharedPreferences reminderAlarmStorage;
+    public static SharedPreferences reminderBroadcastIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +65,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadReminderAlarms()
     {
-        SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+
         // TODO: Read from shared preferences using getString to get nextOccurrence
+        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
+        for (Map.Entry<String, ?> entry : reminderBroadcastIdMap.entrySet())
+        {
+
+        }
+
+        Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
+
+        for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
+        {
+
+        }
     }
 
 }
