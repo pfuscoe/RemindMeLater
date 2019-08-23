@@ -1,10 +1,13 @@
 package patrick.fuscoe.remindmelater;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
@@ -346,6 +349,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("categoryIcon", reminderItem.getCategoryIcon());
         reminderItemMap.put("description", reminderItem.getDescription());
 
+        saveReminderToSharedPreferences();
+
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -358,10 +363,22 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
+                        // TODO: handle local storage of reminder when cloud sync fails
                     }
                 });
 
         onBackPressed();
+    }
+
+    public void saveReminderToSharedPreferences()
+    {
+        SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = reminderAlarmStorage.edit();
+
+        editor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
+        editor.apply();
+
+        // TODO: using apply() for async saving. Check if commit() needed
     }
 
     public void saveUserProfile()
