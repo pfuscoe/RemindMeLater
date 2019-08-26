@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
+import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
@@ -29,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
     public static final int DEFAULT_REMINDER_TIME_HOUR = 10;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
+
+    public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
+    //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
 
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
@@ -125,7 +130,25 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void setReminderAlarms()
     {
+        Context context = getApplicationContext();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        alarmIntentList = new ArrayList<>();
+
+        for (ReminderAlarmItem alarmItem : reminderAlarmItemList)
+        {
+            long alarmTime = alarmItem.getAlarmCalendarObj().getTimeInMillis();
+
+            Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+            intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
+            //intent.putExtra(REMINDER_NEXT_OCCURRENCE, alarmItem.getNextOccurrence());
+
+            // TODO: Check alarmIntent Flag
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, alarmItem.getBroadcastId(), intent, 0);
+
+            alarmIntentList.add(alarmIntent);
+            alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
+        }
     }
 
 }

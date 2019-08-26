@@ -8,7 +8,7 @@ public class ReminderAlarmItem {
     private String title;
     private String nextOccurrence;
     private int broadcastId;
-    private Calendar alarmCalendar;
+    private Calendar alarmCalendarObj;
 
 
     public ReminderAlarmItem()
@@ -32,11 +32,11 @@ public class ReminderAlarmItem {
         int month = alarmDate.getMonthValue();
         int day = alarmDate.getDayOfMonth();
 
-        alarmCalendar = Calendar.getInstance();
-        alarmCalendar.setTimeInMillis(System.currentTimeMillis());
-        alarmCalendar.set(year, month - 1, day);
-        alarmCalendar.set(Calendar.HOUR_OF_DAY, hour);
-        alarmCalendar.set(Calendar.MINUTE, minute);
+        alarmCalendarObj = Calendar.getInstance();
+        alarmCalendarObj.setTimeInMillis(System.currentTimeMillis());
+        alarmCalendarObj.set(year, month - 1, day);
+        alarmCalendarObj.set(Calendar.HOUR_OF_DAY, hour);
+        alarmCalendarObj.set(Calendar.MINUTE, minute);
     }
 
     public String getTitle() {
@@ -51,8 +51,8 @@ public class ReminderAlarmItem {
         return broadcastId;
     }
 
-    public Calendar getAlarmCalendar() {
-        return alarmCalendar;
+    public Calendar getAlarmCalendarObj() {
+        return alarmCalendarObj;
     }
 
 }
