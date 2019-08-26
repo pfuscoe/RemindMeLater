@@ -1,5 +1,7 @@
 package patrick.fuscoe.remindmelater;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,9 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
+import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
 
@@ -31,10 +34,19 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderBroadcastIds;
 
+    private AlarmManager alarmManager;
+
     public List<ReminderAlarmItem> reminderAlarmItemList;
+    public List<PendingIntent> alarmIntentList;
 
     public static int reminderTimeHour;
     public static int reminderTimeMinute;
+
+    @Override
+    public void bootReceived() {
+        loadReminderAlarms();
+        setReminderAlarms();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadUserPreferences();
         loadReminderAlarms();
+        setReminderAlarms();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -91,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
-        // TODO: Read from shared preferences using getString to get nextOccurrence
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
         Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
 
@@ -109,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
             reminderAlarmItemList.add(reminderAlarmItem);
         }
+    }
+
+    public void setReminderAlarms()
+    {
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     }
 
 }
