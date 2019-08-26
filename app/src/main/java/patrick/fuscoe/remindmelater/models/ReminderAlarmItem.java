@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 public class ReminderAlarmItem {
 
+    private String title;
     private String nextOccurrence;
     private int broadcastId;
     private Calendar alarmCalendar;
@@ -15,8 +16,9 @@ public class ReminderAlarmItem {
 
     }
 
-    public ReminderAlarmItem(String nextOccurrence, int broadcastId, int hour, int minute)
+    public ReminderAlarmItem(String title, String nextOccurrence, int broadcastId, int hour, int minute)
     {
+        this.title = title;
         this.nextOccurrence = nextOccurrence;
         this.broadcastId = broadcastId;
 
@@ -35,6 +37,10 @@ public class ReminderAlarmItem {
         alarmCalendar.set(year, month - 1, day);
         alarmCalendar.set(Calendar.HOUR_OF_DAY, hour);
         alarmCalendar.set(Calendar.MINUTE, minute);
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getNextOccurrence() {

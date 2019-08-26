@@ -11,8 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderBroadcastIds;
+
+    public List<ReminderAlarmItem> reminderAlarmItemList;
 
     public static int reminderTimeHour;
     public static int reminderTimeMinute;
@@ -88,19 +93,22 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: Read from shared preferences using getString to get nextOccurrence
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
+        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
+
+        reminderAlarmItemList = new ArrayList<>();
 
         for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
         {
+            String title = entry.getKey();
+            String nextOccurrence = (String) entry.getValue();
 
+            int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
+
+            ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
+                    broadcastId, reminderTimeHour, reminderTimeMinute);
+
+            reminderAlarmItemList.add(reminderAlarmItem);
         }
-
-        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
-
-        for (Map.Entry<String, ?> entry : reminderBroadcastIdMap.entrySet())
-        {
-
-        }
-
     }
 
 }
