@@ -50,6 +50,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:parentActivityName=".FirebaseSignInActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
