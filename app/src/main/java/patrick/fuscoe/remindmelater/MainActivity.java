@@ -34,9 +34,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
+    public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
 
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
+    public static SharedPreferences reminderIconIds;
     public static SharedPreferences reminderBroadcastIds;
 
     private AlarmManager alarmManager;
@@ -107,9 +109,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public void loadReminderAlarms()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
+        Map<String, ?> reminderIconIdMap = reminderIconIds.getAll();
         Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
 
         reminderAlarmItemList = new ArrayList<>();
@@ -119,10 +123,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             String title = entry.getKey();
             String nextOccurrence = (String) entry.getValue();
 
+            int iconId = (Integer) reminderIconIdMap.get(title);
             int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
 
             ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
-                    broadcastId, reminderTimeHour, reminderTimeMinute);
+                    iconId, broadcastId, reminderTimeHour, reminderTimeMinute);
 
             reminderAlarmItemList.add(reminderAlarmItem);
         }
@@ -141,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
             intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
+            intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
             //intent.putExtra(REMINDER_NEXT_OCCURRENCE, alarmItem.getNextOccurrence());
 
             // TODO: Check alarmIntent Flag

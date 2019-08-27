@@ -379,6 +379,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
         reminderAlarmEditor.apply();
 
+        SharedPreferences reminderIconIds = MainActivity.reminderIconIds;
+        SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+
+        reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
+        reminderIconIdEditor.apply();
+
         //SharedPreferences reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
         SharedPreferences reminderBroadcastIds = MainActivity.reminderBroadcastIds;
         SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();

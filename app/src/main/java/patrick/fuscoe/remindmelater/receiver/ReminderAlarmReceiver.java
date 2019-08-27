@@ -12,7 +12,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String title = intent.getStringExtra(MainActivity.REMINDER_TITLE);
 
-        // TODO: Setup send notification service for received alarm
+        // TODO: Setup send notification for received alarm
         // need small icon, title
     }
 }
