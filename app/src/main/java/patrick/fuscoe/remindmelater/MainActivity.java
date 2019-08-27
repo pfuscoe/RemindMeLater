@@ -1,10 +1,13 @@
 package patrick.fuscoe.remindmelater;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
@@ -26,6 +29,8 @@ import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
+
+    public static final String NOTIFICATION_CHANNEL_ID = "patrick.fuscoe.remindmelater.NOTIFICATION_CHANNEL_ID";
 
     public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        createNotificationChannel();
 
         loadUserPreferences();
         loadReminderAlarms();
@@ -154,6 +161,22 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             alarmIntentList.add(alarmIntent);
             alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
+        }
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_channel_name);
+            String description = getString(R.string.notification_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
