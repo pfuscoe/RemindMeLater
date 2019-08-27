@@ -9,11 +9,17 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 
+import java.util.List;
+
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
+import patrick.fuscoe.remindmelater.ui.main.RemindersViewModel;
 
 public class ReminderAlarmReceiver extends BroadcastReceiver {
+
+    private List<ReminderItem> reminderItemList;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -42,5 +48,11 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         notificationManager.notify(notificationId, builder.build());
 
 
+    }
+
+    public void loadReminders()
+    {
+        //RemindersViewModel remindersViewModel = new RemindersViewModel();
+        // TODO: use AsyncTask to load reminders...
     }
 }
