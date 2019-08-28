@@ -139,7 +139,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
 
         // TODO: Notification Dismiss Intent
-        Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class)
+        Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
