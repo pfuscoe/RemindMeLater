@@ -136,8 +136,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         // TODO: Notification Snooze Intent
         Intent snoozeIntent = new Intent(context, NotificationSnoozeReceiver.class);
-
-
+        
         // TODO: Notification Dismiss Intent
         Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
 
