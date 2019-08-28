@@ -173,8 +173,8 @@ public class RemindersFragment extends Fragment {
                                 String title = entry.getKey();
                                 HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
-                                String recurrenceString = (String) reminderItemMap.get("recurrence");
-                                Period recurrence = Period.parse(recurrenceString);
+                                //String recurrenceString = (String) reminderItemMap.get("recurrence");
+                                //Period recurrence = Period.parse(recurrenceString);
 
                                 int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
                                 Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
