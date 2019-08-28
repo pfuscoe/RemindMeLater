@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             long alarmTime = alarmItem.getAlarmCalendarObj().getTimeInMillis();
 
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+            // TODO: setAction might be needed here
             intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
             intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
             //intent.putExtra(REMINDER_NEXT_OCCURRENCE, alarmItem.getNextOccurrence());

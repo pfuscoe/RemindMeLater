@@ -124,17 +124,31 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         int notificationId = (int) System.currentTimeMillis();
         int iconId = reminderItem.getCategoryIcon();
 
+        // Notification Tap Intent
         Intent remindersFragmentIntent = new Intent(context, RemindersFragment.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(remindersFragmentIntent);
         PendingIntent remindersFragmentPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // TODO: Notification Done Intent
+        Intent doneIntent = new Intent(context, NotificationDoneReceiver.class);
+
+        // TODO: Notification Snooze Intent
+        Intent snoozeIntent = new Intent(context, NotificationSnoozeReceiver.class);
+
+
+        // TODO: Notification Dismiss Intent
+        Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class)
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(iconId)
                 .setContentTitle(reminderTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(remindersFragmentPendingIntent)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
