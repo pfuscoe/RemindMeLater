@@ -44,4 +44,6 @@
     <string name="reminder_icon_ids_file_key">patrick.fuscoe.remindmelater.REMINDER_ICON_IDS</string>
     <string name="notification_channel_name">Remind Me Later Notifications</string>
     <string name="notification_channel_description">Remind Me Later Notification Channel</string>
+    <string name="snooze">Snooze</string>
+    <string name="done">Done</string>
 </resources>

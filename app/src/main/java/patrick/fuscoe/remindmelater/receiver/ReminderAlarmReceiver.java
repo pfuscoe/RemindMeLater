@@ -34,6 +34,11 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderAlarmReceiver";
 
+    public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
+    public static final String NOTIFICATION_ACTION_DONE = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_DONE";
+    public static final String NOTIFICATION_ACTION_SNOOZE = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_SNOOZE";
+    public static final String NOTIFICATION_ACTION_DISMISS = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_DISMISS";
+
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String userId = auth.getUid();
@@ -131,12 +136,20 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         PendingIntent remindersFragmentPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // TODO: Notification Done Intent
+        // Notification Done Intent
         Intent doneIntent = new Intent(context, NotificationDoneReceiver.class);
+        doneIntent.setAction(NOTIFICATION_ACTION_DONE);
+        doneIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        PendingIntent donePendingIntent =
+                PendingIntent.getBroadcast(context, 0, doneIntent, 0);
 
-        // TODO: Notification Snooze Intent
+        // Notification Snooze Intent
         Intent snoozeIntent = new Intent(context, NotificationSnoozeReceiver.class);
-        
+        snoozeIntent.setAction(NOTIFICATION_ACTION_SNOOZE);
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+
         // TODO: Notification Dismiss Intent
         Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
 
@@ -148,7 +161,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setContentIntent(remindersFragmentPendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .addAction(R.drawable.action_check, context.getString(R.string.done), donePendingIntent)
+                .addAction(R.drawable.action_alarm_snooze, context.getString(R.string.snooze), snoozePendingIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());
