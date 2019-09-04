@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public static final String NOTIFICATION_ACTION_DONE = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_DONE";
     public static final String NOTIFICATION_ACTION_SNOOZE = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_SNOOZE";
     public static final String NOTIFICATION_ACTION_DISMISS = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_DISMISS";
+
+    public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
+    public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -60,6 +64,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         reminderTitle = intent.getStringExtra(MainActivity.REMINDER_TITLE);
         //int iconId = intent.getIntExtra(MainActivity.REMINDER_ICON_ID, R.drawable.category_note);
+
+        loadReminder();
 
         /*
         Intent remindersFragmentIntent = new Intent(context, RemindersFragment.class);
@@ -129,6 +135,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         int notificationId = (int) System.currentTimeMillis();
         int iconId = reminderItem.getCategoryIcon();
 
+        Gson gson = new Gson();
+        String reminderItemString = gson.toJson(reminderItem);
+
         // Notification Tap Intent
         Intent remindersFragmentIntent = new Intent(context, RemindersFragment.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -140,6 +149,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Intent doneIntent = new Intent(context, NotificationDoneReceiver.class);
         doneIntent.setAction(NOTIFICATION_ACTION_DONE);
         doneIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        doneIntent.putExtra(REMINDER_ITEM, reminderItemString);
+        doneIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         PendingIntent donePendingIntent =
                 PendingIntent.getBroadcast(context, 0, doneIntent, 0);
 
@@ -147,6 +158,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Intent snoozeIntent = new Intent(context, NotificationSnoozeReceiver.class);
         snoozeIntent.setAction(NOTIFICATION_ACTION_SNOOZE);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        snoozeIntent.putExtra(REMINDER_ITEM, reminderItemString);
+        snoozeIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         PendingIntent snoozePendingIntent =
                 PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
 
