@@ -20,6 +20,7 @@ public class ReminderItem {
     private String recurrenceInterval;
 
     private Period recurrence;
+    private String recurrenceString;
     private int daysAway;
     private boolean snoozed;
     private ArrayList<HistoryItem> historyItems;
@@ -74,6 +75,8 @@ public class ReminderItem {
                 recurrence = Period.ofYears(recurrenceNum);
                 return;
         }
+
+        recurrenceString = recurrence.toString();
     }
 
     public void addToHistory(HistoryItem historyItem)
@@ -96,6 +99,10 @@ public class ReminderItem {
 
     public Period getRecurrence() {
         return recurrence;
+    }
+
+    public String getRecurrenceString() {
+        return recurrenceString;
     }
 
     public String getNextOccurrence() {

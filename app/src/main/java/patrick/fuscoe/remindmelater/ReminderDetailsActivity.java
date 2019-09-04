@@ -341,7 +341,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         updateReminderItemObject();
 
         HashMap<String, Object> reminderItemMap = new HashMap<>();
-        reminderItemMap.put("recurrence", reminderItem.getRecurrence().toString());
+        reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
         reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
         reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());

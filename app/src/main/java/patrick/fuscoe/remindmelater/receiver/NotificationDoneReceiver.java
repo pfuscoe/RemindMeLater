@@ -62,7 +62,10 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
     private void updateReminderItem()
     {
-        Period recurrence = reminderItem.getRecurrence();
+        // Using workaround to get recurrence since Gson doesn't support Period java class
+        String recurrenceString = reminderItem.getRecurrenceString();
+        Period recurrence = Period.parse(recurrenceString);
+
         int daysUntilNext = recurrence.getDays();
 
         // TODO: Fix recurrence by either using val & interval or toString for new item property due to gson issues
@@ -81,7 +84,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
     private void saveReminderItem()
     {
         HashMap<String, Object> reminderItemMap = new HashMap<>();
-        reminderItemMap.put("recurrence", reminderItem.getRecurrence().toString());
+        reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
         reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
         reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());

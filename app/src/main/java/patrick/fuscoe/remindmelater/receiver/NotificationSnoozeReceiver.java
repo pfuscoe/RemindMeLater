@@ -29,7 +29,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.NotificationSnoozeReceiver";
     public static final int DEFAULT_NOTIFICATION_ID = 101;
-    public static final int DEFAULT_SNOOZE_DAYS = 1;
+    public static final int DEFAULT_SNOOZE_DAYS = 2;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
@@ -62,12 +62,12 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     private void updateReminderItem()
     {
-        Period recurrence = reminderItem.getRecurrence();
+        //Period recurrence = reminderItem.getRecurrence();
         // TODO: Setup snooze length customization
-        int daysUntilNext = DEFAULT_SNOOZE_DAYS;
+        //int daysUntilNext = DEFAULT_SNOOZE_DAYS;
 
         LocalDate nextOccurrence = LocalDate.now();
-        nextOccurrence.plusDays(daysUntilNext);
+        nextOccurrence.plusDays(DEFAULT_SNOOZE_DAYS);
         reminderItem.setNextOccurrence(nextOccurrence.toString());
 
         // TODO: Add action to history
@@ -76,7 +76,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
     private void saveReminderItem()
     {
         HashMap<String, Object> reminderItemMap = new HashMap<>();
-        reminderItemMap.put("recurrence", reminderItem.getRecurrence().toString());
+        reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
         reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
         reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
