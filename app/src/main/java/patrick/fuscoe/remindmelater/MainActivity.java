@@ -33,11 +33,12 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
 
     public static final String NOTIFICATION_CHANNEL_ID = "patrick.fuscoe.remindmelater.NOTIFICATION_CHANNEL_ID";
+    public static final String ACTION_ALARM_RECEIVER = "patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver";
 
     public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
     public static final int DEFAULT_REMINDER_TIME_HOUR = 12;
-    public static final int DEFAULT_REMINDER_TIME_MINUTE = 30;
+    public static final int DEFAULT_REMINDER_TIME_MINUTE = 34;
 
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
             // TODO: setAction might be needed here
+            intent.setAction(ACTION_ALARM_RECEIVER);
             intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
             intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
             //intent.putExtra(REMINDER_NEXT_OCCURRENCE, alarmItem.getNextOccurrence());

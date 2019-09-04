@@ -13,7 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".BootReceiver"
+        <receiver android:name="patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="patrick.fuscoe.remindmelater.receiver.BootReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
