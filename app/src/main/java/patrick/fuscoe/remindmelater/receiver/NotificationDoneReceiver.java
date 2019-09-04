@@ -129,5 +129,5 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         // TODO: using apply() for async saving. Check if commit() needed
     }
-    
+
 }
