@@ -36,9 +36,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderAlarmReceiver";
 
     public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
-    public static final String NOTIFICATION_ACTION_DONE = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_DONE";
-    public static final String NOTIFICATION_ACTION_SNOOZE = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_SNOOZE";
-    public static final String NOTIFICATION_ACTION_DISMISS = "patrick.fuscoe.remindmelater.NOTIFICATION_ACTION_DISMISS";
+    public static final String NOTIFICATION_ACTION_DONE = "patrick.fuscoe.remindmelater.receiver.NotificationDoneReceiver";
+    public static final String NOTIFICATION_ACTION_SNOOZE = "patrick.fuscoe.remindmelater.receiver.NotificationSnoozeReceiver";
+    public static final String NOTIFICATION_ACTION_DISMISS = "patrick.fuscoe.remindmelater.receiver.NotificationDismissReceiver";
 
     public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";

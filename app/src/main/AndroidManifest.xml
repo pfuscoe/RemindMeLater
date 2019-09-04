@@ -27,6 +27,27 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="patrick.fuscoe.remindmelater.receiver.NotificationDoneReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationDoneReceiver"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="patrick.fuscoe.remindmelater.receiver.NotificationSnoozeReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationSnoozeReceiver"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="patrick.fuscoe.remindmelater.receiver.NotificationDismissReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationDismissReceiver"></action>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ReminderDetailsActivity"
             android:label="@string/app_name"

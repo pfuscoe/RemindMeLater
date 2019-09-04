@@ -65,9 +65,15 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         Period recurrence = reminderItem.getRecurrence();
         int daysUntilNext = recurrence.getDays();
 
+        // TODO: Fix recurrence by either using val & interval or toString for new item property due to gson issues
+
+        Log.d(TAG, ": daysUntilNext: " + daysUntilNext);
+
         LocalDate nextOccurrence = LocalDate.now();
         nextOccurrence.plusDays(daysUntilNext);
         reminderItem.setNextOccurrence(nextOccurrence.toString());
+
+        Log.d(TAG, ": nextOccurrence: " + nextOccurrence.toString());
 
         // TODO: Add action to history
     }

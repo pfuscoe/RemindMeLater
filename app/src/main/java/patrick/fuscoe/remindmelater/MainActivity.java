@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
-    public static final int DEFAULT_REMINDER_TIME_HOUR = 12;
+    public static final int DEFAULT_REMINDER_TIME_HOUR = 1;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 34;
 
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
@@ -161,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             long alarmTime = alarmItem.getAlarmCalendarObj().getTimeInMillis();
 
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
-            // TODO: setAction might be needed here
             intent.setAction(ACTION_ALARM_RECEIVER);
             intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
             intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
