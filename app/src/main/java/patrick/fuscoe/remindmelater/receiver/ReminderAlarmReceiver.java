@@ -65,6 +65,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         reminderTitle = intent.getStringExtra(MainActivity.REMINDER_TITLE);
         //int iconId = intent.getIntExtra(MainActivity.REMINDER_ICON_ID, R.drawable.category_note);
 
+        Log.d(TAG, ": Alarm Received: " + reminderTitle);
+
         loadReminder();
 
         /*

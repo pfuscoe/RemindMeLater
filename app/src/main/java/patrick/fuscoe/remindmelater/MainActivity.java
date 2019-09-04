@@ -14,6 +14,8 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -34,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
-    public static final int DEFAULT_REMINDER_TIME_HOUR = 10;
-    public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
+    public static final int DEFAULT_REMINDER_TIME_HOUR = 12;
+    public static final int DEFAULT_REMINDER_TIME_MINUTE = 30;
 
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
@@ -125,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         reminderAlarmItemList = new ArrayList<>();
 
+        Log.d(TAG, ": Reminder Time of Day: " + reminderTimeHour + ":" + reminderTimeMinute);
+
         for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
         {
             String title = entry.getKey();
@@ -135,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
                     iconId, broadcastId, reminderTimeHour, reminderTimeMinute);
+
+            Log.d(TAG, ": reminderAlarmItem: " + reminderAlarmItem.getTitle() + " built");
 
             reminderAlarmItemList.add(reminderAlarmItem);
         }
@@ -149,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         for (ReminderAlarmItem alarmItem : reminderAlarmItemList)
         {
+            Log.d(TAG, ": Alarm Calendar Object: " + alarmItem.getAlarmCalendarObj().toString());
+
             long alarmTime = alarmItem.getAlarmCalendarObj().getTimeInMillis();
 
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
