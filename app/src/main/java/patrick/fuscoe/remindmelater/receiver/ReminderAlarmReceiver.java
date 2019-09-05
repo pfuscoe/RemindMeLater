@@ -128,6 +128,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
         String description = (String) reminderItemMap.get("description");
 
+        //Log.d(TAG, ": recurrenceInterval: " + recurrenceInterval);
+
         reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
                 recurrenceInterval, nextOccurrence, category, categoryIcon, description);
     }
@@ -136,6 +138,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     {
         int notificationId = (int) System.currentTimeMillis();
         int iconId = reminderItem.getCategoryIcon();
+
+        Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
 
         Gson gson = new Gson();
         String reminderItemString = gson.toJson(reminderItem);

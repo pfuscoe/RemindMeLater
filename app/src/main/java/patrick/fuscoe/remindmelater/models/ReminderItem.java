@@ -9,6 +9,8 @@ import java.util.Calendar;
 
 public class ReminderItem {
 
+    public static final String TAG = "patrick.fuscoe.remindmelater.ReminderItem";
+
     private String title;
     private String nextOccurrence;  // LocalDate String format
     private String category;
@@ -42,8 +44,12 @@ public class ReminderItem {
 
         updateRecurrencePeriod();
         updateDaysAway(nextOccurrence);
+
+        this.recurrenceString = recurrence.toString();
         this.snoozed = false;
         this.historyItems = new ArrayList<>();
+
+        //Log.d(TAG, ": Reminder Item Constructed");
     }
 
     public void updateDaysAway(String nextOccurrence)
@@ -57,6 +63,8 @@ public class ReminderItem {
 
     public void updateRecurrencePeriod()
     {
+        //Log.d(TAG, ": updateRecurrencePeriod called");
+
         switch (recurrenceInterval)
         {
             case "Days":
@@ -76,7 +84,7 @@ public class ReminderItem {
                 return;
         }
 
-        recurrenceString = recurrence.toString();
+        //Log.d(TAG, ": recurrenceString: " + recurrenceString);
     }
 
     public void addToHistory(HistoryItem historyItem)

@@ -48,10 +48,17 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         this.context = context;
         this.notificationId = intent.getIntExtra(ReminderAlarmReceiver.EXTRA_NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID);
 
+        Log.d(TAG, ": notificationId: " + notificationId);
+
         Gson gson = new Gson();
         Type dataTypeReminderItem = new TypeToken<ReminderItem>(){}.getType();
         String reminderItemString = intent.getStringExtra(ReminderAlarmReceiver.REMINDER_ITEM);
+
+        Log.d(TAG, ": Gson reminderItemString: " + reminderItemString);
+
         reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
+
+        Log.d(TAG, ": reminderItem object toString: " + reminderItem.toString());
 
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
@@ -63,6 +70,8 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
     private void updateReminderItem()
     {
         // Using workaround to get recurrence since Gson doesn't support Period java class
+        Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
+
         String recurrenceString = reminderItem.getRecurrenceString();
         Period recurrence = Period.parse(recurrenceString);
 
