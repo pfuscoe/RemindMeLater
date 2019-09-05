@@ -144,6 +144,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Gson gson = new Gson();
         String reminderItemString = gson.toJson(reminderItem);
 
+        Log.d(TAG, ": Gson reminderItemString: " + reminderItemString);
+
         // Notification Tap Intent
         Intent remindersFragmentIntent = new Intent(context, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

@@ -81,8 +81,10 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         Log.d(TAG, ": daysUntilNext: " + daysUntilNext);
 
-        LocalDate nextOccurrence = LocalDate.now();
-        nextOccurrence.plusDays(daysUntilNext);
+        LocalDate now = LocalDate.now();
+        Log.d(TAG, ": nextOccurrence: " + now.toString());
+        LocalDate nextOccurrence = now.plusDays(daysUntilNext);
+        Log.d(TAG, ": nextOccurrence: " + nextOccurrence.toString());
         reminderItem.setNextOccurrence(nextOccurrence.toString());
 
         Log.d(TAG, ": nextOccurrence: " + nextOccurrence.toString());
