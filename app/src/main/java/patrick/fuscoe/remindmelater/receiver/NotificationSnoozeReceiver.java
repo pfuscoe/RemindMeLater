@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +30,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.NotificationSnoozeReceiver";
     public static final int DEFAULT_NOTIFICATION_ID = 101;
-    public static final int DEFAULT_SNOOZE_DAYS = 2;
+    public static final int DEFAULT_SNOOZE_DAYS = 1;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
@@ -58,6 +59,9 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
         updateReminderItem();
         saveReminderItem();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
     }
 
     private void updateReminderItem()

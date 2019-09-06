@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,8 +137,12 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
     public void sendNotification()
     {
-        int notificationId = (int) System.currentTimeMillis();
+        //int notificationId = (int) System.currentTimeMillis();
+        int notificationId = generateUniqueInt();
+        //int notificationId = 101;
         int iconId = reminderItem.getCategoryIcon();
+
+        Log.d(TAG, ": notificationId: " + notificationId);
 
         Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
 
@@ -188,5 +193,13 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());
+    }
+
+    private int generateUniqueInt()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        long yesterday = calendar.getTimeInMillis();
+        return (int) (System.currentTimeMillis() - yesterday);
     }
 }

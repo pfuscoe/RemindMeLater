@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,8 +55,6 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         Type dataTypeReminderItem = new TypeToken<ReminderItem>(){}.getType();
         String reminderItemString = intent.getStringExtra(ReminderAlarmReceiver.REMINDER_ITEM);
 
-        Log.d(TAG, ": Gson reminderItemString: " + reminderItemString);
-
         reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
 
         Log.d(TAG, ": reminderItem object toString: " + reminderItem.toString());
@@ -65,6 +64,9 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         updateReminderItem();
         saveReminderItem();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
     }
 
     private void updateReminderItem()
@@ -87,7 +89,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         Log.d(TAG, ": nextOccurrence: " + nextOccurrence.toString());
         reminderItem.setNextOccurrence(nextOccurrence.toString());
 
-        Log.d(TAG, ": nextOccurrence: " + nextOccurrence.toString());
+        Log.d(TAG, ": nextOccurrence: " + reminderItem.getNextOccurrence());
 
         // TODO: Add action to history
     }
