@@ -25,17 +25,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -154,9 +158,22 @@ public class ReminderDetailsActivity extends AppCompatActivity
         remindersDocId = intent.getStringExtra(RemindersFragment.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
-        Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
-        String userProfileString = intent.getStringExtra(RemindersFragment.USER_PROFILE);
-        userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
+        viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
+
+        if (intent.hasExtra(RemindersFragment.USER_PROFILE))
+        {
+            Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
+            String userProfileString = intent.getStringExtra(RemindersFragment.USER_PROFILE);
+            userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
+            Log.d(TAG, "User Profile obtained from intent");
+            Log.d(TAG, " userProfile Gson String: " + userProfileString);
+
+            updateCategorySelectSpinner();
+        }
+        else
+        {
+            loadUserProfile();
+        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(reminderItem.getTitle());
@@ -168,14 +185,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewDescription = findViewById(R.id.view_reminder_details_description);
 
+        /*
         // Setup category select spinner
-        viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
                 getApplicationContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
         setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
         viewCategorySpinner.setOnItemSelectedListener(this);
         //reminderCategorySpinnerAdapter.notifyDataSetChanged();
+        */
 
         // Setup Recurrence Spinner
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
@@ -195,7 +213,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
         btnSave = findViewById(R.id.view_reminder_details_button_save);
         btnSave.setOnClickListener(btnClickListener);
 
-        updateFields();
+        if (intent.hasExtra(RemindersFragment.USER_PROFILE)) {
+            updateFields();
+        }
     }
 
     public void updateCategorySelectSpinner()
@@ -419,6 +439,42 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 });
 
         Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+    }
+
+    public void loadUserProfile()
+    {
+        userDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            buildUserProfileObj(documentSnapshot);
+                            updateCategorySelectSpinner();
+                            updateFields();
+                        }
+                    }
+                });
+    }
+
+    public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
+    {
+        Map<String, Object> docMap = documentSnapshot.getData();
+
+        String id = documentSnapshot.getId();
+        String displayName = documentSnapshot.getString("displayName");
+
+        ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
+
+        String[] subscriptions = new String[subscriptionsList.size()];
+        subscriptions = subscriptionsList.toArray(subscriptions);
+
+        Map<String, Integer> reminderCategories =
+                (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+
+        userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
+
+        Log.d(TAG, ": userProfile loaded from cloud");
     }
 
     @Override

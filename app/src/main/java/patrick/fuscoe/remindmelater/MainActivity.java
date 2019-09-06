@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
-    public static final int DEFAULT_REMINDER_TIME_HOUR = 2;
-    public static final int DEFAULT_REMINDER_TIME_MINUTE = 17;
+    public static final int DEFAULT_REMINDER_TIME_HOUR = 9;
+    public static final int DEFAULT_REMINDER_TIME_MINUTE = 30;
 
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";

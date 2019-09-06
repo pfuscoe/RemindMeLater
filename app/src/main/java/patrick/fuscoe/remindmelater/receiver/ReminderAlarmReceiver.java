@@ -28,6 +28,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersViewModel;
@@ -152,10 +153,13 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, ": Gson reminderItemString: " + reminderItemString);
 
         // Notification Tap Intent
-        Intent remindersFragmentIntent = new Intent(context, MainActivity.class);
+        //Intent remindersFragmentIntent = new Intent(context, MainActivity.class);
+        Intent reminderDetailsIntent = new Intent(context, ReminderDetailsActivity.class);
+        reminderDetailsIntent.putExtra(RemindersFragment.REMINDERS_DOC_ID, remindersDocId);
+        reminderDetailsIntent.putExtra(RemindersFragment.REMINDER_ITEM, reminderItemString);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addNextIntentWithParentStack(remindersFragmentIntent);
-        PendingIntent remindersFragmentPendingIntent =
+        stackBuilder.addNextIntentWithParentStack(reminderDetailsIntent);
+        PendingIntent reminderDetailsPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Done Intent
@@ -184,7 +188,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setSmallIcon(iconId)
                 .setContentTitle(reminderTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(remindersFragmentPendingIntent)
+                .setContentIntent(reminderDetailsPendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setAutoCancel(true)
