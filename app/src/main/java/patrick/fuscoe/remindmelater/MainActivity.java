@@ -10,7 +10,16 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -44,6 +53,12 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
     public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
 
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference remindersCollectionRef = db.collection("reminders");
+    private final String userId = auth.getUid();
+    private final DocumentReference userDocRef = db.collection("users").document(userId);
+
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderIconIds;
@@ -67,6 +82,15 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+
+        if (intent.getBooleanExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, false))
+        {
+            // TODO: If new user, then create user and reminders docs. Also need to load reminders to device storage..
+            // Check if this is a new user by checking if user doc on cloud exists
+            checkIfNewUser();
+        }
 
         createNotificationChannel();
 
@@ -101,6 +125,28 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    public void checkIfNewUser()
+    {
+        userDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists())
+                            {
+
+                            }
+                            else
+                            {
+                                // TODO: create new reminders doc and user doc
+                            }
+                        }
+                    }
+                });
     }
 
     public void setActionBarTitle(String title)

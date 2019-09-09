@@ -17,11 +17,16 @@ import java.util.List;
 public class FirebaseSignInActivity extends AppCompatActivity {
 
     public static final String TAG = "Firebase Sign In Activity";
+    public static final String CHECK_IF_NEW_USER = "patrick.fuscoe.remindmelater.CHECK_IF_NEW_USER";
     private static final int RC_SIGN_IN = 223;
+
+    private boolean userMustEnterLoginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userMustEnterLoginInfo = false;
 
         checkSignIn();
     }
@@ -33,6 +38,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         {
             // already signed in
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(CHECK_IF_NEW_USER, userMustEnterLoginInfo);
             startActivity(intent);
 
             finish();
@@ -40,6 +46,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         else
         {
             // not signed in
+            userMustEnterLoginInfo = true;
             beginSignIn();
         }
     }
@@ -73,6 +80,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                 // ...
 
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra(CHECK_IF_NEW_USER, userMustEnterLoginInfo);
                 startActivity(intent);
 
                 finish();
