@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
+import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
     private final String userId = auth.getUid();
     private final DocumentReference userDocRef = db.collection("users").document(userId);
+
+    private UserProfile userProfile;
 
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
@@ -135,18 +138,39 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful())
                         {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists())
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if (documentSnapshot.exists())
                             {
-
+                                buildUserProfileObj(documentSnapshot);
                             }
                             else
                             {
                                 // TODO: create new reminders doc and user doc
+                                
                             }
                         }
                     }
                 });
+    }
+
+    public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
+    {
+        Map<String, Object> docMap = documentSnapshot.getData();
+
+        String id = documentSnapshot.getId();
+        String displayName = documentSnapshot.getString("displayName");
+
+        ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
+
+        String[] subscriptions = new String[subscriptionsList.size()];
+        subscriptions = subscriptionsList.toArray(subscriptions);
+
+        Map<String, Integer> reminderCategories =
+                (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+
+        userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
+
+        Log.d(TAG, ": userProfile loaded from cloud");
     }
 
     public void setActionBarTitle(String title)
