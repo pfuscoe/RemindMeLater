@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         if (intent.getBooleanExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, false))
         {
-            // TODO: If new user, then create user and reminders docs. Also need to load reminders to device storage..
+            // TODO: Also need to load reminders to device storage..
             // Check if this is a new user by checking if user doc on cloud exists
             checkIfNewUser();
         }
@@ -201,7 +201,22 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void createNewUserDoc()
     {
-        
+        Map<String, Object> userProfileDoc = new HashMap<>();
+        userProfileDoc.put("displayName", "");
+
+        userDocRef.set(userProfileDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "User DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing User document", e);
+                    }
+                });
     }
 
     public void setActionBarTitle(String title)
