@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     private final DocumentReference userDocRef = db.collection("users").document(userId);
 
     private UserProfile userProfile;
+    private String remindersDocId;
 
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             else
                             {
                                 // TODO: create new reminders doc and user doc
-                                
+                                createNewReminderDoc();
                             }
                         }
                     }
@@ -171,6 +175,33 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
 
         Log.d(TAG, ": userProfile loaded from cloud");
+    }
+
+    public void createNewReminderDoc()
+    {
+        Map<String, Object> reminderDocMap = new HashMap<>();
+        reminderDocMap.put("userId", userId);
+
+        remindersCollectionRef.add(reminderDocMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        remindersDocId = documentReference.getId();
+                        Log.d(TAG, "Reminders document written with ID: " + remindersDocId);
+                        createNewUserDoc();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding reminders document", e);
+                    }
+                });
+    }
+
+    public void createNewUserDoc()
+    {
+        
     }
 
     public void setActionBarTitle(String title)
