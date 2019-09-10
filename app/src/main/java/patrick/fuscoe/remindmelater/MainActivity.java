@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -138,8 +139,31 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO: Setup logout option from menu
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_logout:
+                Log.d(TAG, "Menu: Logout clicked");
+                logoutUser();
+                return true;
+
+            case R.id.menu_main_user_settings:
+                Log.d(TAG, "Menu: User Settings clicked");
+                return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void logoutUser()
+    {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(MainActivity.this, FirebaseSignInActivity.class);
+                        startActivity(intent);
+                    }
+                });
     }
 
     public void checkIfNewUser()
