@@ -29,6 +29,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +133,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO: Setup logout option from menu
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void checkIfNewUser()
