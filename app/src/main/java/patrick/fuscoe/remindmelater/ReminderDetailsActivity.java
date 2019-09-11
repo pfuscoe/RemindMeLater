@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -50,12 +51,14 @@ import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 
 public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener,
-        AddCategoryDialogFragment.AddCategoryDialogListener {
+        AddCategoryDialogFragment.AddCategoryDialogListener,
+        DeleteReminderDialogFragment.DeleteReminderDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
@@ -290,6 +293,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        // Swap edit icon for trash can
+        MenuItem editIcon = menu.findItem(R.id.menu_main_edit);
+        editIcon.setIcon(R.drawable.action_delete);
+
         return true;
     }
 
@@ -299,6 +307,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         {
             case R.id.menu_main_add:
                 Log.d(TAG, ": Add Button pressed");
+                return true;
+
+            case R.id.menu_main_edit:
+                Log.d(TAG, "Delete menu icon pressed");
+                openDeleteReminderDialog();
                 return true;
 
             case R.id.menu_main_user_settings:
@@ -320,6 +333,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
     {
         DialogFragment dialogFragment = new DatePickerDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void openDeleteReminderDialog()
+    {
+        DialogFragment dialogFragment = new DeleteReminderDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "deleteReminder");
     }
 
     @Override
@@ -417,6 +436,43 @@ public class ReminderDetailsActivity extends AppCompatActivity
         // TODO: using apply() for async saving. Check if commit() needed
     }
 
+    public void deleteReminder()
+    {
+        // TODO: Delete reminder (cancel alarm, remove from device storage and cloud)
+        Map<String, Object> removeReminderUpdate = new HashMap<>();
+        removeReminderUpdate.put(reminderItem.getTitle(), FieldValue.delete());
+
+        remindersDocRef.update(removeReminderUpdate)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Delete Reminder Success: Reminders DocumentSnapshot successfully updated!");
+                        cancelReminderAlarm();
+                        removeReminderLocalStorage();
+                        Toast.makeText(getApplicationContext(), "Reminder Item Deleted: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating reminders document", e);
+                        // TODO: handle local storage of reminder when cloud sync fails
+                    }
+                });
+
+        onBackPressed();
+    }
+
+    public void cancelReminderAlarm()
+    {
+
+    }
+
+    public void removeReminderLocalStorage()
+    {
+
+    }
+
     public void saveUserProfile()
     {
         Map<String, Object> userProfileDoc = new HashMap<>();
@@ -496,6 +552,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
             updateCategorySelectSpinner();
             Toast.makeText(getApplicationContext(), "New Reminder Category Added: " + categoryName, Toast.LENGTH_SHORT).show();
         }
+        else if (dialog instanceof DeleteReminderDialogFragment)
+        {
+            deleteReminder();
+        }
     }
 
     @Override
@@ -503,6 +563,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
         if (dialog instanceof AddCategoryDialogFragment)
         {
             Toast.makeText(getApplicationContext(), "Add Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (dialog instanceof DeleteReminderDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Delete Reminder Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 }
