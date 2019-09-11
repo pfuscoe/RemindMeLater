@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createNotificationChannel();
+
         Intent intent = getIntent();
 
         if (intent.getBooleanExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, false))
@@ -100,12 +102,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             // Check if this is a new user by checking if user doc on cloud exists
             checkIfNewUser();
         }
-
-        createNotificationChannel();
-
-        loadUserPreferences();
-        loadReminderAlarms();
-        setReminderAlarms();
+        else
+        {
+            // User already signed-in
+            loadUserPreferences();
+            loadReminderAlarms();
+            setReminderAlarms();
+        }
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -138,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO: Setup logout option from menu
         switch (item.getItemId())
         {
             case R.id.menu_main_logout:
@@ -160,10 +162,34 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
+                        clearAllSharedPreferences();
+                        finishAffinity();
                         Intent intent = new Intent(MainActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
                     }
                 });
+    }
+
+    public void clearAllSharedPreferences()
+    {
+        userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
+        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor userPreferencesEditor = userPreferences.edit();
+        userPreferencesEditor.clear().commit();
+
+        SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
+        reminderAlarmStorageEditor.clear().commit();
+
+        SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
+        reminderIconIdsEditor.clear().commit();
+
+        SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
+        reminderBroadcastIdsEditor.clear().commit();
+
+        Log.d(TAG, "All SharedPreferences cleared");
     }
 
     public void checkIfNewUser()
@@ -177,11 +203,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             DocumentSnapshot documentSnapshot = task.getResult();
                             if (documentSnapshot.exists())
                             {
+                                // Existing user is re-logging in
                                 buildUserProfileObj(documentSnapshot);
+                                // TODO: download-save user prefs, download-save reminders and set alarms
                             }
                             else
                             {
-                                // TODO: create new reminders doc and user doc
+                                // New user was created
                                 createNewReminderDoc();
                             }
                         }
