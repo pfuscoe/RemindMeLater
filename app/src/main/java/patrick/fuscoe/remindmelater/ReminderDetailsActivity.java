@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +62,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
         DeleteReminderDialogFragment.DeleteReminderDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
+
+    private static SharedPreferences reminderAlarmStorage;
+    private static SharedPreferences reminderIconIds;
+    private static SharedPreferences reminderBroadcastIds;
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -465,6 +470,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void cancelReminderAlarm()
     {
+        Context context = getApplicationContext();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+
+        
 
     }
 
