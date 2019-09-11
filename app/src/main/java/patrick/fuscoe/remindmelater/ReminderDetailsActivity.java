@@ -477,6 +477,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
+        int broadcastId = reminderBroadcastIds.getInt(reminderItem.getTitle(), 0);
         
 
     }
