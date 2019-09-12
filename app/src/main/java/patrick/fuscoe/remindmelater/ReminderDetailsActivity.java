@@ -491,7 +491,16 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void removeReminderLocalStorage()
     {
+        SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
+        reminderAlarmStorageEditor.remove(reminderItem.getTitle());
 
+        SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
+        reminderIconIdsEditor.remove(reminderItem.getTitle());
+
+        SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
+        reminderBroadcastIdsEditor.remove(reminderItem.getTitle());
+
+        Log.d(TAG, "Reminder removed from local storage: " + reminderItem.getTitle());
     }
 
     public void saveUserProfile()
