@@ -2,6 +2,7 @@ package patrick.fuscoe.remindmelater;
 
 import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderDialogFragment;
@@ -478,8 +480,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         int broadcastId = reminderBroadcastIds.getInt(reminderItem.getTitle(), 0);
-        
 
+        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+        intent.setAction(MainActivity.ACTION_ALARM_RECEIVER);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent, 0);
+
+        alarmManager.cancel(alarmIntent);
     }
 
     public void removeReminderLocalStorage()
