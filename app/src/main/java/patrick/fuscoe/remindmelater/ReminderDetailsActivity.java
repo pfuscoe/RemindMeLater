@@ -445,7 +445,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void deleteReminder()
     {
-        // TODO: Delete reminder (cancel alarm, remove from device storage and cloud)
         Map<String, Object> removeReminderUpdate = new HashMap<>();
         removeReminderUpdate.put(reminderItem.getTitle(), FieldValue.delete());
 
@@ -492,13 +491,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void removeReminderLocalStorage()
     {
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
-        reminderAlarmStorageEditor.remove(reminderItem.getTitle());
+        reminderAlarmStorageEditor.remove(reminderItem.getTitle()).commit();
 
         SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
-        reminderIconIdsEditor.remove(reminderItem.getTitle());
+        reminderIconIdsEditor.remove(reminderItem.getTitle()).commit();
 
         SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
-        reminderBroadcastIdsEditor.remove(reminderItem.getTitle());
+        reminderBroadcastIdsEditor.remove(reminderItem.getTitle()).commit();
 
         Log.d(TAG, "Reminder removed from local storage: " + reminderItem.getTitle());
     }
