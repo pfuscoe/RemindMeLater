@@ -212,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             {
                                 // Existing user is re-logging in
                                 buildUserProfileObj(documentSnapshot);
-                                // TODO: download-save user prefs, download-save reminders and set alarms
                                 saveUserPrefsToStorage();
                                 saveRemindersToStorage();
                                 loadReminderAlarms();
@@ -267,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding reminders document", e);
+                        Log.w(TAG, "Error adding new reminders document", e);
                     }
                 });
     }
@@ -275,7 +274,14 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public void createNewUserDoc()
     {
         Map<String, Object> userProfileDoc = new HashMap<>();
+
         userProfileDoc.put("displayName", "");
+
+        Map<String, Integer> reminderCategoriesMap = new HashMap<>();
+        userProfileDoc.put("reminderCategories", reminderCategoriesMap);
+
+        ArrayList<String> subscriptionsList = new ArrayList<>();
+        userProfileDoc.put("subscriptions", subscriptionsList);
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -287,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing User document", e);
+                        Log.w(TAG, "Error adding new User document", e);
                     }
                 });
     }
