@@ -435,7 +435,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         SharedPreferences reminderBroadcastIds = MainActivity.reminderBroadcastIds;
         SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
 
-        int broadcastId = (int) System.currentTimeMillis();
+        int broadcastId = MainActivity.generateUniqueInt();
         // TODO: Add check for existing id
         reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
         reminderBroadcastIdEditor.apply();

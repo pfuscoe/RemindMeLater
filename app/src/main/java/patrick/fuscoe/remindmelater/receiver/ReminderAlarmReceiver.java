@@ -95,7 +95,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public void loadReminder()
     {
         //RemindersViewModel remindersViewModel = new RemindersViewModel();
-        // TODO: get reminders doc from firestore
         reminders.whereEqualTo("userId", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

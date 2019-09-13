@@ -21,6 +21,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
@@ -33,11 +35,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     private UserProfile userProfile;
     private String remindersDocId;
+    private DocumentReference remindersDocRef;
 
     public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public List<ReminderAlarmItem> reminderAlarmItemList;
     public List<PendingIntent> alarmIntentList;
+
+    private List<ReminderItem> reminderItemList;
 
     public static int reminderTimeHour;
     public static int reminderTimeMinute;
@@ -206,6 +213,10 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                                 // Existing user is re-logging in
                                 buildUserProfileObj(documentSnapshot);
                                 // TODO: download-save user prefs, download-save reminders and set alarms
+                                saveUserPrefsToStorage();
+                                saveRemindersToStorage();
+                                loadReminderAlarms();
+                                setReminderAlarms();
                             }
                             else
                             {
@@ -235,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
 
         Log.d(TAG, ": userProfile loaded from cloud");
+
+        // TODO: add user prefs like default reminder time
     }
 
     public void createNewReminderDoc()
@@ -290,6 +303,92 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         reminderTimeHour = userPreferences.getInt(USER_PREF_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_HOUR);
         reminderTimeMinute = userPreferences.getInt(USER_PREF_REMINDER_TIME_MINUTE, DEFAULT_REMINDER_TIME_MINUTE);
+    }
+
+    public void saveUserPrefsToStorage()
+    {
+        // TODO: get user prefs from object and write to disk
+    }
+
+    public void saveRemindersToStorage()
+    {
+        remindersCollectionRef.whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            for (QueryDocumentSnapshot document : task.getResult())
+                            {
+                                remindersDocId = document.getId();
+                                Log.d(TAG, "remindersDocId: " + remindersDocId);
+                                buildReminderItemList(document);
+                                writeRemindersToDisk();
+                            }
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Error getting documents: " + task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    public void buildReminderItemList(QueryDocumentSnapshot document)
+    {
+        reminderItemList = new ArrayList<>();
+
+        Map<String, Object> docMap = document.getData();
+
+        for (Map.Entry<String, Object> entry : docMap.entrySet())
+        {
+            if (!entry.getKey().equals("userId"))
+            {
+                HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
+
+                String reminderTitle = entry.getKey();
+                int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
+                String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
+                String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
+                String category = (String) reminderItemMap.get("category");
+                int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+                String description = (String) reminderItemMap.get("description");
+
+                ReminderItem reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
+                        recurrenceInterval, nextOccurrence, category, categoryIcon, description);
+
+                reminderItemList.add(reminderItem);
+            }
+        }
+    }
+
+    public void writeRemindersToDisk()
+    {
+        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
+        SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+        SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
+
+        for (ReminderItem reminderItem : reminderItemList)
+        {
+            reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
+            reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
+
+            int broadcastId = generateUniqueInt();
+            reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
+        }
+
+        // Using commit() because alarms are loaded immediately after write to disk from cloud
+        reminderAlarmEditor.commit();
+        reminderIconIdEditor.commit();
+        reminderBroadcastIdEditor.commit();
+
+        Log.d(TAG, "Reminders written to storage");
     }
 
     public void loadReminderAlarms()
@@ -364,6 +463,14 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public static int generateUniqueInt()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        long yesterday = calendar.getTimeInMillis();
+        return (int) (System.currentTimeMillis() - yesterday);
     }
 
 }
