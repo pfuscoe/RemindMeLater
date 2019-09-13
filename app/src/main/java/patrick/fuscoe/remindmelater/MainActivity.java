@@ -63,11 +63,15 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
     public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
 
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
-    private final String userId = auth.getUid();
-    private final DocumentReference userDocRef = db.collection("users").document(userId);
+    //private final String userId = auth.getUid();
+    //private final DocumentReference userDocRef = db.collection("users").document(userId);
+
+    public static FirebaseAuth auth;
+    public static String userId;
+    public static DocumentReference userDocRef;
 
     private UserProfile userProfile;
     private String remindersDocId;
@@ -99,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        auth = FirebaseAuth.getInstance();
+        userId = auth.getUid();
+        userDocRef = db.collection("users").document(userId);
+
         createNotificationChannel();
 
         Intent intent = getIntent();
@@ -107,21 +115,17 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         {
             // TODO: Also need to load reminders to device storage..
             // Check if this is a new user by checking if user doc on cloud exists
+            // Note: Loading prefs, setting up tabs and loading alarms is called after cloud sync
             checkIfNewUser();
         }
         else
         {
             // User already signed-in
             loadUserPreferences();
+            setupTabs();
             loadReminderAlarms();
             setReminderAlarms();
         }
-
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
 
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbarMain);
@@ -137,6 +141,15 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             }
         });
         */
+    }
+
+    private void setupTabs()
+    {
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(sectionsPagerAdapter);
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -170,9 +183,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
                         clearAllSharedPreferences();
-                        finishAffinity();
                         Intent intent = new Intent(MainActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
+                        finishAffinity();
                     }
                 });
     }
@@ -214,8 +227,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                                 buildUserProfileObj(documentSnapshot);
                                 saveUserPrefsToStorage();
                                 saveRemindersToStorage();
-                                loadReminderAlarms();
-                                setReminderAlarms();
+                                setupTabs();
                             }
                             else
                             {
@@ -233,6 +245,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         String id = documentSnapshot.getId();
         String displayName = documentSnapshot.getString("displayName");
+
+        Log.d(TAG, "displayName: " + displayName);
 
         ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
 
@@ -288,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "User DocumentSnapshot successfully written!");
+                        setupTabs();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -331,6 +346,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                                 Log.d(TAG, "remindersDocId: " + remindersDocId);
                                 buildReminderItemList(document);
                                 writeRemindersToDisk();
+                                loadReminderAlarms();
+                                setReminderAlarms();
                             }
                         }
                         else

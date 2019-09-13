@@ -11,16 +11,17 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import patrick.fuscoe.remindmelater.FirebaseQueryLiveData;
+import patrick.fuscoe.remindmelater.MainActivity;
 
 public class ToDoGroupsViewModel extends ViewModel {
 
-    private static final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private static final String userId = auth.getCurrentUser().getUid();
+    //private static final FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private static final String userId = auth.getCurrentUser().getUid();
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroups = db.collection("todogroups");
 
-    private final Query toDoGroupsQuery = toDoGroups.whereArrayContains("subscribers", userId);
+    private final Query toDoGroupsQuery = toDoGroups.whereArrayContains("subscribers", MainActivity.userId);
 
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(toDoGroupsQuery);
 

@@ -66,12 +66,12 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
     public static final int DEFAULT_CATEGORY_ICON = R.drawable.category_note;
 
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
 
-    private final String userId = auth.getUid();
-    private final DocumentReference userDocRef = db.collection("users").document(userId);
+    //private final String userId = auth.getUid();
+    //private final DocumentReference userDocRef = db.collection("users").document(userId);
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -431,7 +431,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
-        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconId, false, auth.getUid());
+        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconId, false, MainActivity.auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
         userProfile.addSubscription(docId);
@@ -549,7 +549,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
     private void commitUserDoc(Map<String, Object> userProfileDoc)
     {
-        userDocRef.set(userProfileDoc)
+        MainActivity.userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -572,7 +572,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         DocumentReference groupRef = toDoGroupsCollectionRef.document(groupId);
 
         batch.set(groupRef, toDoGroupDoc);
-        batch.set(userDocRef, userProfileDoc);
+        batch.set(MainActivity.userDocRef, userProfileDoc);
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -588,7 +588,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         DocumentReference groupRef = toDoGroupsCollectionRef.document(groupId);
 
         batch.delete(groupRef);
-        batch.set(userDocRef, userProfileDoc);
+        batch.set(MainActivity.userDocRef, userProfileDoc);
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

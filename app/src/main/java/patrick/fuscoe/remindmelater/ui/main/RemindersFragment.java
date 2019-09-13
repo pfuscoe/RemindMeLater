@@ -46,12 +46,12 @@ public class RemindersFragment extends Fragment {
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
 
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
-    private final String userId = auth.getUid();
-    private final DocumentReference userDocRef = db.collection("users").document(userId);
+    //private final String userId = auth.getUid();
+    //private final DocumentReference userDocRef = db.collection("users").document(userId);
     private String remindersDocId;
 
     private RecyclerView remindersRecyclerView;

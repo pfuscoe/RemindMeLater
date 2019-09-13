@@ -11,16 +11,17 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import patrick.fuscoe.remindmelater.FirebaseQueryLiveData;
+import patrick.fuscoe.remindmelater.MainActivity;
 
 public class RemindersViewModel extends ViewModel {
 
-    private static final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private static final String userId = auth.getCurrentUser().getUid();
+    //private static final FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private static final String userId = auth.getCurrentUser().getUid();
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference reminders = db.collection("reminders");
 
-    private final Query remindersQuery = reminders.whereEqualTo("userId", userId);
+    private final Query remindersQuery = reminders.whereEqualTo("userId", MainActivity.userId);
 
     private final FirebaseQueryLiveData liveData = new FirebaseQueryLiveData(remindersQuery);
 

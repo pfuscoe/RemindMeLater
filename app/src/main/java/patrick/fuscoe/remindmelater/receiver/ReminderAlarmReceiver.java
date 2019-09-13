@@ -45,9 +45,12 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
 
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final String userId = auth.getUid();
+    //private final String userId = auth.getUid();
+
+    private FirebaseAuth auth;
+    private String userId;
 
     private final CollectionReference reminders = db.collection("reminders");
 
@@ -63,6 +66,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         this.context = context;
         //int notificationId = (int) System.currentTimeMillis();
+
+        auth = FirebaseAuth.getInstance();
+        userId = auth.getUid();
 
         reminderTitle = intent.getStringExtra(MainActivity.REMINDER_TITLE);
         //int iconId = intent.getIntExtra(MainActivity.REMINDER_ICON_ID, R.drawable.category_note);
