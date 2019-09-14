@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,10 +37,12 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
+import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 
-public class RemindersFragment extends Fragment {
+public class RemindersFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     public static final String TAG = "patrick.fuscoe.remindmelater.RemindersFragment";
@@ -54,6 +58,7 @@ public class RemindersFragment extends Fragment {
     //private final DocumentReference userDocRef = db.collection("users").document(userId);
     private String remindersDocId;
 
+    private Spinner viewCategorySpinner;
     private RecyclerView remindersRecyclerView;
     private RecyclerView.Adapter remindersAdapter;
     private RecyclerView.LayoutManager remindersLayoutManager;
@@ -92,6 +97,20 @@ public class RemindersFragment extends Fragment {
         void reminderClicked(View v, int position);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent.getId() == R.id.view_reminders_spinner_filter)
+        {
+            ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(position);
+            // TODO: refresh recycler view with only selected category reminders showing
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     public static RemindersFragment newInstance(int index) {
         RemindersFragment fragment = new RemindersFragment();
         Bundle bundle = new Bundle();
@@ -126,6 +145,10 @@ public class RemindersFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        // Setup filter
+        viewCategorySpinner = root.findViewById(R.id.view_reminders_spinner_filter);
+
+        // Setup recycler view
         remindersRecyclerView = root.findViewById(R.id.view_reminders_recycler);
         remindersRecyclerView.setHasFixedSize(true);
 
@@ -246,6 +269,15 @@ public class RemindersFragment extends Fragment {
         remindersRecyclerView.setAdapter(remindersAdapter);
 
         remindersAdapter.notifyDataSetChanged();
+    }
+
+    public void updateCategorySelectSpinner()
+    {
+        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
+                getContext(), userProfile.getReminderCategories());
+        viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
+        //setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
+        viewCategorySpinner.setOnItemSelectedListener(this);
     }
 
     @Override

@@ -127,6 +127,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
     };
 
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
@@ -146,6 +147,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
     }
 
+    @Override
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
