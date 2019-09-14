@@ -69,6 +69,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     private UserProfile userProfile;
     private List<ReminderItem> reminderItemList;
 
+    private String selectedCategoryName = "All";
     private boolean editMode;
 
 
@@ -102,7 +103,13 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         if (parent.getId() == R.id.view_reminders_spinner_filter)
         {
             ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(position);
+            selectedCategoryName = reminderCategory.getCategoryName();
+            //String categoryName = reminderCategory.getCategoryName();
+            int iconId = reminderCategory.getIconId();
+
             // TODO: refresh recycler view with only selected category reminders showing
+            List<ReminderItem> filteredReminderItemList =
+                    filterReminderListByCategory(selectedCategoryName);
         }
     }
 
@@ -147,6 +154,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
         // Setup filter
         viewCategorySpinner = root.findViewById(R.id.view_reminders_spinner_filter);
+        //updateCategorySelectSpinner();
 
         // Setup recycler view
         remindersRecyclerView = root.findViewById(R.id.view_reminders_recycler);
@@ -258,6 +266,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                     Log.d(TAG, "UserProfile loaded");
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
+                    updateCategorySelectSpinner();
                 }
             }
         });
@@ -265,6 +274,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
     public void updateRemindersDisplay()
     {
+        // TODO: make reminderItemList a parameter for use with filter
         remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
         remindersRecyclerView.setAdapter(remindersAdapter);
 
@@ -273,11 +283,33 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
     public void updateCategorySelectSpinner()
     {
+        Log.d(TAG, "updateCategorySelectSpinner called");
+
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
                 getContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
         //setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
         viewCategorySpinner.setOnItemSelectedListener(this);
+    }
+
+    private List<ReminderItem> filterReminderListByCategory(String categoryName)
+    {
+        if (categoryName.equals("All"))
+        {
+            return reminderItemList;
+        }
+
+        List<ReminderItem> filteredReminderItemList = new ArrayList<>();
+
+        for (ReminderItem reminderItem : reminderItemList)
+        {
+            if (reminderItem.getCategory().equals(categoryName))
+            {
+                filteredReminderItemList.add(reminderItem);
+            }
+        }
+
+        return filteredReminderItemList;
     }
 
     @Override
