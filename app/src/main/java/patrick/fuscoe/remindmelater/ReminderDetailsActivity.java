@@ -345,6 +345,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void openDeleteReminderDialog()
     {
         DialogFragment dialogFragment = new DeleteReminderDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", reminderItem.getTitle());
+        dialogFragment.setArguments(bundle);
         dialogFragment.show(getSupportFragmentManager(), "deleteReminder");
     }
 
