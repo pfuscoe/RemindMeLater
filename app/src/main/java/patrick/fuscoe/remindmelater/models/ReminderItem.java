@@ -7,7 +7,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ReminderItem {
+public class ReminderItem implements Comparable<ReminderItem> {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderItem";
 
@@ -50,6 +50,11 @@ public class ReminderItem {
         this.historyItems = new ArrayList<>();
 
         //Log.d(TAG, ": Reminder Item Constructed");
+    }
+
+    @Override
+    public int compareTo(ReminderItem o) {
+        return this.getDaysAway() - o.getDaysAway();
     }
 
     public void updateDaysAway(String nextOccurrence)

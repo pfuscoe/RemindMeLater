@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,9 +108,11 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
             //String categoryName = reminderCategory.getCategoryName();
             int iconId = reminderCategory.getIconId();
 
-            // TODO: refresh recycler view with only selected category reminders showing
             List<ReminderItem> filteredReminderItemList =
                     filterReminderListByCategory(selectedCategoryName);
+            Collections.sort(filteredReminderItemList);
+
+            updateRemindersDisplay(filteredReminderItemList);
         }
     }
 
@@ -230,7 +233,8 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                     reminderItemList = reminderListFromDoc;
                     Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
-                    updateRemindersDisplay();
+                    Collections.sort(reminderItemList);
+                    updateRemindersDisplay(reminderItemList);
                 }
             }
         });
@@ -272,10 +276,9 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         });
     }
 
-    public void updateRemindersDisplay()
+    public void updateRemindersDisplay(List<ReminderItem> reminderItems)
     {
-        // TODO: make reminderItemList a parameter for use with filter
-        remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
+        remindersAdapter = new RemindersAdapter(reminderItems, getContext(), reminderClickListener);
         remindersRecyclerView.setAdapter(remindersAdapter);
 
         remindersAdapter.notifyDataSetChanged();
