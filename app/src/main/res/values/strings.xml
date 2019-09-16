@@ -28,12 +28,6 @@
     <string name="reminder_details_next_occurrence_label">Next:</string>
     <string name="reminder_details_date_button_text">Set Date</string>
     <string name="reminder_details_description_label">Description</string>
-    <string-array name="array_recurrence">
-        <item>Days</item>
-        <item>Weeks</item>
-        <item>Months</item>
-        <item>Years</item>
-    </string-array>
     <string name="reminder_details_category_label">Category:</string>
     <string name="reminder_details_category_add">Add New Category</string>
     <string name="dialog_add_reminder_category_title">Add New Reminder Category</string>
@@ -46,4 +40,11 @@
     <string name="notification_channel_description">Remind Me Later Notification Channel</string>
     <string name="snooze">Snooze</string>
     <string name="done">Done</string>
+    <string name="title_activity_user_preferences">UserPreferencesActivity</string>
+    <string-array name="array_recurrence">
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+        <item>Years</item>
+    </string-array>
 </resources>
