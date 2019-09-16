@@ -263,8 +263,17 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                         Log.d("subscriptions item: ", subscriptions[i]);
                     }
 
-                    Map<String, Integer> reminderCategories =
-                            (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+                    // TODO: Try get map(string, object) then do math to int exact of each (long)
+                    //Map<String, Integer> reminderCategories =
+                            //(Map<String, Integer>) documentSnapshot.get("reminderCategories");
+                    Map<String, Integer> reminderCategories = new HashMap<>();
+                    Map<String, Long> reminderCategoriesLongFormat =
+                            (Map<String, Long>) documentSnapshot.get("reminderCategories");
+
+                    for (Map.Entry<String, Long> entry : reminderCategoriesLongFormat.entrySet())
+                    {
+                        reminderCategories.put(entry.getKey(), Math.toIntExact(entry.getValue()));
+                    }
 
                     userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
 
