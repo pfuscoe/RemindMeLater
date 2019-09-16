@@ -13,8 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
+import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
@@ -42,6 +44,15 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
         }
 
         Collections.sort(reminderCategoryList);
+
+        // Add "All" category to front for use in filter spinner
+        if (this.context instanceof MainActivity)
+        {
+            ReminderCategory reminderCategoryAll =
+                    new ReminderCategory("All", R.drawable.category_all_animation);
+            reminderCategoryList.add(0, reminderCategoryAll);
+        }
+
         reminderCategories = reminderCategoryList;
     }
 
