@@ -91,7 +91,7 @@ public class CategoryIconSet {
         categoryIconList.add(R.drawable.category_mailbox);
         categoryIconList.add(R.drawable.category_microphone);
         categoryIconList.add(R.drawable.category_mushroom);
-        categoryIconList.add(R.drawable.category_note);
+        //categoryIconList.add(R.drawable.category_note);
         categoryIconList.add(R.drawable.category_pen);
         categoryIconList.add(R.drawable.category_phone_classic);
         categoryIconList.add(R.drawable.category_phone_in_talk);
