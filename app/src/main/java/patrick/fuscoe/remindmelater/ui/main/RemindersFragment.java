@@ -351,14 +351,14 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         LocalDate nextOccurrenceLocalDate = LocalDate.now().plusDays(recurrenceNum);
         String nextOccurrence = nextOccurrenceLocalDate.toString();
 
-        String category = "default";
+        String category = "Main";
         int categoryIcon = R.drawable.category_note;
         String description = "";
 
         ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval,
                 nextOccurrence, category, categoryIcon, description);
 
-        reminderItemList.add(reminderItem);
+        //reminderItemList.add(reminderItem);
 
         Intent intent = new Intent(getContext(), ReminderDetailsActivity.class);
         Gson gson = new Gson();

@@ -241,23 +241,32 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void setCategorySpinnerSelection(ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter)
     {
+        // TODO: Refactor to use drawable file names
         List<ReminderCategory> reminderCategoryList = reminderCategorySpinnerAdapter.getReminderCategories();
 
         //ReminderCategory reminderCategory = new ReminderCategory("Main", R.drawable.category_note);
+        int mainCategoryPosition = 0;
         int categoryPosition = 0;
         int counter = 0;
 
-        for (ReminderCategory item : reminderCategoryList)
+        for (ReminderCategory reminderCategory : reminderCategoryList)
         {
-            if (item.getIconId() == reminderItem.getCategoryIcon())
+            if (reminderCategory.getIconId() == reminderItem.getCategoryIcon())
             {
                 categoryPosition = counter;
-                //reminderCategory = item;
+                viewCategorySpinner.setSelection(categoryPosition);
+                return;
             }
+            else if (reminderCategory.getCategoryName().equals("Main"))
+            {
+                mainCategoryPosition = counter;
+            }
+
             counter++;
         }
 
-        viewCategorySpinner.setSelection(categoryPosition);
+        // No match found - Must be new reminder. Set default category to 'Main'
+        viewCategorySpinner.setSelection(mainCategoryPosition);
     }
 
     public void updateFields()
