@@ -3,6 +3,8 @@ package patrick.fuscoe.remindmelater;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,9 +18,11 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
-public class UserPreferencesActivity extends AppCompatActivity {
+public class UserPreferencesActivity extends AppCompatActivity
+        implements TimePickerDialogFragment.OnTimeSetListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.UserPreferencesActivity";
 
@@ -29,6 +33,21 @@ public class UserPreferencesActivity extends AppCompatActivity {
     public static DocumentReference userDocRef;
 
     private UserProfile userProfile;
+
+    private int reminderHour;
+    private int reminderMinute;
+
+
+    private View.OnClickListener btnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // TODO: Add button click behavior
+            switch (v.getId())
+            {
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,4 +71,12 @@ public class UserPreferencesActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+        Log.d(TAG, "onTimeSet: hourOfDay = " + hourOfDay + ". minute = " + minute);
+
+        reminderHour = hourOfDay;
+        reminderMinute = minute;
+    }
 }
