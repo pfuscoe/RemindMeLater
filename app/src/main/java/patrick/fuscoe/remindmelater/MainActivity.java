@@ -125,9 +125,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         else
         {
             // User already signed-in
-            // TODO: Need to load user profile from cloud. could move outside if statement and always do
-            loadUserPreferences();
-            setupTabs();
+            loadUserProfileFromCloud();
+            //loadUserPreferences();
             loadReminderAlarms();
             setReminderAlarms();
         }
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             {
                                 // User already exists
                                 buildUserProfileObj(documentSnapshot);
-                                saveUserPrefsToStorage();
+                                //saveUserPrefsToStorage();
                                 saveRemindersToStorage();
                                 setupTabs();
                             }
@@ -253,6 +252,22 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                                 // New user was created
                                 createNewReminderDoc();
                             }
+                        }
+                    }
+                });
+    }
+
+    public void loadUserProfileFromCloud()
+    {
+        userDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            buildUserProfileObj(documentSnapshot);
+                            setupTabs();
                         }
                     }
                 });

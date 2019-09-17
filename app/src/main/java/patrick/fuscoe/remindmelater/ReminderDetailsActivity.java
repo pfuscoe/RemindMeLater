@@ -556,7 +556,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 });
     }
 
-    // TODO: Refactor with new fields and icon names
+    // TODO: Refactor with icon names
     public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
     {
         Map<String, Object> docMap = documentSnapshot.getData();
@@ -577,7 +577,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
                 MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
-        
+
         Log.d(TAG, ": userProfile loaded from cloud");
     }
 
