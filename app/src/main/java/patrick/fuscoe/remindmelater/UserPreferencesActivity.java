@@ -84,7 +84,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         Gson gson = new Gson();
 
         Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
-        String userProfileString = intent.getStringExtra(RemindersFragment.USER_PROFILE);
+        String userProfileString = intent.getStringExtra(MainActivity.USER_PROFILE);
+        Log.d(TAG, "userProfileString in intent: " + userProfileString);
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
         Log.d(TAG, "User Profile obtained from intent");
 
@@ -93,6 +94,14 @@ public class UserPreferencesActivity extends AppCompatActivity
         btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
         btnSave = findViewById(R.id.button_user_preferences_save);
         btnCancel = findViewById(R.id.button_user_preferences_cancel);
+
+        getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
+    }
+
+    private void openTimePicker()
+    {
+        DialogFragment dialogFragment = new TimePickerDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     @Override
@@ -104,11 +113,4 @@ public class UserPreferencesActivity extends AppCompatActivity
         reminderMinute = minute;
     }
 
-    private void openTimePicker()
-    {
-        DialogFragment dialogFragment = new TimePickerDialogFragment();
-        dialogFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-    
 }

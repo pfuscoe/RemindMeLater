@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final int DEFAULT_REMINDER_TIME_HOUR = 9;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 30;
 
+    public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
     public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         else
         {
             // User already signed-in
+            // TODO: Need to load user profile from cloud. could move outside if statement and always do
             loadUserPreferences();
             setupTabs();
             loadReminderAlarms();
@@ -170,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, "Menu: User Settings clicked");
+                openUserSettings();
                 return true;
         }
 
@@ -188,6 +192,17 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                         finishAffinity();
                     }
                 });
+    }
+
+    public void openUserSettings()
+    {
+        Intent intent = new Intent(MainActivity.this, UserPreferencesActivity.class);
+        Gson gson = new Gson();
+
+        String userProfileString = gson.toJson(userProfile);
+        Log.d(TAG, "userProfileString: " + userProfileString);
+        intent.putExtra(USER_PROFILE, userProfileString);
+        startActivity(intent);
     }
 
     public void clearAllSharedPreferences()
