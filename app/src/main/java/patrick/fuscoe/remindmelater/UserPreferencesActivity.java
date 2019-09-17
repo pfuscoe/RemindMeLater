@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,6 +37,12 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private UserProfile userProfile;
 
+    private TextView viewTimeDisplay;
+    private Button btnSetTime;
+    private Button btnClearEmptyReminderCategories;
+    private Button btnSave;
+    private Button btnCancel;
+
     private int reminderHour;
     private int reminderMinute;
 
@@ -44,7 +53,18 @@ public class UserPreferencesActivity extends AppCompatActivity
             // TODO: Add button click behavior
             switch (v.getId())
             {
+                case R.id.button_user_preferences_time:
+                    openTimePicker();
+                    return;
 
+                case R.id.button_user_preferences_clear_empty_reminder_categories:
+                    return;
+
+                case R.id.button_user_preferences_save:
+                    return;
+
+                case R.id.button_user_preferences_cancel:
+                    return;
             }
         }
     };
@@ -68,7 +88,11 @@ public class UserPreferencesActivity extends AppCompatActivity
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
         Log.d(TAG, "User Profile obtained from intent");
 
-
+        viewTimeDisplay = findViewById(R.id.view_user_preferences_time_display);
+        btnSetTime = findViewById(R.id.button_user_preferences_time);
+        btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
+        btnSave = findViewById(R.id.button_user_preferences_save);
+        btnCancel = findViewById(R.id.button_user_preferences_cancel);
     }
 
     @Override
@@ -79,4 +103,12 @@ public class UserPreferencesActivity extends AppCompatActivity
         reminderHour = hourOfDay;
         reminderMinute = minute;
     }
+
+    private void openTimePicker()
+    {
+        DialogFragment dialogFragment = new TimePickerDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    
 }
