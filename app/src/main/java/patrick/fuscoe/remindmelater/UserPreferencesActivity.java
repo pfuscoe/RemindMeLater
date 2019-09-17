@@ -91,9 +91,13 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         viewTimeDisplay = findViewById(R.id.view_user_preferences_time_display);
         btnSetTime = findViewById(R.id.button_user_preferences_time);
+        btnSetTime.setOnClickListener(btnClickListener);
         btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
+        btnClearEmptyReminderCategories.setOnClickListener(btnClickListener);
         btnSave = findViewById(R.id.button_user_preferences_save);
+        btnSave.setOnClickListener(btnClickListener);
         btnCancel = findViewById(R.id.button_user_preferences_cancel);
+        btnCancel.setOnClickListener(btnClickListener);
 
         getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
     }
