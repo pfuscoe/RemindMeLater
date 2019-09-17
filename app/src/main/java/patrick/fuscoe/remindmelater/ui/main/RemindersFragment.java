@@ -275,7 +275,11 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                         reminderCategories.put(entry.getKey(), Math.toIntExact(entry.getValue()));
                     }
 
-                    userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
+                    MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
+                    MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
+
+                    userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
+                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
 
                     Log.d(TAG, "UserProfile loaded");
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
