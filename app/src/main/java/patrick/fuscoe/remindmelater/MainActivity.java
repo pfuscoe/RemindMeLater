@@ -47,6 +47,7 @@ import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
+import patrick.fuscoe.remindmelater.ui.main.UserProfileViewModel;
 
 public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
 
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static String userId;
     public static DocumentReference userDocRef;
 
+    //private UserProfileViewModel userProfileViewModel;
     private UserProfile userProfile;
     private String remindersDocId;
     private DocumentReference remindersDocRef;
@@ -132,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbarMain);
+
+
 
         /*
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -238,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             DocumentSnapshot documentSnapshot = task.getResult();
                             if (documentSnapshot.exists())
                             {
-                                // Existing user is re-logging in
+                                // User already exists
                                 buildUserProfileObj(documentSnapshot);
                                 saveUserPrefsToStorage();
                                 saveRemindersToStorage();
@@ -271,11 +275,16 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         Map<String, Integer> reminderCategories =
                 (Map<String, Integer>) documentSnapshot.get("reminderCategories");
 
-        userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories);
+        reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
+        reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
+
+        Log.d(TAG, "buildUserProfileObj: reminderTimeHour = " + reminderTimeHour +
+                ". reminderTimeMinute = " + reminderTimeMinute);
+
+        userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
+                reminderTimeHour, reminderTimeMinute);
 
         Log.d(TAG, ": userProfile loaded from cloud");
-
-        // TODO: add user prefs like default reminder time
     }
 
     public void createNewReminderDoc()
@@ -314,6 +323,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         ArrayList<String> subscriptionsList = new ArrayList<>();
         userProfileDoc.put("subscriptions", subscriptionsList);
 
+        userProfileDoc.put("reminderHour", DEFAULT_REMINDER_TIME_HOUR);
+        userProfileDoc.put("reminderMinute", DEFAULT_REMINDER_TIME_MINUTE);
+
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -345,7 +357,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void saveUserPrefsToStorage()
     {
-        // TODO: get user prefs from object and write to disk
+        // TODO: get user prefs from object and write to disk - need to use storage at all for user prefs?
+
     }
 
     public void saveRemindersToStorage()

@@ -556,6 +556,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 });
     }
 
+    // TODO: Refactor with new fields and icon names
     public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
     {
         Map<String, Object> docMap = documentSnapshot.getData();

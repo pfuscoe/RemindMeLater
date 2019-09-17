@@ -5,12 +5,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.MainActivity;
+
 public class UserProfile {
 
     private String id;
     private String displayName;
     private String[] subscriptions;
     private Map<String, Integer> reminderCategories;
+    private int reminderHour;
+    private int reminderMinute;
 
 
     public UserProfile() {
@@ -23,14 +27,19 @@ public class UserProfile {
         this.displayName = displayName;
         this.subscriptions = new String[]{};
         this.reminderCategories = new HashMap<>();
+        this.reminderHour = MainActivity.DEFAULT_REMINDER_TIME_HOUR;
+        this.reminderMinute = MainActivity.DEFAULT_REMINDER_TIME_MINUTE;
     }
 
-    public UserProfile(String id, String displayName, String[] subscriptions, Map<String, Integer> reminderCategories)
+    public UserProfile(String id, String displayName, String[] subscriptions,
+                       Map<String, Integer> reminderCategories, int reminderHour, int reminderMinute)
     {
         this.id = id;
         this.displayName = displayName;
         this.subscriptions = subscriptions;
         this.reminderCategories = reminderCategories;
+        this.reminderHour = reminderHour;
+        this.reminderMinute = reminderMinute;
     }
 
 
@@ -85,5 +94,21 @@ public class UserProfile {
 
     public Map<String, Integer> getReminderCategories() {
         return reminderCategories;
+    }
+
+    public int getReminderHour() {
+        return reminderHour;
+    }
+
+    public void setReminderHour(int reminderHour) {
+        this.reminderHour = reminderHour;
+    }
+
+    public int getReminderMinute() {
+        return reminderMinute;
+    }
+
+    public void setReminderMinute(int reminderMinute) {
+        this.reminderMinute = reminderMinute;
     }
 }
