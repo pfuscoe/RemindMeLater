@@ -211,13 +211,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void clearAllSharedPreferences()
     {
-        userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
+        //userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
         reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
-        SharedPreferences.Editor userPreferencesEditor = userPreferences.edit();
-        userPreferencesEditor.clear().commit();
+        //SharedPreferences.Editor userPreferencesEditor = userPreferences.edit();
+        //userPreferencesEditor.clear().commit();
 
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
         reminderAlarmStorageEditor.clear().commit();
@@ -349,10 +349,15 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void loadUserPreferences()
     {
+        reminderTimeHour = userProfile.getReminderHour();
+        reminderTimeMinute = userProfile.getReminderMinute();
+
+        /*
         userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
 
         reminderTimeHour = userPreferences.getInt(USER_PREF_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_HOUR);
         reminderTimeMinute = userPreferences.getInt(USER_PREF_REMINDER_TIME_MINUTE, DEFAULT_REMINDER_TIME_MINUTE);
+        */
     }
 
     public void saveUserPrefsToStorage()
