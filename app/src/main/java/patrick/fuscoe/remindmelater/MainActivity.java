@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     private String remindersDocId;
     private DocumentReference remindersDocRef;
 
-    public static SharedPreferences userPreferences;
+    //public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderIconIds;
     public static SharedPreferences reminderBroadcastIds;

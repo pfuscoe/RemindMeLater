@@ -312,6 +312,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
+        menu.removeItem(R.id.menu_main_logout);
+        menu.removeItem(R.id.menu_main_user_settings);
+        menu.removeItem(R.id.menu_main_reorder);
+
         // Swap edit icon for trash can
         MenuItem editIcon = menu.findItem(R.id.menu_main_edit);
         editIcon.setIcon(R.drawable.action_delete);
@@ -332,9 +336,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 openDeleteReminderDialog();
                 return true;
 
+                /*
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
                 return true;
+
+                 */
 
             default:
                 return super.onOptionsItemSelected(item);
