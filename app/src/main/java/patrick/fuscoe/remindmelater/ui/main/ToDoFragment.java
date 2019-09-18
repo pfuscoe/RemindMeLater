@@ -431,8 +431,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
     private void addToDoGroup(String title, String selectedIconName)
     {
-        //groupAdded = true;
-
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
         final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconName, false, MainActivity.auth.getUid());
@@ -442,26 +440,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         Map<String, Object> userProfileDoc = buildUserDoc(userProfile);
 
         commitAddToDoGroupBatch(docId, toDoGroupDoc, userProfileDoc);
-
-        /*
-        toDoGroupsCollectionRef.document(docId)
-                .set(toDoGroupDoc)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                        userProfile.addSubscription(docId);
-                        userFieldChanged = true;
-                        groupAdded = false;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
-        */
 
         Log.d(TAG, ": To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do Group Added: " + title, Toast.LENGTH_LONG).show();
@@ -502,26 +480,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         commitDeleteToDoGroupBatch(docId, userProfileDoc);
 
-        /*
-        toDoGroupsCollectionRef.document(docId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        userProfile.removeSubscription(docId);
-                        userFieldChanged = true;
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
-        */
-
         Log.d(TAG, ": To Do Group " + groupTitle + " deleted");
         Toast.makeText(getContext(), "To Do Group Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
     }
@@ -547,6 +505,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         userProfileDoc.put("displayName", userProfile.getDisplayName());
         userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
         userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
+        userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
+        userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
 
         return userProfileDoc;
     }

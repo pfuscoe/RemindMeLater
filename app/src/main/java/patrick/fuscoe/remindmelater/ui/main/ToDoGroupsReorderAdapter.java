@@ -82,7 +82,9 @@ public class ToDoGroupsReorderAdapter extends RecyclerView.Adapter<ToDoGroupsReo
         holder.viewToDoGroupTitle.setText(toDoGroup.getTitle());
         holder.viewToDoGroupTitle.setTextColor(ContextCompat.getColor(context, R.color.greyDark));
 
-        holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context, toDoGroup.getIconId()));
+        holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context,
+                context.getResources().getIdentifier(toDoGroup.getIconName(),
+                        "drawable", context.getPackageName())));
         holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
         int dragIconId = context.getResources().getIdentifier("action_drag", "drawable", context.getPackageName());
