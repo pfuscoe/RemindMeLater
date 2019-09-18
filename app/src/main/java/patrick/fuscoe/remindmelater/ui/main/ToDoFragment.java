@@ -228,8 +228,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     {
                         String id = doc.getId();
                         String title = doc.getString("title");
-                        //String iconName = doc.getString("iconName");
-                        int iconId = Math.toIntExact(doc.getLong("iconId"));
+                        String iconName = doc.getString("iconName");
+                        //int iconId = Math.toIntExact(doc.getLong("iconId"));
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
                         int totalItems = doc.get("totalItems", int.class);
@@ -240,7 +240,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
 
-                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconId, shared, numPriorityOneItems, subscribers, toDoItems);
+                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
                     }
 
@@ -429,13 +429,13 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         }
     }
 
-    private void addToDoGroup(String title, int selectedIconId)
+    private void addToDoGroup(String title, String selectedIconName)
     {
         //groupAdded = true;
 
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
-        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconId, false, MainActivity.auth.getUid());
+        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconName, false, MainActivity.auth.getUid());
 
         Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
         userProfile.addSubscription(docId);
@@ -530,7 +530,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     {
         Map<String, Object> toDoGroupDoc = new HashMap<>();
         toDoGroupDoc.put("title", toDoGroup.getTitle());
-        toDoGroupDoc.put("iconId", toDoGroup.getIconId());
+        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
@@ -631,7 +631,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToEdit.getTitle());
         //bundle.putString("iconName", toDoGroupToEdit.getIconName());
-        bundle.putInt("iconId", toDoGroupToEdit.getIconId());
+        bundle.putString("iconName", toDoGroupToEdit.getIconName());
         Log.d(TAG, ": called showEditToDoGroupDialog");
 
         dialogFragment.setArguments(bundle);
@@ -660,17 +660,20 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryEditName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String newTitle = viewCategoryEditName.getText().toString();
-            int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
-            addToDoGroup(newTitle, selectedIconId);
+            //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
+            String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
+            addToDoGroup(newTitle, selectedIconName);
         }
         else if (dialog instanceof EditToDoGroupDialogFragment)
         {
             Dialog dialogView = dialog.getDialog();
             EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_category_edit_name);
             String newTitle = viewEditToDoGroupTitle.getText().toString();
-            int selectedIconId = ((EditToDoGroupDialogFragment) dialog).getSelectedIconId();
+            //int selectedIconId = ((EditToDoGroupDialogFragment) dialog).getSelectedIconId();
+            String selectedIconName = ((EditToDoGroupDialogFragment) dialog).getSelectedIconName();
             toDoGroupToEdit.setTitle(newTitle);
-            toDoGroupToEdit.setIconId(selectedIconId);
+            //toDoGroupToEdit.setIconId(selectedIconId);
+            toDoGroupToEdit.setIconName(selectedIconName);
 
             editToDoGroup(toDoGroupToEdit);
         }

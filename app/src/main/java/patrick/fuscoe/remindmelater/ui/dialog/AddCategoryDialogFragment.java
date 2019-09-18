@@ -30,6 +30,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
     private List<Boolean> categoryIconListIsChecked;
     private int selectedIcon;
     private int selectedIconPos;
+    private String selectedIconName;
 
     private RecyclerView categoryIconRecycler;
     private RecyclerView.LayoutManager categoryIconRecyclerLayoutManager;
@@ -55,11 +56,13 @@ public class AddCategoryDialogFragment extends DialogFragment {
                 //categoryIconListIsChecked.set(position, false);
                 selectedIcon = -1;
                 selectedIconPos = -1;
+                selectedIconName = "default";
             }
             else
             {
                 categoryIconListIsChecked.set(position, true);
                 selectedIcon = categoryIconList.get(position);
+                selectedIconName = getResources().getResourceEntryName(selectedIcon);
 
                 // notify old pos changed
                 categoryIconRecyclerAdapter.notifyItemChanged(oldPos);
@@ -111,6 +114,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
 
         selectedIcon = -1;
         selectedIconPos = -1;
+        selectedIconName = "default";
 
         //Bundle bundle = getArguments();
 
@@ -144,5 +148,9 @@ public class AddCategoryDialogFragment extends DialogFragment {
 
     public int getSelectedIconId() {
         return selectedIcon;
+    }
+
+    public String getSelectedIconName() {
+        return selectedIconName;
     }
 }

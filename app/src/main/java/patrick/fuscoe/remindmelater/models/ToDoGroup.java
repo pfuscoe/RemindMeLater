@@ -16,7 +16,7 @@ public class ToDoGroup {
     private String id;
     private String title;
     private String iconName;
-    private int iconId;
+    //private int iconId;
     private boolean shared;
     private int numPriorityOneItems;
     private int totalItems;
@@ -32,11 +32,12 @@ public class ToDoGroup {
 
     }
 
-    public ToDoGroup(String id, String title, int iconId, boolean shared, String userId)
+    public ToDoGroup(String id, String title, String iconName, boolean shared, String userId)
     {
         this.id = id;
         this.title = title;
-        this.iconId = iconId;
+        //this.iconId = iconId;
+        this.iconName = iconName;
         this.shared = shared;
         this.numPriorityOneItems = 0;
         this.totalItems = 0;
@@ -46,11 +47,12 @@ public class ToDoGroup {
         this.toDoItems = new HashMap<>();
     }
 
-    public ToDoGroup(String id, String title, int iconId, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
+    public ToDoGroup(String id, String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
     {
         this.id = id;
         this.title = title;
-        this.iconId = iconId;
+        //this.iconId = iconId;
+        this.iconName = iconName;
         this.shared = shared;
         this.numPriorityOneItems = numPriorityOneItems;
         this.subscribers = subscribers;
@@ -113,8 +115,8 @@ public class ToDoGroup {
         return title;
     }
 
-    public int getIconId() {
-        return iconId;
+    public String getIconName() {
+        return iconName;
     }
 
     public boolean isShared() {
@@ -155,8 +157,8 @@ public class ToDoGroup {
         this.title = title;
     }
 
-    public void setIconId(int iconId) {
-        this.iconId = iconId;
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     public void setShared(boolean shared) {

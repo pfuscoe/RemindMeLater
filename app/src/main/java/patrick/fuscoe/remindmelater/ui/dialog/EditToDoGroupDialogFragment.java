@@ -27,6 +27,7 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
     private List<Boolean> categoryIconListIsChecked;
     private int selectedIcon;
     private int selectedIconPos;
+    private String selectedIconName;
 
     private RecyclerView categoryIconRecycler;
     private RecyclerView.LayoutManager categoryIconRecyclerLayoutManager;
@@ -52,11 +53,13 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
                 //categoryIconListIsChecked.set(position, false);
                 selectedIcon = -1;
                 selectedIconPos = -1;
+                selectedIconName = "default";
             }
             else
             {
                 categoryIconListIsChecked.set(position, true);
                 selectedIcon = categoryIconList.get(position);
+                selectedIconName = getResources().getResourceEntryName(selectedIcon);
 
                 // notify old pos changed
                 categoryIconRecyclerAdapter.notifyItemChanged(oldPos);
@@ -94,11 +97,14 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         String groupTitle = bundle.getString("title");
-        int groupIconId = bundle.getInt("iconId");
+        //int groupIconId = bundle.getInt("iconId");
+        String groupIconName = bundle.getString("iconName");
 
         EditText viewGroupTitle = v.findViewById(R.id.dialog_category_edit_name);
         viewGroupTitle.setText(groupTitle);
-        selectedIcon = groupIconId;
+        selectedIconName = groupIconName;
+        selectedIcon = getResources().getIdentifier(
+                groupIconName, "drawable", requireActivity().getPackageName());
         //selectedIconPos = -1;
 
         CategoryIconSet categoryIconSet = new CategoryIconSet();
@@ -134,5 +140,9 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
 
     public int getSelectedIconId() {
         return selectedIcon;
+    }
+
+    public String getSelectedIconName() {
+        return selectedIconName;
     }
 }
