@@ -78,11 +78,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static FirebaseAuth auth;
     public static String userId;
     public static DocumentReference userDocRef;
+    public static DocumentReference remindersDocRef;
 
     //private UserProfileViewModel userProfileViewModel;
     private UserProfile userProfile;
     private String remindersDocId;
-    private DocumentReference remindersDocRef;
 
     //public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
@@ -319,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        remindersDocRef = documentReference;
                         remindersDocId = documentReference.getId();
                         Log.d(TAG, "Reminders document written with ID: " + remindersDocId);
                         createNewUserDoc();
@@ -399,6 +400,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                         {
                             for (QueryDocumentSnapshot document : task.getResult())
                             {
+                                remindersDocRef = document.getReference();
                                 remindersDocId = document.getId();
                                 Log.d(TAG, "remindersDocId: " + remindersDocId);
                                 buildReminderItemList(document);
