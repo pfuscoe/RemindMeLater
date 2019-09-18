@@ -128,7 +128,7 @@ public class UserPreferencesActivity extends AppCompatActivity
     public void clearEmptyReminderCategories()
     {
         // TODO: Clear Empty Reminder Categories
-
+        //loadRemindersFromCloud();
     }
 
     public void saveUserPrefs()
