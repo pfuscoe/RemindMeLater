@@ -237,7 +237,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         Map<String, Object> toDoGroupDoc = new HashMap<>();
 
         toDoGroupDoc.put("title", toDoGroup.getTitle());
-        toDoGroupDoc.put("iconId", toDoGroup.getIconId());
+        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
