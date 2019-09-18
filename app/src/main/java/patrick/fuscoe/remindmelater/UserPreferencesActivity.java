@@ -58,9 +58,11 @@ public class UserPreferencesActivity extends AppCompatActivity
                     return;
 
                 case R.id.button_user_preferences_clear_empty_reminder_categories:
+                    clearEmptyReminderCategories();
                     return;
 
                 case R.id.button_user_preferences_save:
+                    saveUserPrefs();
                     return;
 
                 case R.id.button_user_preferences_cancel:
@@ -115,6 +117,17 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         reminderHour = hourOfDay;
         reminderMinute = minute;
+    }
+
+    public void clearEmptyReminderCategories()
+    {
+        // TODO: Clear Empty Reminder Categories
+
+    }
+
+    public void saveUserPrefs()
+    {
+        // TODO: Save User Prefs
     }
 
 }
