@@ -29,7 +29,7 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
     private List<ReminderCategory> reminderCategories;
 
-    public ReminderCategorySpinnerAdapter(Context context, Map<String, Integer> reminderCategoriesMap)
+    public ReminderCategorySpinnerAdapter(Context context, Map<String, String> reminderCategoriesMap)
     {
         this.context = context;
         buildReminderCategoryList(reminderCategoriesMap);
@@ -37,11 +37,11 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
     }
 
-    public void buildReminderCategoryList(Map<String, Integer> reminderCategoriesMap)
+    public void buildReminderCategoryList(Map<String, String> reminderCategoriesMap)
     {
         List<ReminderCategory> reminderCategoryList = new ArrayList<>();
 
-        for (Map.Entry<String, Integer> entry : reminderCategoriesMap.entrySet())
+        for (Map.Entry<String, String> entry : reminderCategoriesMap.entrySet())
         {
             ReminderCategory reminderCategory = new ReminderCategory(entry.getKey(), entry.getValue());
             reminderCategoryList.add(reminderCategory);

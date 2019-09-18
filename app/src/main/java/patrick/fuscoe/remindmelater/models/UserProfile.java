@@ -12,7 +12,7 @@ public class UserProfile {
     private String id;
     private String displayName;
     private String[] subscriptions;
-    private Map<String, Integer> reminderCategories;
+    private Map<String, String> reminderCategories;  // Category Name & Icon Name
     private int reminderHour;
     private int reminderMinute;
 
@@ -32,7 +32,7 @@ public class UserProfile {
     }
 
     public UserProfile(String id, String displayName, String[] subscriptions,
-                       Map<String, Integer> reminderCategories, int reminderHour, int reminderMinute)
+                       Map<String, String> reminderCategories, int reminderHour, int reminderMinute)
     {
         this.id = id;
         this.displayName = displayName;
@@ -57,9 +57,9 @@ public class UserProfile {
         subscriptions = tempList.toArray(subscriptions);
     }
 
-    public void addReminderCategory(String categoryName, Integer categoryIcon)
+    public void addReminderCategory(String categoryName, String categoryIconName)
     {
-        reminderCategories.put(categoryName, categoryIcon);
+        reminderCategories.put(categoryName, categoryIconName);
     }
 
     public void removeReminderCategory(String categoryName)
@@ -92,7 +92,7 @@ public class UserProfile {
         this.subscriptions = subscriptions;
     }
 
-    public Map<String, Integer> getReminderCategories() {
+    public Map<String, String> getReminderCategories() {
         return reminderCategories;
     }
 

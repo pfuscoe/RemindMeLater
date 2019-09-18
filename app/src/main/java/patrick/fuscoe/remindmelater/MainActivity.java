@@ -294,8 +294,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         String[] subscriptions = new String[subscriptionsList.size()];
         subscriptions = subscriptionsList.toArray(subscriptions);
 
-        Map<String, Integer> reminderCategories =
-                (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+        Map<String, String> reminderCategories =
+                (Map<String, String>) documentSnapshot.get("reminderCategories");
 
         reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
         reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
@@ -337,9 +337,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         userProfileDoc.put("displayName", "");
 
-        Map<String, Integer> reminderCategoriesMap = new HashMap<>();
+        Map<String, String> reminderCategoriesMap = new HashMap<>();
         // TODO: need to fix to store drawable name not id
-        reminderCategoriesMap.put("Main", R.drawable.category_note);
+        reminderCategoriesMap.put("Main", DEFAULT_REMINDER_CATEGORY_ICON_NAME);
         userProfileDoc.put("reminderCategories", reminderCategoriesMap);
 
         ArrayList<String> subscriptionsList = new ArrayList<>();

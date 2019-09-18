@@ -277,8 +277,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                         Log.d("subscriptions item: ", subscriptions[i]);
                     }
 
-                    Map<String, Integer> reminderCategories =
-                            (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+                    Map<String, String> reminderCategories =
+                            (Map<String, String>) documentSnapshot.get("reminderCategories");
 
                     MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
                     MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));

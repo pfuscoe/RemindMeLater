@@ -585,8 +585,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         String[] subscriptions = new String[subscriptionsList.size()];
         subscriptions = subscriptionsList.toArray(subscriptions);
 
-        Map<String, Integer> reminderCategories =
-                (Map<String, Integer>) documentSnapshot.get("reminderCategories");
+        Map<String, String> reminderCategories =
+                (Map<String, String>) documentSnapshot.get("reminderCategories");
 
         MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
         MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
@@ -613,7 +613,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
             viewCategoryIcon.setImageResource(getResources().getIdentifier(
                     selectedIconName, "drawable", getPackageName()));
 
-            userProfile.addReminderCategory(categoryName, selectedIconId);
+            userProfile.addReminderCategory(categoryName, selectedIconName);
             saveUserProfile();
             updateCategorySelectSpinner();
             Toast.makeText(getApplicationContext(), "New Reminder Category Added: " + categoryName, Toast.LENGTH_SHORT).show();
