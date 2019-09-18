@@ -219,13 +219,14 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                                 //Log.d(TAG, ": nextOccurrence.toString: " + nextOccurrence.toString());
 
                                 String category = (String) reminderItemMap.get("category");
-                                int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
-                                Log.d(TAG, ": categoryIcon: " + categoryIcon);
+                                //int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+                                String categoryIconName = (String) reminderItemMap.get("categoryIconName");
+                                Log.d(TAG, ": categoryIconName: " + categoryIconName);
 
                                 String description = (String) reminderItemMap.get("description");
 
                                 ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
-                                        recurrenceInterval, nextOccurrence, category, categoryIcon, description);
+                                        recurrenceInterval, nextOccurrence, category, categoryIconName, description);
                                 reminderListFromDoc.add(reminderItem);
                             }
                         }
@@ -356,11 +357,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         String nextOccurrence = nextOccurrenceLocalDate.toString();
 
         String category = "Main";
-        int categoryIcon = R.drawable.category_note;
+        //int categoryIcon = R.drawable.category_note;
+        String categoryIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
         String description = "";
 
         ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval,
-                nextOccurrence, category, categoryIcon, description);
+                nextOccurrence, category, categoryIconName, description);
 
         //reminderItemList.add(reminderItem);
 

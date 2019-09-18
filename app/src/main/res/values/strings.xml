@@ -50,4 +50,5 @@
     <string name="user_preferences_time_button_text">Set Time</string>
     <string name="user_preferences_time_label">Set Time of Day to Receive Reminders</string>
     <string name="user_preferences_clear_empty_categories_button_label">Clear Empty Reminder Categories</string>
+    <string name="reminder_icon_names_file_key">patrick.fuscoe.remindmelater.REMINDER_ICON_NAMES</string>
 </resources>

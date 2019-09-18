@@ -14,7 +14,8 @@ public class ReminderItem implements Comparable<ReminderItem> {
     private String title;
     private String nextOccurrence;  // LocalDate String format
     private String category;
-    private int categoryIcon;
+    //private int categoryIcon;
+    private String categoryIconName;
     private String description;
 
     //private Address address;
@@ -32,14 +33,15 @@ public class ReminderItem implements Comparable<ReminderItem> {
 
     }
 
-    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence, String category, int categoryIcon, String description)
+    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence,
+                        String category, String categoryIconName, String description)
     {
         this.title = title;
         this.recurrenceNum = recurrenceNum;
         this.recurrenceInterval = recurrenceInterval;
         this.nextOccurrence = nextOccurrence;
         this.category = category;
-        this.categoryIcon = categoryIcon;
+        this.categoryIconName = categoryIconName;
         this.description = description;
 
         updateRecurrencePeriod();
@@ -126,8 +128,8 @@ public class ReminderItem implements Comparable<ReminderItem> {
         return category;
     }
 
-    public int getCategoryIcon() {
-        return categoryIcon;
+    public String getCategoryIconName() {
+        return categoryIconName;
     }
 
     public String getDescription() {
@@ -168,8 +170,8 @@ public class ReminderItem implements Comparable<ReminderItem> {
         this.category = category;
     }
 
-    public void setCategoryIcon(int categoryIcon) {
-        this.categoryIcon = categoryIcon;
+    public void setCategoryIconName(String categoryIconName) {
+        this.categoryIconName = categoryIconName;
     }
 
     public void setDescription(String description) {

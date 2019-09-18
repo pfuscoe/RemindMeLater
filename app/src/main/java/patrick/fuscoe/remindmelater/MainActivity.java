@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
     public static final int DEFAULT_REMINDER_TIME_HOUR = 9;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 30;
+    public static final String DEFAULT_REMINDER_CATEGORY_ICON_NAME = "category_note";
 
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     //public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderIconIds;
+    public static SharedPreferences reminderIconNames;
     public static SharedPreferences reminderBroadcastIds;
 
     private AlarmManager alarmManager;
@@ -426,11 +428,12 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
                 String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
                 String category = (String) reminderItemMap.get("category");
-                int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+                //int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+                String categoryIconName = (String) reminderItemMap.get("categoryIconName");
                 String description = (String) reminderItemMap.get("description");
 
                 ReminderItem reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
-                        recurrenceInterval, nextOccurrence, category, categoryIcon, description);
+                        recurrenceInterval, nextOccurrence, category, categoryIconName, description);
 
                 reminderItemList.add(reminderItem);
             }

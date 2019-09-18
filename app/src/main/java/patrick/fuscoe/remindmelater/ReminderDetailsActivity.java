@@ -142,7 +142,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
             ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(pos);
             reminderItem.setCategory(reminderCategory.getCategoryName());
             reminderItem.setCategoryIcon(reminderCategory.getIconId());
-            viewCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
+            viewCategoryIcon.setImageResource(getResources().getIdentifier(
+                    reminderItem.getCategoryIconName(), "drawable", getPackageName()));
             Log.d(TAG, ": Reminder Category Changed.");
         }
     }
@@ -283,7 +284,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
         else
         {
-            viewCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
+            viewCategoryIcon.setImageResource(getResources().getIdentifier(
+                    reminderItem.getCategoryIconName(), "drawable", getPackageName());
         }
 
 
@@ -413,7 +415,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
         reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
         reminderItemMap.put("category", reminderItem.getCategory());
-        reminderItemMap.put("categoryIcon", reminderItem.getCategoryIcon());
+        reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
 
         saveReminderToSharedPreferences();
@@ -529,6 +531,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         userProfileDoc.put("displayName", userProfile.getDisplayName());
         userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
         userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
+        userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
+        userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
 
         MainActivity.userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -595,12 +599,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String categoryName = viewCategoryName.getText().toString();
-            int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
+            //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
+            String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
 
             reminderItem.setCategory(categoryName);
-            reminderItem.setCategoryIcon(selectedIconId);
+            reminderItem.setCategoryIconName(selectedIconName);
 
-            viewCategoryIcon.setImageResource(selectedIconId);
+            viewCategoryIcon.setImageResource(getResources().getIdentifier(
+                    selectedIconName, "drawable", getPackageName()));
 
             userProfile.addReminderCategory(categoryName, selectedIconId);
             saveUserProfile();
