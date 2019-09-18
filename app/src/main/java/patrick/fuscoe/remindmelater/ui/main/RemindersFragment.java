@@ -106,7 +106,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
             ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(position);
             selectedCategoryName = reminderCategory.getCategoryName();
             //String categoryName = reminderCategory.getCategoryName();
-            int iconId = reminderCategory.getIconId();
+            //int iconId = reminderCategory.getIconId();
 
             List<ReminderItem> filteredReminderItemList =
                     filterReminderListByCategory(selectedCategoryName);

@@ -4,12 +4,15 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.graphics.BitmapCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -132,13 +135,14 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
         String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
         String category = (String) reminderItemMap.get("category");
-        int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+        //int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
+        String categoryIconName = (String) reminderItemMap.get("categoryIconName");
         String description = (String) reminderItemMap.get("description");
 
         //Log.d(TAG, ": recurrenceInterval: " + recurrenceInterval);
 
         reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
-                recurrenceInterval, nextOccurrence, category, categoryIcon, description);
+                recurrenceInterval, nextOccurrence, category, categoryIconName, description);
     }
 
     public void sendNotification()
@@ -146,7 +150,10 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         //int notificationId = (int) System.currentTimeMillis();
         int notificationId = generateUniqueInt();
         //int notificationId = 101;
-        int iconId = reminderItem.getCategoryIcon();
+        //int iconId = reminderItem.getCategoryIcon();
+        int iconId = context.getResources().getIdentifier(
+                reminderItem.getCategoryIconName(), "drawable", context.getPackageName());
+        Bitmap largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), iconId);
 
         Log.d(TAG, ": notificationId: " + notificationId);
 
@@ -191,6 +198,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(iconId)
+                .setLargeIcon(largeIconBitmap)
                 .setContentTitle(reminderTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(reminderDetailsPendingIntent)

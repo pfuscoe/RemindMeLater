@@ -3,12 +3,14 @@ package patrick.fuscoe.remindmelater.models;
 public class ReminderCategory implements Comparable<ReminderCategory> {
 
     private String categoryName;
-    private int iconId;
+    //private int iconId;
+    private String iconName;
 
-    public ReminderCategory(String categoryName, int iconId)
+    public ReminderCategory(String categoryName, String iconName)
     {
         this.categoryName = categoryName;
-        this.iconId = iconId;
+        //this.iconId = iconId;
+        this.iconName = iconName;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class ReminderCategory implements Comparable<ReminderCategory> {
         return categoryName;
     }
 
-    public int getIconId() {
-        return iconId;
+    public String getIconName() {
+        return iconName;
     }
 }

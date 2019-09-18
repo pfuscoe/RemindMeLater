@@ -102,7 +102,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
         reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
         reminderItemMap.put("category", reminderItem.getCategory());
-        reminderItemMap.put("categoryIcon", reminderItem.getCategoryIcon());
+        reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
 
         saveReminderToSharedPreferences();
@@ -133,12 +133,18 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
         reminderAlarmEditor.apply();
 
-        SharedPreferences reminderIconIds = context.getSharedPreferences(
-                context.getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+        //SharedPreferences reminderIconIds = context.getSharedPreferences(
+                //context.getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        //SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
 
-        reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
-        reminderIconIdEditor.apply();
+        //reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
+        //reminderIconIdEditor.apply();
+
+        SharedPreferences reminderIconNames = context.getSharedPreferences(
+                context.getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
+        reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
+        reminderIconNamesEditor.apply();
 
         SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
                 context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);

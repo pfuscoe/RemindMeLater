@@ -73,7 +73,8 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
         holder.viewRowReminderTitle.setText(reminderItem.getTitle());
 
         // TODO: Setup snooze icon
-        holder.viewRowReminderCategoryIcon.setImageResource(reminderItem.getCategoryIcon());
+        holder.viewRowReminderCategoryIcon.setImageResource(context.getResources().getIdentifier(
+                reminderItem.getCategoryIconName(), "drawable", context.getPackageName()));
         holder.viewRowReminderDaysAway.setText(String.valueOf(reminderItem.getDaysAway()));
     }
 

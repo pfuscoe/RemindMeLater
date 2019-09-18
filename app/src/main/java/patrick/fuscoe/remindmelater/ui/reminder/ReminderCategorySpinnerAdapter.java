@@ -20,6 +20,10 @@ import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
+    public static final String TAG = "patrick.fuscoe.remindmelater.ReminderCategorySpinnerAdapter";
+
+    public static final String REMINDER_CATEGORY_ALL_ICON_NAME = "category_all_animation";
+
     private Context context;
     private LayoutInflater inflater;
 
@@ -49,7 +53,7 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
         if (this.context instanceof MainActivity)
         {
             ReminderCategory reminderCategoryAll =
-                    new ReminderCategory("All", R.drawable.category_all_animation);
+                    new ReminderCategory("All", REMINDER_CATEGORY_ALL_ICON_NAME);
             reminderCategoryList.add(0, reminderCategoryAll);
         }
 
@@ -80,7 +84,8 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
         ReminderCategory reminderCategory = reminderCategories.get(position);
 
-        categoryIcon.setImageResource(reminderCategory.getIconId());
+        categoryIcon.setImageResource(context.getResources().getIdentifier(
+                reminderCategory.getIconName(), "drawable", context.getPackageName()));
         categoryName.setText(reminderCategory.getCategoryName());
 
         return convertView;

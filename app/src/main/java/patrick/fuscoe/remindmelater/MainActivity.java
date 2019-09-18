@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
-    public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
+    //public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
+    public static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
 
     //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     //public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
-    public static SharedPreferences reminderIconIds;
+    //public static SharedPreferences reminderIconIds;
     public static SharedPreferences reminderIconNames;
     public static SharedPreferences reminderBroadcastIds;
 
@@ -214,7 +215,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     {
         //userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         //SharedPreferences.Editor userPreferencesEditor = userPreferences.edit();
@@ -223,8 +225,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
         reminderAlarmStorageEditor.clear().commit();
 
-        SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
-        reminderIconIdsEditor.clear().commit();
+        //SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
+        //reminderIconIdsEditor.clear().commit();
+
+        SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
+        reminderIconNamesEditor.clear().commit();
 
         SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
         reminderBroadcastIdsEditor.clear().commit();
@@ -443,17 +448,20 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public void writeRemindersToDisk()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
-        SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+        //SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+        SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
         SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
 
         for (ReminderItem reminderItem : reminderItemList)
         {
             reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
-            reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
+            //reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
+            reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
 
             int broadcastId = generateUniqueInt();
             reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
@@ -461,7 +469,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         // Using commit() because alarms are loaded immediately after write to disk from cloud
         reminderAlarmEditor.commit();
-        reminderIconIdEditor.commit();
+        //reminderIconIdEditor.commit();
+        reminderIconNamesEditor.commit();
         reminderBroadcastIdEditor.commit();
 
         Log.d(TAG, "Reminders written to storage");
@@ -470,11 +479,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public void loadReminderAlarms()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
-        Map<String, ?> reminderIconIdMap = reminderIconIds.getAll();
+        //Map<String, ?> reminderIconIdMap = reminderIconIds.getAll();
+        Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
         Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
 
         reminderAlarmItemList = new ArrayList<>();
@@ -486,11 +497,12 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             String title = entry.getKey();
             String nextOccurrence = (String) entry.getValue();
 
-            int iconId = (Integer) reminderIconIdMap.get(title);
+            //int iconId = (Integer) reminderIconIdMap.get(title);
+            String iconName = (String) reminderIconNamesMap.get(title);
             int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
 
             ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
-                    iconId, broadcastId, reminderTimeHour, reminderTimeMinute);
+                    iconName, broadcastId, reminderTimeHour, reminderTimeMinute);
 
             Log.d(TAG, ": reminderAlarmItem: " + reminderAlarmItem.getTitle() + " built");
 
@@ -514,7 +526,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
             intent.setAction(ACTION_ALARM_RECEIVER);
             intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
-            intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
+            //intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
+            intent.putExtra(REMINDER_ICON_NAME, alarmItem.getIconName());
             //intent.putExtra(REMINDER_NEXT_OCCURRENCE, alarmItem.getNextOccurrence());
 
             // TODO: Check alarmIntent Flag

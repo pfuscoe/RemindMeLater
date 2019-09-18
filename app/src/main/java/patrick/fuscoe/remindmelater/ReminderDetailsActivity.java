@@ -141,7 +141,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         {
             ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(pos);
             reminderItem.setCategory(reminderCategory.getCategoryName());
-            reminderItem.setCategoryIcon(reminderCategory.getIconId());
+            reminderItem.setCategoryIconName(reminderCategory.getIconName());
             viewCategoryIcon.setImageResource(getResources().getIdentifier(
                     reminderItem.getCategoryIconName(), "drawable", getPackageName()));
             Log.d(TAG, ": Reminder Category Changed.");
@@ -252,7 +252,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         for (ReminderCategory reminderCategory : reminderCategoryList)
         {
-            if (reminderCategory.getIconId() == reminderItem.getCategoryIcon())
+            if (reminderCategory.getIconName().equals(reminderItem.getCategoryIconName()))
             {
                 categoryPosition = counter;
                 viewCategorySpinner.setSelection(categoryPosition);
@@ -278,16 +278,16 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
         viewDescription.setText(reminderItem.getDescription());
 
-        if (reminderItem.getCategoryIcon() == -1)
+        if (reminderItem.getCategoryIconName().equals("Main"))
         {
-            viewCategoryIcon.setImageResource(R.drawable.category_note);
+            viewCategoryIcon.setImageResource(getResources().getIdentifier(
+                    MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME, "drawable", getPackageName()));
         }
         else
         {
             viewCategoryIcon.setImageResource(getResources().getIdentifier(
                     reminderItem.getCategoryIconName(), "drawable", getPackageName());
         }
-
 
         switch (reminderItem.getRecurrenceInterval())
         {
@@ -442,21 +442,23 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void saveReminderToSharedPreferences()
     {
         //SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        SharedPreferences reminderAlarmStorage = MainActivity.reminderAlarmStorage;
-        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
-
+        //SharedPreferences reminderAlarmStorage = MainActivity.reminderAlarmStorage;
+        SharedPreferences.Editor reminderAlarmEditor = MainActivity.reminderAlarmStorage.edit();
         reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
         reminderAlarmEditor.apply();
 
-        SharedPreferences reminderIconIds = MainActivity.reminderIconIds;
-        SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+        //SharedPreferences reminderIconIds = MainActivity.reminderIconIds;
+        //SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
+        //reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
+        //reminderIconIdEditor.apply();
 
-        reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
-        reminderIconIdEditor.apply();
+        SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
+        reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
+        reminderIconNamesEditor.apply();
 
         //SharedPreferences reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
-        SharedPreferences reminderBroadcastIds = MainActivity.reminderBroadcastIds;
-        SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
+        //SharedPreferences reminderBroadcastIds = MainActivity.reminderBroadcastIds;
+        SharedPreferences.Editor reminderBroadcastIdEditor = MainActivity.reminderBroadcastIds.edit();
 
         int broadcastId = MainActivity.generateUniqueInt();
         // TODO: Add check for existing id
@@ -497,9 +499,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
         Context context = getApplicationContext();
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
-        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        //reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
+        //reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         int broadcastId = reminderBroadcastIds.getInt(reminderItem.getTitle(), 0);
 
@@ -513,14 +515,17 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void removeReminderLocalStorage()
     {
-        SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
-        reminderAlarmStorageEditor.remove(reminderItem.getTitle()).commit();
+        SharedPreferences.Editor reminderAlarmStorageEditor = MainActivity.reminderAlarmStorage.edit();
+        reminderAlarmStorageEditor.remove(reminderItem.getTitle()).apply();
 
-        SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
-        reminderIconIdsEditor.remove(reminderItem.getTitle()).commit();
+        //SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
+        //reminderIconIdsEditor.remove(reminderItem.getTitle()).commit();
 
-        SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
-        reminderBroadcastIdsEditor.remove(reminderItem.getTitle()).commit();
+        SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
+        reminderIconNamesEditor.remove(reminderItem.getTitle()).apply();
+
+        SharedPreferences.Editor reminderBroadcastIdsEditor = MainActivity.reminderBroadcastIds.edit();
+        reminderBroadcastIdsEditor.remove(reminderItem.getTitle()).apply();
 
         Log.d(TAG, "Reminder removed from local storage: " + reminderItem.getTitle());
     }

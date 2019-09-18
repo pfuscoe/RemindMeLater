@@ -7,7 +7,8 @@ public class ReminderAlarmItem {
 
     private String title;
     private String nextOccurrence;
-    private int iconId;
+    //private int iconId;
+    private String iconName;
     private int broadcastId;
     private Calendar alarmCalendarObj;
 
@@ -17,11 +18,12 @@ public class ReminderAlarmItem {
 
     }
 
-    public ReminderAlarmItem(String title, String nextOccurrence, int iconId, int broadcastId, int hour, int minute)
+    public ReminderAlarmItem(String title, String nextOccurrence, String iconName, int broadcastId, int hour, int minute)
     {
         this.title = title;
         this.nextOccurrence = nextOccurrence;
-        this.iconId = iconId;
+        //this.iconId = iconId;
+        this.iconName = iconName;
         this.broadcastId = broadcastId;
 
         buildAlarmCalendarObject(hour, minute);
@@ -49,8 +51,8 @@ public class ReminderAlarmItem {
         return nextOccurrence;
     }
 
-    public int getIconId() {
-        return iconId;
+    public String getIconName() {
+        return iconName;
     }
 
     public int getBroadcastId() {
