@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -63,9 +64,13 @@ public class UserPreferencesActivity extends AppCompatActivity
 
                 case R.id.button_user_preferences_save:
                     saveUserPrefs();
+                    Toast.makeText(getApplicationContext(), userProfile.getDisplayName() + ": User Settings Updated", Toast.LENGTH_LONG).show();
+                    onBackPressed();
                     return;
 
                 case R.id.button_user_preferences_cancel:
+                    Toast.makeText(getApplicationContext(), "Edit User Settings Cancelled", Toast.LENGTH_LONG).show();
+                    onBackPressed();
                     return;
             }
         }
@@ -101,6 +106,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         btnCancel = findViewById(R.id.button_user_preferences_cancel);
         btnCancel.setOnClickListener(btnClickListener);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
     }
 

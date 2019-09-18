@@ -13,7 +13,12 @@
         <activity
             android:name=".UserPreferencesActivity"
             android:label="@string/title_activity_user_preferences"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="patrick.fuscoe.remindmelater.MainActivity" />
+        </activity>
 
         <activity
             android:name=".ReminderDetailsActivity"
