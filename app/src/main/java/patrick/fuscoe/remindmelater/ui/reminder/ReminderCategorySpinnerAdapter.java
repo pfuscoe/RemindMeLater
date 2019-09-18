@@ -41,13 +41,23 @@ public class ReminderCategorySpinnerAdapter extends BaseAdapter {
     {
         List<ReminderCategory> reminderCategoryList = new ArrayList<>();
 
+        ReminderCategory reminderCategoryMain = new ReminderCategory(
+                "Main", MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME);
+
         for (Map.Entry<String, String> entry : reminderCategoriesMap.entrySet())
         {
             ReminderCategory reminderCategory = new ReminderCategory(entry.getKey(), entry.getValue());
-            reminderCategoryList.add(reminderCategory);
+
+            if (!reminderCategory.getCategoryName().equals("Main"))
+            {
+                reminderCategoryList.add(reminderCategory);
+            }
         }
 
         Collections.sort(reminderCategoryList);
+
+        // Make 'Main' category show up on top (except for 'All')
+        reminderCategoryList.add(0, reminderCategoryMain);
 
         // Add "All" category to front for use in filter spinner
         if (this.context instanceof MainActivity)

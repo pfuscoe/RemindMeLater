@@ -339,7 +339,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userProfileDoc.put("displayName", "");
 
         Map<String, String> reminderCategoriesMap = new HashMap<>();
-        // TODO: need to fix to store drawable name not id
         reminderCategoriesMap.put("Main", DEFAULT_REMINDER_CATEGORY_ICON_NAME);
         userProfileDoc.put("reminderCategories", reminderCategoriesMap);
 
