@@ -286,7 +286,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         else
         {
             viewCategoryIcon.setImageResource(getResources().getIdentifier(
-                    reminderItem.getCategoryIconName(), "drawable", getPackageName());
+                    reminderItem.getCategoryIconName(), "drawable", getPackageName()));
         }
 
         switch (reminderItem.getRecurrenceInterval())
