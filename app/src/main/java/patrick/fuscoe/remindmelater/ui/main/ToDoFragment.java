@@ -64,7 +64,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
     public static final String TO_DO_GROUP = "patrick.fuscoe.remindmelater.TO_DO_GROUP";
 
-    public static final int DEFAULT_CATEGORY_ICON = R.drawable.category_note;
+    //public static final int DEFAULT_CATEGORY_ICON = R.drawable.category_note;
 
     //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -622,7 +622,14 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             String newTitle = viewCategoryEditName.getText().toString();
             //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
-            addToDoGroup(newTitle, selectedIconName);
+            if (selectedIconName.equals("default"))
+            {
+                addToDoGroup(newTitle, MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME);
+            }
+            else
+            {
+                addToDoGroup(newTitle, selectedIconName);
+            }
         }
         else if (dialog instanceof EditToDoGroupDialogFragment)
         {

@@ -604,14 +604,22 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String categoryName = viewCategoryName.getText().toString();
+            reminderItem.setCategory(categoryName);
+
             //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
 
-            reminderItem.setCategory(categoryName);
-            reminderItem.setCategoryIconName(selectedIconName);
+            if (selectedIconName.equals("default"))
+            {
+                reminderItem.setCategoryIconName(MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME);
+            }
+            else
+            {
+                reminderItem.setCategoryIconName(selectedIconName);
+            }
 
             viewCategoryIcon.setImageResource(getResources().getIdentifier(
-                    selectedIconName, "drawable", getPackageName()));
+                    reminderItem.getCategoryIconName(), "drawable", getPackageName()));
 
             userProfile.addReminderCategory(categoryName, selectedIconName);
             saveUserProfile();
