@@ -128,16 +128,26 @@ public class UserPreferencesActivity extends AppCompatActivity
     private void setTimeDisplay()
     {
         String timeToDisplay;
+        String minutesString;
+
+        if (userProfile.getReminderMinute() == 0)
+        {
+            minutesString = "00";
+        }
+        else
+        {
+            minutesString = "0";
+        }
 
         if (userProfile.getReminderHour() < 12)
         {
             timeToDisplay = userProfile.getReminderHour() + " : " +
-                    userProfile.getReminderMinute() + " AM";
+                    minutesString + " AM";
         }
         else
         {
             timeToDisplay = userProfile.getReminderHour() + " : " +
-                    userProfile.getReminderMinute() + " PM";
+                    minutesString + " PM";
         }
 
         viewTimeDisplay.setText(timeToDisplay);
@@ -156,6 +166,8 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         userProfile.setReminderHour(hourOfDay);
         userProfile.setReminderMinute(minute);
+
+        setTimeDisplay();
     }
 
     public void clearEmptyReminderCategories()
@@ -179,6 +191,7 @@ public class UserPreferencesActivity extends AppCompatActivity
             if (numReminders == 0)
             {
                 userProfile.removeReminderCategory(reminderCategory.getKey());
+                Log.d(TAG, reminderCategory.getKey() + " - Reminder Category Removed");
             }
         }
     }
