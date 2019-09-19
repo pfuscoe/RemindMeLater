@@ -152,13 +152,16 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         int notificationId = generateUniqueInt();
         //int notificationId = 101;
         //int iconId = reminderItem.getCategoryIcon();
+
+        //Log.d(TAG, " reminderItem category icon name: " + reminderItem.getCategoryIconName());
+
         int iconId = context.getResources().getIdentifier(
                 reminderItem.getCategoryIconName(), "drawable", context.getPackageName());
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), iconId);
 
         Log.d(TAG, ": notificationId: " + notificationId);
 
-        Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
+        //Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
 
         Gson gson = new Gson();
         String reminderItemString = gson.toJson(reminderItem);
@@ -196,10 +199,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         // TODO: Notification Dismiss Intent
         Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
 
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(iconId)
                 .setLargeIcon(largeIconBitmap)
+                .setSmallIcon(iconId)
                 .setContentTitle(reminderTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(reminderDetailsPendingIntent)
