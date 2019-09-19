@@ -73,6 +73,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         LocalDate nextOccurrence = LocalDate.now();
         nextOccurrence.plusDays(DEFAULT_SNOOZE_DAYS);
         reminderItem.setNextOccurrence(nextOccurrence.toString());
+        reminderItem.setSnoozed(true);
 
         // TODO: Add action to history
     }
@@ -87,6 +88,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
         saveReminderToSharedPreferences();
 

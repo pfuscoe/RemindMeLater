@@ -208,26 +208,24 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                                 String title = entry.getKey();
                                 HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
-                                //String recurrenceString = (String) reminderItemMap.get("recurrence");
-                                //Period recurrence = Period.parse(recurrenceString);
-
                                 int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
                                 Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
                                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
 
                                 String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
-                                //LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
-                                //Log.d(TAG, ": nextOccurrence.toString: " + nextOccurrence.toString());
 
                                 String category = (String) reminderItemMap.get("category");
-                                //int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
                                 String categoryIconName = (String) reminderItemMap.get("categoryIconName");
                                 Log.d(TAG, ": categoryIconName: " + categoryIconName);
 
                                 String description = (String) reminderItemMap.get("description");
 
+                                boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
+
                                 ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
-                                        recurrenceInterval, nextOccurrence, category, categoryIconName, description);
+                                        recurrenceInterval, nextOccurrence, category,
+                                        categoryIconName, description, isSnoozed);
+
                                 reminderListFromDoc.add(reminderItem);
                             }
                         }
@@ -365,9 +363,10 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         //int categoryIcon = R.drawable.category_note;
         String categoryIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
         String description = "";
+        boolean isSnoozed = false;
 
         ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval,
-                nextOccurrence, category, categoryIconName, description);
+                nextOccurrence, category, categoryIconName, description, isSnoozed);
 
         //reminderItemList.add(reminderItem);
 

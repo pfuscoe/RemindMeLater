@@ -91,6 +91,8 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         Log.d(TAG, ": nextOccurrence: " + reminderItem.getNextOccurrence());
 
+        reminderItem.setSnoozed(false);
+
         // TODO: Add action to history
     }
 
@@ -104,6 +106,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
         saveReminderToSharedPreferences();
 

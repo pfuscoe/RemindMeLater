@@ -135,14 +135,15 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
         String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
         String category = (String) reminderItemMap.get("category");
-        //int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
         String categoryIconName = (String) reminderItemMap.get("categoryIconName");
         String description = (String) reminderItemMap.get("description");
+        boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 
         //Log.d(TAG, ": recurrenceInterval: " + recurrenceInterval);
 
         reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
-                recurrenceInterval, nextOccurrence, category, categoryIconName, description);
+                recurrenceInterval, nextOccurrence, category,
+                categoryIconName, description, isSnoozed);
     }
 
     public void sendNotification()

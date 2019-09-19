@@ -435,12 +435,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
                 String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
                 String category = (String) reminderItemMap.get("category");
-                //int categoryIcon = Math.toIntExact((long) reminderItemMap.get("categoryIcon"));
                 String categoryIconName = (String) reminderItemMap.get("categoryIconName");
                 String description = (String) reminderItemMap.get("description");
+                boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 
                 ReminderItem reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
-                        recurrenceInterval, nextOccurrence, category, categoryIconName, description);
+                        recurrenceInterval, nextOccurrence, category,
+                        categoryIconName, description, isSnoozed);
 
                 reminderItemList.add(reminderItem);
             }

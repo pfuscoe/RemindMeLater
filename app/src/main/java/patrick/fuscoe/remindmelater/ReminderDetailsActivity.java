@@ -65,9 +65,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
-    private static SharedPreferences reminderAlarmStorage;
-    private static SharedPreferences reminderIconIds;
-    private static SharedPreferences reminderBroadcastIds;
+    //private static SharedPreferences reminderAlarmStorage;
+    //private static SharedPreferences reminderIconIds;
+    //private static SharedPreferences reminderBroadcastIds;
 
     //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -81,9 +81,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private ReminderItem reminderItem;
     private UserProfile userProfile;
     private LocalDate dateShown;
-
-    private String recurrenceInterval;
-    private int recurrenceNum;
 
     private EditText viewTitle;
     private ImageView viewCategoryIcon;
@@ -122,7 +119,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
                     saveReminder();
                     return;
-
             }
         }
     };
@@ -134,7 +130,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         // parent.getItemAtPosition(pos)
         if (parent.getId() == R.id.view_reminder_details_recurrence_spinner)
         {
-            recurrenceInterval = (String) parent.getItemAtPosition(pos);
+            reminderItem.setRecurrenceInterval((String) parent.getItemAtPosition(pos));
             Log.d(TAG, ": Recurrence Interval changed.");
         }
         else if (parent.getId() == R.id.view_reminder_details_category_spinner)
@@ -242,10 +238,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void setCategorySpinnerSelection(ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter)
     {
-        // TODO: Refactor to use drawable file names
         List<ReminderCategory> reminderCategoryList = reminderCategorySpinnerAdapter.getReminderCategories();
 
-        //ReminderCategory reminderCategory = new ReminderCategory("Main", R.drawable.category_note);
         int mainCategoryPosition = 0;
         int categoryPosition = 0;
         int counter = 0;
@@ -272,6 +266,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void updateFields()
     {
+        // TODO: set isSnoozed checkbox
         viewTitle.setText(reminderItem.getTitle());
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
@@ -387,6 +382,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     // Get values from fields and update reminderItem object
     public void updateReminderItemObject()
     {
+        // TODO: Add isSnoozed toggle functionality to layout - grab and save here
         String title = viewTitle.getText().toString();
         String recurrenceNumString = viewRecurrenceNum.getText().toString();
         int recurrenceNum = Integer.parseInt(recurrenceNumString);
@@ -417,6 +413,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
         saveReminderToSharedPreferences();
 
@@ -503,7 +500,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         //reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
-        int broadcastId = reminderBroadcastIds.getInt(reminderItem.getTitle(), 0);
+        int broadcastId = MainActivity.reminderBroadcastIds.getInt(reminderItem.getTitle(), 0);
 
         Intent intent = new Intent(context, ReminderAlarmReceiver.class);
         intent.setAction(MainActivity.ACTION_ALARM_RECEIVER);

@@ -249,9 +249,11 @@ public class UserPreferencesActivity extends AppCompatActivity
                                     String category = (String) reminderItemMap.get("category");
                                     String categoryIconName = (String) reminderItemMap.get("categoryIconName");
                                     String description = (String) reminderItemMap.get("description");
+                                    boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 
                                     ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
-                                            recurrenceInterval, nextOccurrence, category, categoryIconName, description);
+                                            recurrenceInterval, nextOccurrence, category,
+                                            categoryIconName, description, isSnoozed);
 
                                     reminderItemList.add(reminderItem);
                                 }

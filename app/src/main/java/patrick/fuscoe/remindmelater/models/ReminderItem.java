@@ -25,7 +25,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
     private Period recurrence;
     private String recurrenceString;
     private int daysAway;
-    private boolean snoozed;
+    private boolean isSnoozed;
     private ArrayList<HistoryItem> historyItems;
 
 
@@ -34,7 +34,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
     }
 
     public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence,
-                        String category, String categoryIconName, String description)
+                        String category, String categoryIconName, String description, boolean isSnoozed)
     {
         this.title = title;
         this.recurrenceNum = recurrenceNum;
@@ -48,7 +48,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
         updateDaysAway(nextOccurrence);
 
         this.recurrenceString = recurrence.toString();
-        this.snoozed = false;
+        this.isSnoozed = isSnoozed;
         this.historyItems = new ArrayList<>();
 
         //Log.d(TAG, ": Reminder Item Constructed");
@@ -141,7 +141,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
     }
 
     public boolean isSnoozed() {
-        return snoozed;
+        return isSnoozed;
     }
 
     public ArrayList<HistoryItem> getHistoryItems() {
@@ -160,6 +160,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
 
     public void setRecurrenceInterval(String recurrenceInterval) {
         this.recurrenceInterval = recurrenceInterval;
+        updateRecurrencePeriod();
     }
 
     public void setNextOccurrence(String nextOccurrence) {
@@ -178,8 +179,8 @@ public class ReminderItem implements Comparable<ReminderItem> {
         this.description = description;
     }
 
-    public void setSnoozed(boolean snoozed) {
-        this.snoozed = snoozed;
+    public void setSnoozed(boolean isSnoozed) {
+        this.isSnoozed = isSnoozed;
     }
 
 }
