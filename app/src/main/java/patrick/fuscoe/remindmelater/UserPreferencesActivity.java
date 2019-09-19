@@ -56,8 +56,6 @@ public class UserPreferencesActivity extends AppCompatActivity
     private Button btnSave;
     private Button btnCancel;
 
-    private int reminderHour;
-    private int reminderMinute;
     private List<ReminderItem> reminderItemList;
 
 
@@ -110,6 +108,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         Log.d(TAG, "User Profile obtained from intent");
 
         viewTimeDisplay = findViewById(R.id.view_user_preferences_time_display);
+        setTimeDisplay();
+
         btnSetTime = findViewById(R.id.button_user_preferences_time);
         btnSetTime.setOnClickListener(btnClickListener);
         btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
@@ -123,8 +123,24 @@ public class UserPreferencesActivity extends AppCompatActivity
         getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
 
         reminderItemList = new ArrayList<>();
-        reminderHour = MainActivity.reminderTimeHour;
-        reminderMinute = MainActivity.reminderTimeMinute;
+    }
+
+    private void setTimeDisplay()
+    {
+        String timeToDisplay;
+
+        if (userProfile.getReminderHour() < 12)
+        {
+            timeToDisplay = userProfile.getReminderHour() + " : " +
+                    userProfile.getReminderMinute() + " AM";
+        }
+        else
+        {
+            timeToDisplay = userProfile.getReminderHour() + " : " +
+                    userProfile.getReminderMinute() + " PM";
+        }
+
+        viewTimeDisplay.setText(timeToDisplay);
     }
 
     private void openTimePicker()
@@ -138,8 +154,8 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         Log.d(TAG, "onTimeSet: hourOfDay = " + hourOfDay + ". minute = " + minute);
 
-        reminderHour = hourOfDay;
-        reminderMinute = minute;
+        userProfile.setReminderHour(hourOfDay);
+        userProfile.setReminderMinute(minute);
     }
 
     public void clearEmptyReminderCategories()
@@ -174,8 +190,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         userProfileDoc.put("displayName", userProfile.getDisplayName());
         userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
         userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
-        userProfileDoc.put("reminderHour", reminderHour);
-        userProfileDoc.put("reminderMinute", reminderMinute);
+        userProfileDoc.put("reminderHour", userProfile.getReminderHour());
+        userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -184,6 +200,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         Toast.makeText(getApplicationContext(), "User Settings for " +
                                 userProfile.getDisplayName() + " Saved", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -192,8 +209,6 @@ public class UserPreferencesActivity extends AppCompatActivity
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
-
-        Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
     }
 
     public void loadReminders()
