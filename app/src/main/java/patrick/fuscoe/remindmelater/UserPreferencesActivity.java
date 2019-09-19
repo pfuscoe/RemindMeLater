@@ -9,18 +9,27 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
@@ -46,6 +55,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private int reminderHour;
     private int reminderMinute;
+    private List<ReminderItem> reminderItemList;
 
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
@@ -108,6 +118,8 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
+
+        reminderItemList = new ArrayList<>();
     }
 
     private void openTimePicker()
@@ -127,13 +139,73 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     public void clearEmptyReminderCategories()
     {
-        // TODO: Clear Empty Reminder Categories
-        //loadRemindersFromCloud();
+        loadReminders();
+        Map<String, String> reminderCategories = new HashMap<>();
+        reminderCategories.putAll(userProfile.getReminderCategories());
+
+        for (Map.Entry<String, String> reminderCategory : reminderCategories.entrySet())
+        {
+            int numReminders = 0;
+
+            for (ReminderItem reminderItem : reminderItemList)
+            {
+                if (reminderCategory.getKey().equals(reminderItem.getCategory()))
+                {
+                    numReminders++;
+                }
+            }
+
+            if (numReminders == 0)
+            {
+                userProfile.removeReminderCategory(reminderCategory.getKey());
+            }
+        }
     }
 
     public void saveUserPrefs()
     {
         // TODO: Save User Prefs
     }
+
+    public void loadReminders()
+    {
+        MainActivity.remindersDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+
+                            Map<String, Object> docMap = documentSnapshot.getData();
+
+                            for (Map.Entry<String, Object> entry : docMap.entrySet())
+                            {
+                                if (!entry.getKey().contentEquals("userId"))
+                                {
+                                    String title = entry.getKey();
+                                    HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
+
+                                    int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
+                                    String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
+                                    String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
+                                    String category = (String) reminderItemMap.get("category");
+                                    String categoryIconName = (String) reminderItemMap.get("categoryIconName");
+                                    String description = (String) reminderItemMap.get("description");
+
+                                    ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
+                                            recurrenceInterval, nextOccurrence, category, categoryIconName, description);
+
+                                    reminderItemList.add(reminderItem);
+                                }
+
+                            }
+
+                        }
+                    }
+                });
+    }
+
+
 
 }
