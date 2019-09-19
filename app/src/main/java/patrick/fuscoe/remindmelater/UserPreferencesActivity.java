@@ -15,6 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +77,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
                 case R.id.button_user_preferences_save:
                     saveUserPrefs();
-                    Toast.makeText(getApplicationContext(), userProfile.getDisplayName() + ": User Settings Updated", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), userProfile.getDisplayName() + ": User Settings Updated", Toast.LENGTH_LONG).show();
                     onBackPressed();
                     return;
 
@@ -120,6 +123,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
 
         reminderItemList = new ArrayList<>();
+        reminderHour = MainActivity.reminderTimeHour;
+        reminderMinute = MainActivity.reminderTimeMinute;
     }
 
     private void openTimePicker()
@@ -164,7 +169,31 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     public void saveUserPrefs()
     {
-        // TODO: Save User Prefs
+        Map<String, Object> userProfileDoc = new HashMap<>();
+
+        userProfileDoc.put("displayName", userProfile.getDisplayName());
+        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
+        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
+        userProfileDoc.put("reminderHour", reminderHour);
+        userProfileDoc.put("reminderMinute", reminderMinute);
+
+        userDocRef.set(userProfileDoc)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Toast.makeText(getApplicationContext(), "User Settings for " +
+                                userProfile.getDisplayName() + " Saved", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
     }
 
     public void loadReminders()
@@ -205,7 +234,5 @@ public class UserPreferencesActivity extends AppCompatActivity
                     }
                 });
     }
-
-
 
 }
