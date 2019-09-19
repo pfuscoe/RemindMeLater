@@ -165,6 +165,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
 
     public void setNextOccurrence(String nextOccurrence) {
         this.nextOccurrence = nextOccurrence;
+        updateDaysAway(nextOccurrence);
     }
 
     public void setCategory(String category) {

@@ -29,7 +29,7 @@
         <EditText
             android:id="@+id/view_reminder_details_title"
             android:layout_width="wrap_content"
-            android:maxWidth="200dp"
+            android:maxWidth="256dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
@@ -141,15 +141,25 @@
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_date_display"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_label" />
 
+        <CheckBox
+            android:id="@+id/view_reminder_details_checkbox_snoozed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label"
+            android:text="@string/snoozed" />
+
         <TextView
             android:id="@+id/view_reminder_details_description_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="@string/reminder_details_description_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label" />
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_checkbox_snoozed" />
 
         <EditText
             android:id="@+id/view_reminder_details_description"

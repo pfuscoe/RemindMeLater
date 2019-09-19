@@ -66,9 +66,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     private void updateReminderItem()
     {
-        //Period recurrence = reminderItem.getRecurrence();
         // TODO: Setup snooze length customization here
-        //int daysUntilNext = DEFAULT_SNOOZE_DAYS;
 
         LocalDate nextOccurrence = LocalDate.now();
         nextOccurrence.plusDays(DEFAULT_SNOOZE_DAYS);

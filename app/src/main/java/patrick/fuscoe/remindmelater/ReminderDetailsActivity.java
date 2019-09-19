@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -90,6 +91,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private Spinner viewRecurrenceSpinner;
     private TextView viewDateDisplay;
     private Button btnSetDate;
+    private CheckBox viewSnoozedCheckbox;
     private EditText viewDescription;
     private Button btnCancel;
     private Button btnSave;
@@ -192,6 +194,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewCategoryIcon = findViewById(R.id.view_reminder_details_category_icon);
         viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
+        viewSnoozedCheckbox = findViewById(R.id.view_reminder_details_checkbox_snoozed);
         viewDescription = findViewById(R.id.view_reminder_details_description);
 
         /*
@@ -266,11 +269,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void updateFields()
     {
-        // TODO: set isSnoozed checkbox
         viewTitle.setText(reminderItem.getTitle());
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
+        viewSnoozedCheckbox.setChecked(reminderItem.isSnoozed());
         viewDescription.setText(reminderItem.getDescription());
 
         if (reminderItem.getCategoryIconName().equals("Main"))
@@ -370,6 +373,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
         setNextOccurrenceDate(localDate);
+        viewSnoozedCheckbox.setChecked(false);
+        // TODO: toggle snoozed indicator icon too
     }
 
     public void setNextOccurrenceDate(LocalDate localDate)
@@ -382,20 +387,20 @@ public class ReminderDetailsActivity extends AppCompatActivity
     // Get values from fields and update reminderItem object
     public void updateReminderItemObject()
     {
-        // TODO: Add isSnoozed toggle functionality to layout - grab and save here
         String title = viewTitle.getText().toString();
         String recurrenceNumString = viewRecurrenceNum.getText().toString();
         int recurrenceNum = Integer.parseInt(recurrenceNumString);
         String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
         String nextOccurrence = viewDateDisplay.getText().toString();
-        //LocalDate nextOccurrence = LocalDate.parse(nextOccurrenceString);
         String description = viewDescription.getText().toString();
+        boolean isSnoozed = viewSnoozedCheckbox.isChecked();
 
         reminderItem.setTitle(title);
         reminderItem.setRecurrenceNum(recurrenceNum);
         reminderItem.setRecurrenceInterval(recurrenceInterval);
         reminderItem.setNextOccurrence(nextOccurrence);
         reminderItem.setDescription(description);
+        reminderItem.setSnoozed(isSnoozed);
 
         reminderItem.updateRecurrencePeriod();
         reminderItem.updateDaysAway(nextOccurrence);
@@ -569,7 +574,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 });
     }
 
-    // TODO: Refactor with icon names
     public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
     {
         Map<String, Object> docMap = documentSnapshot.getData();
