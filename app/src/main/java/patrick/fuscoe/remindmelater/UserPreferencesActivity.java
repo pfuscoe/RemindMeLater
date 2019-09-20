@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private UserProfile userProfile;
 
+    private EditText viewDisplayName;
     private TextView viewTimeDisplay;
     private Button btnSetTime;
     private Button btnClearEmptyReminderCategories;
@@ -107,6 +109,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
         Log.d(TAG, "User Profile obtained from intent");
 
+        viewDisplayName = findViewById(R.id.view_user_preferences_display_name);
+        viewDisplayName.setText(userProfile.getDisplayName());
         viewTimeDisplay = findViewById(R.id.view_user_preferences_time_display);
         setTimeDisplay();
 
@@ -198,9 +202,11 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     public void saveUserPrefs()
     {
+        String displayName = viewDisplayName.getText().toString();
+
         Map<String, Object> userProfileDoc = new HashMap<>();
 
-        userProfileDoc.put("displayName", userProfile.getDisplayName());
+        userProfileDoc.put("displayName", displayName);
         userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
         userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
         userProfileDoc.put("reminderHour", userProfile.getReminderHour());
