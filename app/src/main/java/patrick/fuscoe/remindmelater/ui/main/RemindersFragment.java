@@ -191,13 +191,13 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                     // Update UI views with data from snapshot
                     List<ReminderItem> reminderListFromDoc = new ArrayList<>();
 
-                    Log.d(TAG, ": queryDocumentSnapshots size: " + queryDocumentSnapshots.size());
+                    //Log.d(TAG, ": queryDocumentSnapshots size: " + queryDocumentSnapshots.size());
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
                     {
                         MainActivity.remindersDocRef = doc.getReference();
                         remindersDocId = doc.getId();
-                        Log.d(TAG, ": remindersDocId: " + remindersDocId);
+                        //Log.d(TAG, ": remindersDocId: " + remindersDocId);
 
                         Map<String, Object> docMap = doc.getData();
 
@@ -209,14 +209,14 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                                 HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
                                 int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
-                                Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
+                                //Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
                                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
 
                                 String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
 
                                 String category = (String) reminderItemMap.get("category");
                                 String categoryIconName = (String) reminderItemMap.get("categoryIconName");
-                                Log.d(TAG, ": categoryIconName: " + categoryIconName);
+                                //Log.d(TAG, ": categoryIconName: " + categoryIconName);
 
                                 String description = (String) reminderItemMap.get("description");
 

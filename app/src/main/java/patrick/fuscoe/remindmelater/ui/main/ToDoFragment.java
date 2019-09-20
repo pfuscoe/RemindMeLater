@@ -246,7 +246,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     toDoGroupList = toDoGroupDocs;
 
-                    Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
+                    //Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     updateToDoGroupDisplayOnReorder();
                     UpdateToDoGroupsDisplay();
                 }
@@ -268,14 +268,16 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
 
-                    Log.d(TAG, "subscriptionsList: " + subscriptionsList);
+                    //Log.d(TAG, "subscriptionsList: " + subscriptionsList);
 
                     String[] subscriptions = new String[subscriptionsList.size()];
                     subscriptions = subscriptionsList.toArray(subscriptions);
 
+                    /*
                     for (int i = 0; i < subscriptions.length; i++) {
                         Log.d("subscriptions item: ", subscriptions[i]);
                     }
+                    */
 
                     Map<String, String> reminderCategories =
                             (Map<String, String>) documentSnapshot.get("reminderCategories");
