@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -63,9 +64,12 @@ public class ReminderItem implements Comparable<ReminderItem> {
     {
         LocalDate now = LocalDate.now();
         LocalDate next = LocalDate.parse(nextOccurrence);
-        Period diff = Period.between(now, next);
 
-        daysAway = diff.getDays();
+        daysAway = (int) now.until(next, ChronoUnit.DAYS);
+
+        //Period diff = Period.between(now, next);
+
+        //daysAway = diff.getDays();
     }
 
     public void updateRecurrencePeriod()

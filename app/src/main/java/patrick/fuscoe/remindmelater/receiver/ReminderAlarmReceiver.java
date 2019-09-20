@@ -74,6 +74,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
 
+        Log.d(TAG, "MainActivity.REMINDER_TITLE: " + MainActivity.REMINDER_TITLE);
+
         reminderTitle = intent.getStringExtra(MainActivity.REMINDER_TITLE);
         //int iconId = intent.getIntExtra(MainActivity.REMINDER_ICON_ID, R.drawable.category_note);
 
@@ -156,6 +158,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         SharedPreferences.Editor reminderNotificationIdsEditor = MainActivity.reminderNotificationIds.edit();
         reminderNotificationIdsEditor.putInt(reminderTitle, notificationId);
         reminderNotificationIdsEditor.apply();
+
+        Log.d(TAG, reminderTitle + ": notificationId: " + notificationId);
         //int notificationId = 101;
         //int iconId = reminderItem.getCategoryIcon();
 
