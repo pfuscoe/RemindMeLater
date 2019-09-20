@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -150,6 +151,11 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     {
         //int notificationId = (int) System.currentTimeMillis();
         int notificationId = generateUniqueInt();
+        MainActivity.reminderNotificationIds = context.getSharedPreferences(
+                context.getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor reminderNotificationIdsEditor = MainActivity.reminderNotificationIds.edit();
+        reminderNotificationIdsEditor.putInt(reminderTitle, notificationId);
+        reminderNotificationIdsEditor.apply();
         //int notificationId = 101;
         //int iconId = reminderItem.getCategoryIcon();
 

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -431,6 +432,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
                         saveReminderToSharedPreferences();
                         cancelReminderAlarm();
+                        cancelNotification();
                         setReminderAlarm();
                     }
                 })
@@ -483,6 +485,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Delete Reminder Success: Reminders DocumentSnapshot successfully updated!");
                         cancelReminderAlarm();
+                        cancelNotification();
                         removeReminderLocalStorage();
                         Toast.makeText(getApplicationContext(), "Reminder Item Deleted: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
@@ -517,6 +520,20 @@ public class ReminderDetailsActivity extends AppCompatActivity
         alarmManager.cancel(alarmIntent);
 
         Log.d(TAG, " Alarm cancelled: " + reminderItem.getTitle());
+    }
+
+    public void cancelNotification()
+    {
+        Context context = getApplicationContext();
+
+        MainActivity.reminderNotificationIds = context.getSharedPreferences(
+                context.getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
+
+        int notificationId = MainActivity.reminderNotificationIds.getInt(
+                reminderItem.getTitle(), MainActivity.DEFAULT_NOTIFICATION_ID);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
     }
 
     public void removeReminderLocalStorage()

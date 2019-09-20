@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String DEFAULT_REMINDER_CATEGORY_ICON_NAME = "category_note";
     public static final String DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME = "category_format_list_checkbox";
     public static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
+    public static final int DEFAULT_NOTIFICATION_ID = 100;
+
 
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     //public static SharedPreferences reminderIconIds;
     public static SharedPreferences reminderIconNames;
     public static SharedPreferences reminderBroadcastIds;
+    public static SharedPreferences reminderNotificationIds;
 
     private AlarmManager alarmManager;
 
@@ -139,7 +142,10 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbarMain);
 
-
+        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
+        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        reminderNotificationIds = getSharedPreferences(getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
 
         /*
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -220,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        reminderNotificationIds = getSharedPreferences(getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
 
         //SharedPreferences.Editor userPreferencesEditor = userPreferences.edit();
         //userPreferencesEditor.clear().commit();
@@ -235,6 +242,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
         reminderBroadcastIdsEditor.clear().commit();
+
+        SharedPreferences.Editor reminderNotificationIdsEditor = reminderNotificationIds.edit();
+        reminderNotificationIdsEditor.clear().commit();
 
         Log.d(TAG, "All SharedPreferences cleared");
     }
