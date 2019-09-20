@@ -568,12 +568,19 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         }
     }
 
+    /*
     public static int generateUniqueInt()
     {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
         long yesterday = calendar.getTimeInMillis();
         return (int) (System.currentTimeMillis() - yesterday);
+    }
+    */
+
+    public static int generateUniqueInt()
+    {
+        return (int) (Math.random() * 1000000);
     }
 
 }

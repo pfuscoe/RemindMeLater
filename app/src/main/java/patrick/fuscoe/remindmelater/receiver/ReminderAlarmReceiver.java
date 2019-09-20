@@ -198,7 +198,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         doneIntent.putExtra(REMINDER_ITEM, reminderItemString);
         doneIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         PendingIntent donePendingIntent =
-                PendingIntent.getBroadcast(context, 0, doneIntent, 0);
+                PendingIntent.getBroadcast(context, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Snooze Intent
         Intent snoozeIntent = new Intent(context, NotificationSnoozeReceiver.class);
@@ -207,7 +207,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         snoozeIntent.putExtra(REMINDER_ITEM, reminderItemString);
         snoozeIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+                PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // TODO: Notification Dismiss Intent
         Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
@@ -228,11 +228,18 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         notificationManager.notify(notificationId, builder.build());
     }
 
+    /*
     private int generateUniqueInt()
     {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
         long yesterday = calendar.getTimeInMillis();
         return (int) (System.currentTimeMillis() - yesterday);
+    }
+    */
+
+    private int generateUniqueInt()
+    {
+        return (int) (Math.random() * 1000000);
     }
 }
