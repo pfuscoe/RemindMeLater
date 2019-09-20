@@ -67,9 +67,9 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
     private void updateReminderItem()
     {
         // TODO: Setup snooze length customization here
+        LocalDate now = LocalDate.now();
+        LocalDate nextOccurrence = now.plusDays(DEFAULT_SNOOZE_DAYS);
 
-        LocalDate nextOccurrence = LocalDate.now();
-        nextOccurrence.plusDays(DEFAULT_SNOOZE_DAYS);
         reminderItem.setNextOccurrence(nextOccurrence.toString());
         reminderItem.setSnoozed(true);
 

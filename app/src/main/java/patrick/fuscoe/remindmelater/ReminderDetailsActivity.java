@@ -122,7 +122,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     Log.d(TAG, ": Reminder " + reminderItem.getTitle() + " saved");
                     Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
                     saveReminder();
-                    onBackPressed();
+                    // Note: onBackPressed on successful save
                     return;
             }
         }
@@ -434,6 +434,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         cancelReminderAlarm();
                         cancelNotification();
                         setReminderAlarm();
+                        onBackPressed();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -556,6 +557,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void setReminderAlarm()
     {
         String title = reminderItem.getTitle();
+        Log.d(TAG, "title: " + title);
         String nextOccurrence = reminderItem.getNextOccurrence();
         String iconName = reminderItem.getCategoryIconName();
         int broadcastId = MainActivity.reminderBroadcastIds.getInt(
@@ -573,7 +575,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         intent.putExtra(MainActivity.REMINDER_TITLE, title);
         intent.putExtra(MainActivity.REMINDER_ICON_NAME, iconName);
 
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);

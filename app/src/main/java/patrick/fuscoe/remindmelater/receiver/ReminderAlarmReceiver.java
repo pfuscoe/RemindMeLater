@@ -131,6 +131,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
     public void buildReminderItem(QueryDocumentSnapshot document)
     {
+        Log.d(TAG, "reminderTitle: " + reminderTitle);
+
         Map<String, Object> docMap = document.getData();
         HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) docMap.get(reminderTitle);
 
@@ -139,6 +141,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
         String category = (String) reminderItemMap.get("category");
         String categoryIconName = (String) reminderItemMap.get("categoryIconName");
+        Log.d(TAG, "category: " + category + ". categoryiconName: " + categoryIconName);
         String description = (String) reminderItemMap.get("description");
         boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 

@@ -55,9 +55,11 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         Type dataTypeReminderItem = new TypeToken<ReminderItem>(){}.getType();
         String reminderItemString = intent.getStringExtra(ReminderAlarmReceiver.REMINDER_ITEM);
 
+        Log.d(TAG, "reminderItemString: " + reminderItemString);
+
         reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
 
-        Log.d(TAG, ": reminderItem object toString: " + reminderItem.toString());
+        //Log.d(TAG, ": reminderItem object toString: " + reminderItem.toString());
 
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
@@ -116,6 +118,9 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
+
+        Log.d(TAG, "category: " + reminderItem.getCategory() +
+                ". categoryiconName: " + reminderItem.getCategoryIconName());
 
         saveReminderToSharedPreferences();
 
