@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 30;
     public static final String DEFAULT_REMINDER_CATEGORY_ICON_NAME = "category_note";
     public static final String DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME = "category_format_list_checkbox";
+    public static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
 
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";

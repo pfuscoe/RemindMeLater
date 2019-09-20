@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
@@ -120,6 +121,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     Log.d(TAG, ": Reminder " + reminderItem.getTitle() + " saved");
                     Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
                     saveReminder();
+                    onBackPressed();
                     return;
             }
         }
@@ -420,14 +422,16 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("description", reminderItem.getDescription());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
-        saveReminderToSharedPreferences();
-
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
                         Toast.makeText(getApplicationContext(), "Reminder Item Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        saveReminderToSharedPreferences();
+                        cancelReminderAlarm();
+                        setReminderAlarm();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -437,8 +441,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         // TODO: handle local storage of reminder when cloud sync fails
                     }
                 });
-
-        onBackPressed();
     }
 
     public void saveReminderToSharedPreferences()
@@ -513,6 +515,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent, 0);
 
         alarmManager.cancel(alarmIntent);
+
+        Log.d(TAG, " Alarm cancelled: " + reminderItem.getTitle());
     }
 
     public void removeReminderLocalStorage()
@@ -530,6 +534,34 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderBroadcastIdsEditor.remove(reminderItem.getTitle()).apply();
 
         Log.d(TAG, "Reminder removed from local storage: " + reminderItem.getTitle());
+    }
+
+    public void setReminderAlarm()
+    {
+        String title = reminderItem.getTitle();
+        String nextOccurrence = reminderItem.getNextOccurrence();
+        String iconName = reminderItem.getCategoryIconName();
+        int broadcastId = MainActivity.reminderBroadcastIds.getInt(
+                title, MainActivity.DEFAULT_REMINDER_BROADCAST_ID);
+
+        ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
+                iconName, broadcastId, MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
+
+        long alarmTime = reminderAlarmItem.getAlarmCalendarObj().getTimeInMillis();
+
+        // Set the alarm
+        Context context = getApplicationContext();
+        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+        intent.setAction(MainActivity.ACTION_ALARM_RECEIVER);
+        intent.putExtra(MainActivity.REMINDER_TITLE, title);
+        intent.putExtra(MainActivity.REMINDER_ICON_NAME, iconName);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
+
+        Log.d(TAG, "Alarm set for: " + reminderAlarmItem.getAlarmCalendarObj().toString());
     }
 
     public void saveUserProfile()
