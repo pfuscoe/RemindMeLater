@@ -216,6 +216,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setLargeIcon(largeIconBitmap)
                 .setSmallIcon(iconId)
                 .setContentTitle(reminderTitle)
+                .setContentText(reminderItem.getDescription())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(reminderDetailsPendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
