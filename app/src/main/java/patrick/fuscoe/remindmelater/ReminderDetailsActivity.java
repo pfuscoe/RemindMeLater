@@ -94,6 +94,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private TextView viewDateDisplay;
     private Button btnSetDate;
     private CheckBox viewSnoozedCheckbox;
+    private ImageView viewSnoozedIcon;
     private EditText viewDescription;
     private Button btnCancel;
     private Button btnSave;
@@ -198,6 +199,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewSnoozedCheckbox = findViewById(R.id.view_reminder_details_checkbox_snoozed);
+        viewSnoozedIcon = findViewById(R.id.view_reminder_details_snoozed_icon);
+        viewSnoozedIcon.setColorFilter(getColor(R.color.redDark));
         viewDescription = findViewById(R.id.view_reminder_details_description);
 
         /*
@@ -278,6 +281,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
         viewSnoozedCheckbox.setChecked(reminderItem.isSnoozed());
         viewDescription.setText(reminderItem.getDescription());
+
+        if (reminderItem.isSnoozed())
+        {
+            viewSnoozedIcon.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewSnoozedIcon.setVisibility(View.INVISIBLE);
+        }
 
         if (reminderItem.getCategoryIconName().equals("Main"))
         {
@@ -377,7 +389,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
         setNextOccurrenceDate(localDate);
         viewSnoozedCheckbox.setChecked(false);
-        // TODO: toggle snoozed indicator icon too
+        viewSnoozedIcon.setVisibility(View.INVISIBLE);
     }
 
     public void setNextOccurrenceDate(LocalDate localDate)

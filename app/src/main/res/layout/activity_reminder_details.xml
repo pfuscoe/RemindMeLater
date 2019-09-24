@@ -151,6 +151,16 @@
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label"
             android:text="@string/snoozed" />
 
+        <ImageView
+            android:id="@+id/view_reminder_details_snoozed_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_checkbox_snoozed"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label"
+            app:srcCompat="@drawable/snooze" />
+
         <TextView
             android:id="@+id/view_reminder_details_description_label"
             android:layout_width="wrap_content"
