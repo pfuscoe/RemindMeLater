@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#58A3FF</color>
-    <color name="colorPrimaryDark">#2D69B3</color>
-    <color name="colorAccent">#FFc459</color>
+    <color name="colorPrimary">#3D9AE2</color>
+    <color name="colorPrimaryDark">#1A6096</color>
+    <color name="colorPrimaryLight">#BDDBFF</color>
+    <color name="colorAccent">#E3A13D</color>
 
     <color name="black">#000000</color>
     <color name="blue">#0000FF</color>
@@ -12,6 +13,4 @@
     <color name="orangeDark">#FF8C00</color>
     <color name="red">#FF0000</color>
     <color name="redDark">#8B0000</color>
-
-    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
