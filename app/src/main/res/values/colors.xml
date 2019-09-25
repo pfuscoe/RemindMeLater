@@ -10,5 +10,8 @@
     <color name="greyLight">#D3D3D3</color>
     <color name="greyDark">#A9A9A9</color>
     <color name="orangeDark">#FF8C00</color>
+    <color name="red">#FF0000</color>
     <color name="redDark">#8B0000</color>
+
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
