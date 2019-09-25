@@ -216,7 +216,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setLargeIcon(largeIconBitmap)
                 .setSmallIcon(iconId)
                 .setContentTitle(reminderTitle)
-                .setContentText(reminderItem.getDescription())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(reminderDetailsPendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
@@ -224,6 +223,11 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .addAction(R.drawable.action_check, context.getString(R.string.done), donePendingIntent)
                 .addAction(R.drawable.action_alarm_snooze, context.getString(R.string.snooze), snoozePendingIntent);
+
+        if (!reminderItem.getDescription().equals(""))
+        {
+            builder.setContentText(reminderItem.getDescription());
+        }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());
