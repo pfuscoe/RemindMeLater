@@ -1,5 +1,7 @@
 package patrick.fuscoe.remindmelater.receiver;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +25,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
 
+import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 
 public class NotificationSnoozeReceiver extends BroadcastReceiver {
@@ -40,6 +44,10 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
     private Context context;
     private int notificationId;
 
+    private SharedPreferences reminderAlarmStorage;
+    private SharedPreferences reminderIconNames;
+    private SharedPreferences reminderBroadcastIds;
+
     private ReminderItem reminderItem;
     private String remindersDocId;
 
@@ -48,6 +56,8 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
         this.context = context;
         this.notificationId = intent.getIntExtra(ReminderAlarmReceiver.EXTRA_NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID);
+
+        initializeSharedPreferences();
 
         Gson gson = new Gson();
         Type dataTypeReminderItem = new TypeToken<ReminderItem>(){}.getType();
@@ -62,6 +72,16 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
+    }
+
+    private void initializeSharedPreferences()
+    {
+        reminderAlarmStorage = context.getSharedPreferences(
+                context.getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        reminderIconNames = context.getSharedPreferences(
+                context.getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
+        reminderBroadcastIds = context.getSharedPreferences(
+                context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
     }
 
     private void updateReminderItem()
@@ -111,28 +131,19 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     private void saveReminderToSharedPreferences()
     {
-        SharedPreferences reminderAlarmStorage = context.getSharedPreferences(
-                context.getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
 
+        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
         reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
         reminderAlarmEditor.apply();
 
-        //SharedPreferences reminderIconIds = context.getSharedPreferences(
-        //context.getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         //SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
-
         //reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
         //reminderIconIdEditor.apply();
 
-        SharedPreferences reminderIconNames = context.getSharedPreferences(
-                context.getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
         reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
         reminderIconNamesEditor.apply();
 
-        SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
-                context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
 
         int broadcastId = (int) System.currentTimeMillis();
@@ -145,6 +156,29 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     private void setReminderAlarm()
     {
+        String title = reminderItem.getTitle();
+        Log.d(TAG, "title: " + title);
+        String nextOccurrence = reminderItem.getNextOccurrence();
+        String iconName = reminderItem.getCategoryIconName();
+        int broadcastId = reminderBroadcastIds.getInt(title, MainActivity.DEFAULT_REMINDER_BROADCAST_ID);
 
+        ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
+                iconName, broadcastId, MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
+
+        long alarmTime = reminderAlarmItem.getAlarmCalendarObj().getTimeInMillis();
+
+        // Set the alarm
+        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+        intent.setAction(MainActivity.ACTION_ALARM_RECEIVER);
+        intent.putExtra(MainActivity.REMINDER_TITLE, title);
+        intent.putExtra(MainActivity.REMINDER_ICON_NAME, iconName);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
+
+        Log.d(TAG, "Alarm set for: " + reminderAlarmItem.getAlarmCalendarObj().toString());
     }
 }
