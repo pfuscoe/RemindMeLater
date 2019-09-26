@@ -160,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         */
     }
 
+    // TODO: override onNewIntent() and set launch mode to deal with back pressing / duplicate alarms
+
     private void setupTabs()
     {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -286,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                         {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             buildUserProfileObj(documentSnapshot);
+                            Log.d(TAG, "User Profile loaded from cloud");
                             setupTabs();
                         }
                     }

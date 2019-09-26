@@ -106,6 +106,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isRecurring", reminderItem.isRecurring());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)

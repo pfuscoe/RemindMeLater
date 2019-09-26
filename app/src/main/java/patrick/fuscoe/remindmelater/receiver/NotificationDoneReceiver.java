@@ -146,6 +146,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isRecurring", reminderItem.isRecurring());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
         Log.d(TAG, "category: " + reminderItem.getCategory() +

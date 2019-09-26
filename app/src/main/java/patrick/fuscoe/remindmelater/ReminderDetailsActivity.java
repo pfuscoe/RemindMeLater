@@ -537,6 +537,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         cancelReminderAlarm();
                         cancelNotification();
                         removeReminderLocalStorage();
+                        onBackPressed();
                         Toast.makeText(getApplicationContext(), "Reminder Item Deleted: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -547,8 +548,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         // TODO: handle local storage of reminder when cloud sync fails
                     }
                 });
-
-        onBackPressed();
     }
 
     public void cancelReminderAlarm()
