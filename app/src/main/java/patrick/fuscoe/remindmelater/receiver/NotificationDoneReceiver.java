@@ -64,8 +64,16 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
-        updateReminderItem();
-        saveReminderItem();
+        if (reminderItem.isRecurring())
+        {
+            updateReminderItem();
+            saveReminderItem();
+        }
+        else
+        {
+            deleteReminderItem();
+            cancelReminderAlarm();
+        }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
@@ -122,20 +130,22 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         Log.d(TAG, "category: " + reminderItem.getCategory() +
                 ". categoryiconName: " + reminderItem.getCategoryIconName());
 
-        saveReminderToSharedPreferences();
-
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
                         Toast.makeText(context, "Reminder Item Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        saveReminderToSharedPreferences();
+                        setReminderAlarm();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
+                        Toast.makeText(context, "Action failed due to network error: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
                         // TODO: handle local storage of reminder when cloud sync fails
                     }
                 });
@@ -173,6 +183,21 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderBroadcastIdEditor.apply();
 
         // TODO: using apply() for async saving. Check if commit() needed
+    }
+
+    private void deleteReminderItem()
+    {
+
+    }
+
+    private void cancelReminderAlarm()
+    {
+
+    }
+
+    private void setReminderAlarm()
+    {
+
     }
 
 }

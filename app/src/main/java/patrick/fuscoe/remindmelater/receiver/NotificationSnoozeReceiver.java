@@ -88,20 +88,22 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         reminderItemMap.put("description", reminderItem.getDescription());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
-        saveReminderToSharedPreferences();
-
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
                         Toast.makeText(context, "Reminder Item Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        saveReminderToSharedPreferences();
+                        setReminderAlarm();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
+                        Toast.makeText(context, "Action failed due to network error: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
                         // TODO: handle local storage of reminder when cloud sync fails
                     }
                 });
@@ -139,5 +141,10 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         reminderBroadcastIdEditor.apply();
 
         // TODO: using apply() for async saving. Check if commit() needed
+    }
+
+    private void setReminderAlarm()
+    {
+
     }
 }
