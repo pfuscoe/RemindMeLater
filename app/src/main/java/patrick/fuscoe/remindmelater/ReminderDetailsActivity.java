@@ -318,17 +318,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
+        viewRecurringCheckbox.setChecked(reminderItem.isRecurring());
         viewSnoozedCheckbox.setChecked(reminderItem.isSnoozed());
         viewDescription.setText(reminderItem.getDescription());
 
-        if (reminderItem.isSnoozed())
-        {
-            viewSnoozedIcon.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            viewSnoozedIcon.setVisibility(View.INVISIBLE);
-        }
+        toggleRecurring();
+        toggleSnoozed();
 
         if (reminderItem.getCategoryIconName().equals("Main"))
         {
@@ -442,6 +437,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void updateReminderItemObject()
     {
         String title = viewTitle.getText().toString();
+        boolean isRecurring = viewRecurringCheckbox.isChecked();
         String recurrenceNumString = viewRecurrenceNum.getText().toString();
         int recurrenceNum = Integer.parseInt(recurrenceNumString);
         String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
@@ -450,6 +446,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         boolean isSnoozed = viewSnoozedCheckbox.isChecked();
 
         reminderItem.setTitle(title);
+        reminderItem.setRecurring(isRecurring);
         reminderItem.setRecurrenceNum(recurrenceNum);
         reminderItem.setRecurrenceInterval(recurrenceInterval);
         reminderItem.setNextOccurrence(nextOccurrence);
@@ -472,6 +469,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("category", reminderItem.getCategory());
         reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
         reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isRecurring", reminderItem.isRecurring());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
 
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)

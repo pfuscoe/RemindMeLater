@@ -442,6 +442,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
                 String reminderTitle = entry.getKey();
+                boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
                 int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
                 String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
@@ -450,8 +451,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 String description = (String) reminderItemMap.get("description");
                 boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 
-                ReminderItem reminderItem = new ReminderItem(reminderTitle, recurrenceNum,
-                        recurrenceInterval, nextOccurrence, category,
+                ReminderItem reminderItem = new ReminderItem(reminderTitle, isRecurring,
+                        recurrenceNum, recurrenceInterval, nextOccurrence, category,
                         categoryIconName, description, isSnoozed);
 
                 reminderItemList.add(reminderItem);

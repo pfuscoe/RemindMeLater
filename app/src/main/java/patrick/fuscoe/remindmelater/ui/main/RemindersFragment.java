@@ -208,6 +208,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                                 String title = entry.getKey();
                                 HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
+                                boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
                                 int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
                                 //Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
                                 String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
@@ -222,8 +223,8 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                                 boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 
-                                ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
-                                        recurrenceInterval, nextOccurrence, category,
+                                ReminderItem reminderItem = new ReminderItem(title, isRecurring,
+                                        recurrenceNum, recurrenceInterval, nextOccurrence, category,
                                         categoryIconName, description, isSnoozed);
 
                                 reminderListFromDoc.add(reminderItem);
@@ -366,9 +367,10 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         String categoryIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
         String description = "";
         boolean isSnoozed = false;
+        boolean isRecurring = true;
 
-        ReminderItem reminderItem = new ReminderItem(title, recurrenceNum, recurrenceInterval,
-                nextOccurrence, category, categoryIconName, description, isSnoozed);
+        ReminderItem reminderItem = new ReminderItem(title, isRecurring, recurrenceNum,
+                recurrenceInterval, nextOccurrence, category, categoryIconName, description, isSnoozed);
 
         //reminderItemList.add(reminderItem);
 

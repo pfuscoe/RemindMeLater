@@ -26,6 +26,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
     private Period recurrence;
     private String recurrenceString;
     private int daysAway;
+    private boolean isRecurring;
     private boolean isSnoozed;
     private ArrayList<HistoryItem> historyItems;
 
@@ -34,10 +35,11 @@ public class ReminderItem implements Comparable<ReminderItem> {
 
     }
 
-    public ReminderItem(String title, int recurrenceNum, String recurrenceInterval, String nextOccurrence,
+    public ReminderItem(String title, boolean isRecurring, int recurrenceNum, String recurrenceInterval, String nextOccurrence,
                         String category, String categoryIconName, String description, boolean isSnoozed)
     {
         this.title = title;
+        this.isRecurring = isRecurring;
         this.recurrenceNum = recurrenceNum;
         this.recurrenceInterval = recurrenceInterval;
         this.nextOccurrence = nextOccurrence;
@@ -108,6 +110,10 @@ public class ReminderItem implements Comparable<ReminderItem> {
         return title;
     }
 
+    public boolean isRecurring() {
+        return isRecurring;
+    }
+
     public int getRecurrenceNum() {
         return recurrenceNum;
     }
@@ -156,6 +162,10 @@ public class ReminderItem implements Comparable<ReminderItem> {
     /** Setters **/
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setRecurring(boolean recurring) {
+        isRecurring = recurring;
     }
 
     public void setRecurrenceNum(int recurrenceNum) {

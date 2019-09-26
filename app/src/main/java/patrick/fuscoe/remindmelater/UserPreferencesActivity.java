@@ -249,6 +249,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                                     String title = entry.getKey();
                                     HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
+                                    boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
                                     int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
                                     String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
                                     String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
@@ -257,9 +258,9 @@ public class UserPreferencesActivity extends AppCompatActivity
                                     String description = (String) reminderItemMap.get("description");
                                     boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
 
-                                    ReminderItem reminderItem = new ReminderItem(title, recurrenceNum,
-                                            recurrenceInterval, nextOccurrence, category,
-                                            categoryIconName, description, isSnoozed);
+                                    ReminderItem reminderItem = new ReminderItem(title, isRecurring,
+                                            recurrenceNum, recurrenceInterval, nextOccurrence,
+                                            category, categoryIconName, description, isSnoozed);
 
                                     reminderItemList.add(reminderItem);
                                 }
