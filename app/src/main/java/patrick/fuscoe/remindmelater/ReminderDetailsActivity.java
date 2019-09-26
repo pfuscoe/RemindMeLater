@@ -89,6 +89,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private ImageView viewCategoryIcon;
     private Spinner viewCategorySpinner;
     private TextView viewAddNewCategory;
+    private CheckBox viewRecurringCheckbox;
     private EditText viewRecurrenceNum;
     private Spinner viewRecurrenceSpinner;
     private TextView viewDateDisplay;
@@ -111,6 +112,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
                 case R.id.view_reminder_details_date_button:
                     openDatePicker();
+                    return;
+
+                case R.id.view_reminder_details_checkbox_recurring:
+                    toggleRecurring();
+                    return;
+
+                case R.id.view_reminder_details_checkbox_snoozed:
+                    toggleSnoozed();
                     return;
 
                 case R.id.view_reminder_details_button_cancel:
@@ -196,12 +205,16 @@ public class ReminderDetailsActivity extends AppCompatActivity
         // Setup views, fields, buttons, etc.
         viewTitle = findViewById(R.id.view_reminder_details_title);
         viewCategoryIcon = findViewById(R.id.view_reminder_details_category_icon);
+        viewRecurringCheckbox = findViewById(R.id.view_reminder_details_checkbox_recurring);
         viewRecurrenceNum = findViewById(R.id.view_reminder_details_recurrence_num);
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewSnoozedCheckbox = findViewById(R.id.view_reminder_details_checkbox_snoozed);
         viewSnoozedIcon = findViewById(R.id.view_reminder_details_snoozed_icon);
         viewSnoozedIcon.setColorFilter(getColor(R.color.redDark));
         viewDescription = findViewById(R.id.view_reminder_details_description);
+
+        viewRecurringCheckbox.setOnClickListener(btnClickListener);
+        viewSnoozedCheckbox.setOnClickListener(btnClickListener);
 
         /*
         // Setup category select spinner
@@ -233,6 +246,32 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         if (intent.hasExtra(RemindersFragment.USER_PROFILE)) {
             updateFields();
+        }
+    }
+
+    private void toggleRecurring()
+    {
+        if (viewRecurringCheckbox.isChecked())
+        {
+            viewRecurrenceNum.setVisibility(View.VISIBLE);
+            viewRecurrenceSpinner.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewRecurrenceNum.setVisibility(View.INVISIBLE);
+            viewRecurrenceSpinner.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void toggleSnoozed()
+    {
+        if (viewSnoozedCheckbox.isChecked())
+        {
+            viewSnoozedIcon.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewSnoozedIcon.setVisibility(View.INVISIBLE);
         }
     }
 
