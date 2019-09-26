@@ -165,6 +165,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+        Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
+        backIntent.putExtra(MainActivity.BACK_PRESSED_FROM_REMINDER_DETAILS, TAG);
+        startActivity(backIntent);
+        finish();
+        //super.onBackPressed();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

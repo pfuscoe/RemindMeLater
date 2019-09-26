@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
     //public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
     public static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
+    public static final String BACK_PRESSED_FROM_REMINDER_DETAILS = "patrick.fuscoe.remindmelater.BACK_PRESSED_FROM_REMINDER_DETAILS";
 
     //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -103,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public static int reminderTimeHour;
     public static int reminderTimeMinute;
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     public void bootReceived() {
@@ -162,9 +165,20 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     // TODO: override onNewIntent() and set launch mode to deal with back pressing / duplicate alarms
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent.hasExtra(BACK_PRESSED_FROM_REMINDER_DETAILS))
+        {
+            sectionsPagerAdapter.getItem(1);
+        }
+
+        super.onNewIntent(intent);
+    }
+
     private void setupTabs()
     {
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
