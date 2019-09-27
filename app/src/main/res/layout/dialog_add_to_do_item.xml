@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:buttonTint="@color/redDark"
+            android:buttonTint="@color/red"
             android:text="@string/dialog_add_to_do_item_label_radio_high"
             android:textSize="16sp" />
 

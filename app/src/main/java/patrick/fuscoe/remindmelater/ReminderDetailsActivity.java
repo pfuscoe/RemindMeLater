@@ -219,7 +219,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay = findViewById(R.id.view_reminder_details_date_display);
         viewSnoozedCheckbox = findViewById(R.id.view_reminder_details_checkbox_snoozed);
         viewSnoozedIcon = findViewById(R.id.view_reminder_details_snoozed_icon);
-        viewSnoozedIcon.setColorFilter(getColor(R.color.redDark));
+        viewSnoozedIcon.setColorFilter(getColor(R.color.red));
         viewDescription = findViewById(R.id.view_reminder_details_description);
 
         viewRecurringCheckbox.setOnClickListener(btnClickListener);
