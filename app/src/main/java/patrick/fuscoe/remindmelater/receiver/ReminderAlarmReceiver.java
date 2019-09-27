@@ -56,6 +56,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     private FirebaseAuth auth;
     private String userId;
 
+    private SharedPreferences reminderNotificationIds;
+
     private final CollectionReference reminders = db.collection("reminders");
 
     private Context context;
@@ -73,6 +75,9 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
+
+        reminderNotificationIds = context.getSharedPreferences(
+                context.getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
 
         Log.d(TAG, "MainActivity.REMINDER_TITLE: " + MainActivity.REMINDER_TITLE);
 
@@ -155,17 +160,24 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
     public void sendNotification()
     {
-        //int notificationId = (int) System.currentTimeMillis();
-        int notificationId = generateUniqueInt();
-        MainActivity.reminderNotificationIds = context.getSharedPreferences(
-                context.getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor reminderNotificationIdsEditor = MainActivity.reminderNotificationIds.edit();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        int notificationId;
+
+        if (reminderNotificationIds.contains(reminderTitle))
+        {
+            notificationId = reminderNotificationIds.getInt(reminderTitle, MainActivity.DEFAULT_NOTIFICATION_ID);
+        }
+        else
+        {
+            notificationId = generateUniqueInt();
+        }
+
+        SharedPreferences.Editor reminderNotificationIdsEditor = reminderNotificationIds.edit();
         reminderNotificationIdsEditor.putInt(reminderTitle, notificationId);
         reminderNotificationIdsEditor.apply();
 
         Log.d(TAG, reminderTitle + ": notificationId: " + notificationId);
-        //int notificationId = 101;
-        //int iconId = reminderItem.getCategoryIcon();
 
         //Log.d(TAG, " reminderItem category icon name: " + reminderItem.getCategoryIconName());
 
@@ -183,7 +195,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, ": Gson reminderItemString: " + reminderItemString);
 
         // Notification Tap Intent
-        //Intent remindersFragmentIntent = new Intent(context, MainActivity.class);
         Intent reminderDetailsIntent = new Intent(context, ReminderDetailsActivity.class);
         reminderDetailsIntent.putExtra(RemindersFragment.REMINDERS_DOC_ID, remindersDocId);
         reminderDetailsIntent.putExtra(RemindersFragment.REMINDER_ITEM, reminderItemString);
@@ -211,7 +222,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // TODO: Notification Dismiss Intent
-        Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
+        //Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
                 .setLargeIcon(largeIconBitmap)
@@ -230,7 +241,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
             builder.setContentText(reminderItem.getDescription());
         }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());
     }
 

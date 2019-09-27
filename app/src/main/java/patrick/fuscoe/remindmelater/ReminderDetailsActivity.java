@@ -72,11 +72,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
     //private static SharedPreferences reminderIconIds;
     //private static SharedPreferences reminderBroadcastIds;
 
-    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
-    //private final String userId = auth.getUid();
-    //private final DocumentReference userDocRef = db.collection("users").document(userId);
+    private final String userId = auth.getUid();
+    private final DocumentReference userDocRef = db.collection("users").document(userId);
 
     private String remindersDocId;
     private DocumentReference remindersDocRef;
@@ -650,7 +650,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
         userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
 
-        MainActivity.userDocRef.set(userProfileDoc)
+        userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -669,7 +669,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void loadUserProfile()
     {
-        MainActivity.userDocRef.get()
+        userDocRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
