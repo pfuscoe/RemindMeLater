@@ -82,9 +82,12 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
                         "drawable", context.getPackageName())));
         holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
-        int circleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());
-        holder.viewToDoGroupNumCircle.setImageResource(circleIconId);
-        holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.red));
+        if (toDoGroup.getNumPriorityOneItems() != 0)
+        {
+            int circleIconId = context.getResources().getIdentifier(numCircleIconString, "drawable", context.getPackageName());
+            holder.viewToDoGroupNumCircle.setImageResource(circleIconId);
+            holder.viewToDoGroupNumCircle.setColorFilter(ContextCompat.getColor(context, R.color.red));
+        }
 
         int boxIconId = context.getResources().getIdentifier(numBoxIconString, "drawable", context.getPackageName());
         holder.viewToDoGroupNumBox.setImageResource(boxIconId);
