@@ -232,7 +232,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                         //int iconId = Math.toIntExact(doc.getLong("iconId"));
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
-                        int totalItems = doc.get("totalItems", int.class);
+                        //int totalItems = doc.get("totalItems", int.class);
 
                         ArrayList<String> subscribersList = (ArrayList<String>) doc.get("subscribers");
 

@@ -45,16 +45,16 @@ public class UserProfile {
 
     public void addSubscription(String groupId)
     {
-        ArrayList<String> tempList = new ArrayList<String>(Arrays.asList(subscriptions));
+        ArrayList<String> tempList = new ArrayList<>(Arrays.asList(subscriptions));
         tempList.add(groupId);
-        subscriptions = tempList.toArray(subscriptions);
+        subscriptions = tempList.toArray(new String[0]);
     }
 
     public void removeSubscription(String groupId)
     {
         ArrayList<String> tempList = new ArrayList<>(Arrays.asList(subscriptions));
         tempList.remove(groupId);
-        subscriptions = tempList.toArray(subscriptions);
+        subscriptions = tempList.toArray(new String[0]);
     }
 
     public void addReminderCategory(String categoryName, String categoryIconName)

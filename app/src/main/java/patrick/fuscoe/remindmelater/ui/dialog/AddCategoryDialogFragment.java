@@ -36,6 +36,8 @@ public class AddCategoryDialogFragment extends DialogFragment {
     private RecyclerView.LayoutManager categoryIconRecyclerLayoutManager;
     private RecyclerView.Adapter categoryIconRecyclerAdapter;
 
+    private Context context;
+
     public interface CategoryIconClickListener {
         void onIconClicked(View v, int position);
     }
@@ -56,7 +58,15 @@ public class AddCategoryDialogFragment extends DialogFragment {
                 //categoryIconListIsChecked.set(position, false);
                 selectedIcon = -1;
                 selectedIconPos = -1;
-                selectedIconName = "default";
+
+                if (context instanceof ReminderDetailsActivity)
+                {
+                    selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
+                }
+                else
+                {
+                    selectedIconName = MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME;
+                }
             }
             else
             {
@@ -83,6 +93,8 @@ public class AddCategoryDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        this.context = context;
+
         try {
             if (context instanceof ReminderDetailsActivity)
             {
@@ -114,7 +126,15 @@ public class AddCategoryDialogFragment extends DialogFragment {
 
         selectedIcon = -1;
         selectedIconPos = -1;
-        selectedIconName = "default";
+
+        if (context instanceof ReminderDetailsActivity)
+        {
+            selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
+        }
+        else
+        {
+            selectedIconName = MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME;
+        }
 
         //Bundle bundle = getArguments();
 
