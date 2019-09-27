@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static int reminderTimeMinute;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private boolean setRemindersTabActive;
 
     @Override
     public void bootReceived() {
@@ -122,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userId = auth.getUid();
         userDocRef = db.collection("users").document(userId);
 
+        setRemindersTabActive = false;
+
         createNotificationChannel();
 
         Intent intent = getIntent();
@@ -136,6 +139,15 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         else
         {
             // User already signed-in
+            if (intent.hasExtra(BACK_PRESSED_FROM_REMINDER_DETAILS))
+            {
+                setRemindersTabActive = true;
+            }
+            else
+            {
+                setRemindersTabActive = false;
+            }
+
             loadUserProfileFromCloud();
             //loadUserPreferences();
             loadReminderAlarms();
@@ -179,6 +191,12 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     private void setupTabs()
     {
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+
+        if (setRemindersTabActive)
+        {
+            sectionsPagerAdapter.getItem(1);
+        }
+
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
