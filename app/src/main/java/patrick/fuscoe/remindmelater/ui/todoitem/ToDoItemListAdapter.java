@@ -243,7 +243,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return R.color.orangeDark;
 
             case 3:
-                return R.color.blueDark;
+                return R.color.blue;
 
             default:
                 return R.color.red;

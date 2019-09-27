@@ -60,7 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:buttonTint="@color/blueDark"
+            android:buttonTint="@color/blue"
             android:text="@string/dialog_add_to_do_item_label_radio_low"
             android:textSize="16sp" />
     </RadioGroup>

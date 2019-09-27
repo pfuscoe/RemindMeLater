@@ -76,7 +76,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/reminder_details_category_add"
-            android:textColor="@color/blueDark"
+            android:textColor="@color/blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_icon" />
 

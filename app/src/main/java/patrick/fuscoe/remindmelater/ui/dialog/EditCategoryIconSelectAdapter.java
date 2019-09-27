@@ -73,7 +73,7 @@ public class EditCategoryIconSelectAdapter extends RecyclerView.Adapter<EditCate
         if (categoryIconListIsChecked.get(position))
         {
             holder.viewCategoryIconCheckbox.setImageResource(R.drawable.checkbox_marked);
-            holder.viewCategoryIconCheckbox.setColorFilter(context.getColor(R.color.blueDark));
+            holder.viewCategoryIconCheckbox.setColorFilter(context.getColor(R.color.blue));
         }
         else
         {
