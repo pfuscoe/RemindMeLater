@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import java.util.List;
 
+import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
@@ -53,7 +54,7 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
                 //categoryIconListIsChecked.set(position, false);
                 selectedIcon = -1;
                 selectedIconPos = -1;
-                selectedIconName = "default";
+                selectedIconName = MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME;
             }
             else
             {
