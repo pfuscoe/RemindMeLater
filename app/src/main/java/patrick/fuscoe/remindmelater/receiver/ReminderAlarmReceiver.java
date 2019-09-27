@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -233,6 +234,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setAutoCancel(true)
+                .setSound(null)
+                .setVibrate(null)
                 .addAction(R.drawable.action_check, context.getString(R.string.done), donePendingIntent)
                 .addAction(R.drawable.action_alarm_snooze, context.getString(R.string.snooze), snoozePendingIntent);
 
