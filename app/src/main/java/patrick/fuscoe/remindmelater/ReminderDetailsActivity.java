@@ -468,6 +468,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void saveReminder()
     {
+        String title = viewTitle.getText().toString();
+
+        if (title.equals(""))
+        {
+            Toast.makeText(this, "Cannot Save Reminder: Title Must Not Be Blank", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         updateReminderItemObject();
 
         HashMap<String, Object> reminderItemMap = new HashMap<>();
