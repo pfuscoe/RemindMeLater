@@ -622,6 +622,13 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryEditName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String newTitle = viewCategoryEditName.getText().toString();
+
+            if (newTitle.equals(""))
+            {
+                Toast.makeText(getContext(), "Add To Do Group Failed: Group Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
             if (selectedIconName.equals("default"))
@@ -638,6 +645,13 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             Dialog dialogView = dialog.getDialog();
             EditText viewEditToDoGroupTitle = dialogView.findViewById(R.id.dialog_category_edit_name);
             String newTitle = viewEditToDoGroupTitle.getText().toString();
+
+            if (newTitle.equals(""))
+            {
+                Toast.makeText(getContext(), "Edit To Do Group Failed: Group Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             //int selectedIconId = ((EditToDoGroupDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((EditToDoGroupDialogFragment) dialog).getSelectedIconName();
             toDoGroupToEdit.setTitle(newTitle);

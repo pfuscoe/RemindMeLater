@@ -303,7 +303,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         EditText viewAddToDoItemName = dialogView.findViewById(R.id.dialog_add_to_do_item_name);
         String newItemName = viewAddToDoItemName.getText().toString();
-        
+
         if (newItemName.equals(""))
         {
             Toast.makeText(this, "Add To Do Item Failed: Name Must Not Be Empty", Toast.LENGTH_LONG).show();
