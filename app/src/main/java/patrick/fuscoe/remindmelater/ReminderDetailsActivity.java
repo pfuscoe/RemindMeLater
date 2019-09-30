@@ -714,6 +714,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Dialog dialogView = dialog.getDialog();
             EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
             String categoryName = viewCategoryName.getText().toString();
+
+            if (categoryName.equals(""))
+            {
+                Toast.makeText(this, "Add Reminder Category Failed: Category Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             reminderItem.setCategory(categoryName);
 
             //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
