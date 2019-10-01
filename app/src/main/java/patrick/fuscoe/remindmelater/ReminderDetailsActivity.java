@@ -100,6 +100,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private Button btnCancel;
     private Button btnSave;
 
+    private boolean reminderTitleChanged;
+    private String oldReminderTitle;
+
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
@@ -187,6 +190,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         Type dataTypeReminderItem = new TypeToken<ReminderItem>(){}.getType();
         String reminderItemString = intent.getStringExtra(RemindersFragment.REMINDER_ITEM);
         reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
+        reminderTitleChanged = false;
 
         remindersDocId = intent.getStringExtra(RemindersFragment.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
@@ -474,6 +478,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         {
             Toast.makeText(this, "Cannot Save Reminder: Title Must Not Be Blank", Toast.LENGTH_LONG).show();
             return;
+        }
+        else if (!title.equals(reminderItem.getTitle()))
+        {
+            reminderTitleChanged = true;
+            oldReminderTitle = reminderItem.getTitle();
         }
 
         updateReminderItemObject();
