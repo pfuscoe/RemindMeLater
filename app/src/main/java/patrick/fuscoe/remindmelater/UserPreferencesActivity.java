@@ -64,7 +64,6 @@ public class UserPreferencesActivity extends AppCompatActivity
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // TODO: Add button click behavior
             switch (v.getId())
             {
                 case R.id.button_user_preferences_time:
