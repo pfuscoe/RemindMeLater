@@ -137,9 +137,13 @@ public class UserPreferencesActivity extends AppCompatActivity
         {
             minutesString = "00";
         }
+        else if (userProfile.getReminderMinute() < 10)
+        {
+            minutesString = "0" + (userProfile.getReminderMinute() % 10);
+        }
         else
         {
-            minutesString = "0";
+            minutesString = String.valueOf(userProfile.getReminderMinute());
         }
 
         if (userProfile.getReminderHour() < 12)
