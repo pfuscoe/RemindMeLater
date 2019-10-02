@@ -146,7 +146,11 @@ public class UserPreferencesActivity extends AppCompatActivity
             minutesString = String.valueOf(userProfile.getReminderMinute());
         }
 
-        if (userProfile.getReminderHour() < 12)
+        if (userProfile.getReminderHour() == 0)
+        {
+            timeToDisplay = "12 : " + minutesString + " AM";
+        }
+        else if (userProfile.getReminderHour() < 12)
         {
             timeToDisplay = userProfile.getReminderHour() + " : " +
                     minutesString + " AM";

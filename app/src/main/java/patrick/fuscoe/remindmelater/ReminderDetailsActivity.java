@@ -132,8 +132,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     return;
 
                 case R.id.view_reminder_details_button_save:
-                    Log.d(TAG, ": Reminder " + reminderItem.getTitle() + " saved");
-                    Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Save Clicked");
+                    //Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
                     checkIfTitleChanged();
                     // Note: onBackPressed on successful save
                     return;
@@ -452,6 +452,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         if (!title.equals(reminderItem.getTitle()))
         {
+            Log.d(TAG, "Title has changed.  Old title: " + reminderItem.getTitle() + ". New title: " + title);
             reminderTitleChanged = true;
             oldReminderTitle = reminderItem.getTitle();
             deleteReminder(oldReminderTitle);
@@ -488,7 +489,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void saveReminder()
     {
-        final String title = reminderItem.getTitle();
+        final String title = viewTitle.getText().toString();
 
         if (title.equals(""))
         {
@@ -520,13 +521,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
-                        Toast.makeText(getApplicationContext(), "Reminder Item Updated: " + title, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Reminders DocumentSnapshot successfully updated: " + title);
 
                         saveReminderToSharedPreferences();
                         cancelReminderAlarm(title);
                         cancelNotification(title);
                         setReminderAlarm();
+                        Toast.makeText(getApplicationContext(), "Reminder Item Saved: " + title, Toast.LENGTH_SHORT).show();
+
                         onBackPressed();
                     }
                 })
@@ -574,13 +576,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
         final boolean isReminderTitleChanged = reminderTitleChanged;
 
         Map<String, Object> removeReminderUpdate = new HashMap<>();
-        removeReminderUpdate.put(reminderTitle, FieldValue.delete());
+        removeReminderUpdate.put(title, FieldValue.delete());
 
         remindersDocRef.update(removeReminderUpdate)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Delete Reminder Success: Reminders DocumentSnapshot successfully updated!");
+                        Log.d(TAG, "Successfully deleted reminder on cloud: " + title);
                         cancelReminderAlarm(title);
                         cancelNotification(title);
                         removeReminderLocalStorage(title);
@@ -591,10 +593,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         }
                         else
                         {
+                            Toast.makeText(getApplicationContext(), "Reminder Item Deleted: " + title, Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         }
-
-                        Toast.makeText(getApplicationContext(), "Reminder Item Deleted: " + title, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -639,21 +640,23 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
+
+        Log.d(TAG, "Notification cancelled for " + reminderTitle + ". NotificationId: " + notificationId);
     }
 
     public void removeReminderLocalStorage(String reminderTitle)
     {
         SharedPreferences.Editor reminderAlarmStorageEditor = MainActivity.reminderAlarmStorage.edit();
-        reminderAlarmStorageEditor.remove(reminderTitle).apply();
+        reminderAlarmStorageEditor.remove(reminderTitle).commit();
 
         //SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
         //reminderIconIdsEditor.remove(reminderItem.getTitle()).commit();
 
         SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
-        reminderIconNamesEditor.remove(reminderTitle).apply();
+        reminderIconNamesEditor.remove(reminderTitle).commit();
 
         SharedPreferences.Editor reminderBroadcastIdsEditor = MainActivity.reminderBroadcastIds.edit();
-        reminderBroadcastIdsEditor.remove(reminderTitle).apply();
+        reminderBroadcastIdsEditor.remove(reminderTitle).commit();
 
         Log.d(TAG, "Reminder removed from local storage: " + reminderTitle);
     }
@@ -661,7 +664,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void setReminderAlarm()
     {
         String title = reminderItem.getTitle();
-        Log.d(TAG, "title: " + title);
+        Log.d(TAG, "In method setReminderAlarm. title: " + title);
         String nextOccurrence = reminderItem.getNextOccurrence();
         String iconName = reminderItem.getCategoryIconName();
         int broadcastId = MainActivity.reminderBroadcastIds.getInt(
