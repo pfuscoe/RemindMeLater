@@ -215,6 +215,15 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         toDoItemList.remove(toDoItem);
 
+        int numUnfinishedItems = toDoGroup.getNumUnfinishedItems();
+        toDoGroup.setNumUnfinishedItems(numUnfinishedItems - 1);
+
+        if (toDoItem.getPriority() == 1)
+        {
+            int numPriorityOneItems = toDoGroup.getNumPriorityOneItems();
+            toDoGroup.setNumPriorityOneItems(numPriorityOneItems - 1);
+        }
+
         hasChanged = true;
         UpdateToDoItemListDisplay();
     }
@@ -228,6 +237,15 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         toDoItemListDone.remove(toDoItem);
 
+        int numUnfinishedItems = toDoGroup.getNumUnfinishedItems();
+        toDoGroup.setNumUnfinishedItems(numUnfinishedItems + 1);
+
+        if (toDoItem.getPriority() == 1)
+        {
+            int numPriorityOneItems = toDoGroup.getNumPriorityOneItems();
+            toDoGroup.setNumPriorityOneItems(numPriorityOneItems + 1);
+        }
+
         hasChanged = true;
         UpdateToDoItemListDisplay();
     }
@@ -240,6 +258,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
+        toDoGroupDoc.put("numUnfinishedItems", toDoGroup.getNumUnfinishedItems());
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 

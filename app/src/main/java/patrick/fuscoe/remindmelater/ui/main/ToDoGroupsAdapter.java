@@ -139,9 +139,9 @@ public class ToDoGroupsAdapter extends RecyclerView.Adapter<ToDoGroupsAdapter.To
 
     private String selectNumBoxIconName(ToDoGroup toDoGroup)
     {
-        int totalItems = toDoGroup.getTotalItems();
+        int numUnfinishedItems = toDoGroup.getNumUnfinishedItems();
 
-        switch (totalItems)
+        switch (numUnfinishedItems)
         {
             case 0:
                 return "numeric_0_box_multiple_outline";

@@ -19,6 +19,7 @@ public class ToDoGroup {
     //private int iconId;
     private boolean shared;
     private int numPriorityOneItems;
+    private int numUnfinishedItems;
     private int totalItems;
 
     private String[] subscribers;
@@ -40,6 +41,7 @@ public class ToDoGroup {
         this.iconName = iconName;
         this.shared = shared;
         this.numPriorityOneItems = 0;
+        this.numUnfinishedItems = 0;
         this.totalItems = 0;
         this.subscribers = new String[]{userId};
 
@@ -47,7 +49,8 @@ public class ToDoGroup {
         this.toDoItems = new HashMap<>();
     }
 
-    public ToDoGroup(String id, String title, String iconName, boolean shared, int numPriorityOneItems, String[] subscribers, Map<String, Object> toDoItems)
+    public ToDoGroup(String id, String title, String iconName, boolean shared, int numPriorityOneItems,
+                     int numUnfinishedItems, String[] subscribers, Map<String, Object> toDoItems)
     {
         this.id = id;
         this.title = title;
@@ -55,6 +58,7 @@ public class ToDoGroup {
         this.iconName = iconName;
         this.shared = shared;
         this.numPriorityOneItems = numPriorityOneItems;
+        this.numUnfinishedItems = numUnfinishedItems;
         this.subscribers = subscribers;
         this.toDoItems = toDoItems;
 
@@ -87,9 +91,14 @@ public class ToDoGroup {
         //Collections.sort(toDoItemArrayList);
         totalItems++;
 
-        if (toDoItem.getPriority() == 1)
+        if (!toDoItem.isDone())
         {
-            numPriorityOneItems++;
+            numUnfinishedItems++;
+
+            if (toDoItem.getPriority() == 1)
+            {
+                numPriorityOneItems++;
+            }
         }
 
         // Update HashMap
@@ -125,6 +134,10 @@ public class ToDoGroup {
 
     public int getNumPriorityOneItems() {
         return numPriorityOneItems;
+    }
+
+    public int getNumUnfinishedItems() {
+        return numUnfinishedItems;
     }
 
     public int getTotalItems() {
@@ -167,6 +180,10 @@ public class ToDoGroup {
 
     public void setNumPriorityOneItems(int numPriorityOneItems) {
         this.numPriorityOneItems = numPriorityOneItems;
+    }
+
+    public void setNumUnfinishedItems(int numUnfinishedItems) {
+        this.numUnfinishedItems = numUnfinishedItems;
     }
 
     public void setTotalItems(int totalItems) {

@@ -232,6 +232,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                         //int iconId = Math.toIntExact(doc.getLong("iconId"));
                         boolean shared = doc.getBoolean("shared");
                         int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
+                        int numUnfinishedItems = doc.get("numUnfinishedItems", int.class);
                         //int totalItems = doc.get("totalItems", int.class);
 
                         ArrayList<String> subscribersList = (ArrayList<String>) doc.get("subscribers");
@@ -240,7 +241,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                         Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
 
-                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared, numPriorityOneItems, subscribers, toDoItems);
+                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared,
+                                numPriorityOneItems, numUnfinishedItems, subscribers, toDoItems);
                         toDoGroupDocs.add(toDoGroup);
                     }
 
@@ -493,6 +495,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
+        toDoGroupDoc.put("numUnfinishedItems", toDoGroup.getNumUnfinishedItems());
         toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
