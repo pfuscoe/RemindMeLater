@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     private SectionsPagerAdapter sectionsPagerAdapter;
     private boolean setRemindersTabActive;
 
+    private String newUserDisplayName;
+
     @Override
     public void bootReceived() {
         loadReminderAlarms();
@@ -134,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             // TODO: Also need to load reminders to device storage..
             // Check if this is a new user by checking if user doc on cloud exists
             // Note: Loading prefs, setting up tabs and loading alarms is called after cloud sync
+            if (intent.hasExtra(FirebaseNewUserSignUpActivity.DISPLAY_NAME))
+            {
+                newUserDisplayName = intent.getStringExtra(FirebaseNewUserSignUpActivity.DISPLAY_NAME);
+            }
+
             checkIfNewUser();
         }
         else
@@ -383,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     {
         Map<String, Object> userProfileDoc = new HashMap<>();
 
-        userProfileDoc.put("displayName", "");
+        userProfileDoc.put("displayName", newUserDisplayName);
 
         Map<String, String> reminderCategoriesMap = new HashMap<>();
         reminderCategoriesMap.put("Main", DEFAULT_REMINDER_CATEGORY_ICON_NAME);

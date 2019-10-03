@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FirebaseNewUserSignUpActivity";
+    public static final String DISPLAY_NAME = "patrick.fuscoe.remindmelater.DISPLAY_NAME";
 
     private FirebaseAuth auth;
 
@@ -59,7 +60,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
     {
         String email = viewEmail.getText().toString();
         String password = viewPassword.getText().toString();
-        String displayName = viewDisplayName.getText().toString();
+        final String displayName = viewDisplayName.getText().toString();
 
         if (email.equals(""))
         {
@@ -70,6 +71,12 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         if (password.equals(""))
         {
             Toast.makeText(this, "Please enter a password", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (displayName.equals(""))
+        {
+            Toast.makeText(this, "Please enter a display name", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -84,6 +91,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             //updateUI(user);
                             Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, MainActivity.class);
                             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
+                            intent.putExtra(DISPLAY_NAME, displayName);
                             startActivity(intent);
                             finish();
                         } else {
