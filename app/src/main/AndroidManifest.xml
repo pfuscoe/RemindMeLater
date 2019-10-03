@@ -13,7 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FirebaseNewUserSignUpActivity"></activity>
+        <activity
+            android:name=".FirebaseNewUserSignUpActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".FirebaseSignInActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="patrick.fuscoe.remindmelater.FirebaseSignInActivity" />
+        </activity>
         <activity
             android:name=".UserPreferencesActivity"
             android:label="@string/title_activity_user_preferences"

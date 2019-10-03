@@ -99,7 +99,9 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     private void openNewUserSignUp()
     {
-
+        Intent intent = new Intent(this, FirebaseNewUserSignUpActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void openForgotPassword()
