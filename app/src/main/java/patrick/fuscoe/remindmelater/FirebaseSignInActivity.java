@@ -26,7 +26,7 @@ import java.util.List;
 
 public class FirebaseSignInActivity extends AppCompatActivity {
 
-    public static final String TAG = "Firebase Sign In Activity";
+    public static final String TAG = "patrick.fuscoe.remindmelater.FirebaseSignInActivity";
     public static final String CHECK_IF_NEW_USER = "patrick.fuscoe.remindmelater.CHECK_IF_NEW_USER";
     private static final int RC_SIGN_IN = 223;
 

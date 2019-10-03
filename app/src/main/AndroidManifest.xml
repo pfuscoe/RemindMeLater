@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".FirebaseNewUserSignUpActivity"></activity>
         <activity
             android:name=".UserPreferencesActivity"
             android:label="@string/title_activity_user_preferences"
@@ -23,7 +23,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="patrick.fuscoe.remindmelater.MainActivity" />
         </activity>
-
         <activity
             android:name=".ReminderDetailsActivity"
             android:label="@string/app_name"
@@ -33,7 +32,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="patrick.fuscoe.remindmelater.MainActivity" />
         </activity>
-
         <activity
             android:name=".ToDoItemListActivity"
             android:label="@string/app_name"
@@ -43,7 +41,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="patrick.fuscoe.remindmelater.MainActivity" />
         </activity>
-
         <activity
             android:name=".FirebaseSignInActivity"
             android:label="@string/app_name">
@@ -53,14 +50,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:parentActivityName=".FirebaseSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <receiver
             android:name=".receiver.ReminderAlarmReceiver"
@@ -97,7 +92,6 @@
                 <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationDismissReceiver" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
