@@ -402,6 +402,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userProfileDoc.put("reminderHour", DEFAULT_REMINDER_TIME_HOUR);
         userProfileDoc.put("reminderMinute", DEFAULT_REMINDER_TIME_MINUTE);
 
+        // Set new user profile
+        String[] subscriptions = new String[0];
+        subscriptions = subscriptionsList.toArray(subscriptions);
+
+        userProfile = new UserProfile(userId, newUserDisplayName, subscriptions,
+                reminderCategoriesMap, DEFAULT_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_MINUTE);
+
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
