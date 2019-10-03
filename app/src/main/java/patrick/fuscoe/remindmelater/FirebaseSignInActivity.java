@@ -106,7 +106,23 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     private void openForgotPassword()
     {
+        String email = viewEmail.getText().toString();
 
+        if (email.equals(""))
+        {
+            Toast.makeText(this, "Please enter an email address to receive the password reset link", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Password Reset Email sent.");
+                        }
+                    }
+                });
     }
 
     private void loginReturningUser()
