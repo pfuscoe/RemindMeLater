@@ -41,7 +41,7 @@
             android:id="@+id/dialog_add_to_do_item_radio_high"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:buttonTint="@color/red"
             android:text="@string/dialog_add_to_do_item_label_radio_high"
             android:textSize="16sp" />
@@ -50,7 +50,7 @@
             android:id="@+id/dialog_add_to_do_item_radio_medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:buttonTint="@color/orangeDark"
             android:text="@string/dialog_add_to_do_item_label_radio_medium"
             android:textSize="16sp" />
