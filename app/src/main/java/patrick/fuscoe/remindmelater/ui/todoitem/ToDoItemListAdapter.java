@@ -165,7 +165,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof ToDoItemHeaderViewHolder)
         {
             ToDoItemHeaderViewHolder viewHolder = (ToDoItemHeaderViewHolder) holder;
-            viewHolder.viewToDoItemHeaderLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            viewHolder.viewToDoItemHeaderLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryLight));
         }
         else if (holder instanceof ToDoItemViewHolder)
         {
@@ -182,7 +182,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         else if (holder instanceof ToDoItemDoneHeaderViewHolder)
         {
             ToDoItemDoneHeaderViewHolder viewHolder = (ToDoItemDoneHeaderViewHolder) holder;
-            viewHolder.viewToDoItemDoneHeaderLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            viewHolder.viewToDoItemDoneHeaderLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryLight));
         }
         else if (holder instanceof ToDoItemDoneViewHolder)
         {
