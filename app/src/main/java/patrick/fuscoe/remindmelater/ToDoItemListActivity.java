@@ -159,6 +159,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         menu.removeItem(R.id.menu_main_reorder);
 
         // TODO: swap edit icon for delete and setup functionality to remove entire group
+        menu.removeItem(R.id.menu_main_edit);
 
         return true;
     }
