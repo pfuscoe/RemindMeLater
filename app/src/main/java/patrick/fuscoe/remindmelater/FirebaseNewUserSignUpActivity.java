@@ -25,6 +25,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     private EditText viewEmail;
     private EditText viewPassword;
+    private EditText viewVerifyPassword;
     private EditText viewDisplayName;
     private Button btnSignUp;
 
@@ -50,6 +51,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
         viewEmail = findViewById(R.id.view_new_user_sign_up_email);
         viewPassword = findViewById(R.id.view_new_user_sign_up_password);
+        viewVerifyPassword = findViewById(R.id.view_new_user_sign_up_verify_password);
         viewDisplayName = findViewById(R.id.view_new_user_sign_up_display_name);
         btnSignUp = findViewById(R.id.btn_new_user_sign_up_sign_up);
 
@@ -60,6 +62,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
     {
         String email = viewEmail.getText().toString();
         String password = viewPassword.getText().toString();
+        String verifyPassword = viewVerifyPassword.getText().toString();
         final String displayName = viewDisplayName.getText().toString();
 
         if (email.equals(""))
@@ -72,6 +75,11 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Please enter a password", Toast.LENGTH_LONG).show();
             return;
+        }
+
+        if (!verifyPassword.equals(password))
+        {
+            Toast.makeText(this, "Passwords do not match: Please verify that you entered the correct password", Toast.LENGTH_LONG).show();
         }
 
         if (displayName.equals(""))

@@ -61,4 +61,6 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
+    <string name="sign_up_display_name">Display Name</string>
+    <string name="sign_up_verify_password">Verify Password</string>
 </resources>
