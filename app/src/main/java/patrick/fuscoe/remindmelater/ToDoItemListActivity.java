@@ -153,6 +153,13 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        menu.removeItem(R.id.menu_main_logout);
+        menu.removeItem(R.id.menu_main_user_settings);
+        menu.removeItem(R.id.menu_main_reorder);
+
+        // TODO: swap edit icon for delete and setup functionality to remove entire group
+
         return true;
     }
 
@@ -163,10 +170,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
             case R.id.menu_main_add:
                 Log.d(TAG, ": Add Button pressed");
                 showAddToDoItemDialog();
-                return true;
-
-            case R.id.menu_main_user_settings:
-                Log.d(TAG, ": Menu item selected: " + item.getItemId());
                 return true;
 
             default:
