@@ -77,7 +77,6 @@ public class UserPreferencesActivity extends AppCompatActivity
                 case R.id.button_user_preferences_save:
                     saveUserPrefs();
                     //Toast.makeText(getApplicationContext(), userProfile.getDisplayName() + ": User Settings Updated", Toast.LENGTH_LONG).show();
-                    onBackPressed();
                     return;
 
                 case R.id.button_user_preferences_cancel:
@@ -227,6 +226,16 @@ public class UserPreferencesActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "User Settings for " +
                                 userProfile.getDisplayName() + " Saved", Toast.LENGTH_LONG).show();
                         Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+
+                        Gson gson = new Gson();
+                        String userProfileString = gson.toJson(userProfile);
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra(MainActivity.USER_PREFERENCES_UPDATED, true);
+                        intent.putExtra(MainActivity.USER_PROFILE, userProfileString);
+                        startActivity(intent);
+                        finish();
+                        //onBackPressed();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

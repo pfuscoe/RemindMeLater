@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
@@ -35,6 +36,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     //public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
     public static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
     public static final String BACK_PRESSED_FROM_REMINDER_DETAILS = "patrick.fuscoe.remindmelater.BACK_PRESSED_FROM_REMINDER_DETAILS";
+    public static final String USER_PREFERENCES_UPDATED = "patrick.fuscoe.remindmelater.USER_PREFERENCES_UPDATED";
 
     //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -188,6 +191,21 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         if (intent.hasExtra(BACK_PRESSED_FROM_REMINDER_DETAILS))
         {
             sectionsPagerAdapter.getItem(1);
+        }
+
+        if (intent.hasExtra(USER_PREFERENCES_UPDATED))
+        {
+            Log.d(TAG, "Returned from user prefs which were updated.");
+
+            Gson gson = new Gson();
+            Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
+            String userProfileString = intent.getStringExtra(USER_PROFILE);
+            userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
+            Log.d(TAG, "userProfile Gson String: " + userProfileString);
+
+            updateReminderTimeOfDay();
+            loadReminderAlarms();
+            setReminderAlarms();
         }
 
         super.onNewIntent(intent);
@@ -430,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         getSupportActionBar().setTitle(title);
     }
 
-    public void loadUserPreferences()
+    public void updateReminderTimeOfDay()
     {
         reminderTimeHour = userProfile.getReminderHour();
         reminderTimeMinute = userProfile.getReminderMinute();
@@ -633,4 +651,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         return (int) (Math.random() * 1000000);
     }
 
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
 }
