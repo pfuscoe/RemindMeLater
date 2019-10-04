@@ -154,6 +154,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             String userId = auth.getUid();
                             Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                             intent.putExtra(USER_ID, userId);
+                            intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
                             startActivity(intent);
                             finish();
                         } else {

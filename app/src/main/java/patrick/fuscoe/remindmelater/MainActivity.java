@@ -157,8 +157,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             loadUserProfileFromCloud();
             //loadUserPreferences();
-            loadReminderAlarms();
-            setReminderAlarms();
         }
 
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
@@ -328,6 +326,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             DocumentSnapshot documentSnapshot = task.getResult();
                             buildUserProfileObj(documentSnapshot);
                             Log.d(TAG, "User Profile loaded from cloud");
+                            //loadReminderAlarms();
+                            //setReminderAlarms();
                             setupTabs();
                         }
                     }
