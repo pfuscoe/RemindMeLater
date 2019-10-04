@@ -29,12 +29,12 @@
         <EditText
             android:id="@+id/view_reminder_details_title"
             android:layout_width="wrap_content"
-            android:maxWidth="256dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
-            android:ems="10"
+            android:ems="11"
             android:inputType="textPersonName"
+            android:maxWidth="256dp"
             android:text="Name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,8 +53,8 @@
             android:id="@+id/view_reminder_details_category_icon"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/category_account_card_details" />
@@ -74,8 +74,9 @@
             android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="32dp"
             android:text="@string/reminder_details_category_add"
+            android:textAlignment="center"
             android:textColor="@color/blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_icon" />
@@ -85,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="24dp"
             android:text="@string/recurring"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_label" />
@@ -95,7 +96,7 @@
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="18dp"
             android:ems="10"
             android:inputType="number"
             android:text="##"
@@ -109,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_num"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_label" />
 
@@ -169,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text="@string/reminder_details_description_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_checkbox_snoozed" />
