@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -74,6 +75,9 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
             else if (position <= numItemsToDo)
             {
                 ToDoItem item = toDoItemList.get(position - 1);
+                CheckBox checkBox = v.findViewById(R.id.view_to_do_item_priority_checkbox);
+                checkBox.setChecked(true);
+                // TODO: Implement delay
                 markToDoItemDone(item);
             }
             else

@@ -5,9 +5,12 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,7 +54,8 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static class ToDoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ConstraintLayout viewToDoItemLayout;
-        ImageView viewToDoItemPriorityIcon;
+        //ImageView viewToDoItemPriorityIcon;
+        CheckBox viewToDoItemPriorityCheckbox;
         TextView viewToDoItemName;
 
         ToDoItemViewHolder(View v)
@@ -61,7 +65,8 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             v.setOnClickListener(this);
 
             viewToDoItemLayout = v.findViewById(R.id.view_to_do_item_layout);
-            viewToDoItemPriorityIcon = v.findViewById(R.id.view_to_do_item_priority_icon);
+            //viewToDoItemPriorityIcon = v.findViewById(R.id.view_to_do_item_priority_icon);
+            viewToDoItemPriorityCheckbox = v.findViewById(R.id.view_to_do_item_priority_checkbox);
             viewToDoItemName = v.findViewById(R.id.view_to_do_item_name);
         }
 
@@ -174,10 +179,12 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             viewHolder.viewToDoItemName.setText(item.getItemName());
 
-            int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
-            viewHolder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
-            int itemPriorityIconColorId = selectItemPriorityIconColor(item.getPriority());
-            viewHolder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
+            //int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
+            //viewHolder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
+            //int itemPriorityIconColorId = selectItemPriorityIconColor(item.getPriority());
+            ColorStateList colorStateList = selectItemPriorityCheckboxColor(item.getPriority());
+            //viewHolder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
+            viewHolder.viewToDoItemPriorityCheckbox.setButtonTintList(colorStateList);
         }
         else if (holder instanceof ToDoItemDoneHeaderViewHolder)
         {
@@ -247,6 +254,24 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             default:
                 return R.color.red;
+        }
+    }
+
+    private ColorStateList selectItemPriorityCheckboxColor(int priority)
+    {
+        switch (priority)
+        {
+            case 1:
+                return ContextCompat.getColorStateList(context, R.color.checkbox_priority_high);
+
+            case 2:
+                return ContextCompat.getColorStateList(context, R.color.checkbox_priority_medium);
+
+            case 3:
+                return ContextCompat.getColorStateList(context, R.color.checkbox_priority_low);
+
+            default:
+                return ContextCompat.getColorStateList(context, R.color.checkbox_priority_high);
         }
     }
 
