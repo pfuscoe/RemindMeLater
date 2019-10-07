@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +64,31 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
     private List<ToDoItem> toDoItemListUnsorted;
 
     private boolean hasChanged;
+
+    /*
+    // Handler and Runnable for use in implementing delay when marking to do item done
+    private static class MyHandler extends Handler {}
+    private final MyHandler markToDoItemDoneHandler = new MyHandler();
+
+    public static class MarkToDoItemDoneRunnable implements Runnable {
+        private final WeakReference<Activity> mActivity;
+
+        public MarkToDoItemDoneRunnable(Activity activity)
+        {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void run() {
+            Activity activity = mActivity.get();
+            if (activity != null)
+            {
+
+            }
+        }
+    }
+    */
+
 
     private ToDoItemClickListener toDoItemClickListener = new ToDoItemClickListener() {
         @Override
