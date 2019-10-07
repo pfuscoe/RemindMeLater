@@ -103,11 +103,19 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
             }
             else if (position <= numItemsToDo)
             {
-                ToDoItem item = toDoItemList.get(position - 1);
+                final ToDoItem item = toDoItemList.get(position - 1);
                 CheckBox checkBox = v.findViewById(R.id.view_to_do_item_priority_checkbox);
                 checkBox.setChecked(true);
-                // TODO: Implement delay
-                markToDoItemDone(item);
+
+                // Short delay to allow checkbox animation to complete
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        markToDoItemDone(item);
+                    }
+                }, 500);
+
+                //markToDoItemDone(item);
             }
             else
             {
