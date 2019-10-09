@@ -7,6 +7,7 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 public class ReminderItem implements Comparable<ReminderItem> {
 
@@ -28,7 +29,9 @@ public class ReminderItem implements Comparable<ReminderItem> {
     private int daysAway;
     private boolean isRecurring;
     private boolean isSnoozed;
-    private ArrayList<HistoryItem> historyItems;
+    //private ArrayList<HistoryItem> historyItems;
+    private boolean isHibernating;
+    private Map<String, String> history;
 
 
     public ReminderItem() {
@@ -36,7 +39,8 @@ public class ReminderItem implements Comparable<ReminderItem> {
     }
 
     public ReminderItem(String title, boolean isRecurring, int recurrenceNum, String recurrenceInterval, String nextOccurrence,
-                        String category, String categoryIconName, String description, boolean isSnoozed)
+                        String category, String categoryIconName, String description, boolean isSnoozed,
+                        boolean isHibernating, Map<String, String> history)
     {
         this.title = title;
         this.isRecurring = isRecurring;
@@ -52,7 +56,9 @@ public class ReminderItem implements Comparable<ReminderItem> {
 
         this.recurrenceString = recurrence.toString();
         this.isSnoozed = isSnoozed;
-        this.historyItems = new ArrayList<>();
+        //this.historyItems = new ArrayList<>();
+        this.isHibernating = isHibernating;
+        this.history = history;
 
         //Log.d(TAG, ": Reminder Item Constructed");
     }
@@ -100,9 +106,9 @@ public class ReminderItem implements Comparable<ReminderItem> {
         //Log.d(TAG, ": recurrenceString: " + recurrenceString);
     }
 
-    public void addToHistory(HistoryItem historyItem)
+    public void addToHistory(String dateString, String action)
     {
-        historyItems.add(historyItem);
+        history.put(dateString, action);
     }
 
     /** Getters **/
@@ -154,10 +160,13 @@ public class ReminderItem implements Comparable<ReminderItem> {
         return isSnoozed;
     }
 
-    public ArrayList<HistoryItem> getHistoryItems() {
-        return historyItems;
+    public boolean isHibernating() {
+        return isHibernating;
     }
 
+    public Map<String, String> getHistory() {
+        return history;
+    }
 
     /** Setters **/
     public void setTitle(String title) {
@@ -198,4 +207,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
         this.isSnoozed = isSnoozed;
     }
 
+    public void setHibernating(boolean hibernating) {
+        isHibernating = hibernating;
+    }
 }
