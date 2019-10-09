@@ -217,6 +217,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
         userProfileDoc.put("reminderHour", userProfile.getReminderHour());
         userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
+        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
+        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

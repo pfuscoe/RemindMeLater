@@ -269,24 +269,18 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                     Map<String, String> reminderCategories =
                             (Map<String, String>) documentSnapshot.get("reminderCategories");
 
-                    /*
-                    //Map<String, Integer> reminderCategories =
-                            //(Map<String, Integer>) documentSnapshot.get("reminderCategories");
-                    Map<String, Integer> reminderCategories = new HashMap<>();
-                    Map<String, Long> reminderCategoriesLongFormat =
-                            (Map<String, Long>) documentSnapshot.get("reminderCategories");
-
-                    for (Map.Entry<String, Long> entry : reminderCategoriesLongFormat.entrySet())
-                    {
-                        reminderCategories.put(entry.getKey(), Math.toIntExact(entry.getValue()));
-                    }
-                    */
-
                     MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
                     MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
 
+                    int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
+
+                    ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
+                    String[] friends;
+                    friends = friendsList.toArray(new String[0]);
+
                     userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
+                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
+                            hibernateLength, friends);
 
                     Log.d(TAG, "UserProfile loaded");
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());

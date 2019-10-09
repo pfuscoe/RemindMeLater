@@ -15,6 +15,8 @@ public class UserProfile {
     private Map<String, String> reminderCategories;  // Category Name & Icon Name
     private int reminderHour;
     private int reminderMinute;
+    private int hibernateLength;
+    private String[] friends;
 
 
     public UserProfile() {
@@ -29,10 +31,13 @@ public class UserProfile {
         this.reminderCategories = new HashMap<>();
         this.reminderHour = MainActivity.DEFAULT_REMINDER_TIME_HOUR;
         this.reminderMinute = MainActivity.DEFAULT_REMINDER_TIME_MINUTE;
+        this.hibernateLength = MainActivity.DEFAULT_HIBERNATE_LENGTH;
+        this.friends = new String[]{};
     }
 
     public UserProfile(String id, String displayName, String[] subscriptions,
-                       Map<String, String> reminderCategories, int reminderHour, int reminderMinute)
+                       Map<String, String> reminderCategories, int reminderHour, int reminderMinute,
+                       int hibernateLength, String[] friends)
     {
         this.id = id;
         this.displayName = displayName;
@@ -40,6 +45,8 @@ public class UserProfile {
         this.reminderCategories = reminderCategories;
         this.reminderHour = reminderHour;
         this.reminderMinute = reminderMinute;
+        this.hibernateLength = hibernateLength;
+        this.friends = friends;
     }
 
 
@@ -55,6 +62,20 @@ public class UserProfile {
         ArrayList<String> tempList = new ArrayList<>(Arrays.asList(subscriptions));
         tempList.remove(groupId);
         subscriptions = tempList.toArray(new String[0]);
+    }
+
+    public void addFriend(String friendId)
+    {
+        ArrayList<String> tempList = new ArrayList<>(Arrays.asList(friends));
+        tempList.add(friendId);
+        friends = tempList.toArray(new String[0]);
+    }
+
+    public void removeFriend(String friendId)
+    {
+        ArrayList<String> tempList = new ArrayList<>(Arrays.asList(friends));
+        tempList.remove(friendId);
+        friends = tempList.toArray(new String[0]);
     }
 
     public void addReminderCategory(String categoryName, String categoryIconName)
@@ -110,5 +131,21 @@ public class UserProfile {
 
     public void setReminderMinute(int reminderMinute) {
         this.reminderMinute = reminderMinute;
+    }
+
+    public int getHibernateLength() {
+        return hibernateLength;
+    }
+
+    public void setHibernateLength(int hibernateLength) {
+        this.hibernateLength = hibernateLength;
+    }
+
+    public String[] getFriends() {
+        return friends;
+    }
+
+    public void setFriends(String[] friends) {
+        this.friends = friends;
     }
 }

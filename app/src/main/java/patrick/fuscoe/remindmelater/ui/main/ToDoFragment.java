@@ -287,8 +287,15 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
                     MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
 
+                    int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
+
+                    ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
+                    String[] friends;
+                    friends = friendsList.toArray(new String[0]);
+
                     userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
+                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
+                            hibernateLength, friends);
 
                     Log.d(TAG, "UserProfile loaded");
                     ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
@@ -512,6 +519,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
         userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
         userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
+        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
+        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
 
         return userProfileDoc;
     }

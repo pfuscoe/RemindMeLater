@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
     public static final int DEFAULT_REMINDER_TIME_HOUR = 8;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
+    public static final int DEFAULT_HIBERNATE_LENGTH = 14;
     public static final String DEFAULT_REMINDER_CATEGORY_ICON_NAME = "category_alarm";
     public static final String DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME = "category_format_list_checkbox";
     public static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
@@ -372,11 +373,17 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
         reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
 
+        int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
+
+        ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
+        String[] friends;
+        friends = friendsList.toArray(new String[0]);
+
         Log.d(TAG, "buildUserProfileObj: reminderTimeHour = " + reminderTimeHour +
                 ". reminderTimeMinute = " + reminderTimeMinute);
 
         userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                reminderTimeHour, reminderTimeMinute);
+                reminderTimeHour, reminderTimeMinute, hibernateLength, friends);
 
         Log.d(TAG, ": userProfile loaded from cloud");
     }
@@ -420,12 +427,21 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userProfileDoc.put("reminderHour", DEFAULT_REMINDER_TIME_HOUR);
         userProfileDoc.put("reminderMinute", DEFAULT_REMINDER_TIME_MINUTE);
 
+        userProfileDoc.put("hibernateLength", DEFAULT_HIBERNATE_LENGTH);
+
+        ArrayList<String> friendsList = new ArrayList<>();
+        userProfileDoc.put("friends", friendsList);
+
         // Set new user profile
         String[] subscriptions = new String[0];
         subscriptions = subscriptionsList.toArray(subscriptions);
 
+        String[] friends;
+        friends = friendsList.toArray(new String[0]);
+
         userProfile = new UserProfile(userId, newUserDisplayName, subscriptions,
-                reminderCategoriesMap, DEFAULT_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_MINUTE);
+                reminderCategoriesMap, DEFAULT_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_MINUTE,
+                DEFAULT_HIBERNATE_LENGTH, friends);
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
