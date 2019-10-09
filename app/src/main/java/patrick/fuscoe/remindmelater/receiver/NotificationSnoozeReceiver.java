@@ -108,6 +108,8 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         reminderItemMap.put("description", reminderItem.getDescription());
         reminderItemMap.put("isRecurring", reminderItem.isRecurring());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
+        reminderItemMap.put("isHibernating", reminderItem.isHibernating());
+        reminderItemMap.put("history", reminderItem.getHistory());
 
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

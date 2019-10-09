@@ -516,6 +516,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("description", reminderItem.getDescription());
         reminderItemMap.put("isRecurring", reminderItem.isRecurring());
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
+        reminderItemMap.put("isHibernating", reminderItem.isHibernating());
+        reminderItemMap.put("history", reminderItem.getHistory());
 
         remindersDocRef.update(title, reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

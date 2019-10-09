@@ -222,10 +222,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                                 String description = (String) reminderItemMap.get("description");
 
                                 boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
+                                boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
+                                Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
 
                                 ReminderItem reminderItem = new ReminderItem(title, isRecurring,
                                         recurrenceNum, recurrenceInterval, nextOccurrence, category,
-                                        categoryIconName, description, isSnoozed);
+                                        categoryIconName, description, isSnoozed, isHibernating, history);
 
                                 reminderListFromDoc.add(reminderItem);
                             }
@@ -362,9 +364,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         String description = "";
         boolean isSnoozed = false;
         boolean isRecurring = true;
+        boolean isHibernating = false;
+        Map<String, String> history = new HashMap<>();
 
         ReminderItem reminderItem = new ReminderItem(title, isRecurring, recurrenceNum,
-                recurrenceInterval, nextOccurrence, category, categoryIconName, description, isSnoozed);
+                recurrenceInterval, nextOccurrence, category, categoryIconName, description,
+                isSnoozed, isHibernating, history);
 
         //reminderItemList.add(reminderItem);
 

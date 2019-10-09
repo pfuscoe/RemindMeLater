@@ -151,12 +151,14 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "category: " + category + ". categoryiconName: " + categoryIconName);
         String description = (String) reminderItemMap.get("description");
         boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
+        boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
+        Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
 
         //Log.d(TAG, ": recurrenceInterval: " + recurrenceInterval);
 
         reminderItem = new ReminderItem(reminderTitle, isRecurring, recurrenceNum,
                 recurrenceInterval, nextOccurrence, category,
-                categoryIconName, description, isSnoozed);
+                categoryIconName, description, isSnoozed, isHibernating, history);
     }
 
     public void sendNotification()
