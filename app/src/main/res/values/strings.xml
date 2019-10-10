@@ -65,4 +65,5 @@
     <string name="sign_up_verify_password">Verify Password</string>
     <string name="hibernating">Hibernating</string>
     <string name="hibernate">Hibernate</string>
+    <string name="author_by">by Patrick Fuscoe</string>
 </resources>
