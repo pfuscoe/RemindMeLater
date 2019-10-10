@@ -96,6 +96,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private Button btnSetDate;
     private CheckBox viewSnoozedCheckbox;
     private ImageView viewSnoozedIcon;
+    private CheckBox viewHibernatingCheckbox;
+    private ImageView viewHibernatingIcon;
     private EditText viewDescription;
     private Button btnCancel;
     private Button btnSave;
@@ -124,6 +126,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 case R.id.view_reminder_details_checkbox_snoozed:
                     toggleSnoozed();
                     return;
+
+                case R.id.view_reminder_details_checkbox_hibernating:
+                    toggleHibernating();
 
                 case R.id.view_reminder_details_button_cancel:
                     Log.d(TAG, ": Add/Edit Reminder Cancelled");
@@ -224,10 +229,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewSnoozedCheckbox = findViewById(R.id.view_reminder_details_checkbox_snoozed);
         viewSnoozedIcon = findViewById(R.id.view_reminder_details_snoozed_icon);
         viewSnoozedIcon.setColorFilter(getColor(R.color.red));
+        viewHibernatingCheckbox = findViewById(R.id.view_reminder_details_checkbox_hibernating);
+        viewHibernatingIcon = findViewById(R.id.view_reminder_details_hibernating_icon);
         viewDescription = findViewById(R.id.view_reminder_details_description);
 
         viewRecurringCheckbox.setOnClickListener(btnClickListener);
         viewSnoozedCheckbox.setOnClickListener(btnClickListener);
+        viewHibernatingCheckbox.setOnClickListener(btnClickListener);
 
         /*
         // Setup category select spinner
@@ -288,6 +296,18 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
     }
 
+    private void toggleHibernating()
+    {
+        if (viewHibernatingCheckbox.isChecked())
+        {
+            viewHibernatingIcon.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewHibernatingIcon.setVisibility(View.INVISIBLE);
+        }
+    }
+
     public void updateCategorySelectSpinner()
     {
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
@@ -333,10 +353,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
         viewRecurringCheckbox.setChecked(reminderItem.isRecurring());
         viewSnoozedCheckbox.setChecked(reminderItem.isSnoozed());
+        viewHibernatingCheckbox.setChecked(reminderItem.isHibernating());
         viewDescription.setText(reminderItem.getDescription());
 
         toggleRecurring();
         toggleSnoozed();
+        toggleHibernating();
 
         if (reminderItem.getCategoryIconName().equals("Main"))
         {
@@ -437,6 +459,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         setNextOccurrenceDate(localDate);
         viewSnoozedCheckbox.setChecked(false);
         viewSnoozedIcon.setVisibility(View.INVISIBLE);
+        viewHibernatingCheckbox.setChecked(false);
+        viewHibernatingIcon.setVisibility(View.INVISIBLE);
     }
 
     public void setNextOccurrenceDate(LocalDate localDate)
@@ -474,6 +498,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         String nextOccurrence = viewDateDisplay.getText().toString();
         String description = viewDescription.getText().toString();
         boolean isSnoozed = viewSnoozedCheckbox.isChecked();
+        boolean isHibernating = viewHibernatingCheckbox.isChecked();
 
         reminderItem.setTitle(title);
         reminderItem.setRecurring(isRecurring);
@@ -482,6 +507,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItem.setNextOccurrence(nextOccurrence);
         reminderItem.setDescription(description);
         reminderItem.setSnoozed(isSnoozed);
+        reminderItem.setHibernating(isHibernating);
 
         reminderItem.updateRecurrencePeriod();
         reminderItem.updateDaysAway(nextOccurrence);
