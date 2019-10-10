@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="GoogleAppIndexingWarning"
     package="patrick.fuscoe.remindmelater">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +17,8 @@
         <activity
             android:name=".FirebaseNewUserSignUpActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".FirebaseSignInActivity">
+            android:parentActivityName=".FirebaseSignInActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="patrick.fuscoe.remindmelater.FirebaseSignInActivity" />
@@ -50,7 +52,8 @@
         </activity>
         <activity
             android:name=".FirebaseSignInActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,7 +65,8 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:parentActivityName=".FirebaseSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <receiver
             android:name=".receiver.ReminderAlarmReceiver"
