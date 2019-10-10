@@ -45,7 +45,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
     public static final String NOTIFICATION_ACTION_DONE = "patrick.fuscoe.remindmelater.receiver.NotificationDoneReceiver";
     public static final String NOTIFICATION_ACTION_SNOOZE = "patrick.fuscoe.remindmelater.receiver.NotificationSnoozeReceiver";
-    public static final String NOTIFICATION_ACTION_DISMISS = "patrick.fuscoe.remindmelater.receiver.NotificationDismissReceiver";
+    public static final String NOTIFICATION_ACTION_HIBERNATE = "patrick.fuscoe.remindmelater.receiver.NotificationHibernateReceiver";
 
     public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
@@ -224,9 +224,16 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         PendingIntent snoozePendingIntent =
                 PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // TODO: Notification Dismiss Intent
-        //Intent dismissIntent = new Intent(context, NotificationDismissReceiver.class);
+        // Notification Hibernate Intent
+        Intent hibernateIntent = new Intent(context, NotificationHibernateReceiver.class);
+        hibernateIntent.setAction(NOTIFICATION_ACTION_HIBERNATE);
+        hibernateIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        hibernateIntent.putExtra(REMINDER_ITEM, reminderItemString);
+        hibernateIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
+        PendingIntent hibernatePendingIntent =
+                PendingIntent.getBroadcast(context, 0, hibernateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // Build Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
                 .setLargeIcon(largeIconBitmap)
                 .setSmallIcon(iconId)
@@ -239,7 +246,8 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                 .setSound(null)
                 .setVibrate(null)
                 .addAction(R.drawable.action_check, context.getString(R.string.done), donePendingIntent)
-                .addAction(R.drawable.action_alarm_snooze, context.getString(R.string.snooze), snoozePendingIntent);
+                .addAction(R.drawable.action_alarm_snooze, context.getString(R.string.snooze), snoozePendingIntent)
+                .addAction(R.drawable.hibernate, context.getString(R.string.hibernate), hibernatePendingIntent);
 
         if (!reminderItem.getDescription().equals(""))
         {
@@ -248,16 +256,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         notificationManager.notify(notificationId, builder.build());
     }
-
-    /*
-    private int generateUniqueInt()
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        long yesterday = calendar.getTimeInMillis();
-        return (int) (System.currentTimeMillis() - yesterday);
-    }
-    */
 
     private int generateUniqueInt()
     {

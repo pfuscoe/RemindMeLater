@@ -93,10 +93,10 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receiver.NotificationDismissReceiver"
+            android:name=".receiver.NotificationHibernateReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationDismissReceiver" />
+                <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationHibernateReceiver" />
             </intent-filter>
         </receiver>
     </application>

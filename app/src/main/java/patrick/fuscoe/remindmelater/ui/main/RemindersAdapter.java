@@ -81,6 +81,11 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
             holder.viewRowReminderSnoozeIcon.setImageResource(R.drawable.snooze);
             holder.viewRowReminderSnoozeIcon.setColorFilter(context.getColor(R.color.red));
         }
+        else if (reminderItem.isHibernating())
+        {
+            holder.viewRowReminderSnoozeIcon.setImageResource(R.drawable.hibernate);
+            holder.viewRowReminderSnoozeIcon.setColorFilter(context.getColor(R.color.greyDark));
+        }
     }
 
     @Override
