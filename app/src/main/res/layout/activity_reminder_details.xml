@@ -33,9 +33,9 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:ems="11"
+            android:hint="@string/new_reminder"
             android:inputType="textPersonName"
             android:maxWidth="256dp"
-            android:text="Name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

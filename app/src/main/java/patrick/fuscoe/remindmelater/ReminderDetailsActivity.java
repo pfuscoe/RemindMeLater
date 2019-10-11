@@ -219,7 +219,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(reminderItem.getTitle());
+
+        if (reminderItem.getTitle().equals(""))
+        {
+            getSupportActionBar().setTitle(R.string.new_reminder);
+        }
+        else
+        {
+            getSupportActionBar().setTitle(reminderItem.getTitle());
+        }
 
         // Setup views, fields, buttons, etc.
         viewTitle = findViewById(R.id.view_reminder_details_title);
@@ -352,7 +360,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void updateFields()
     {
-        viewTitle.setText(reminderItem.getTitle());
+        if (reminderItem.getTitle().equals(""))
+        {
+            viewTitle.setHint(R.string.new_reminder);
+        }
+        else
+        {
+            viewTitle.setText(reminderItem.getTitle());
+        }
+
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
         viewDateDisplay.setText(reminderItem.getNextOccurrence());
@@ -484,7 +500,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Log.d(TAG, "Title has changed.  Old title: " + reminderItem.getTitle() + ". New title: " + title);
             reminderTitleChanged = true;
             oldReminderTitle = reminderItem.getTitle();
-            deleteReminder(oldReminderTitle);
+
+            if (oldReminderTitle.equals(""))
+            {
+                saveReminder();
+            }
+            else
+            {
+                deleteReminder(oldReminderTitle);
+            }
         }
         else
         {
@@ -524,7 +548,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         if (title.equals(""))
         {
-            Toast.makeText(this, "Cannot Save Reminder: Title Must Not Be Blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot Save Reminder: You must enter a title", Toast.LENGTH_LONG).show();
             return;
         }
 

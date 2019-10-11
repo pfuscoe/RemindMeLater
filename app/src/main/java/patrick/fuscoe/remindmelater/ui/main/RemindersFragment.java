@@ -361,7 +361,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
     public void addReminder()
     {
-        String title = "New Reminder";
+        String title = "";
         int recurrenceNum = 7;
         String recurrenceInterval = "Days";
 
