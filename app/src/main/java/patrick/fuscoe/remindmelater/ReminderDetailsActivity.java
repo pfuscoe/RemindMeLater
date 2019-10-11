@@ -129,6 +129,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
                 case R.id.view_reminder_details_checkbox_hibernating:
                     toggleHibernating();
+                    return;
 
                 case R.id.view_reminder_details_button_cancel:
                     Log.d(TAG, ": Add/Edit Reminder Cancelled");
@@ -289,6 +290,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         if (viewSnoozedCheckbox.isChecked())
         {
             viewSnoozedIcon.setVisibility(View.VISIBLE);
+            viewHibernatingCheckbox.setChecked(false);
+            viewHibernatingIcon.setVisibility(View.INVISIBLE);
         }
         else
         {
@@ -301,6 +304,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         if (viewHibernatingCheckbox.isChecked())
         {
             viewHibernatingIcon.setVisibility(View.VISIBLE);
+            viewSnoozedCheckbox.setChecked(false);
+            viewSnoozedIcon.setVisibility(View.INVISIBLE);
         }
         else
         {
