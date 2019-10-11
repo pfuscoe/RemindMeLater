@@ -30,11 +30,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_app_icon" />
 
+    <TextView
+        android:id="@+id/view_sign_in_app_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/author_by"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_app_title" />
+
     <EditText
         android:id="@+id/view_new_user_sign_up_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="14"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
@@ -42,13 +53,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_app_title" />
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_app_author" />
 
     <EditText
         android:id="@+id/view_new_user_sign_up_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="14"
         android:hint="@string/password"
         android:inputType="textPassword"
@@ -62,7 +73,7 @@
         android:id="@+id/view_new_user_sign_up_verify_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="14"
         android:hint="@string/sign_up_verify_password"
         android:inputType="textPassword"
@@ -76,7 +87,7 @@
         android:id="@+id/view_new_user_sign_up_display_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="14"
         android:hint="@string/sign_up_display_name"
         android:inputType="textPersonName"
