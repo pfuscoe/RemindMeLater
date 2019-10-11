@@ -66,4 +66,5 @@
     <string name="hibernating">Hibernating</string>
     <string name="hibernate">Hibernate</string>
     <string name="author_by">by Patrick Fuscoe</string>
+    <string name="days_left">Days Left</string>
 </resources>

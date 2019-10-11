@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -329,6 +331,14 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         }
 
         return filteredReminderItemList;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        menu.removeItem(R.id.menu_main_edit);
+        menu.removeItem(R.id.menu_main_reorder);
     }
 
     @Override

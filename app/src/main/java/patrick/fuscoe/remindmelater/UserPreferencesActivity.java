@@ -182,28 +182,67 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     public void clearEmptyReminderCategories()
     {
-        loadReminders();
-        Map<String, String> reminderCategories = new HashMap<>();
-        reminderCategories.putAll(userProfile.getReminderCategories());
+        MainActivity.remindersDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
 
-        for (Map.Entry<String, String> reminderCategory : reminderCategories.entrySet())
-        {
-            int numReminders = 0;
+                            Map<String, Object> docMap = documentSnapshot.getData();
 
-            for (ReminderItem reminderItem : reminderItemList)
-            {
-                if (reminderCategory.getKey().equals(reminderItem.getCategory()))
-                {
-                    numReminders++;
-                }
-            }
+                            for (Map.Entry<String, Object> entry : docMap.entrySet())
+                            {
+                                if (!entry.getKey().contentEquals("userId"))
+                                {
+                                    String title = entry.getKey();
+                                    HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
-            if (numReminders == 0)
-            {
-                userProfile.removeReminderCategory(reminderCategory.getKey());
-                Log.d(TAG, reminderCategory.getKey() + " - Reminder Category Removed");
-            }
-        }
+                                    boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
+                                    int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
+                                    String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
+                                    String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
+                                    String category = (String) reminderItemMap.get("category");
+                                    String categoryIconName = (String) reminderItemMap.get("categoryIconName");
+                                    String description = (String) reminderItemMap.get("description");
+                                    boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
+                                    boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
+                                    Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
+
+                                    ReminderItem reminderItem = new ReminderItem(title, isRecurring,
+                                            recurrenceNum, recurrenceInterval, nextOccurrence,
+                                            category, categoryIconName, description, isSnoozed,
+                                            isHibernating, history);
+
+                                    reminderItemList.add(reminderItem);
+                                }
+                            }
+
+                            Map<String, String> reminderCategories = new HashMap<>();
+                            reminderCategories.putAll(userProfile.getReminderCategories());
+
+                            for (Map.Entry<String, String> reminderCategory : reminderCategories.entrySet())
+                            {
+                                int numReminders = 0;
+
+                                for (ReminderItem reminderItem : reminderItemList)
+                                {
+                                    if (reminderCategory.getKey().equals(reminderItem.getCategory()))
+                                    {
+                                        numReminders++;
+                                    }
+                                }
+
+                                if (numReminders == 0)
+                                {
+                                    userProfile.removeReminderCategory(reminderCategory.getKey());
+                                    Log.d(TAG, reminderCategory.getKey() + " - Reminder Category Removed");
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     public void saveUserPrefs()
@@ -250,47 +289,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     public void loadReminders()
     {
-        MainActivity.remindersDocRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot = task.getResult();
 
-                            Map<String, Object> docMap = documentSnapshot.getData();
-
-                            for (Map.Entry<String, Object> entry : docMap.entrySet())
-                            {
-                                if (!entry.getKey().contentEquals("userId"))
-                                {
-                                    String title = entry.getKey();
-                                    HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
-
-                                    boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
-                                    int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
-                                    String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
-                                    String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
-                                    String category = (String) reminderItemMap.get("category");
-                                    String categoryIconName = (String) reminderItemMap.get("categoryIconName");
-                                    String description = (String) reminderItemMap.get("description");
-                                    boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
-                                    boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
-                                    Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
-
-                                    ReminderItem reminderItem = new ReminderItem(title, isRecurring,
-                                            recurrenceNum, recurrenceInterval, nextOccurrence,
-                                            category, categoryIconName, description, isSnoozed,
-                                            isHibernating, history);
-
-                                    reminderItemList.add(reminderItem);
-                                }
-
-                            }
-
-                        }
-                    }
-                });
     }
 
 }
