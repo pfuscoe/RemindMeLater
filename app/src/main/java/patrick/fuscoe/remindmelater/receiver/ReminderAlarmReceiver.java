@@ -208,7 +208,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         // Notification Done Intent
         Intent doneIntent = new Intent(context, NotificationDoneReceiver.class);
-        doneIntent.setAction(NOTIFICATION_ACTION_DONE);
+        doneIntent.setAction(NOTIFICATION_ACTION_DONE + notificationId);
         doneIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         doneIntent.putExtra(REMINDER_ITEM, reminderItemString);
         doneIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
@@ -217,7 +217,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         // Notification Snooze Intent
         Intent snoozeIntent = new Intent(context, NotificationSnoozeReceiver.class);
-        snoozeIntent.setAction(NOTIFICATION_ACTION_SNOOZE);
+        snoozeIntent.setAction(NOTIFICATION_ACTION_SNOOZE + notificationId);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         snoozeIntent.putExtra(REMINDER_ITEM, reminderItemString);
         snoozeIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
@@ -226,7 +226,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         // Notification Hibernate Intent
         Intent hibernateIntent = new Intent(context, NotificationHibernateReceiver.class);
-        hibernateIntent.setAction(NOTIFICATION_ACTION_HIBERNATE);
+        hibernateIntent.setAction(NOTIFICATION_ACTION_HIBERNATE + notificationId);
         hibernateIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
         hibernateIntent.putExtra(REMINDER_ITEM, reminderItemString);
         hibernateIntent.putExtra(REMINDERS_DOC_ID, remindersDocId);
