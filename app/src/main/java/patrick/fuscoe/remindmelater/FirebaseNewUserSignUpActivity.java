@@ -80,6 +80,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         if (!verifyPassword.equals(password))
         {
             Toast.makeText(this, "Passwords do not match: Please verify that you entered the correct password", Toast.LENGTH_LONG).show();
+            return;
         }
 
         if (displayName.equals(""))
