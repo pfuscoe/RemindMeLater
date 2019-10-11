@@ -92,6 +92,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
         reminderItem.setNextOccurrence(nextOccurrence.toString());
         reminderItem.setSnoozed(true);
+        reminderItem.setHibernating(false);
 
         // TODO: Add action to history
     }

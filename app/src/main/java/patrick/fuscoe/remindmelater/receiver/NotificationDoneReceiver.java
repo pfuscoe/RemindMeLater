@@ -130,6 +130,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         Log.d(TAG, ": nextOccurrence: " + reminderItem.getNextOccurrence());
 
         reminderItem.setSnoozed(false);
+        reminderItem.setHibernating(false);
 
         //Log.d(TAG, "reminderItemToString: " + reminderItem.toString());
 

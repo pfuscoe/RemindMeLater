@@ -90,7 +90,8 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
         LocalDate nextOccurrence = now.plusDays(DEFAULT_HIBERNATE_DAYS);
 
         reminderItem.setNextOccurrence(nextOccurrence.toString());
-        reminderItem.setSnoozed(true);
+        reminderItem.setSnoozed(false);
+        reminderItem.setHibernating(true);
 
         // TODO: Add action to history
     }
