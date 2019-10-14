@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +29,9 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
     private EditText viewPassword;
     private EditText viewVerifyPassword;
     private EditText viewDisplayName;
+    private CheckBox viewPrivacyTosCheckbox;
+    private TextView viewPrivacyPolicy;
+    private TextView viewTos;
     private Button btnSignUp;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -34,6 +39,14 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId())
             {
+                case R.id.view_new_user_sign_up_privacy_policy:
+                    openPrivacyPolicy();
+                    return;
+
+                case R.id.view_new_user_sign_up_tos:
+                    openTos();
+                    return;
+
                 case R.id.btn_new_user_sign_up_sign_up:
                     signUp();
                     return;
@@ -53,8 +66,13 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         viewPassword = findViewById(R.id.view_new_user_sign_up_password);
         viewVerifyPassword = findViewById(R.id.view_new_user_sign_up_verify_password);
         viewDisplayName = findViewById(R.id.view_new_user_sign_up_display_name);
+        viewPrivacyTosCheckbox = findViewById(R.id.view_new_user_sign_up_privacy_tos_checkbox);
+        viewPrivacyPolicy = findViewById(R.id.view_new_user_sign_up_privacy_policy);
+        viewTos = findViewById(R.id.view_new_user_sign_up_tos);
         btnSignUp = findViewById(R.id.btn_new_user_sign_up_sign_up);
 
+        viewPrivacyPolicy.setOnClickListener(onClickListener);
+        viewTos.setOnClickListener(onClickListener);
         btnSignUp.setOnClickListener(onClickListener);
     }
 
@@ -89,6 +107,12 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if (!viewPrivacyTosCheckbox.isChecked())
+        {
+            Toast.makeText(this, "You must have read the Privacy Policy and agree to the Terms of Service before signing up", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -113,4 +137,15 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void openPrivacyPolicy()
+    {
+
+    }
+
+    public void openTos()
+    {
+
+    }
+
 }

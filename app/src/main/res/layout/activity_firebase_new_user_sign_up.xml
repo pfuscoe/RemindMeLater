@@ -97,16 +97,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_verify_password" />
 
-    <Button
-        android:id="@+id/btn_new_user_sign_up_sign_up"
-        android:layout_width="wrap_content"
+    <CheckBox
+        android:id="@+id/view_new_user_sign_up_privacy_tos_checkbox"
+        android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:text="@string/sign_up"
+        android:layout_marginTop="8dp"
+        android:text="@string/sign_up_privacy_tos_checkbox_text"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_display_name" />
+
+    <TextView
+        android:id="@+id/view_new_user_sign_up_privacy_policy"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/privacy_policy"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_privacy_tos_checkbox" />
+
+    <TextView
+        android:id="@+id/view_new_user_sign_up_tos"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/tos"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        app:layout_constraintStart_toEndOf="@+id/view_new_user_sign_up_privacy_policy"
+        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_privacy_tos_checkbox" />
+
+    <Button
+        android:id="@+id/btn_new_user_sign_up_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="72dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/sign_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_privacy_tos_checkbox" />
+
+    <TextView
+        android:id="@+id/view_new_user_sign_up_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/copyright_line"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_privacy_policy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

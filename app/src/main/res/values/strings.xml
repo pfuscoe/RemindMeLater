@@ -68,4 +68,8 @@
     <string name="author_by">by Patrick Fuscoe</string>
     <string name="days_left">Days Left</string>
     <string name="new_reminder">New Reminder</string>
+    <string name="sign_up_privacy_tos_checkbox_text">I have read the Privacy Policy and accept the Terms of Service for this App</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="tos">Terms of Service</string>
+    <string name="copyright_line">Copyright &#169; Patrick Fuscoe. All Rights Reserved.</string>
 </resources>
