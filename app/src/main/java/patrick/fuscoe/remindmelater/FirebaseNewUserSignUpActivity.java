@@ -140,7 +140,8 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     public void openPrivacyPolicy()
     {
-
+        Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(intent);
     }
 
     public void openTos()

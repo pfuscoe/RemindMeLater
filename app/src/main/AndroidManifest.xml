@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="GoogleAppIndexingWarning"
-    package="patrick.fuscoe.remindmelater">
+    package="patrick.fuscoe.remindmelater"
+    tools:ignore="GoogleAppIndexingWarning">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".TermsOfServiceActivity"></activity>
+        <activity android:name=".PrivacyPolicyActivity" />
         <activity
             android:name=".FirebaseNewUserSignUpActivity"
             android:label="@string/app_name"
@@ -65,8 +67,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:parentActivityName=".FirebaseSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".receiver.ReminderAlarmReceiver"
