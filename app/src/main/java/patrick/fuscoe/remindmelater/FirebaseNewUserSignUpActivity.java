@@ -146,7 +146,8 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     public void openTos()
     {
-
+        Intent intent = new Intent(this, TermsOfServiceActivity.class);
+        startActivity(intent);
     }
 
 }
