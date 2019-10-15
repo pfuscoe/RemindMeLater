@@ -48,7 +48,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private TextView viewNewUserLink;
     private TextView viewForgotPasswordLink;
     private Button btnLogin;
-    private Button btnSignInWithGoogle;
+    private com.google.android.gms.common.SignInButton btnSignInWithGoogle;
 
     private boolean userMustEnterLoginInfo;
 
