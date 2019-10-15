@@ -55,7 +55,7 @@
     <string name="reminder_notification_ids_file_key">patrick.fuscoe.remindmelater.REMINDER_NOTIFICATION_IDS</string>
     <string name="display_name">Display Name:</string>
     <string name="recurring">Recurring</string>
-    <string name="new_user_sign_up">New User Sign Up</string>
+    <string name="new_user_sign_up">Sign Up With Email</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
@@ -71,5 +71,5 @@
     <string name="sign_up_privacy_tos_checkbox_text">I have read the Privacy Policy and accept the Terms of Service for this App</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="tos">Terms of Service</string>
-    <string name="copyright_line">Copyright &#169; Patrick Fuscoe. All Rights Reserved.</string>
+    <string name="copyright_line">Copyright © 2019 Patrick Fuscoe</string>
 </resources>
