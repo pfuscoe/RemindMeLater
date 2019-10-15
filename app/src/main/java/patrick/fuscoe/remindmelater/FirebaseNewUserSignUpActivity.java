@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
@@ -122,11 +124,14 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             //FirebaseUser user = mAuth.getCurrentUser();
                             //updateUI(user);
+                            /*
                             Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, MainActivity.class);
                             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
                             intent.putExtra(DISPLAY_NAME, displayName);
                             startActivity(intent);
                             finish();
+                            */
+                            updateDisplayName();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -148,6 +153,64 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, TermsOfServiceActivity.class);
         startActivity(intent);
+    }
+
+    public void updateDisplayName()
+    {
+        String displayName = viewDisplayName.getText().toString();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName).build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Display Name added to Firebase user profile.");
+                        }
+
+                        checkEmailVerified();
+                    }
+                });
+    }
+
+    public void checkEmailVerified()
+    {
+        String displayName = viewDisplayName.getText().toString();
+
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user.isEmailVerified())
+        {
+            Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, MainActivity.class);
+            intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
+            intent.putExtra(DISPLAY_NAME, displayName);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Email verification sent.");
+                                Toast.makeText(FirebaseNewUserSignUpActivity.this, "Please check your email to verify your account", Toast.LENGTH_LONG).show();
+                                onBackPressed();
+                            }
+                            else
+                            {
+                                Log.w(TAG, "Failed to send verification email", task.getException());
+                                Toast.makeText(FirebaseNewUserSignUpActivity.this, "Failed to send verification email. Please contact support", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        }
     }
 
 }
