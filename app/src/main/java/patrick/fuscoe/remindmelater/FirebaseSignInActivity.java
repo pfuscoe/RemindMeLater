@@ -169,14 +169,21 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
-                            //FirebaseUser user = auth.getCurrentUser();
+                            FirebaseUser user = auth.getCurrentUser();
                             //updateUI(user);
-                            String userId = auth.getUid();
-                            Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
-                            intent.putExtra(USER_ID, userId);
-                            intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
-                            startActivity(intent);
-                            finish();
+                            if (user.isEmailVerified())
+                            {
+                                String userId = auth.getUid();
+                                Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
+                                intent.putExtra(USER_ID, userId);
+                                intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else
+                            {
+                                Toast.makeText(FirebaseSignInActivity.this, "Please check your email to verify your account before logging in", Toast.LENGTH_LONG).show();
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
