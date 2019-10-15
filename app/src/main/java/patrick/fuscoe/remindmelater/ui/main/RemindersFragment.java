@@ -287,7 +287,16 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                             hibernateLength, friends);
 
                     Log.d(TAG, "UserProfile loaded");
-                    ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName());
+
+                    if (!userProfile.getDisplayName().equals(""))
+                    {
+                        ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName() + "!");
+                    }
+                    else
+                    {
+                        ((MainActivity) getActivity()).setActionBarTitle("Hello, New User!");
+                    }
+
                     updateCategorySelectSpinner();
                 }
             }
