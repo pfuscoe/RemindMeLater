@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         userDocRef = db.collection("users").document(userId);
 
         setRemindersTabActive = false;
+        newUserDisplayName = "New User";
 
         createNotificationChannel();
 

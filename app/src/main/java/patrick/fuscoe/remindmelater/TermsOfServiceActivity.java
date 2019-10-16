@@ -15,6 +15,6 @@ public class TermsOfServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_terms_of_service);
 
         viewTermsOfServiceWebView = findViewById(R.id.view_terms_of_service_webview);
-        viewTermsOfServiceWebView.loadUrl("file:///android_asset/terms_and_conditions");
+        viewTermsOfServiceWebView.loadUrl("file:///android_asset/terms_and_conditions.html");
     }
 }
