@@ -71,6 +71,6 @@
     <string name="sign_up_privacy_tos_checkbox_text">I have read the Privacy Policy and accept the Terms of Service for this App</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="tos">Terms of Service</string>
-    <string name="copyright_line">Copyright © 2019 Patrick Fuscoe</string>
+    <string name="copyright_line">Copyright © Patrick Fuscoe 2019</string>
     <string name="web_client_id">812785313358-fcb8rmopmppagltd2crhjc0j85fom2gk.apps.googleusercontent.com</string>
 </resources>

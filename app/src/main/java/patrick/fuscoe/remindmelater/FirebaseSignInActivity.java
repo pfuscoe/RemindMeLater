@@ -35,6 +35,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FirebaseSignInActivity";
     public static final String CHECK_IF_NEW_USER = "patrick.fuscoe.remindmelater.CHECK_IF_NEW_USER";
+    public static final String DISPLAY_NAME = "patrick.fuscoe.remindmelater.DISPLAY_NAME";
+
     private static final int RC_SIGN_IN = 223;
 
     public static final String USER_ID = "patrick.fuscoe.remindmelater.USER_ID";
@@ -109,7 +111,9 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if (auth.getCurrentUser() != null)
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null)
         {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
