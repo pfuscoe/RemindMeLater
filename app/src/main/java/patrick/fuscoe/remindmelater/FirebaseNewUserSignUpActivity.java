@@ -201,7 +201,9 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "Email verification sent.");
                                 Toast.makeText(FirebaseNewUserSignUpActivity.this, "Please check your email to verify your account", Toast.LENGTH_LONG).show();
-                                onBackPressed();
+                                Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, FirebaseSignInActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                             else
                             {
