@@ -183,6 +183,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             else
                             {
                                 Toast.makeText(FirebaseSignInActivity.this, "Please check your email to verify your account before logging in", Toast.LENGTH_LONG).show();
+                                logoutUser();
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -245,6 +246,11 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void logoutUser()
+    {
+        AuthUI.getInstance().signOut(this);
     }
 
     /*

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -201,9 +202,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, "Email verification sent.");
                                 Toast.makeText(FirebaseNewUserSignUpActivity.this, "Please check your email to verify your account", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, FirebaseSignInActivity.class);
-                                startActivity(intent);
-                                finish();
+                                logoutUser();
                             }
                             else
                             {
@@ -213,6 +212,19 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    public void logoutUser()
+    {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, FirebaseSignInActivity.class);
+                        startActivity(intent);
+                        finishAffinity();
+                    }
+                });
     }
 
 }
