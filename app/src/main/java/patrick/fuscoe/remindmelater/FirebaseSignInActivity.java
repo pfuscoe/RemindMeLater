@@ -125,12 +125,11 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, FirebaseNewUserSignUpActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void openForgotPassword()
     {
-        String email = viewEmail.getText().toString();
+        final String email = viewEmail.getText().toString();
 
         if (email.equals(""))
         {
@@ -143,7 +142,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "Password Reset Email sent.");
+                            Log.d(TAG, "Password Reset Email sent to: " + email);
+                            Toast.makeText(FirebaseSignInActivity.this, "Password Reset Email sent to: " + email, Toast.LENGTH_LONG).show();
                         }
                     }
                 });

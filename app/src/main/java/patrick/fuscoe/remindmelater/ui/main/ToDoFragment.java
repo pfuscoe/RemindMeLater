@@ -299,14 +299,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     Log.d(TAG, "UserProfile loaded");
 
-                    if (!userProfile.getDisplayName().equals(""))
-                    {
-                        ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName() + "!");
-                    }
-                    else
-                    {
-                        ((MainActivity) getActivity()).setActionBarTitle("Hello, New User!");
-                    }
+                    ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName() + "!");
 
                     updateToDoGroupDisplayOnReorder();
                     UpdateToDoGroupsDisplay();

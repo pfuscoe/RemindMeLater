@@ -31,7 +31,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
     private EditText viewEmail;
     private EditText viewPassword;
     private EditText viewVerifyPassword;
-    private EditText viewDisplayName;
+    //private EditText viewDisplayName;
     private CheckBox viewPrivacyTosCheckbox;
     private TextView viewPrivacyPolicy;
     private TextView viewTos;
@@ -68,7 +68,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         viewEmail = findViewById(R.id.view_new_user_sign_up_email);
         viewPassword = findViewById(R.id.view_new_user_sign_up_password);
         viewVerifyPassword = findViewById(R.id.view_new_user_sign_up_verify_password);
-        viewDisplayName = findViewById(R.id.view_new_user_sign_up_display_name);
+        //viewDisplayName = findViewById(R.id.view_new_user_sign_up_display_name);
         viewPrivacyTosCheckbox = findViewById(R.id.view_new_user_sign_up_privacy_tos_checkbox);
         viewPrivacyPolicy = findViewById(R.id.view_new_user_sign_up_privacy_policy);
         viewTos = findViewById(R.id.view_new_user_sign_up_tos);
@@ -77,6 +77,8 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         viewPrivacyPolicy.setOnClickListener(onClickListener);
         viewTos.setOnClickListener(onClickListener);
         btnSignUp.setOnClickListener(onClickListener);
+
+
     }
 
     private void signUp()
@@ -84,7 +86,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         String email = viewEmail.getText().toString();
         String password = viewPassword.getText().toString();
         String verifyPassword = viewVerifyPassword.getText().toString();
-        final String displayName = viewDisplayName.getText().toString();
+        //final String displayName = viewDisplayName.getText().toString();
 
         if (email.equals(""))
         {
@@ -104,11 +106,13 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
             return;
         }
 
+        /*
         if (displayName.equals(""))
         {
             Toast.makeText(this, "Please enter a display name", Toast.LENGTH_LONG).show();
             return;
         }
+        */
 
         if (!viewPrivacyTosCheckbox.isChecked())
         {
@@ -132,7 +136,8 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                             */
-                            updateDisplayName();
+                            //updateDisplayName();
+                            checkEmailVerified();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -156,6 +161,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
     public void updateDisplayName()
     {
         String displayName = viewDisplayName.getText().toString();
@@ -177,10 +183,11 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                     }
                 });
     }
+    */
 
     public void checkEmailVerified()
     {
-        String displayName = viewDisplayName.getText().toString();
+        //String displayName = viewDisplayName.getText().toString();
 
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
@@ -189,7 +196,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         {
             Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, MainActivity.class);
             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
-            intent.putExtra(DISPLAY_NAME, displayName);
+            //intent.putExtra(DISPLAY_NAME, displayName);
             startActivity(intent);
             finish();
         }
