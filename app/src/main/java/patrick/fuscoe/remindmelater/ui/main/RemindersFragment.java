@@ -18,7 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,6 +67,8 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     private RecyclerView remindersRecyclerView;
     private RecyclerView.Adapter remindersAdapter;
     private RecyclerView.LayoutManager remindersLayoutManager;
+    private FrameLayout viewRemindersTips;
+    private WebView viewRemindersTipsWebView;
 
     private RemindersViewModel remindersViewModel;
     private UserProfileViewModel userProfileViewModel;
@@ -161,6 +165,10 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         viewCategorySpinner = root.findViewById(R.id.view_reminders_spinner_filter);
         //updateCategorySelectSpinner();
 
+        viewRemindersTips = root.findViewById(R.id.view_reminders_tips);
+        viewRemindersTipsWebView = root.findViewById(R.id.view_reminders_tips_webview);
+        viewRemindersTipsWebView.loadUrl("file:///android_asset/tips_reminders.html");
+
         // Setup recycler view
         remindersRecyclerView = root.findViewById(R.id.view_reminders_recycler);
         remindersRecyclerView.setHasFixedSize(true);
@@ -174,6 +182,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
         remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
         remindersRecyclerView.setAdapter(remindersAdapter);
+
+        // Show Tips if Reminders List Empty
+        if (reminderItemList.isEmpty())
+        {
+            viewRemindersTips.setVisibility(View.VISIBLE);
+        }
 
         return root;
     }
@@ -238,6 +252,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                     reminderItemList = reminderListFromDoc;
                     //Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
+
+                    if (!reminderItemList.isEmpty())
+                    {
+                        viewRemindersTips.setVisibility(View.INVISIBLE);
+                    }
+
                     Collections.sort(reminderItemList);
                     updateRemindersDisplay(reminderItemList);
                 }
