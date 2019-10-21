@@ -234,4 +234,14 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                 });
     }
 
+    private void showProgressBar()
+    {
+
+    }
+
+    private void hideProgressBar()
+    {
+
+    }
+
 }
