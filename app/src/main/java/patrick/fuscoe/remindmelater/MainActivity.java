@@ -35,6 +35,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static DocumentReference userDocRef;
     public static DocumentReference remindersDocRef;
 
+    private ProgressBar viewMainProgressBar;
     //private UserProfileViewModel userProfileViewModel;
     private UserProfile userProfile;
     private String remindersDocId;
@@ -124,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewMainProgressBar = findViewById(R.id.view_main_progress_bar);
+        viewMainProgressBar.setVisibility(View.VISIBLE);
 
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
@@ -226,6 +232,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        viewMainProgressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
