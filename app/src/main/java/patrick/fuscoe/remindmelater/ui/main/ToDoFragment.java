@@ -23,7 +23,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -76,6 +78,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
     private RecyclerView.LayoutManager toDoGroupsLayoutManager;
+    private FrameLayout viewToDoGroupsTips;
+    private WebView viewToDoGroupsTipsWebview;
 
     private ToDoGroupsViewModel toDoGroupsViewModel;
     private UserProfileViewModel userProfileViewModel;
@@ -167,6 +171,10 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_to_do_groups, container, false);
 
+        viewToDoGroupsTips = root.findViewById(R.id.view_to_do_groups_tips);
+        viewToDoGroupsTipsWebview = root.findViewById(R.id.view_to_do_groups_tips_webview);
+        viewToDoGroupsTipsWebview.loadUrl("file:///android_asset/tips_to_do_groups.html");
+
         // Setup Toolbar
         setHasOptionsMenu(true);
 
@@ -179,6 +187,12 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
+
+        // Show Tips if To Groups List Empty
+        if (toDoGroupList.isEmpty())
+        {
+            viewToDoGroupsTips.setVisibility(View.VISIBLE);
+        }
 
         ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             @Override
@@ -247,6 +261,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     }
 
                     toDoGroupList = toDoGroupDocs;
+
+                    if (!toDoGroupList.isEmpty())
+                    {
+                        viewToDoGroupsTips.setVisibility(View.INVISIBLE);
+                    }
 
                     //Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     updateToDoGroupDisplayOnReorder();
