@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <ProgressBar
-        android:id="@+id/view_new_user_sign_in_progress_bar"
+        android:id="@+id/view_new_user_sign_up_progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_app_icon" />
 
     <TextView
-        android:id="@+id/view_sign_in_app_author"
+        android:id="@+id/view_new_user_sign_up_app_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_app_author" />
+        app:layout_constraintTop_toBottomOf="@+id/view_new_user_sign_up_app_author" />
 
     <EditText
         android:id="@+id/view_new_user_sign_up_password"

@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,10 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
 
+    private ProgressBar viewProgressBar;
+    private ImageView viewAppIcon;
+    private TextView viewAppTitle;
+    private TextView viewAppAuthor;
     private EditText viewEmail;
     private EditText viewPassword;
     private EditText viewVerifyPassword;
@@ -36,6 +42,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
     private TextView viewPrivacyPolicy;
     private TextView viewTos;
     private Button btnSignUp;
+    private TextView viewCopyright;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -65,6 +72,10 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_firebase_new_user_sign_up);
 
+        viewProgressBar = findViewById(R.id.view_new_user_sign_up_progress_bar);
+        viewAppIcon = findViewById(R.id.view_new_user_sign_up_app_icon);
+        viewAppTitle = findViewById(R.id.view_new_user_sign_up_app_title);
+        viewAppAuthor = findViewById(R.id.view_new_user_sign_up_app_author);
         viewEmail = findViewById(R.id.view_new_user_sign_up_email);
         viewPassword = findViewById(R.id.view_new_user_sign_up_password);
         viewVerifyPassword = findViewById(R.id.view_new_user_sign_up_verify_password);
@@ -73,6 +84,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
         viewPrivacyPolicy = findViewById(R.id.view_new_user_sign_up_privacy_policy);
         viewTos = findViewById(R.id.view_new_user_sign_up_tos);
         btnSignUp = findViewById(R.id.btn_new_user_sign_up_sign_up);
+        viewCopyright = findViewById(R.id.view_new_user_sign_up_copyright);
 
         viewPrivacyPolicy.setOnClickListener(onClickListener);
         viewTos.setOnClickListener(onClickListener);
@@ -236,7 +248,19 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     private void showProgressBar()
     {
+        viewProgressBar.setVisibility(View.VISIBLE);
 
+        viewAppIcon.setVisibility(View.INVISIBLE);
+        viewAppTitle.setVisibility(View.INVISIBLE);
+        viewAppAuthor.setVisibility(View.INVISIBLE);
+        viewEmail.setVisibility(View.INVISIBLE);
+        viewPassword.setVisibility(View.INVISIBLE);
+        viewVerifyPassword.setVisibility(View.INVISIBLE);
+        viewPrivacyTosCheckbox.setVisibility(View.INVISIBLE);
+        viewPrivacyPolicy.setVisibility(View.INVISIBLE);
+        viewTos.setVisibility(View.INVISIBLE);
+        btnSignUp.setVisibility(View.INVISIBLE);
+        viewCopyright.setVisibility(View.INVISIBLE);
     }
 
     private void hideProgressBar()
