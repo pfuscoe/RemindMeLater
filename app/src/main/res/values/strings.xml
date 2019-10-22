@@ -76,4 +76,6 @@
     <string name="select_an_icon">Select an Icon (optional):</string>
     <string name="dialog_to_do_group_name_hint">Enter To Do List Name</string>
     <string name="dialog_reminder_category_name_hint">Enter Reminder Category Name</string>
+    <string name="show_tips">Show Tips</string>
+    <string name="hide_tips">Hide Tips</string>
 </resources>

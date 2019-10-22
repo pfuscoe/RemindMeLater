@@ -90,10 +90,14 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     private ToDoGroup toDoGroupToEdit;
     private ToDoGroup toDoGroupToDelete;
 
+    //private Menu optionsMenu;
+    private MenuItem tipsMenuItem;
+
     private boolean editMode;
     private boolean reorderMode;
     private boolean userFieldChanged;
     private boolean groupAdded;
+    private boolean isTipsOn;
 
     private ItemTouchHelper toDoGroupReorderItemTouchHelper;
 
@@ -163,6 +167,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         reorderMode = false;
         userFieldChanged = false;
         groupAdded = false;
+        isTipsOn = false;
     }
 
     @Override
@@ -189,9 +194,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
 
         // Show Tips if To Groups List Empty
-        if (toDoGroupList.isEmpty())
+        if (toDoGroupList.isEmpty() && !isTipsOn)
         {
-            viewToDoGroupsTips.setVisibility(View.VISIBLE);
+            toggleTips();
         }
 
         ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
@@ -262,9 +267,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     toDoGroupList = toDoGroupDocs;
 
-                    if (!toDoGroupList.isEmpty())
+                    if (!toDoGroupList.isEmpty() && isTipsOn)
                     {
-                        viewToDoGroupsTips.setVisibility(View.INVISIBLE);
+                        toggleTips();
                     }
 
                     //Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
@@ -418,6 +423,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
 
+        //optionsMenu = menu;
+        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
+
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
 
         if (editMode)
@@ -453,6 +461,10 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             case R.id.menu_main_reorder:
                 Log.d(TAG, ": Reorder menu item selected");
                 enterReorderMode();
+                return true;
+
+            case R.id.menu_main_tips:
+                toggleTips();
                 return true;
 
             default:
@@ -735,6 +747,24 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         requireActivity().invalidateOptionsMenu();
 
         UpdateToDoGroupsDisplay();
+    }
+
+    private void toggleTips()
+    {
+        if (isTipsOn)
+        {
+            viewToDoGroupsTips.setVisibility(View.INVISIBLE);
+            toDoGroupsRecyclerView.setVisibility(View.VISIBLE);
+            tipsMenuItem.setTitle(R.string.show_tips);
+            isTipsOn = false;
+        }
+        else
+        {
+            viewToDoGroupsTips.setVisibility(View.VISIBLE);
+            toDoGroupsRecyclerView.setVisibility(View.INVISIBLE);
+            tipsMenuItem.setTitle(R.string.hide_tips);
+            isTipsOn = true;
+        }
     }
 
 }

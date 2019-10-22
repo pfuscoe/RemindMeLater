@@ -7,14 +7,14 @@
         android:id="@+id/menu_main_add"
         android:icon="@drawable/ic_menu_add"
         android:orderInCategory="100"
-        android:title="Add New Group"
+        android:title="Add"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_main_edit"
         android:icon="@drawable/ic_menu_edit"
         android:orderInCategory="100"
-        android:title="Edit Group"
+        android:title="Edit"
         app:showAsAction="ifRoom" />
 
     <item
@@ -32,7 +32,13 @@
     <item
         android:id="@+id/menu_main_reorder"
         android:orderInCategory="100"
-        android:title="Reorder Groups"
+        android:title="Reorder"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/menu_main_tips"
+        android:orderInCategory="100"
+        android:title="@string/show_tips"
         app:showAsAction="collapseActionView" />
 
 </menu>

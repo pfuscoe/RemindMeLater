@@ -76,8 +76,11 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     private UserProfile userProfile;
     private List<ReminderItem> reminderItemList;
 
+    private MenuItem tipsMenuItem;
+
     private String selectedCategoryName = "All";
     private boolean editMode;
+    private boolean isTipsOn;
 
 
     private ReminderClickListener reminderClickListener = new ReminderClickListener() {
@@ -142,6 +145,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         reminderItemList = new ArrayList<>();
 
         editMode = false;
+        isTipsOn = false;
 
         /*
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
@@ -184,9 +188,9 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         remindersRecyclerView.setAdapter(remindersAdapter);
 
         // Show Tips if Reminders List Empty
-        if (reminderItemList.isEmpty())
+        if (reminderItemList.isEmpty() && !isTipsOn)
         {
-            viewRemindersTips.setVisibility(View.VISIBLE);
+            toggleTips();
         }
 
         return root;
@@ -253,9 +257,9 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                     reminderItemList = reminderListFromDoc;
                     //Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
 
-                    if (!reminderItemList.isEmpty())
+                    if (!reminderItemList.isEmpty() && isTipsOn)
                     {
-                        viewRemindersTips.setVisibility(View.INVISIBLE);
+                        toggleTips();
                     }
 
                     Collections.sort(reminderItemList);
@@ -359,6 +363,8 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
+        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
+
         menu.removeItem(R.id.menu_main_edit);
         menu.removeItem(R.id.menu_main_reorder);
     }
@@ -374,6 +380,10 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
+                return true;
+
+            case R.id.menu_main_tips:
+                toggleTips();
                 return true;
 
             default:
@@ -413,5 +423,23 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         intent.putExtra(USER_PROFILE, userProfileString);
         startActivity(intent);
+    }
+
+    private void toggleTips()
+    {
+        if (isTipsOn)
+        {
+            viewRemindersTips.setVisibility(View.INVISIBLE);
+            remindersRecyclerView.setVisibility(View.VISIBLE);
+            tipsMenuItem.setTitle(R.string.show_tips);
+            isTipsOn = false;
+        }
+        else
+        {
+            viewRemindersTips.setVisibility(View.VISIBLE);
+            remindersRecyclerView.setVisibility(View.INVISIBLE);
+            tipsMenuItem.setTitle(R.string.hide_tips);
+            isTipsOn = true;
+        }
     }
 }
