@@ -129,15 +129,19 @@ public class AddCategoryDialogFragment extends DialogFragment {
 
         EditText viewCategoryName = v.findViewById(R.id.dialog_category_edit_name);
 
+        String dialogTitle;
+
         if (context instanceof ReminderDetailsActivity)
         {
             selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
             viewCategoryName.setHint(R.string.dialog_reminder_category_name_hint);
+            dialogTitle = getString(R.string.dialog_add_reminder_category_title);
         }
         else
         {
             selectedIconName = MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME;
             viewCategoryName.setHint(R.string.dialog_to_do_group_name_hint);
+            dialogTitle = getString(R.string.dialog_add_category_title);
         }
 
         //Bundle bundle = getArguments();
@@ -153,7 +157,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
         categoryIconRecycler.setAdapter(categoryIconRecyclerAdapter);
 
         builder.setView(v)
-                .setTitle(R.string.dialog_add_category_title)
+                .setTitle(dialogTitle)
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {

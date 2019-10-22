@@ -196,7 +196,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         // Show Tips if To Groups List Empty
         if (toDoGroupList.isEmpty() && !isTipsOn)
         {
-            toggleTips();
+            viewToDoGroupsTips.setVisibility(View.VISIBLE);
+            isTipsOn = true;
         }
 
         ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
@@ -424,7 +425,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         inflater.inflate(R.menu.menu_main, menu);
 
         //optionsMenu = menu;
-        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
 
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
 
@@ -435,6 +435,17 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         else
         {
             viewIconEdit.setIcon(R.drawable.ic_menu_edit);
+        }
+
+        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
+
+        if (isTipsOn)
+        {
+            tipsMenuItem.setTitle(R.string.hide_tips);
+        }
+        else
+        {
+            tipsMenuItem.setTitle(R.string.show_tips);
         }
 
         super.onCreateOptionsMenu(menu, inflater);

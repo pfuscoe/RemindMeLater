@@ -190,7 +190,8 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         // Show Tips if Reminders List Empty
         if (reminderItemList.isEmpty() && !isTipsOn)
         {
-            toggleTips();
+            viewRemindersTips.setVisibility(View.VISIBLE);
+            isTipsOn = true;
         }
 
         return root;
@@ -363,10 +364,19 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
-
         menu.removeItem(R.id.menu_main_edit);
         menu.removeItem(R.id.menu_main_reorder);
+
+        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
+
+        if (isTipsOn)
+        {
+            tipsMenuItem.setTitle(R.string.hide_tips);
+        }
+        else
+        {
+            tipsMenuItem.setTitle(R.string.show_tips);
+        }
     }
 
     @Override
