@@ -496,7 +496,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         commitAddToDoGroupBatch(docId, toDoGroupDoc, userProfileDoc);
 
         Log.d(TAG, ": To Do Group " + title + " added");
-        Toast.makeText(getContext(), "To Do Group Added: " + title, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "To Do List Added: " + title, Toast.LENGTH_LONG).show();
     }
 
     private void editToDoGroup(ToDoGroup toDoGroup)
@@ -521,7 +521,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                 });
 
         Log.d(TAG, ": To Do Group " + toDoGroup.getTitle() + " saved");
-        Toast.makeText(getContext(), "To Do Group Saved: " + toDoGroup.getTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "To Do List Saved: " + toDoGroup.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     private void deleteToDoGroup(ToDoGroup toDoGroup)
@@ -535,7 +535,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         commitDeleteToDoGroupBatch(docId, userProfileDoc);
 
         Log.d(TAG, ": To Do Group " + groupTitle + " deleted");
-        Toast.makeText(getContext(), "To Do Group Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "To Do List Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
     }
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
@@ -680,7 +680,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
             if (newTitle.equals(""))
             {
-                Toast.makeText(getContext(), "Add To Do Group Failed: Group Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Add To Do List Failed: List Name Must Not Be Blank", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -703,7 +703,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
             if (newTitle.equals(""))
             {
-                Toast.makeText(getContext(), "Edit To Do Group Failed: Group Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Edit To Do List Failed: List Name Must Not Be Blank", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -725,11 +725,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     public void onDialogNegativeClick(DialogFragment dialog) {
         if (dialog instanceof AddToDoGroupDialogFragment)
         {
-            Toast.makeText(getContext(), "Add To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Add To Do List Cancelled", Toast.LENGTH_SHORT).show();
         }
         else if (dialog instanceof EditToDoGroupDialogFragment)
         {
-            Toast.makeText(getContext(), "Edit To Do Group Cancelled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Edit To Do List Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 

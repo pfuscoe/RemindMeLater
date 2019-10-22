@@ -155,10 +155,15 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        hideProgressBar();
+
                         if (task.isSuccessful()) {
-                            hideProgressBar();
                             Log.d(TAG, "Password Reset Email sent to: " + email);
                             Toast.makeText(FirebaseSignInActivity.this, "Password Reset Email sent to: " + email, Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(FirebaseSignInActivity.this, "Error sending password reset email to " + email + ": " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
