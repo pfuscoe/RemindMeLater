@@ -270,14 +270,29 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     toDoGroupList = toDoGroupDocs;
 
-                    if (toDoGroupList.isEmpty() && !isTipsOn)
+                    if (tipsMenuItem != null)
                     {
-                        toggleTips();
-                    }
+                        if (toDoGroupList.isEmpty() && !isTipsOn)
+                        {
+                            toggleTips();
+                        }
 
-                    if (!toDoGroupList.isEmpty() && isTipsOn)
+                        if (!toDoGroupList.isEmpty() && isTipsOn)
+                        {
+                            toggleTips();
+                        }
+                    }
+                    else
                     {
-                        toggleTips();
+                        if (toDoGroupList.isEmpty() && !isTipsOn)
+                        {
+                            toggleTipsNoMenu();
+                        }
+
+                        if (!toDoGroupList.isEmpty() && isTipsOn)
+                        {
+                            toggleTipsNoMenu();
+                        }
                     }
 
                     //Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
@@ -781,6 +796,22 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             viewToDoGroupsTips.setVisibility(View.VISIBLE);
             toDoGroupsRecyclerView.setVisibility(View.INVISIBLE);
             tipsMenuItem.setTitle(R.string.hide_tips);
+            isTipsOn = true;
+        }
+    }
+
+    private void toggleTipsNoMenu()
+    {
+        if (isTipsOn)
+        {
+            viewToDoGroupsTips.setVisibility(View.INVISIBLE);
+            toDoGroupsRecyclerView.setVisibility(View.VISIBLE);
+            isTipsOn = false;
+        }
+        else
+        {
+            viewToDoGroupsTips.setVisibility(View.VISIBLE);
+            toDoGroupsRecyclerView.setVisibility(View.INVISIBLE);
             isTipsOn = true;
         }
     }

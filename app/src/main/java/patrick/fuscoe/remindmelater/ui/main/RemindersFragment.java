@@ -260,14 +260,29 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                     reminderItemList = reminderListFromDoc;
                     //Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
 
-                    if (reminderItemList.isEmpty() && !isTipsOn)
+                    if (tipsMenuItem != null)
                     {
-                        toggleTips();
-                    }
+                        if (reminderItemList.isEmpty() && !isTipsOn)
+                        {
+                            toggleTips();
+                        }
 
-                    if (!reminderItemList.isEmpty() && isTipsOn)
+                        if (!reminderItemList.isEmpty() && isTipsOn)
+                        {
+                            toggleTips();
+                        }
+                    }
+                    else
                     {
-                        toggleTips();
+                        if (reminderItemList.isEmpty() && !isTipsOn)
+                        {
+                            toggleTipsNoMenu();
+                        }
+
+                        if (!reminderItemList.isEmpty() && isTipsOn)
+                        {
+                            toggleTipsNoMenu();
+                        }
                     }
 
                     Collections.sort(reminderItemList);
@@ -456,6 +471,22 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
             viewRemindersTips.setVisibility(View.VISIBLE);
             remindersRecyclerView.setVisibility(View.INVISIBLE);
             tipsMenuItem.setTitle(R.string.hide_tips);
+            isTipsOn = true;
+        }
+    }
+
+    private void toggleTipsNoMenu()
+    {
+        if (isTipsOn)
+        {
+            viewRemindersTips.setVisibility(View.INVISIBLE);
+            remindersRecyclerView.setVisibility(View.VISIBLE);
+            isTipsOn = false;
+        }
+        else
+        {
+            viewRemindersTips.setVisibility(View.VISIBLE);
+            remindersRecyclerView.setVisibility(View.INVISIBLE);
             isTipsOn = true;
         }
     }
