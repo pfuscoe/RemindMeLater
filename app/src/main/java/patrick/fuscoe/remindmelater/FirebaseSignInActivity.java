@@ -221,6 +221,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     private void signInWithGoogle()
     {
+        showProgressBar();
+
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -247,7 +249,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
-        showProgressBar();
+        //showProgressBar();
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
@@ -255,7 +257,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            hideProgressBar();
+                            //hideProgressBar();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = auth.getCurrentUser();
@@ -263,6 +265,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                             intent.putExtra(USER_ID, userId);
                             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
+                            hideProgressBar();
                             startActivity(intent);
                             finish();
                         } else {
