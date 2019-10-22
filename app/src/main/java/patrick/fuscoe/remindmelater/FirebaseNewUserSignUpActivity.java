@@ -132,6 +132,8 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
             return;
         }
 
+        showProgressBar();
+
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -152,6 +154,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             checkEmailVerified();
                         } else {
                             // If sign in fails, display a message to the user.
+                            hideProgressBar();
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(FirebaseNewUserSignUpActivity.this, "Authentication failed: " +
                                             task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -206,6 +209,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
         if (user.isEmailVerified())
         {
+            hideProgressBar();
             Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, MainActivity.class);
             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
             //intent.putExtra(DISPLAY_NAME, displayName);
@@ -225,6 +229,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                             }
                             else
                             {
+                                hideProgressBar();
                                 Log.w(TAG, "Failed to send verification email", task.getException());
                                 Toast.makeText(FirebaseNewUserSignUpActivity.this, "Failed to send verification email. Please contact support", Toast.LENGTH_LONG).show();
                             }
@@ -239,6 +244,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
+                        hideProgressBar();
                         Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
                         finishAffinity();
@@ -265,7 +271,19 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
     private void hideProgressBar()
     {
+        viewProgressBar.setVisibility(View.INVISIBLE);
 
+        viewAppIcon.setVisibility(View.VISIBLE);
+        viewAppTitle.setVisibility(View.VISIBLE);
+        viewAppAuthor.setVisibility(View.VISIBLE);
+        viewEmail.setVisibility(View.VISIBLE);
+        viewPassword.setVisibility(View.VISIBLE);
+        viewVerifyPassword.setVisibility(View.VISIBLE);
+        viewPrivacyTosCheckbox.setVisibility(View.VISIBLE);
+        viewPrivacyPolicy.setVisibility(View.VISIBLE);
+        viewTos.setVisibility(View.VISIBLE);
+        btnSignUp.setVisibility(View.VISIBLE);
+        viewCopyright.setVisibility(View.VISIBLE);
     }
 
 }

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,12 +47,17 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     public GoogleSignInClient googleSignInClient;
 
+    private ProgressBar viewProgressBar;
+    private ImageView viewAppIcon;
+    private TextView viewAppTitle;
+    private TextView viewAppAuthor;
     private EditText viewEmail;
     private EditText viewPassword;
     private TextView viewNewUserLink;
     private TextView viewForgotPasswordLink;
     private Button btnLogin;
     private com.google.android.gms.common.SignInButton btnSignInWithGoogle;
+    private TextView viewCopyright;
 
     private boolean userMustEnterLoginInfo;
 
@@ -94,12 +101,17 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        viewProgressBar = findViewById(R.id.view_sign_in_progress_bar);
+        viewAppIcon = findViewById(R.id.view_sign_in_app_icon);
+        viewAppTitle = findViewById(R.id.view_sign_in_app_title);
+        viewAppAuthor = findViewById(R.id.view_sign_in_app_author);
         viewEmail = findViewById(R.id.view_sign_in_email);
         viewPassword = findViewById(R.id.view_sign_in_password);
         viewNewUserLink = findViewById(R.id.view_sign_in_new_user_link);
         viewForgotPasswordLink = findViewById(R.id.view_sign_in_forgot_password_link);
         btnLogin = findViewById(R.id.btn_sign_in_login);
         btnSignInWithGoogle = findViewById(R.id.btn_sign_in_with_google);
+        viewCopyright = findViewById(R.id.view_sign_in_copyright);
 
         viewNewUserLink.setOnClickListener(onClickListener);
         viewForgotPasswordLink.setOnClickListener(onClickListener);
@@ -137,11 +149,14 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             return;
         }
 
+        showProgressBar();
+
         auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            hideProgressBar();
                             Log.d(TAG, "Password Reset Email sent to: " + email);
                             Toast.makeText(FirebaseSignInActivity.this, "Password Reset Email sent to: " + email, Toast.LENGTH_LONG).show();
                         }
@@ -167,11 +182,14 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             return;
         }
 
+        showProgressBar();
+
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            hideProgressBar();
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
                             //updateUI(user);
@@ -191,6 +209,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             }
                         } else {
                             // If sign in fails, display a message to the user.
+                            hideProgressBar();
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(FirebaseSignInActivity.this, "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
@@ -228,12 +247,15 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
+        showProgressBar();
+
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            hideProgressBar();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             //FirebaseUser user = auth.getCurrentUser();
@@ -244,6 +266,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
+                            hideProgressBar();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(FirebaseSignInActivity.this, "Google Authentication failed", Toast.LENGTH_LONG).show();
@@ -255,6 +278,38 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     public void logoutUser()
     {
         AuthUI.getInstance().signOut(this);
+    }
+
+    private void showProgressBar()
+    {
+        viewProgressBar.setVisibility(View.VISIBLE);
+
+        viewAppIcon.setVisibility(View.INVISIBLE);
+        viewAppTitle.setVisibility(View.INVISIBLE);
+        viewAppAuthor.setVisibility(View.INVISIBLE);
+        viewEmail.setVisibility(View.INVISIBLE);
+        viewPassword.setVisibility(View.INVISIBLE);
+        btnLogin.setVisibility(View.INVISIBLE);
+        btnSignInWithGoogle.setVisibility(View.INVISIBLE);
+        viewNewUserLink.setVisibility(View.INVISIBLE);
+        viewForgotPasswordLink.setVisibility(View.INVISIBLE);
+        viewCopyright.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideProgressBar()
+    {
+        viewProgressBar.setVisibility(View.INVISIBLE);
+
+        viewAppIcon.setVisibility(View.VISIBLE);
+        viewAppTitle.setVisibility(View.VISIBLE);
+        viewAppAuthor.setVisibility(View.VISIBLE);
+        viewEmail.setVisibility(View.VISIBLE);
+        viewPassword.setVisibility(View.VISIBLE);
+        btnLogin.setVisibility(View.VISIBLE);
+        btnSignInWithGoogle.setVisibility(View.VISIBLE);
+        viewNewUserLink.setVisibility(View.VISIBLE);
+        viewForgotPasswordLink.setVisibility(View.VISIBLE);
+        viewCopyright.setVisibility(View.VISIBLE);
     }
 
     /*
