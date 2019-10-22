@@ -189,12 +189,12 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            hideProgressBar();
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
                             //updateUI(user);
                             if (user.isEmailVerified())
                             {
+                                hideProgressBar();
                                 String userId = auth.getUid();
                                 Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                                 intent.putExtra(USER_ID, userId);
