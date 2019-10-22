@@ -281,6 +281,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     public void logoutUser()
     {
         AuthUI.getInstance().signOut(this);
+        hideProgressBar();
     }
 
     private void showProgressBar()
