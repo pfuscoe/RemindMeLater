@@ -264,8 +264,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                        Toast.makeText(getApplicationContext(), "User Settings for " +
-                                userProfile.getDisplayName() + " Saved", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "User Settings Saved", Toast.LENGTH_LONG).show();
                         Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
 
                         Gson gson = new Gson();
