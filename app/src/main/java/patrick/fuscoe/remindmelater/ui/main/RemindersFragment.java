@@ -187,12 +187,14 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
         remindersRecyclerView.setAdapter(remindersAdapter);
 
+        /*
         // Show Tips if Reminders List Empty
         if (reminderItemList.isEmpty() && !isTipsOn)
         {
             viewRemindersTips.setVisibility(View.VISIBLE);
             isTipsOn = true;
         }
+        */
 
         return root;
     }
@@ -257,6 +259,11 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                     reminderItemList = reminderListFromDoc;
                     //Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
+
+                    if (reminderItemList.isEmpty() && !isTipsOn)
+                    {
+                        toggleTips();
+                    }
 
                     if (!reminderItemList.isEmpty() && isTipsOn)
                     {

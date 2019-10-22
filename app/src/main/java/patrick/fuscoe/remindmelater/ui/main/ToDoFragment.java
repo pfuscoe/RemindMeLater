@@ -193,12 +193,14 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
 
+        /*
         // Show Tips if To Groups List Empty
         if (toDoGroupList.isEmpty() && !isTipsOn)
         {
             viewToDoGroupsTips.setVisibility(View.VISIBLE);
             isTipsOn = true;
         }
+        */
 
         ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             @Override
@@ -267,6 +269,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     }
 
                     toDoGroupList = toDoGroupDocs;
+
+                    if (toDoGroupList.isEmpty() && !isTipsOn)
+                    {
+                        toggleTips();
+                    }
 
                     if (!toDoGroupList.isEmpty() && isTipsOn)
                     {
