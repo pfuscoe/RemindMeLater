@@ -31,7 +31,7 @@
     <string name="reminder_details_category_label">Category:</string>
     <string name="reminder_details_category_add">Add New Category</string>
     <string name="dialog_add_reminder_category_title">Add New Reminder Category</string>
-    <string name="dialog_add_category_title">Add New Category</string>
+    <string name="dialog_add_category_title">Add New To Do List</string>
     <string name="reminders_file_key">patrick.fuscoe.remindmelater.REMINDERS</string>
     <string name="reminder_broadcast_ids_file_key">patrick.fuscoe.remindmelater.REMINDER_BROADCAST_IDS</string>
     <string name="user_preferences_file_key">patrick.fuscoe.remindmelater.USER_PREFERENCES</string>
@@ -73,4 +73,7 @@
     <string name="tos">Terms of Service</string>
     <string name="copyright_line">Copyright © Patrick Fuscoe 2019</string>
     <string name="web_client_id">812785313358-fcb8rmopmppagltd2crhjc0j85fom2gk.apps.googleusercontent.com</string>
+    <string name="select_an_icon">Select an Icon (optional):</string>
+    <string name="dialog_to_do_group_name_hint">Enter To Do List Name</string>
+    <string name="dialog_reminder_category_name_hint">Enter Reminder Category Name</string>
 </resources>

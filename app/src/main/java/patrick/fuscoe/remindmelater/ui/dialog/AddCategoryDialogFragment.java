@@ -127,18 +127,20 @@ public class AddCategoryDialogFragment extends DialogFragment {
         selectedIcon = -1;
         selectedIconPos = -1;
 
+        EditText viewCategoryName = v.findViewById(R.id.dialog_category_edit_name);
+
         if (context instanceof ReminderDetailsActivity)
         {
             selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
+            viewCategoryName.setHint(R.string.dialog_reminder_category_name_hint);
         }
         else
         {
             selectedIconName = MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME;
+            viewCategoryName.setHint(R.string.dialog_to_do_group_name_hint);
         }
 
         //Bundle bundle = getArguments();
-
-        EditText viewCategoryName = v.findViewById(R.id.dialog_category_edit_name);
 
         categoryIconRecycler = v.findViewById(R.id.dialog_category_edit_recycler);
         categoryIconRecycler.setHasFixedSize(true);
