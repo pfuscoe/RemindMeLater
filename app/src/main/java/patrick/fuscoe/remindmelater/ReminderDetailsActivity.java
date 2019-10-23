@@ -660,7 +660,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        // TODO: handle local storage of reminder when cloud sync fails
+                        Toast.makeText(getApplicationContext(), "Error syncing delete action to cloud. Delete cancelled.", Toast.LENGTH_LONG).show();
                     }
                 });
     }
