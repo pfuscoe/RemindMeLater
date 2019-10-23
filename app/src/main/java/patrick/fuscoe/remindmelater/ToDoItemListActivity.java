@@ -296,6 +296,17 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         UpdateToDoItemListDisplay();
     }
 
+    public void deleteToDoItem(ToDoItem toDoItem)
+    {
+        toDoGroup.removeToDoItem(toDoItem);
+        toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
+
+        toDoItemListDone.remove(toDoItem);
+
+        hasChanged = true;
+        UpdateToDoItemListDisplay();
+    }
+
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
     {
         Map<String, Object> toDoGroupDoc = new HashMap<>();

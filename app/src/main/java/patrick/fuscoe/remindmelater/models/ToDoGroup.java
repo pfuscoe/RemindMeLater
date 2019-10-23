@@ -105,6 +105,15 @@ public class ToDoGroup {
         toDoItems.put(toDoItem.getItemName(), String.valueOf(toDoItem.getPriority()));
     }
 
+    public void removeToDoItem(ToDoItem toDoItem)
+    {
+        toDoItemArrayList.remove(toDoItem);
+        totalItems--;
+
+        // Update HashMap
+        toDoItems.remove(toDoItem.getItemName());
+    }
+
     public void saveToDoItems()
     {
         Map<String, Object> toDoItemsTemp = new HashMap<>();

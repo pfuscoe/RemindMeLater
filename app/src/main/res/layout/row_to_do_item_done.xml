@@ -28,4 +28,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/to_do_item_placeholder" />
+
+    <ImageView
+        android:id="@+id/view_to_do_item_done_delete_icon"
+        android:layout_width="@dimen/row_to_do_item_icon_size"
+        android:layout_height="@dimen/row_to_do_item_icon_size"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/action_delete" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
