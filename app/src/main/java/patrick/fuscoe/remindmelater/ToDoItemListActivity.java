@@ -120,7 +120,15 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
             else
             {
                 ToDoItem item = toDoItemListDone.get(position - numItemsToDo - 2);
-                markToDoItemNotDone(item);
+
+                if (v.getId() == R.id.view_to_do_item_done_delete_icon)
+                {
+                    deleteToDoItem(item);
+                }
+                else
+                {
+                    markToDoItemNotDone(item);
+                }
             }
         }
     };

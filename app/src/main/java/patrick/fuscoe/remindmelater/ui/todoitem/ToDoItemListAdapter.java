@@ -95,16 +95,19 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ConstraintLayout viewToDoItemDoneLayout;
         ImageView viewToDoItemDonePriorityIcon;
         TextView viewToDoItemDoneName;
+        ImageView viewToDoItemDeleteIcon;
 
         ToDoItemDoneViewHolder(View v)
         {
             super(v);
 
-            v.setOnClickListener(this);
-
             viewToDoItemDoneLayout = v.findViewById(R.id.view_to_do_item_done_layout);
             viewToDoItemDonePriorityIcon = v.findViewById(R.id.view_to_do_item_done_priority_icon);
             viewToDoItemDoneName = v.findViewById(R.id.view_to_do_item_done_name);
+            viewToDoItemDeleteIcon = v.findViewById(R.id.view_to_do_item_done_delete_icon);
+
+            v.setOnClickListener(this);
+            viewToDoItemDeleteIcon.setOnClickListener(this);
         }
 
         @Override
@@ -201,6 +204,9 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             int itemPriorityIconId = context.getResources().getIdentifier("checkbox_marked_outline", "drawable", context.getPackageName());
             viewHolder.viewToDoItemDonePriorityIcon.setImageResource(itemPriorityIconId);
             viewHolder.viewToDoItemDonePriorityIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
+
+            viewHolder.viewToDoItemDeleteIcon.setImageResource(R.drawable.action_delete);
+            viewHolder.viewToDoItemDeleteIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
         }
         else
         {
