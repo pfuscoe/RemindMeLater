@@ -190,6 +190,16 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         getSupportActionBar().setTitle(toDoGroup.getTitle());
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (toDoItemListUnsorted.isEmpty())
+        {
+            showAddToDoItemDialog();
+        }
+    }
+
     public void UpdateToDoItemListDisplay()
     {
         toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, toDoItemListDone, this, toDoItemClickListener);
@@ -378,9 +388,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         dialogFrag.show(fm, AddToDoItemDialogFragment.TAG);
     }
 
-    // The dialog fragment receives a reference to this Activity through the
-    // Fragment.onAttach() callback, which it uses to call the following methods
-    // defined by the AddToDoItemDialogFragment.AddToDoItemDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Dialog dialogView = dialog.getDialog();
