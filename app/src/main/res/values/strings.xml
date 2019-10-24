@@ -13,7 +13,7 @@
     <string name="title_activity_to_do_item_list">ToDoItemListActivity</string>
     <string name="to_do_item_placeholder">To Do Item Placeholder</string>
     <string name="hint_enter_item_name">Enter Item Name</string>
-    <string name="dialog_add_to_do_item_label_priority">Priority:</string>
+    <string name="dialog_add_to_do_item_label_priority">Priority (optional):</string>
     <string name="dialog_add_to_do_item_label_radio_high">High</string>
     <string name="dialog_add_to_do_item_label_radio_medium">Medium</string>
     <string name="dialog_add_to_do_item_label_radio_low">Low</string>
