@@ -197,6 +197,20 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         Log.d(TAG, ": Gson reminderItemString: " + reminderItemString);
 
+        String contentRecurrenceString;
+        String contentTitleString;
+
+        if (reminderItem.isRecurring())
+        {
+            contentRecurrenceString = reminderItem.getRecurrenceNum() + " " + reminderItem.getRecurrenceInterval();
+        }
+        else
+        {
+            contentRecurrenceString = "(Non-Recurring)";
+        }
+
+        contentTitleString = reminderTitle + "  (" + contentRecurrenceString + ")";
+
         // Notification Tap Intent
         Intent reminderDetailsIntent = new Intent(context, ReminderDetailsActivity.class);
         reminderDetailsIntent.putExtra(RemindersFragment.REMINDERS_DOC_ID, remindersDocId);
@@ -237,7 +251,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
                 .setLargeIcon(largeIconBitmap)
                 .setSmallIcon(iconId)
-                .setContentTitle(reminderTitle)
+                .setContentTitle(contentTitleString)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(reminderDetailsPendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
