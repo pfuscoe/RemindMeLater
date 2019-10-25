@@ -35,12 +35,13 @@ public class ReminderCategoriesAdapter extends RecyclerView.Adapter<ReminderCate
         {
             super(v);
 
-            v.setOnClickListener(this);
-
             viewRowReminderCategoryLayout = v.findViewById(R.id.view_row_reminder_category_edit_layout);
             viewRowReminderCategoryIcon = v.findViewById(R.id.view_row_reminder_category_edit_icon);
             viewRowReminderCategoryTitle = v.findViewById(R.id.view_row_reminder_category_edit_title);
             viewRowReminderCategoryDeleteIcon = v.findViewById(R.id.view_row_reminder_category_delete_icon);
+
+            v.setOnClickListener(this);
+            viewRowReminderCategoryDeleteIcon.setOnClickListener(this);
         }
 
         @Override

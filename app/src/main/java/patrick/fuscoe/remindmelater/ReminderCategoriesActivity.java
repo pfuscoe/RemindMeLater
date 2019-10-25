@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -50,6 +51,24 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
         @Override
         public void reminderCategoryClicked(View v, int position) {
 
+            ReminderCategory reminderCategory = reminderCategoryList.get(position);
+
+            if (v.getId() == R.id.view_row_reminder_category_delete_icon)
+            {
+                if (isReminderCategoryEmpty(reminderCategory))
+                {
+                    openConfirmDeleteReminderCategoryDialog(reminderCategory);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "There are Reminders in this category! " +
+                            "Please reassign or delete them before proceeding.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else
+            {
+                openEditReminderCategoryDialog(reminderCategory);
+            }
         }
     };
 
@@ -109,5 +128,20 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
         }
 
         Collections.sort(reminderCategoryList);
+    }
+
+    private boolean isReminderCategoryEmpty(ReminderCategory reminderCategory)
+    {
+        return false;
+    }
+
+    private void openConfirmDeleteReminderCategoryDialog(ReminderCategory reminderCategory)
+    {
+
+    }
+
+    private void openEditReminderCategoryDialog(ReminderCategory reminderCategory)
+    {
+        
     }
 }
