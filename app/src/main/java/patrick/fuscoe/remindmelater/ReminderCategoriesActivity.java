@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -52,6 +53,11 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     private ArrayList<String> reminderCategoriesUsed;
     public List<ReminderCategory> reminderCategoryList;
 
+    private ReminderCategory reminderCategoryToEdit;
+    private ReminderCategory reminderCategoryToDelete;
+
+    private boolean hasChanged;
+
 
     private ReminderCategoryClickListener reminderCategoryClickListener = new ReminderCategoryClickListener() {
         @Override
@@ -63,6 +69,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
             {
                 if (isReminderCategoryEmpty(reminderCategory))
                 {
+                    reminderCategoryToDelete = reminderCategory;
                     openConfirmDeleteReminderCategoryDialog(reminderCategory);
                 }
                 else
@@ -73,6 +80,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
             }
             else
             {
+                reminderCategoryToEdit = reminderCategory;
                 openEditReminderCategoryDialog(reminderCategory);
             }
         }
@@ -92,6 +100,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         userDocRef = db.collection("users").document(userId);
         remindersDocRef = MainActivity.remindersDocRef;
 
+        hasChanged = false;
         reminderCategoriesUsed = new ArrayList<>();
 
         Intent intent = getIntent();
@@ -155,6 +164,16 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         return true;
     }
 
+    public void deleteReminderCategory(ReminderCategory reminderCategory)
+    {
+        userProfile.removeReminderCategory(reminderCategory.getCategoryName());
+    }
+
+    public void saveUserProfile()
+    {
+
+    }
+
     private void openConfirmDeleteReminderCategoryDialog(ReminderCategory reminderCategory)
     {
         DialogFragment dialogFragment = new DeleteReminderCategoryDialogFragment();
@@ -177,10 +196,38 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
 
+        hasChanged = true;
+
+        if (dialogFragment instanceof EditReminderCategoryDialogFragment)
+        {
+            Dialog dialogView = dialogFragment.getDialog();
+            
+        }
+        else if (dialogFragment instanceof DeleteReminderCategoryDialogFragment)
+        {
+            deleteReminderCategory(reminderCategoryToDelete);
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialogFragment) {
+        if (dialogFragment instanceof EditReminderCategoryDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Edit Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (dialogFragment instanceof DeleteReminderCategoryDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Delete Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (hasChanged)
+        {
+            saveUserProfile();
+        }
     }
 }
