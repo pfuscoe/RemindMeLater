@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ReminderCategoriesActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_reminder_categories_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
