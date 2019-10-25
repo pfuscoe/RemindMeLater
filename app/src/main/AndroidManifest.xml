@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ReminderCategoriesActivity"></activity>
         <activity android:name=".TermsOfServiceActivity" />
         <activity android:name=".PrivacyPolicyActivity" />
         <activity
