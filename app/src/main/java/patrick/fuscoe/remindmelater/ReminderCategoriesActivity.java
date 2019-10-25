@@ -24,6 +24,7 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.main.ReminderCategoriesAdapter;
+import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderCategoriesActivity extends AppCompatActivity {
 
@@ -44,6 +45,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
 
     private UserProfile userProfile;
 
+    private ArrayList<String> reminderCategoriesUsed;
     public List<ReminderCategory> reminderCategoryList;
 
 
@@ -86,11 +88,15 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
         userDocRef = db.collection("users").document(userId);
         remindersDocRef = MainActivity.remindersDocRef;
 
+        reminderCategoriesUsed = new ArrayList<>();
+
         Intent intent = getIntent();
         Gson gson = new Gson();
 
         Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
         String userProfileString = intent.getStringExtra(MainActivity.USER_PROFILE);
+        reminderCategoriesUsed = intent.getStringArrayListExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
+        //String[] reminderCategoriesUsedArray = intent.getStringArrayExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
 
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
 
@@ -132,7 +138,17 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
 
     private boolean isReminderCategoryEmpty(ReminderCategory reminderCategory)
     {
-        return false;
+        String reminderCategoryName = reminderCategory.getCategoryName();
+
+        for (String usedCategoryName : reminderCategoriesUsed)
+        {
+            if (usedCategoryName.equals(reminderCategoryName))
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     private void openConfirmDeleteReminderCategoryDialog(ReminderCategory reminderCategory)
@@ -142,6 +158,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
 
     private void openEditReminderCategoryDialog(ReminderCategory reminderCategory)
     {
-        
+
     }
 }
