@@ -25,6 +25,7 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderCategoryDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.EditReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ReminderCategoriesAdapter;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
@@ -165,7 +166,12 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
     private void openEditReminderCategoryDialog(ReminderCategory reminderCategory)
     {
-
+        DialogFragment dialogFragment = new EditReminderCategoryDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", reminderCategory.getCategoryName());
+        bundle.putString("iconName", reminderCategory.getIconName());
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(getSupportFragmentManager(), "editReminderCategory");
     }
 
     @Override

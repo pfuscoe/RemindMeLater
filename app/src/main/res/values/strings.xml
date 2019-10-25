@@ -79,4 +79,5 @@
     <string name="show_tips">Show Tips</string>
     <string name="hide_tips">Hide Tips</string>
     <string name="dialog_delete_reminder_category_title">Delete Reminder Category</string>
+    <string name="dialog_edit_reminder_category_title">Edit Reminder Category</string>
 </resources>
