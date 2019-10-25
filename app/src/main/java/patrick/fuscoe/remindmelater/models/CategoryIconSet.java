@@ -125,6 +125,7 @@ public class CategoryIconSet {
         categoryIconList.add(R.drawable.category_sleep);
         categoryIconList.add(R.drawable.category_soccer);
         categoryIconList.add(R.drawable.category_speaker);
+        categoryIconList.add(R.drawable.category_spray_bottle);
         categoryIconList.add(R.drawable.category_sprout);
         categoryIconList.add(R.drawable.category_star);
         categoryIconList.add(R.drawable.category_store);
