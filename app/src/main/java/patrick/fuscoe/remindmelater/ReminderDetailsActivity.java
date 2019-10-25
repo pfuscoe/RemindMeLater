@@ -408,7 +408,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             case "Years":
                 viewRecurrenceSpinner.setSelection(3);
+        }
 
+        if (reminderItem.getTitle().equals(""))
+        {
+            viewSnoozedCheckbox.setVisibility(View.GONE);
+            viewSnoozedIcon.setVisibility(View.GONE);
+            viewHibernatingCheckbox.setVisibility(View.GONE);
+            viewHibernatingIcon.setVisibility(View.GONE);
         }
     }
 
