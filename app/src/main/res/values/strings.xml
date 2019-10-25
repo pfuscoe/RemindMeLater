@@ -78,4 +78,5 @@
     <string name="dialog_reminder_category_name_hint">Enter Reminder Category Name</string>
     <string name="show_tips">Show Tips</string>
     <string name="hide_tips">Hide Tips</string>
+    <string name="dialog_delete_reminder_category_title">Delete Reminder Category</string>
 </resources>

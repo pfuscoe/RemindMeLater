@@ -1,6 +1,7 @@
 package patrick.fuscoe.remindmelater;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -23,10 +24,12 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ReminderCategoriesAdapter;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
-public class ReminderCategoriesActivity extends AppCompatActivity {
+public class ReminderCategoriesActivity extends AppCompatActivity implements
+        DeleteReminderCategoryDialogFragment.DeleteReminderCategoryDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderCategoriesActivity";
 
@@ -147,17 +150,31 @@ public class ReminderCategoriesActivity extends AppCompatActivity {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     private void openConfirmDeleteReminderCategoryDialog(ReminderCategory reminderCategory)
     {
-
+        DialogFragment dialogFragment = new DeleteReminderCategoryDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", reminderCategory.getCategoryName());
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(getSupportFragmentManager(), "deleteReminderCategory");
     }
 
     private void openEditReminderCategoryDialog(ReminderCategory reminderCategory)
     {
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialogFragment) {
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialogFragment) {
 
     }
 }
