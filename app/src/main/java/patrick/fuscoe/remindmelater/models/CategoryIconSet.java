@@ -38,6 +38,7 @@ public class CategoryIconSet {
         categoryIconList.add(R.drawable.category_basketball);
         categoryIconList.add(R.drawable.category_bed_empty);
         categoryIconList.add(R.drawable.category_bike);
+        categoryIconList.add(R.drawable.category_book);
         categoryIconList.add(R.drawable.category_briefcase);
         categoryIconList.add(R.drawable.category_cake_variant);
         categoryIconList.add(R.drawable.category_calculator_variant);
