@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -201,6 +202,16 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         if (dialogFragment instanceof EditReminderCategoryDialogFragment)
         {
             Dialog dialogView = dialogFragment.getDialog();
+            EditText viewReminderCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
+            String newTitle = viewReminderCategoryName.getText().toString();
+
+            if (newTitle.equals(""))
+            {
+                Toast.makeText(this, "Edit Reminder Category Failed: Category Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            String selectedIconName = ((EditReminderCategoryDialogFragment) dialogFragment).getSelectedIconName();
             
         }
         else if (dialogFragment instanceof DeleteReminderCategoryDialogFragment)
