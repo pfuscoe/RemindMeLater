@@ -212,7 +212,10 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
             }
 
             String selectedIconName = ((EditReminderCategoryDialogFragment) dialogFragment).getSelectedIconName();
-            
+
+            ReminderCategory updatedReminderCategory = new ReminderCategory(newTitle, selectedIconName);
+
+            updateReminderItemsOnCategoryEdit(updatedReminderCategory);
         }
         else if (dialogFragment instanceof DeleteReminderCategoryDialogFragment)
         {

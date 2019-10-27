@@ -25,4 +25,12 @@ public class ReminderCategory implements Comparable<ReminderCategory> {
     public String getIconName() {
         return iconName;
     }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
+    }
 }
