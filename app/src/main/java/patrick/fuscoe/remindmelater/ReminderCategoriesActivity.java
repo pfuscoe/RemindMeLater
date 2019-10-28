@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
@@ -136,11 +138,11 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         Type dataTypeReminderItemList = new TypeToken<ArrayList<ReminderItem>>(){}.getType();
         String reminderItemListString = intent.getStringExtra(RemindersFragment.REMINDER_ITEMS);
         reminderItemList = gson.fromJson(reminderItemListString, dataTypeReminderItemList);
+        Log.d(TAG, "reminderItemListString: " + reminderItemListString);
+        Log.d(TAG, "reminderItemList: " + reminderItemList.toString());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Reminder Categories");
-
-        viewReminderCategoriesRecycler = findViewById(R.id.view_reminder_categories_recycler);
 
         reminderCategoryList = new ArrayList<>();
 
@@ -148,7 +150,21 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         buildReminderCategoriesUsedList(userProfile.getReminderCategories());
         Log.d(TAG, "reminderCategoriesUsed: " + reminderCategoriesUsed.toString());
 
-        updateReminderCategoriesDisplay();
+        viewReminderCategoriesRecycler = findViewById(R.id.view_reminder_categories_recycler);
+        viewReminderCategoriesRecycler.setHasFixedSize(true);
+
+        reminderCategoriesRecyclerLayoutManager = new LinearLayoutManager(this);
+        viewReminderCategoriesRecycler.setLayoutManager(reminderCategoriesRecyclerLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                viewReminderCategoriesRecycler.getContext(), DividerItemDecoration.VERTICAL);
+        viewReminderCategoriesRecycler.addItemDecoration(dividerItemDecoration);
+
+        reminderCategoriesAdapter = new ReminderCategoriesAdapter(reminderCategoryList,
+                this, reminderCategoryClickListener);
+        viewReminderCategoriesRecycler.setAdapter(reminderCategoriesAdapter);
+
+        //updateReminderCategoriesDisplay();
     }
 
     @Override

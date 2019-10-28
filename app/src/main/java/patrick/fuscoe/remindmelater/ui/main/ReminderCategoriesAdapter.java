@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -78,6 +79,7 @@ public class ReminderCategoriesAdapter extends RecyclerView.Adapter<ReminderCate
         holder.viewRowReminderCategoryIcon.setImageResource(context.getResources().getIdentifier(
                 reminderCategory.getIconName(), "drawable", context.getPackageName()));
         holder.viewRowReminderCategoryDeleteIcon.setImageResource(R.drawable.action_delete);
+        holder.viewRowReminderCategoryDeleteIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
     }
 
     @Override
