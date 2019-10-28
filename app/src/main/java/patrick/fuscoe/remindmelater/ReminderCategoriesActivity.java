@@ -9,6 +9,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ReminderCategoriesAdapter;
@@ -140,6 +144,34 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         buildReminderCategoryList(userProfile.getReminderCategories());
 
         updateReminderCategoriesDisplay();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        menu.removeItem(R.id.menu_main_edit);
+        menu.removeItem(R.id.menu_main_logout);
+        menu.removeItem(R.id.menu_main_user_settings);
+        menu.removeItem(R.id.menu_main_reorder);
+        menu.removeItem(R.id.menu_main_edit_reminder_categories);
+        menu.removeItem(R.id.menu_main_tips);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_add:
+                openAddReminderCategoryDialog();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void updateReminderCategoriesDisplay()
@@ -372,6 +404,12 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     }
     */
 
+    private void openAddReminderCategoryDialog()
+    {
+        DialogFragment dialogFragment = new AddCategoryDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "addReminderCategory");
+    }
+
     private void openConfirmDeleteReminderCategoryDialog(ReminderCategory reminderCategory)
     {
         DialogFragment dialogFragment = new DeleteReminderCategoryDialogFragment();
@@ -396,7 +434,27 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
         hasChanged = true;
 
-        if (dialogFragment instanceof EditReminderCategoryDialogFragment)
+        if (dialogFragment instanceof AddCategoryDialogFragment)
+        {
+            Dialog dialogView = dialogFragment.getDialog();
+            EditText viewCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
+            String categoryName = viewCategoryName.getText().toString();
+
+            if (categoryName.equals(""))
+            {
+                Toast.makeText(this, "Add Reminder Category Failed: Category Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            String selectedIconName = ((AddCategoryDialogFragment) dialogFragment).getSelectedIconName();
+
+            userProfile.addReminderCategory(categoryName, selectedIconName);
+            ReminderCategory reminderCategory = new ReminderCategory(categoryName, selectedIconName);
+
+            reminderCategoryList.add(reminderCategory);
+            reminderCategoriesAdapter.notifyDataSetChanged();
+        }
+        else if (dialogFragment instanceof EditReminderCategoryDialogFragment)
         {
             Dialog dialogView = dialogFragment.getDialog();
             EditText viewReminderCategoryName = dialogView.findViewById(R.id.dialog_category_edit_name);
