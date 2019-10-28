@@ -121,7 +121,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         remindersDocRef = MainActivity.remindersDocRef;
 
         hasChanged = false;
-        reminderCategoriesUsed = new ArrayList<>();
         reminderItemList = new ArrayList<>();
 
         Intent intent = getIntent();
@@ -129,9 +128,10 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
         Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
         String userProfileString = intent.getStringExtra(MainActivity.USER_PROFILE);
+        Log.d(TAG, "userProfileString: " + userProfileString);
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
 
-        reminderCategoriesUsed = intent.getStringArrayListExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
+        //reminderCategoriesUsed = intent.getStringArrayListExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
 
         Type dataTypeReminderItemList = new TypeToken<ArrayList<ReminderItem>>(){}.getType();
         String reminderItemListString = intent.getStringExtra(RemindersFragment.REMINDER_ITEMS);
@@ -145,6 +145,8 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         reminderCategoryList = new ArrayList<>();
 
         buildReminderCategoryList(userProfile.getReminderCategories());
+        buildReminderCategoriesUsedList(userProfile.getReminderCategories());
+        Log.d(TAG, "reminderCategoriesUsed: " + reminderCategoriesUsed.toString());
 
         updateReminderCategoriesDisplay();
     }
@@ -199,6 +201,27 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         }
 
         Collections.sort(reminderCategoryList);
+    }
+
+    private void buildReminderCategoriesUsedList(Map<String, String> reminderCategoriesMap)
+    {
+        reminderCategoriesUsed = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : reminderCategoriesMap.entrySet())
+        {
+            String userProfileCategoryName = entry.getKey();
+
+            for (ReminderItem reminderItem : reminderItemList)
+            {
+                String reminderItemCategoryName = reminderItem.getCategory();
+
+                if (userProfileCategoryName.equals(reminderItemCategoryName))
+                {
+                    reminderCategoriesUsed.add(reminderItemCategoryName);
+                    break;
+                }
+            }
+        }
     }
 
     private boolean isReminderCategoryEmpty(ReminderCategory reminderCategory)
