@@ -115,6 +115,7 @@ public class EditReminderCategoryDialogFragment extends DialogFragment {
         categoryIconSet.markSelected(selectedIcon);
         categoryIconList = categoryIconSet.getCategoryIconList();
         categoryIconListIsChecked = categoryIconSet.getCategoryIconListIsChecked();
+        selectedIconPos = categoryIconSet.getSelectedIconPos();
 
         categoryIconRecycler = v.findViewById(R.id.dialog_category_edit_recycler);
         categoryIconRecycler.setHasFixedSize(true);

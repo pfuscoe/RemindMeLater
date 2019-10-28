@@ -12,11 +12,14 @@ public class CategoryIconSet {
 
     private ArrayList<Integer> categoryIconList;
     private ArrayList<Boolean> categoryIconListIsChecked;
+    private int selectedIconPos;
 
 
     public CategoryIconSet()
     {
         categoryIconList = new ArrayList<>();
+
+        selectedIconPos = -1;
 
         populateList();
         buildCheckboxList();
@@ -171,6 +174,10 @@ public class CategoryIconSet {
         return categoryIconListIsChecked;
     }
 
+    public int getSelectedIconPos() {
+        return selectedIconPos;
+    }
+
     public void markSelected(Integer iconId)
     {
         //Log.d(TAG, ": markSelected called with iconId: " + iconId);
@@ -180,6 +187,7 @@ public class CategoryIconSet {
             if (iconId.equals(categoryIconList.get(i)))
             {
                 categoryIconListIsChecked.set(i, true);
+                selectedIconPos = i;
                 //Log.d(TAG, ": Icon checked at pos: " + i);
             }
         }

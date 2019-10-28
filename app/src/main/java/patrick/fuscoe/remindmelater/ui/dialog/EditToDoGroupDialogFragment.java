@@ -106,12 +106,12 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
         selectedIconName = groupIconName;
         selectedIcon = getResources().getIdentifier(
                 groupIconName, "drawable", requireActivity().getPackageName());
-        //selectedIconPos = -1;
 
         CategoryIconSet categoryIconSet = new CategoryIconSet();
         categoryIconSet.markSelected(selectedIcon);
         categoryIconList = categoryIconSet.getCategoryIconList();
         categoryIconListIsChecked = categoryIconSet.getCategoryIconListIsChecked();
+        selectedIconPos = categoryIconSet.getSelectedIconPos();
 
         categoryIconRecycler = v.findViewById(R.id.dialog_category_edit_recycler);
         categoryIconRecycler.setHasFixedSize(true);
