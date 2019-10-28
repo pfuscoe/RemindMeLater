@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/view_row_reminder_category_edit_layout"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="64dp">
 
     <ImageView
         android:id="@+id/view_row_reminder_category_edit_icon"

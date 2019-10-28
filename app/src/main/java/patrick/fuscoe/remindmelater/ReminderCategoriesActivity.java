@@ -87,6 +87,13 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
             ReminderCategory reminderCategory = reminderCategoryList.get(position);
 
+            if (reminderCategory.getCategoryName().equals("Main"))
+            {
+                Toast.makeText(getApplicationContext(), "The default category 'Main' cannot " +
+                        "be edited or deleted", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (v.getId() == R.id.view_row_reminder_category_delete_icon)
             {
                 if (isReminderCategoryEmpty(reminderCategory))
@@ -212,10 +219,14 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         {
             ReminderCategory reminderCategory = new ReminderCategory(entry.getKey(), entry.getValue());
 
+            /*
             if (!reminderCategory.getCategoryName().equals("Main"))
             {
                 reminderCategoryList.add(reminderCategory);
             }
+            */
+
+            reminderCategoryList.add(reminderCategory);
         }
 
         Collections.sort(reminderCategoryList);
