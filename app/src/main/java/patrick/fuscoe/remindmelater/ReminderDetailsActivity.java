@@ -424,6 +424,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
+        menu.removeItem(R.id.menu_main_add);
         menu.removeItem(R.id.menu_main_logout);
         menu.removeItem(R.id.menu_main_user_settings);
         menu.removeItem(R.id.menu_main_reorder);
