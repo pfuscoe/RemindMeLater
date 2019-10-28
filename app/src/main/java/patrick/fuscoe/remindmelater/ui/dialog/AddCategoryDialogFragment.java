@@ -60,7 +60,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
                 selectedIcon = -1;
                 selectedIconPos = -1;
 
-                if (context instanceof ReminderDetailsActivity)
+                if (context instanceof ReminderDetailsActivity || context instanceof ReminderCategoriesActivity)
                 {
                     selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
                 }
@@ -97,7 +97,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
         this.context = context;
 
         try {
-            if (context instanceof ReminderDetailsActivity)
+            if (context instanceof ReminderDetailsActivity || context instanceof ReminderCategoriesActivity)
             {
                 listener = (AddCategoryDialogListener) context;
             }
