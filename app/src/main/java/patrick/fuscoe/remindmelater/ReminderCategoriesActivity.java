@@ -153,7 +153,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Reminder Categories");
 
-        reminderCategoryList = new ArrayList<>();
+        //reminderCategoryList = new ArrayList<>();
 
         buildReminderCategoryList(userProfile.getReminderCategories());
         buildReminderCategoriesUsedList(userProfile.getReminderCategories());
@@ -215,6 +215,8 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
     public void buildReminderCategoryList(Map<String, String> reminderCategoriesMap)
     {
+        reminderCategoryList = new ArrayList<>();
+
         ReminderCategory reminderCategoryMain = new ReminderCategory(
                 "Main", MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME);
 
@@ -286,11 +288,11 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
             }
         }
 
+        /*
         int index = reminderCategoryList.indexOf(reminderCategoryToEdit);
         reminderCategoryList.set(index, updatedReminderCategory);
         reminderCategoriesAdapter.notifyDataSetChanged();
 
-        /*
         remindersDocRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -507,10 +509,14 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
             String selectedIconName = ((AddCategoryDialogFragment) dialogFragment).getSelectedIconName();
 
             userProfile.addReminderCategory(categoryName, selectedIconName);
-            ReminderCategory reminderCategory = new ReminderCategory(categoryName, selectedIconName);
 
-            reminderCategoryList.add(reminderCategory);
-            reminderCategoriesAdapter.notifyDataSetChanged();
+            buildReminderCategoryList(userProfile.getReminderCategories());
+            updateReminderCategoriesDisplay();
+
+            //ReminderCategory reminderCategory = new ReminderCategory(categoryName, selectedIconName);
+
+            //reminderCategoryList.add(reminderCategory);
+            //reminderCategoriesAdapter.notifyDataSetChanged();
         }
         else if (dialogFragment instanceof EditReminderCategoryDialogFragment)
         {
@@ -530,6 +536,9 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
             userProfile.removeReminderCategory(reminderCategoryToEdit.getCategoryName());
             userProfile.addReminderCategory(newTitle, selectedIconName);
+
+            buildReminderCategoryList(userProfile.getReminderCategories());
+            updateReminderCategoriesDisplay();
 
             updateReminderItemsOnCategoryEdit(updatedReminderCategory);
         }
