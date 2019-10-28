@@ -2,6 +2,7 @@ package patrick.fuscoe.remindmelater;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,6 +112,8 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_categories);
+        Toolbar toolbar = findViewById(R.id.toolbar_reminder_categories);
+        setSupportActionBar(toolbar);
 
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
