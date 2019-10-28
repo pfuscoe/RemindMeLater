@@ -516,6 +516,9 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
             ReminderCategory updatedReminderCategory = new ReminderCategory(newTitle, selectedIconName);
 
+            userProfile.removeReminderCategory(reminderCategoryToEdit.getCategoryName());
+            userProfile.addReminderCategory(newTitle, selectedIconName);
+
             updateReminderItemsOnCategoryEdit(updatedReminderCategory);
         }
         else if (dialogFragment instanceof DeleteReminderCategoryDialogFragment)
@@ -526,7 +529,11 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialogFragment) {
-        if (dialogFragment instanceof EditReminderCategoryDialogFragment)
+        if (dialogFragment instanceof AddCategoryDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Add Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (dialogFragment instanceof EditReminderCategoryDialogFragment)
         {
             Toast.makeText(getApplicationContext(), "Edit Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
         }

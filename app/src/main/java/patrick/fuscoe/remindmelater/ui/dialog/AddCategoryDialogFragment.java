@@ -19,6 +19,7 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
@@ -131,7 +132,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
 
         String dialogTitle;
 
-        if (context instanceof ReminderDetailsActivity)
+        if (context instanceof ReminderDetailsActivity || context instanceof ReminderCategoriesActivity)
         {
             selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
             viewCategoryName.setHint(R.string.dialog_reminder_category_name_hint);
