@@ -41,6 +41,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
@@ -416,6 +417,10 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                 Log.d(TAG, ": Menu item selected: " + item.getItemId());
                 return true;
 
+            case R.id.menu_main_edit_reminder_categories:
+                openEditReminderCategories();
+                return true;
+
             case R.id.menu_main_tips:
                 toggleTips();
                 return true;
@@ -456,6 +461,17 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         intent.putExtra(REMINDER_ITEM, reminderItemString);
         intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         intent.putExtra(USER_PROFILE, userProfileString);
+        startActivity(intent);
+    }
+
+    private void openEditReminderCategories()
+    {
+        Intent intent = new Intent(getContext(), ReminderCategoriesActivity.class);
+        Gson gson = new Gson();
+        String userProfileString = gson.toJson(userProfile);
+        String reminderItemListString = gson.toJson(reminderItemList);
+        intent.putExtra(MainActivity.USER_PROFILE, userProfileString);
+        intent.putExtra(REMINDER_ITEMS, reminderItemListString);
         startActivity(intent);
     }
 

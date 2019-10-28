@@ -427,6 +427,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         menu.removeItem(R.id.menu_main_logout);
         menu.removeItem(R.id.menu_main_user_settings);
         menu.removeItem(R.id.menu_main_reorder);
+        menu.removeItem(R.id.menu_main_edit_reminder_categories);
         menu.removeItem(R.id.menu_main_tips);
 
         // Swap edit icon for trash can

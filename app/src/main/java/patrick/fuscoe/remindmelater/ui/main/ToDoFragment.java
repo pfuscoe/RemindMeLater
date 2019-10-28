@@ -448,6 +448,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         //optionsMenu = menu;
 
+        menu.removeItem(R.id.menu_main_edit_reminder_categories);
+
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
 
         if (editMode)
