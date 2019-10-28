@@ -215,21 +215,22 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
     public void buildReminderCategoryList(Map<String, String> reminderCategoriesMap)
     {
+        ReminderCategory reminderCategoryMain = new ReminderCategory(
+                "Main", MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME);
+
         for (Map.Entry<String, String> entry : reminderCategoriesMap.entrySet())
         {
             ReminderCategory reminderCategory = new ReminderCategory(entry.getKey(), entry.getValue());
 
-            /*
             if (!reminderCategory.getCategoryName().equals("Main"))
             {
                 reminderCategoryList.add(reminderCategory);
             }
-            */
-
-            reminderCategoryList.add(reminderCategory);
         }
 
         Collections.sort(reminderCategoryList);
+
+        reminderCategoryList.add(0, reminderCategoryMain);
     }
 
     private void buildReminderCategoriesUsedList(Map<String, String> reminderCategoriesMap)
