@@ -50,6 +50,8 @@ import patrick.fuscoe.remindmelater.ui.main.ReminderCategoriesAdapter;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
 public class ReminderCategoriesActivity extends AppCompatActivity implements
+        AddCategoryDialogFragment.AddCategoryDialogListener,
+        EditReminderCategoryDialogFragment.EditReminderCategoryDialogListener,
         DeleteReminderCategoryDialogFragment.DeleteReminderCategoryDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderCategoriesActivity";
@@ -300,6 +302,8 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     private Map<String, Object> buildRemindersDoc(ArrayList<ReminderItem> reminderItemList)
     {
         Map<String, Object> reminderDocMap = new HashMap<>();
+
+        reminderDocMap.put("userId", userId);
 
         for (ReminderItem reminderItem : reminderItemList)
         {
