@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,13 +8,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,10 +28,12 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditReminderCategoryDialogFragment;
@@ -50,6 +59,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     private ReminderCategoriesAdapter reminderCategoriesAdapter;
 
     private UserProfile userProfile;
+    private ArrayList<ReminderItem> reminderItemList;
 
     private ArrayList<String> reminderCategoriesUsed;
     public List<ReminderCategory> reminderCategoryList;
@@ -103,16 +113,20 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
         hasChanged = false;
         reminderCategoriesUsed = new ArrayList<>();
+        reminderItemList = new ArrayList<>();
 
         Intent intent = getIntent();
         Gson gson = new Gson();
 
         Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
         String userProfileString = intent.getStringExtra(MainActivity.USER_PROFILE);
-        reminderCategoriesUsed = intent.getStringArrayListExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
-        //String[] reminderCategoriesUsedArray = intent.getStringArrayExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
-
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
+
+        reminderCategoriesUsed = intent.getStringArrayListExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
+
+        Type dataTypeReminderItemList = new TypeToken<ArrayList<ReminderItem>>(){}.getType();
+        String reminderItemListString = intent.getStringExtra(RemindersFragment.REMINDER_ITEMS);
+        reminderItemList = gson.fromJson(reminderItemListString, dataTypeReminderItemList);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Reminder Categories");
@@ -165,14 +179,92 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         return true;
     }
 
+    public void updateReminderItemsOnCategoryEdit(ReminderCategory updatedReminderCategory)
+    {
+        String oldReminderCategoryName = reminderCategoryToEdit.getCategoryName();
+        String newReminderCategoryName = updatedReminderCategory.getCategoryName();
+        String newReminderCategoryIconName = updatedReminderCategory.getIconName();
+
+        for (ReminderItem reminderItem : reminderItemList)
+        {
+            if (oldReminderCategoryName.equals(reminderItem.getCategory()))
+            {
+                reminderItem.setCategory(newReminderCategoryName);
+                reminderItem.setCategoryIconName(newReminderCategoryIconName);
+
+                Log.d(TAG, reminderItem.getTitle() + " Category and Icon updated");
+            }
+        }
+
+        int index = reminderCategoryList.indexOf(reminderCategoryToEdit);
+        reminderCategoryList.set(index, updatedReminderCategory);
+        reminderCategoriesAdapter.notifyDataSetChanged();
+
+        /*
+        remindersDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                        }
+                    }
+                });
+        */
+    }
+
     public void deleteReminderCategory(ReminderCategory reminderCategory)
     {
         userProfile.removeReminderCategory(reminderCategory.getCategoryName());
+        reminderCategoryList.remove(reminderCategory);
+        reminderCategoriesAdapter.notifyDataSetChanged();
     }
 
-    public void saveUserProfile()
+    public void saveChanges()
     {
+        // TODO: set reminders doc
+        Map<String, Object> reminderDocMap = new HashMap<>();
 
+        for (ReminderItem reminderItem : reminderItemList)
+        {
+            HashMap<String, Object> reminderItemMap = new HashMap<>();
+            reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
+            reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
+            reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
+            reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
+            reminderItemMap.put("category", reminderItem.getCategory());
+            reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
+            reminderItemMap.put("description", reminderItem.getDescription());
+            reminderItemMap.put("isRecurring", reminderItem.isRecurring());
+            reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
+            reminderItemMap.put("isHibernating", reminderItem.isHibernating());
+            reminderItemMap.put("history", reminderItem.getHistory());
+
+            reminderDocMap.put(reminderItem.getTitle(), reminderItemMap);
+        }
+
+        remindersDocRef.set(reminderDocMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Reminders DocumentSnapshot successfully written!");
+                        updateUserProfileDoc();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(getApplicationContext(), "Error saving data to cloud: "
+                                + e.getMessage() + ". Changes cancelled", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+        // TODO: update user profile doc
+
+        Toast.makeText(getApplicationContext(), "Applied changes to Reminder Categories", Toast.LENGTH_LONG).show();
     }
 
     private void openConfirmDeleteReminderCategoryDialog(ReminderCategory reminderCategory)
@@ -241,7 +333,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
         if (hasChanged)
         {
-            saveUserProfile();
+            saveChanges();
         }
     }
 }

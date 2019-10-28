@@ -771,7 +771,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Log.d(TAG, "UserProfile DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -781,7 +781,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     }
                 });
 
-        Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+        //Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
     }
 
     public void loadUserProfile()

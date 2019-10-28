@@ -55,6 +55,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_CATEGORIES_USED = "patrick.fuscoe.remindmelater.REMINDER_CATEGORIES_USED";
+    public static final String REMINDER_ITEMS = "patrick.fuscoe.remindmelater.REMINDER_ITEMS";
 
     //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
