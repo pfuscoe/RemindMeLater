@@ -72,8 +72,8 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
     };
 
     public interface EditToDoGroupDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 
     EditToDoGroupDialogListener listener;

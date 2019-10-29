@@ -16,8 +16,8 @@ public class DeleteToDoGroupDialogFragment extends DialogFragment {
     public static final String TAG = "patrick.fuscoe.remindmelater.DeleteToDoGroupDialogFragment";
 
     public interface DeleteToDoGroupDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 
     DeleteToDoGroupDialogListener listener;
