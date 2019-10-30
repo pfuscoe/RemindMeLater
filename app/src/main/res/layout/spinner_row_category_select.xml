@@ -8,6 +8,7 @@
         android:id="@+id/spinner_row_category_select_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
         android:padding="4dp"
         android:src="@drawable/category_image_area" /><!--Make sure image is present in Drawable folder-->
 
@@ -16,6 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="Placeholder"
         android:textColor="@color/black" />
