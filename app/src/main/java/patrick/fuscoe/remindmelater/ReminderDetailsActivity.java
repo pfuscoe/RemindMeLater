@@ -371,7 +371,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
-        viewDateDisplay.setText(reminderItem.getNextOccurrence());
+        setViewDateDisplay(reminderItem.getNextOccurrence());
+        //viewDateDisplay.setText(reminderItem.getNextOccurrence());
         viewRecurringCheckbox.setChecked(reminderItem.isRecurring());
         viewSnoozedCheckbox.setChecked(reminderItem.isSnoozed());
         viewHibernatingCheckbox.setChecked(reminderItem.isHibernating());
@@ -498,7 +499,22 @@ public class ReminderDetailsActivity extends AppCompatActivity
     {
         String date = localDate.toString();
         reminderItem.setNextOccurrence(date);
-        viewDateDisplay.setText(date);
+        setViewDateDisplay(date);
+        //viewDateDisplay.setText(date);
+    }
+
+    private void setViewDateDisplay(String localDateString)
+    {
+        LocalDate localDate = LocalDate.parse(localDateString);
+
+        String monthString = localDate.getMonth().toString();
+        monthString = monthString.charAt(0) + monthString.substring(1).toLowerCase();
+        int day = localDate.getDayOfMonth();
+        int year = localDate.getYear();
+
+        String dateDisplayString = monthString + " " + day + ", " + year;
+
+        viewDateDisplay.setText(dateDisplayString);
     }
 
     private void checkIfTitleChanged()
@@ -534,7 +550,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         String recurrenceNumString = viewRecurrenceNum.getText().toString();
         int recurrenceNum = Integer.parseInt(recurrenceNumString);
         String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
-        String nextOccurrence = viewDateDisplay.getText().toString();
+        String nextOccurrence = reminderItem.getNextOccurrence();
         String description = viewDescription.getText().toString();
         boolean isSnoozed = viewSnoozedCheckbox.isChecked();
         boolean isHibernating = viewHibernatingCheckbox.isChecked();
