@@ -446,8 +446,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
 
-        //optionsMenu = menu;
-
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
 
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
@@ -494,8 +492,14 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                 return true;
 
             case R.id.menu_main_reorder:
-                Log.d(TAG, ": Reorder menu item selected");
-                enterReorderMode();
+                if (reorderMode)
+                {
+                    exitReorderMode();
+                }
+                else
+                {
+                    enterReorderMode();
+                }
                 return true;
 
             case R.id.menu_main_tips:
@@ -774,10 +778,20 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         UpdateToDoGroupsDisplay();
     }
 
-    public void enterReorderMode()
+    private void enterReorderMode()
     {
         editMode = true;
         reorderMode = true;
+
+        requireActivity().invalidateOptionsMenu();
+
+        UpdateToDoGroupsDisplay();
+    }
+
+    private void exitReorderMode()
+    {
+        editMode = false;
+        reorderMode = false;
 
         requireActivity().invalidateOptionsMenu();
 
