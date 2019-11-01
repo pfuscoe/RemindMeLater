@@ -209,7 +209,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
 
         if (user.isEmailVerified())
         {
-            hideProgressBar();
+            //hideProgressBar();
             Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, MainActivity.class);
             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
             //intent.putExtra(DISPLAY_NAME, displayName);
@@ -244,7 +244,7 @@ public class FirebaseNewUserSignUpActivity extends AppCompatActivity {
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        hideProgressBar();
+                        //hideProgressBar();
                         Intent intent = new Intent(FirebaseNewUserSignUpActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
                         finishAffinity();

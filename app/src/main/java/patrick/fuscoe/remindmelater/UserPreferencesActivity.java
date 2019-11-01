@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -20,6 +21,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,10 +54,14 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private UserProfile userProfile;
 
+    private ProgressBar viewProgressBar;
+    private TextView viewDisplayNameLabel;
     private EditText viewDisplayName;
+    private TextView viewSetTimeLabel;
     private TextView viewTimeDisplay;
     private Button btnSetTime;
-    private Button btnClearEmptyReminderCategories;
+    //private Button btnClearEmptyReminderCategories;
+    private View viewDividerBottom;
     private Button btnSave;
     private Button btnCancel;
 
@@ -70,9 +77,11 @@ public class UserPreferencesActivity extends AppCompatActivity
                     openTimePicker();
                     return;
 
+                    /*
                 case R.id.button_user_preferences_clear_empty_reminder_categories:
                     clearEmptyReminderCategories();
                     return;
+                    */
 
                 case R.id.button_user_preferences_save:
                     saveUserPrefs();
@@ -107,6 +116,11 @@ public class UserPreferencesActivity extends AppCompatActivity
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
         Log.d(TAG, "User Profile obtained from intent");
 
+        viewProgressBar = findViewById(R.id.view_user_preferences_progress_bar);
+        viewDisplayNameLabel = findViewById(R.id.view_user_preferences_display_name_label);
+        viewSetTimeLabel = findViewById(R.id.view_user_preferences_time_label);
+        viewDividerBottom = findViewById(R.id.view_user_preferences_divider_bottom);
+
         viewDisplayName = findViewById(R.id.view_user_preferences_display_name);
         viewDisplayName.setText(userProfile.getDisplayName());
         viewTimeDisplay = findViewById(R.id.view_user_preferences_time_display);
@@ -114,8 +128,8 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         btnSetTime = findViewById(R.id.button_user_preferences_time);
         btnSetTime.setOnClickListener(btnClickListener);
-        btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
-        btnClearEmptyReminderCategories.setOnClickListener(btnClickListener);
+        //btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
+        //btnClearEmptyReminderCategories.setOnClickListener(btnClickListener);
         btnSave = findViewById(R.id.button_user_preferences_save);
         btnSave.setOnClickListener(btnClickListener);
         btnCancel = findViewById(R.id.button_user_preferences_cancel);
@@ -180,6 +194,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         setTimeDisplay();
     }
 
+    /*
     public void clearEmptyReminderCategories()
     {
         MainActivity.remindersDocRef.get()
@@ -244,10 +259,24 @@ public class UserPreferencesActivity extends AppCompatActivity
                     }
                 });
     }
+    */
 
     public void saveUserPrefs()
     {
-        String displayName = viewDisplayName.getText().toString();
+        showProgressBar();
+
+        final String displayName = viewDisplayName.getText().toString();
+
+        final boolean hasDisplayNameChanged;
+
+        if (!displayName.equals(userProfile.getDisplayName()))
+        {
+            hasDisplayNameChanged = true;
+        }
+        else
+        {
+            hasDisplayNameChanged = false;
+        }
 
         Map<String, Object> userProfileDoc = new HashMap<>();
 
@@ -264,18 +293,17 @@ public class UserPreferencesActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                        Toast.makeText(getApplicationContext(), "User Settings Saved", Toast.LENGTH_LONG).show();
                         Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
+                        Toast.makeText(getApplicationContext(), "User Settings Saved", Toast.LENGTH_LONG).show();
 
-                        Gson gson = new Gson();
-                        String userProfileString = gson.toJson(userProfile);
-
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra(MainActivity.USER_PREFERENCES_UPDATED, true);
-                        intent.putExtra(MainActivity.USER_PROFILE, userProfileString);
-                        startActivity(intent);
-                        finish();
-                        //onBackPressed();
+                        if (hasDisplayNameChanged)
+                        {
+                            updateFirebaseUserDisplayName(displayName);
+                        }
+                        else
+                        {
+                            goBackToMain();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -286,9 +314,68 @@ public class UserPreferencesActivity extends AppCompatActivity
                 });
     }
 
-    public void loadReminders()
+    private void updateFirebaseUserDisplayName(String displayName)
     {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName).build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Display Name set in Firebase user profile.");
+
+                            goBackToMain();
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Failed to set display name in Firebase user profile (userProfile doc was updated though)");
+                        }
+                    }
+                });
+    }
+
+    private void goBackToMain()
+    {
+        Gson gson = new Gson();
+        String userProfileString = gson.toJson(userProfile);
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra(MainActivity.USER_PREFERENCES_UPDATED, true);
+        intent.putExtra(MainActivity.USER_PROFILE, userProfileString);
+        startActivity(intent);
+        finish();
+    }
+
+    private void showProgressBar()
+    {
+        viewProgressBar.setVisibility(View.VISIBLE);
+
+        viewDisplayNameLabel.setVisibility(View.INVISIBLE);
+        viewDisplayName.setVisibility(View.INVISIBLE);
+        viewSetTimeLabel.setVisibility(View.INVISIBLE);
+        viewTimeDisplay.setVisibility(View.INVISIBLE);
+        btnSetTime.setVisibility(View.INVISIBLE);
+        viewDividerBottom.setVisibility(View.INVISIBLE);
+        btnSave.setVisibility(View.INVISIBLE);
+        btnCancel.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideProgressBar()
+    {
+        viewProgressBar.setVisibility(View.INVISIBLE);
+
+        viewDisplayNameLabel.setVisibility(View.VISIBLE);
+        viewDisplayName.setVisibility(View.VISIBLE);
+        viewSetTimeLabel.setVisibility(View.VISIBLE);
+        viewTimeDisplay.setVisibility(View.VISIBLE);
+        btnSetTime.setVisibility(View.VISIBLE);
+        viewDividerBottom.setVisibility(View.VISIBLE);
+        btnSave.setVisibility(View.VISIBLE);
+        btnCancel.setVisibility(View.VISIBLE);
     }
 
 }

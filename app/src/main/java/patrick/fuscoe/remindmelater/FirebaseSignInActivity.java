@@ -199,7 +199,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             //updateUI(user);
                             if (user.isEmailVerified())
                             {
-                                hideProgressBar();
+                                //hideProgressBar();
                                 String userId = auth.getUid();
                                 Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                                 intent.putExtra(USER_ID, userId);
@@ -270,7 +270,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                             intent.putExtra(USER_ID, userId);
                             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
-                            hideProgressBar();
+                            //hideProgressBar();
                             startActivity(intent);
                             finish();
                         } else {
