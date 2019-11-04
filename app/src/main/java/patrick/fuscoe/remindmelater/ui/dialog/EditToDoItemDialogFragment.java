@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import patrick.fuscoe.remindmelater.R;
@@ -19,8 +20,11 @@ import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 
 public class EditToDoItemDialogFragment extends DialogFragment {
 
-    public static final String tag = "patrick.fuscoe.remindmelater.EditToDoItemDialogFragment";
+    public static final String TAG = "patrick.fuscoe.remindmelater.EditToDoItemDialogFragment";
 
+    private RadioButton viewPriorityRadioHigh;
+    private RadioButton viewPriorityRadioMedium;
+    private RadioButton viewPriorityRadioLow;
 
     public interface EditToDoItemDialogListener {
         void onDialogPositiveClick(DialogFragment dialogFragment);
@@ -56,7 +60,11 @@ public class EditToDoItemDialogFragment extends DialogFragment {
         viewItemName.setText(itemName);
 
         //RadioGroup viewPriorityRadioGroup = v.findViewById(R.id.dialog_add_to_do_item_radio_group);
-        
+        viewPriorityRadioHigh = v.findViewById(R.id.dialog_add_to_do_item_radio_high);
+        viewPriorityRadioMedium = v.findViewById(R.id.dialog_add_to_do_item_radio_medium);
+        viewPriorityRadioLow = v.findViewById(R.id.dialog_add_to_do_item_radio_low);
+
+        setPriorityRadioButton(priority);
 
         builder.setView(inflater.inflate(R.layout.dialog_add_to_do_item, null))
                 .setTitle(R.string.dialog_edit_to_do_item_title)
@@ -74,5 +82,27 @@ public class EditToDoItemDialogFragment extends DialogFragment {
                 });
 
         return builder.create();
+    }
+
+    private void setPriorityRadioButton(int priority)
+    {
+        switch (priority)
+        {
+            case 1:
+                viewPriorityRadioHigh.setChecked(true);
+                return;
+
+            case 2:
+                viewPriorityRadioMedium.setChecked(true);
+                return;
+
+            case 3:
+                viewPriorityRadioLow.setChecked(true);
+                return;
+
+            default:
+                viewPriorityRadioHigh.setChecked(true);
+                return;
+        }
     }
 }

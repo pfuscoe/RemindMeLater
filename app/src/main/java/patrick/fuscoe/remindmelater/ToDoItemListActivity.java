@@ -44,10 +44,13 @@ import patrick.fuscoe.remindmelater.comparator.SortToDoItemByDate;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoItemDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.EditToDoItemDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
 
-public class ToDoItemListActivity extends AppCompatActivity implements AddToDoItemDialogFragment.AddToDoItemDialogListener {
+public class ToDoItemListActivity extends AppCompatActivity implements
+        AddToDoItemDialogFragment.AddToDoItemDialogListener,
+        EditToDoItemDialogFragment.EditToDoItemDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoItemListActivity";
 
@@ -389,6 +392,18 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         dialogFrag.show(fm, AddToDoItemDialogFragment.TAG);
     }
 
+    public void showEditToDoItemDialog()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        EditToDoItemDialogFragment dialogFragment = new EditToDoItemDialogFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("itemName", );
+        bundle.putInt("priority", );
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, EditToDoItemDialogFragment.TAG);
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Dialog dialogView = dialog.getDialog();
@@ -398,7 +413,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
 
         if (newItemName.equals(""))
         {
-            Toast.makeText(this, "Add To Do Item Failed: Name Must Not Be Empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Add/Edit To Do Item Failed: Name Must Not Be Empty", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -406,12 +421,26 @@ public class ToDoItemListActivity extends AppCompatActivity implements AddToDoIt
         int radioPriorityCheckedId = radioGroupPriority.getCheckedRadioButtonId();
         int priority = processRadioPrioritySelection(radioPriorityCheckedId);
 
-        addToDoItem(newItemName, priority);
+        if (dialog instanceof AddToDoItemDialogFragment)
+        {
+            addToDoItem(newItemName, priority);
+        }
+        else if (dialog instanceof EditToDoItemDialogFragment)
+        {
+            editToDoItem(newItemName, priority);
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        Toast.makeText(this, "Add To Do Item Cancelled", Toast.LENGTH_SHORT).show();
+        if (dialog instanceof AddToDoItemDialogFragment)
+        {
+            Toast.makeText(this, "Add To Do Item Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (dialog instanceof EditToDoItemDialogFragment)
+        {
+            Toast.makeText(this, "Edit To Do Item Cancelled", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private int processRadioPrioritySelection(int radioPriorityCheckedId)
