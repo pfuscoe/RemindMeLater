@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
@@ -43,6 +46,17 @@ public class EditToDoItemDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.dialog_add_to_do_item, null);
+
+        Bundle bundle = getArguments();
+        String itemName = bundle.getString("itemName");
+        int priority = bundle.getInt("priority");
+
+        EditText viewItemName = v.findViewById(R.id.dialog_add_to_do_item_name);
+        viewItemName.setText(itemName);
+
+        //RadioGroup viewPriorityRadioGroup = v.findViewById(R.id.dialog_add_to_do_item_radio_group);
+        
 
         builder.setView(inflater.inflate(R.layout.dialog_add_to_do_item, null))
                 .setTitle(R.string.dialog_edit_to_do_item_title)
