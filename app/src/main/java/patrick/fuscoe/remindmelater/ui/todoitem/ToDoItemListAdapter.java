@@ -209,7 +209,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder.viewToDoItemDonePriorityIcon.setImageResource(itemPriorityIconId);
             viewHolder.viewToDoItemDonePriorityIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
-            viewHolder.viewToDoItemDeleteIcon.setImageResource(R.drawable.action_delete);
+            viewHolder.viewToDoItemDeleteIcon.setImageResource(R.drawable.action_pencil);
             viewHolder.viewToDoItemDeleteIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
         }
         else
