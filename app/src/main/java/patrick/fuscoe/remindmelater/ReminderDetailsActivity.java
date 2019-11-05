@@ -225,6 +225,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Log.d(TAG, " userProfile Gson String: " + userProfileString);
 
             updateCategorySelectSpinner();
+            setupRecurrenceSpinner();
         }
         // Entered activity from notification tap
         else
@@ -272,12 +273,16 @@ public class ReminderDetailsActivity extends AppCompatActivity
         */
 
         // Setup Recurrence Spinner
+        //setupRecurrenceSpinner();
+
+        /*
         viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
         ArrayAdapter<CharSequence> recurrenceAdapter = ArrayAdapter.createFromResource(this,
                 R.array.array_recurrence, android.R.layout.simple_spinner_item);
         recurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         viewRecurrenceSpinner.setAdapter(recurrenceAdapter);
         viewRecurrenceSpinner.setOnItemSelectedListener(this);
+        */
 
         // Setup Buttons and View Click Listeners
         viewAddNewCategory = findViewById(R.id.view_reminder_details_category_add);
@@ -371,6 +376,16 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         // No match found - Must be new reminder. Set default category to 'Main'
         viewCategorySpinner.setSelection(mainCategoryPosition);
+    }
+
+    private void setupRecurrenceSpinner()
+    {
+        viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
+        ArrayAdapter<CharSequence> recurrenceAdapter = ArrayAdapter.createFromResource(this,
+                R.array.array_recurrence, android.R.layout.simple_spinner_item);
+        recurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        viewRecurrenceSpinner.setAdapter(recurrenceAdapter);
+        viewRecurrenceSpinner.setOnItemSelectedListener(this);
     }
 
     public void updateFields()
@@ -827,6 +842,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                             DocumentSnapshot documentSnapshot = task.getResult();
                             buildUserProfileObj(documentSnapshot);
                             updateCategorySelectSpinner();
+                            setupRecurrenceSpinner();
                             updateFields();
                         }
                     }
