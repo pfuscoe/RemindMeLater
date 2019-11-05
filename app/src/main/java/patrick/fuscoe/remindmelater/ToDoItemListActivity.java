@@ -66,6 +66,8 @@ public class ToDoItemListActivity extends AppCompatActivity implements
     private List<ToDoItem> toDoItemListDone;
     private List<ToDoItem> toDoItemListUnsorted;
 
+    private ToDoItem toDoItemToEdit;
+
     private boolean hasChanged;
 
     /*
@@ -106,19 +108,28 @@ public class ToDoItemListActivity extends AppCompatActivity implements
             }
             else if (position <= numItemsToDo)
             {
-                final ToDoItem item = toDoItemList.get(position - 1);
-                CheckBox checkBox = v.findViewById(R.id.view_to_do_item_priority_checkbox);
-                checkBox.setChecked(true);
+                if (v.getId() == R.id.view_to_do_item_edit_icon)
+                {
+                    toDoItemToEdit = toDoItemList.get(position - 1);
 
-                // Short delay to allow checkbox animation to complete
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        markToDoItemDone(item);
-                    }
-                }, 500);
+                    showEditToDoItemDialog();
+                }
+                else
+                {
+                    final ToDoItem item = toDoItemList.get(position - 1);
+                    CheckBox checkBox = v.findViewById(R.id.view_to_do_item_priority_checkbox);
+                    checkBox.setChecked(true);
 
-                //markToDoItemDone(item);
+                    // Short delay to allow checkbox animation to complete
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            markToDoItemDone(item);
+                        }
+                    }, 500);
+
+                    //markToDoItemDone(item);
+                }
             }
             else
             {
@@ -275,6 +286,18 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         UpdateToDoItemListDisplay();
     }
 
+    public void editToDoItem(String itemName, int priority)
+    {
+        ToDoItem updatedToDoItem = new ToDoItem(itemName, priority);
+        toDoGroup.addToDoItem(updatedToDoItem);
+        toDoGroup.removeToDoItem(toDoItemToEdit);
+        toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
+        splitAndSortToDoItems();
+
+        hasChanged = true;
+        UpdateToDoItemListDisplay();
+    }
+
     public void markToDoItemDone(ToDoItem toDoItem)
     {
         toDoItem.setDone(true);
@@ -398,8 +421,8 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         EditToDoItemDialogFragment dialogFragment = new EditToDoItemDialogFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("itemName", );
-        bundle.putInt("priority", );
+        bundle.putString("itemName", toDoItemToEdit.getItemName());
+        bundle.putInt("priority", toDoItemToEdit.getPriority());
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fm, EditToDoItemDialogFragment.TAG);
     }

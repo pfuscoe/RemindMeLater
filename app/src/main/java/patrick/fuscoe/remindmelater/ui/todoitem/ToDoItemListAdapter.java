@@ -54,20 +54,21 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static class ToDoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ConstraintLayout viewToDoItemLayout;
-        //ImageView viewToDoItemPriorityIcon;
         CheckBox viewToDoItemPriorityCheckbox;
         TextView viewToDoItemName;
+        ImageView viewToDoItemEditIcon;
 
         ToDoItemViewHolder(View v)
         {
             super(v);
 
-            v.setOnClickListener(this);
-
             viewToDoItemLayout = v.findViewById(R.id.view_to_do_item_layout);
-            //viewToDoItemPriorityIcon = v.findViewById(R.id.view_to_do_item_priority_icon);
             viewToDoItemPriorityCheckbox = v.findViewById(R.id.view_to_do_item_priority_checkbox);
             viewToDoItemName = v.findViewById(R.id.view_to_do_item_name);
+            viewToDoItemEditIcon = v.findViewById(R.id.view_to_do_item_edit_icon);
+
+            v.setOnClickListener(this);
+            viewToDoItemEditIcon.setOnClickListener(this);
         }
 
         @Override
@@ -188,6 +189,9 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ColorStateList colorStateList = selectItemPriorityCheckboxColor(item.getPriority());
             //viewHolder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
             viewHolder.viewToDoItemPriorityCheckbox.setButtonTintList(colorStateList);
+
+            viewHolder.viewToDoItemEditIcon.setImageResource(R.drawable.action_delete);
+            viewHolder.viewToDoItemEditIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
         }
         else if (holder instanceof ToDoItemDoneHeaderViewHolder)
         {
@@ -245,6 +249,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    /*
     private int selectItemPriorityIconColor(int priority)
     {
         switch (priority)
@@ -262,6 +267,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return R.color.red;
         }
     }
+    */
 
     private ColorStateList selectItemPriorityCheckboxColor(int priority)
     {
