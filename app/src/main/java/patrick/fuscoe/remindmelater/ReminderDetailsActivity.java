@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,6 +87,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private UserProfile userProfile;
     private LocalDate dateShown;
 
+    private ProgressBar viewProgressBar;
+    private ConstraintLayout viewContentConstraintLayout;
     private EditText viewTitle;
     private ImageView viewCategoryIcon;
     private Spinner viewCategorySpinner;
@@ -211,6 +215,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         remindersDocId = intent.getStringExtra(RemindersFragment.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
+        viewProgressBar = findViewById(R.id.view_reminder_details_progress_bar);
+        viewContentConstraintLayout = findViewById(R.id.view_reminder_details_content_constraint_layout);
         viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
 
         // Entered activity from Reminders Fragment
@@ -834,6 +840,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void loadUserProfile()
     {
+        showProgressBar();
+
         userDocRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -844,6 +852,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                             updateCategorySelectSpinner();
                             setupRecurrenceSpinner();
                             updateFields();
+                            hideProgressBar();
                         }
                     }
                 });
@@ -936,11 +945,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     private void showProgressBar()
     {
-        
+        viewProgressBar.setVisibility(View.VISIBLE);
+        viewContentConstraintLayout.setVisibility(View.INVISIBLE);
     }
 
     private void hideProgressBar()
     {
-
+        viewProgressBar.setVisibility(View.INVISIBLE);
+        viewContentConstraintLayout.setVisibility(View.VISIBLE);
     }
 }
