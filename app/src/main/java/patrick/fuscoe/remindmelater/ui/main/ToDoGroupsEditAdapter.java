@@ -74,12 +74,12 @@ public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAd
         ToDoGroup toDoGroup = toDoGroupList.get(position);
 
         holder.viewToDoGroupTitle.setText(toDoGroup.getTitle());
-        holder.viewToDoGroupTitle.setTextColor(ContextCompat.getColor(context, R.color.greyDark));
+        holder.viewToDoGroupTitle.setTextColor(ContextCompat.getColor(context, R.color.grey));
 
         holder.viewToDoGroupIcon.setImageDrawable(ContextCompat.getDrawable(context,
                 context.getResources().getIdentifier(toDoGroup.getIconName(),
                         "drawable", context.getPackageName())));
-        holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
+        holder.viewToDoGroupIcon.setColorFilter(ContextCompat.getColor(context, R.color.grey));
 
         int editIconId = context.getResources().getIdentifier("action_pencil", "drawable", context.getPackageName());
         holder.viewToDoGroupEditIcon.setImageResource(editIconId);
