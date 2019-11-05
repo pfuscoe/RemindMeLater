@@ -190,7 +190,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             //viewHolder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
             viewHolder.viewToDoItemPriorityCheckbox.setButtonTintList(colorStateList);
 
-            viewHolder.viewToDoItemEditIcon.setImageResource(R.drawable.action_delete);
+            viewHolder.viewToDoItemEditIcon.setImageResource(R.drawable.action_pencil);
             viewHolder.viewToDoItemEditIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
         }
         else if (holder instanceof ToDoItemDoneHeaderViewHolder)
@@ -209,7 +209,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder.viewToDoItemDonePriorityIcon.setImageResource(itemPriorityIconId);
             viewHolder.viewToDoItemDonePriorityIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
 
-            viewHolder.viewToDoItemDeleteIcon.setImageResource(R.drawable.action_pencil);
+            viewHolder.viewToDoItemDeleteIcon.setImageResource(R.drawable.action_delete);
             viewHolder.viewToDoItemDeleteIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
         }
         else
