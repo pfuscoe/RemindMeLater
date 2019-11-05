@@ -933,4 +933,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "Delete Reminder Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void showProgressBar()
+    {
+        
+    }
+
+    private void hideProgressBar()
+    {
+
+    }
 }
