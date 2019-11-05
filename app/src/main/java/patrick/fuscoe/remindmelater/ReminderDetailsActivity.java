@@ -105,6 +105,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private boolean reminderTitleChanged;
     private String oldReminderTitle;
 
+    private boolean enteredActivityFromNotification;
+
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
@@ -177,6 +179,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void onBackPressed() {
         Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
         backIntent.putExtra(MainActivity.BACK_PRESSED_FROM_REMINDER_DETAILS, TAG);
+
+        /*
+        if (enteredActivityFromNotification)
+        {
+            backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        }
+        */
+
         startActivity(backIntent);
         finish();
         //super.onBackPressed();
@@ -203,8 +213,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
 
+        // Entered activity from Reminders Fragment
         if (intent.hasExtra(RemindersFragment.USER_PROFILE))
         {
+            enteredActivityFromNotification = false;
+
             Type dataTypeUserProfile = new TypeToken<UserProfile>(){}.getType();
             String userProfileString = intent.getStringExtra(RemindersFragment.USER_PROFILE);
             userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
@@ -213,8 +226,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             updateCategorySelectSpinner();
         }
+        // Entered activity from notification tap
         else
         {
+            enteredActivityFromNotification = true;
             loadUserProfile();
         }
 
