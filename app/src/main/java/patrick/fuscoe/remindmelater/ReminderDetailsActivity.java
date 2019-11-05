@@ -184,12 +184,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
         Intent backIntent = new Intent(getApplicationContext(), MainActivity.class);
         backIntent.putExtra(MainActivity.BACK_PRESSED_FROM_REMINDER_DETAILS, TAG);
 
-        /*
         if (enteredActivityFromNotification)
         {
-            backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        */
 
         startActivity(backIntent);
         finish();

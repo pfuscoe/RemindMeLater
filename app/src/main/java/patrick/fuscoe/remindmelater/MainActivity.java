@@ -223,15 +223,15 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     {
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
-        if (setRemindersTabActive)
-        {
-            sectionsPagerAdapter.getItem(1);
-        }
-
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        if (setRemindersTabActive)
+        {
+            sectionsPagerAdapter.getItem(1);
+        }
 
         viewMainProgressBar.setVisibility(View.INVISIBLE);
     }

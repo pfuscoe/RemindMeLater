@@ -220,6 +220,11 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         PendingIntent reminderDetailsPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        /*
+        PendingIntent reminderDetailsPendingIntent = PendingIntent.getBroadcast(context,
+                0, reminderDetailsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        */
+
         // Notification Done Intent
         Intent doneIntent = new Intent(context, NotificationDoneReceiver.class);
         doneIntent.setAction(NOTIFICATION_ACTION_DONE + notificationId);
