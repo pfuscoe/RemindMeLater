@@ -272,6 +272,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         if (!displayName.equals(userProfile.getDisplayName()))
         {
             hasDisplayNameChanged = true;
+            userProfile.setDisplayName(displayName);
         }
         else
         {
