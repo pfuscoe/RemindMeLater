@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -55,6 +57,8 @@ public class EditToDoItemDialogFragment extends DialogFragment {
         Bundle bundle = getArguments();
         String itemName = bundle.getString("itemName");
         int priority = bundle.getInt("priority");
+
+        Log.d(TAG, "itemName: " + itemName + ", priority: " + priority);
 
         EditText viewItemName = v.findViewById(R.id.dialog_add_to_do_item_name);
         viewItemName.setText(itemName);
