@@ -117,7 +117,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
-                        Toast.makeText(context, "Reminder Item Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Reminder Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
 
                         saveReminderToSharedPreferences();
                         setReminderAlarm();
