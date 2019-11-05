@@ -70,7 +70,7 @@ public class EditToDoItemDialogFragment extends DialogFragment {
 
         setPriorityRadioButton(priority);
 
-        builder.setView(inflater.inflate(R.layout.dialog_add_to_do_item, null))
+        builder.setView(v)
                 .setTitle(R.string.dialog_edit_to_do_item_title)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
