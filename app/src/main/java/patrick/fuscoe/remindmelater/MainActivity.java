@@ -50,6 +50,7 @@ import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
 
@@ -324,6 +325,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
     {
+        userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+
+        /*
         Map<String, Object> docMap = documentSnapshot.getData();
 
         String id = documentSnapshot.getId();
@@ -353,6 +357,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
                 reminderTimeHour, reminderTimeMinute, hibernateLength, friends);
+        */
+
+
+        reminderTimeHour = userProfile.getReminderHour();
+        reminderTimeMinute = userProfile.getReminderMinute();
 
         Log.d(TAG, ": userProfile loaded from cloud");
     }

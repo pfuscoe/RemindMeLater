@@ -304,7 +304,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                 if (documentSnapshot != null)
                 {
                     userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-                    
+
                     /*
                     Map<String, Object> docMap = documentSnapshot.getData();
 

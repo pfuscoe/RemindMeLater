@@ -57,6 +57,7 @@ import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.AddCategoryDialogListener,
         EditToDoGroupDialogFragment.EditToDoGroupDialogListener,
@@ -310,6 +311,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             public void onChanged(@Nullable DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot != null)
                 {
+                    userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+
+                    /*
                     Map<String, Object> docMap = documentSnapshot.getData();
 
                     String id = documentSnapshot.getId();
@@ -317,16 +321,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
 
-                    //Log.d(TAG, "subscriptionsList: " + subscriptionsList);
-
                     String[] subscriptions = new String[subscriptionsList.size()];
                     subscriptions = subscriptionsList.toArray(subscriptions);
-
-                    /*
-                    for (int i = 0; i < subscriptions.length; i++) {
-                        Log.d("subscriptions item: ", subscriptions[i]);
-                    }
-                    */
 
                     Map<String, String> reminderCategories =
                             (Map<String, String>) documentSnapshot.get("reminderCategories");
@@ -343,6 +339,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
                             MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
                             hibernateLength, friends);
+                    */
 
                     Log.d(TAG, "UserProfile loaded");
 

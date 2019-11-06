@@ -40,6 +40,7 @@ import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class UserPreferencesActivity extends AppCompatActivity
         implements TimePickerDialogFragment.OnTimeSetListener {
@@ -279,6 +280,9 @@ public class UserPreferencesActivity extends AppCompatActivity
             hasDisplayNameChanged = false;
         }
 
+        Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
+
+        /*
         Map<String, Object> userProfileDoc = new HashMap<>();
 
         userProfileDoc.put("displayName", displayName);
@@ -288,6 +292,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
         userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
         userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
+        */
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -311,6 +316,8 @@ public class UserPreferencesActivity extends AppCompatActivity
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(getApplicationContext(), "Failed to save user settings to cloud", Toast.LENGTH_LONG).show();
+                        hideProgressBar();
                     }
                 });
     }
