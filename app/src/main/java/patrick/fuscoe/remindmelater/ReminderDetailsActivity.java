@@ -62,6 +62,7 @@ import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener,
@@ -810,14 +811,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void saveUserProfile()
     {
-        Map<String, Object> userProfileDoc = new HashMap<>();
-        userProfileDoc.put("displayName", userProfile.getDisplayName());
-        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
-        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
-        userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
-        userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
-        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
-        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
+        Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -832,8 +826,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
-
-        //Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
     }
 
     public void loadUserProfile()
@@ -858,6 +850,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
     {
+        userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+
+        /*
         Map<String, Object> docMap = documentSnapshot.getData();
 
         String id = documentSnapshot.getId();
@@ -883,6 +878,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
                 MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
                 hibernateLength, friends);
+        */
 
         Log.d(TAG, ": userProfile loaded from cloud");
     }

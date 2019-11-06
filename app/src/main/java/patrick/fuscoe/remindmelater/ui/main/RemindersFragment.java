@@ -47,6 +47,7 @@ import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class RemindersFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -302,6 +303,9 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
             public void onChanged(@Nullable DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot != null)
                 {
+                    userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                    
+                    /*
                     Map<String, Object> docMap = documentSnapshot.getData();
 
                     String id = documentSnapshot.getId();
@@ -309,16 +313,8 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                     ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
 
-                    //Log.d(TAG, "subscriptionsList: " + subscriptionsList);
-
                     String[] subscriptions = new String[subscriptionsList.size()];
                     subscriptions = subscriptionsList.toArray(subscriptions);
-
-                    /*
-                    for (int i = 0; i < subscriptions.length; i++) {
-                        Log.d("subscriptions item: ", subscriptions[i]);
-                    }
-                    */
 
                     Map<String, String> reminderCategories =
                             (Map<String, String>) documentSnapshot.get("reminderCategories");
@@ -335,6 +331,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                     userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
                             MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
                             hibernateLength, friends);
+                    */
 
                     Log.d(TAG, "UserProfile loaded");
 
