@@ -3,11 +3,13 @@ package patrick.fuscoe.remindmelater.models;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+/**
+ * Data model for simplifying reminder item use with AlarmManager.
+ */
 public class ReminderAlarmItem {
 
     private String title;
     private String nextOccurrence;
-    //private int iconId;
     private String iconName;
     private int broadcastId;
     private Calendar alarmCalendarObj;
@@ -22,7 +24,6 @@ public class ReminderAlarmItem {
     {
         this.title = title;
         this.nextOccurrence = nextOccurrence;
-        //this.iconId = iconId;
         this.iconName = iconName;
         this.broadcastId = broadcastId;
 

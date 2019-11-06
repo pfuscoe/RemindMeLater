@@ -1,11 +1,15 @@
 package patrick.fuscoe.remindmelater.models;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 import patrick.fuscoe.remindmelater.R;
 
+/**
+ * Holds the complete list of category icons that can be used in customizing to do group icons
+ * and reminder categories.
+ *
+ * Also stores which icon is currently checked.
+ */
 public class CategoryIconSet {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.CategoryIconSet";
@@ -180,15 +184,12 @@ public class CategoryIconSet {
 
     public void markSelected(Integer iconId)
     {
-        //Log.d(TAG, ": markSelected called with iconId: " + iconId);
-
         for (int i = 0; i < categoryIconList.size(); i++)
         {
             if (iconId.equals(categoryIconList.get(i)))
             {
                 categoryIconListIsChecked.set(i, true);
                 selectedIconPos = i;
-                //Log.d(TAG, ": Icon checked at pos: " + i);
             }
         }
     }

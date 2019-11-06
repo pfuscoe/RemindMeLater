@@ -52,6 +52,17 @@ import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
+/**
+ * The main entry point after the user signs in, except when the user goes directly to
+ * ReminderDetailsActivity from notification tap.
+ *
+ * Has two fragments that are setup as tabs: ToDoFragment, RemindersFragment.
+ *
+ * Accessible throughout the application except for in the receiver classes handling alarms and
+ * notification actions.
+ *
+ * Launches in singleTask mode.
+*/
 public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
@@ -327,39 +338,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     {
         userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
 
-        /*
-        Map<String, Object> docMap = documentSnapshot.getData();
-
-        String id = documentSnapshot.getId();
-        String displayName = documentSnapshot.getString("displayName");
-
-        Log.d(TAG, "displayName: " + displayName);
-
-        ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
-
-        String[] subscriptions = new String[subscriptionsList.size()];
-        subscriptions = subscriptionsList.toArray(subscriptions);
-
-        Map<String, String> reminderCategories =
-                (Map<String, String>) documentSnapshot.get("reminderCategories");
-
-        reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
-        reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
-
-        int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
-
-        ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
-        String[] friends;
-        friends = friendsList.toArray(new String[0]);
-
-        Log.d(TAG, "buildUserProfileObj: reminderTimeHour = " + reminderTimeHour +
-                ". reminderTimeMinute = " + reminderTimeMinute);
-
-        userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                reminderTimeHour, reminderTimeMinute, hibernateLength, friends);
-        */
-
-
         reminderTimeHour = userProfile.getReminderHour();
         reminderTimeMinute = userProfile.getReminderMinute();
 
@@ -487,23 +465,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         {
             if (!entry.getKey().equals("userId"))
             {
-                HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
-
-                String reminderTitle = entry.getKey();
-                boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
-                int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
-                String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
-                String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
-                String category = (String) reminderItemMap.get("category");
-                String categoryIconName = (String) reminderItemMap.get("categoryIconName");
-                String description = (String) reminderItemMap.get("description");
-                boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
-                boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
-                Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
-
-                ReminderItem reminderItem = new ReminderItem(reminderTitle, isRecurring,
-                        recurrenceNum, recurrenceInterval, nextOccurrence, category,
-                        categoryIconName, description, isSnoozed, isHibernating, history);
+                ReminderItem reminderItem = FirebaseDocUtils.createReminderItemObj(entry);
 
                 reminderItemList.add(reminderItem);
             }
