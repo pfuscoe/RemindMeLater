@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 
 public class FirebaseDocUtils {
@@ -53,5 +54,43 @@ public class FirebaseDocUtils {
         return new UserProfile(id, displayName, subscriptions, reminderCategories,
                 reminderTimeHour, reminderTimeMinute, hibernateLength, friends);
     }
+
+    public static Map<String, Object> createToDoGroupDoc(ToDoGroup toDoGroup)
+    {
+        Map<String, Object> toDoGroupDoc = new HashMap<>();
+
+        toDoGroupDoc.put("title", toDoGroup.getTitle());
+        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
+        toDoGroupDoc.put("shared", toDoGroup.isShared());
+        toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
+        toDoGroupDoc.put("numUnfinishedItems", toDoGroup.getNumUnfinishedItems());
+        toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
+        toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
+
+        toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+
+        return toDoGroupDoc;
+    }
+
+    public static ToDoGroup createToDoGroupObj(DocumentSnapshot documentSnapshot)
+    {
+        String id = documentSnapshot.getId();
+        String title = documentSnapshot.getString("title");
+        String iconName = documentSnapshot.getString("iconName");
+        boolean shared = documentSnapshot.getBoolean("shared");
+        int numPriorityOneItems = documentSnapshot.get("numPriorityOneItems", int.class);
+        int numUnfinishedItems = documentSnapshot.get("numUnfinishedItems", int.class);
+
+        ArrayList<String> subscribersList = (ArrayList<String>) documentSnapshot.get("subscribers");
+
+        String[] subscribers = subscribersList.toArray(new String[0]);
+
+        Map<String, Object> toDoItems = (Map<String, Object>) documentSnapshot.get("toDoItems");
+
+        return new ToDoGroup(id, title, iconName, shared,
+                numPriorityOneItems, numUnfinishedItems, subscribers, toDoItems);
+    }
+
+
 
 }

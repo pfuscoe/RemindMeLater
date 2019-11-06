@@ -247,8 +247,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
 
-                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
                     {
+                        ToDoGroup toDoGroup = FirebaseDocUtils.createToDoGroupObj(documentSnapshot);
+
+                        /*
                         String id = doc.getId();
                         String title = doc.getString("title");
                         String iconName = doc.getString("iconName");
@@ -266,6 +269,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                         ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared,
                                 numPriorityOneItems, numUnfinishedItems, subscribers, toDoItems);
+                        */
+
                         toDoGroupDocs.add(toDoGroup);
                     }
 
@@ -565,6 +570,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
     {
+        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
+
+        /*
         Map<String, Object> toDoGroupDoc = new HashMap<>();
         toDoGroupDoc.put("title", toDoGroup.getTitle());
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
@@ -575,6 +583,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
         toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+        */
 
         return toDoGroupDoc;
     }
