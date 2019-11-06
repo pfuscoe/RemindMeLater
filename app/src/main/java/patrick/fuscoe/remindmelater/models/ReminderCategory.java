@@ -1,15 +1,16 @@
 package patrick.fuscoe.remindmelater.models;
 
+/**
+ * Data model for reminder categories.
+ */
 public class ReminderCategory implements Comparable<ReminderCategory> {
 
     private String categoryName;
-    //private int iconId;
     private String iconName;
 
     public ReminderCategory(String categoryName, String iconName)
     {
         this.categoryName = categoryName;
-        //this.iconId = iconId;
         this.iconName = iconName;
     }
 

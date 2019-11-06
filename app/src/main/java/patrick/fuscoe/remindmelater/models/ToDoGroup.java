@@ -1,14 +1,17 @@
 package patrick.fuscoe.remindmelater.models;
 
-import android.util.Log;
-
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data model for ToDoGroup. These objects represent data that the user considers To Do Lists.
+ *
+ * Holds individual to do items in both an ArrayList and HashMap and maintains data consistency.
+ * This is done to simplify cloud storage syncing.
+*/
 public class ToDoGroup {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoGroup";
@@ -16,7 +19,6 @@ public class ToDoGroup {
     private String id;
     private String title;
     private String iconName;
-    //private int iconId;
     private boolean shared;
     private int numPriorityOneItems;
     private int numUnfinishedItems;
@@ -26,7 +28,6 @@ public class ToDoGroup {
 
     private ArrayList<ToDoItem> toDoItemArrayList;
     private Map<String, Object> toDoItems;
-    private ToDoItem[] toDoItemsArray;
 
 
     public ToDoGroup() {
@@ -37,7 +38,6 @@ public class ToDoGroup {
     {
         this.id = id;
         this.title = title;
-        //this.iconId = iconId;
         this.iconName = iconName;
         this.shared = shared;
         this.numPriorityOneItems = 0;
@@ -54,7 +54,6 @@ public class ToDoGroup {
     {
         this.id = id;
         this.title = title;
-        //this.iconId = iconId;
         this.iconName = iconName;
         this.shared = shared;
         this.numPriorityOneItems = numPriorityOneItems;
@@ -66,11 +65,10 @@ public class ToDoGroup {
 
         this.toDoItemArrayList = new ArrayList<>();
 
-        HashMap<String, HashMap<String, Object>> toDoItemsMap = new HashMap<String, HashMap<String, Object>>();
+        Map<String, Map<String, Object>> toDoItemsMap = new HashMap<>();
 
         for (Map.Entry<String, Object> entry : toDoItems.entrySet())
         {
-            HashMap<String, Object> toDoItemMap = new HashMap<>();
             String itemName = entry.getKey();
             toDoItemsMap.put(itemName, (HashMap<String, Object>) entry.getValue());
             int priority = Math.toIntExact((long)toDoItemsMap.get(itemName).get("priority"));
@@ -80,15 +78,12 @@ public class ToDoGroup {
             ToDoItem item = new ToDoItem(itemName, priority, timestamp, done);
             toDoItemArrayList.add(item);
         }
-
-        // could add cleared item storage to more easily re-add done items
     }
 
 
     public void addToDoItem(ToDoItem toDoItem)
     {
         toDoItemArrayList.add(toDoItem);
-        //Collections.sort(toDoItemArrayList);
         totalItems++;
 
         if (!toDoItem.isDone())
@@ -114,21 +109,8 @@ public class ToDoGroup {
         toDoItems.remove(toDoItem.getItemName());
     }
 
-    public void saveToDoItems()
-    {
-        Map<String, Object> toDoItemsTemp = new HashMap<>();
 
-        for (int i = 0; i < toDoItemArrayList.size(); i++)
-        {
-            ToDoItem item = toDoItemArrayList.get(i);
-            toDoItemsTemp.put(item.getItemName(), item.getPriority());
-        }
-
-        toDoItems = toDoItemsTemp;
-    }
-
-
-    /** Getters **/
+    /* Getters */
     public String getTitle() {
         return title;
     }
@@ -161,11 +143,6 @@ public class ToDoGroup {
         return toDoItemArrayList;
     }
 
-    public ToDoItem[] getToDoItemsArray()
-    {
-        return toDoItemsArray;
-    }
-
     public Map<String, Object> getToDoItems() {
         return toDoItems;
     }
@@ -174,7 +151,8 @@ public class ToDoGroup {
         return id;
     }
 
-    /** Setters **/
+
+    /* Setters */
     public void setTitle(String title) {
         this.title = title;
     }

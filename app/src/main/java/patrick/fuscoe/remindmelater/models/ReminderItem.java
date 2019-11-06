@@ -1,14 +1,13 @@
 package patrick.fuscoe.remindmelater.models;
 
-import android.util.Log;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Map;
 
+/**
+ * Data model that holds information on each reminder item
+*/
 public class ReminderItem implements Comparable<ReminderItem> {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderItem";
@@ -16,11 +15,9 @@ public class ReminderItem implements Comparable<ReminderItem> {
     private String title;
     private String nextOccurrence;  // LocalDate String format
     private String category;
-    //private int categoryIcon;
     private String categoryIconName;
     private String description;
 
-    //private Address address;
     private int recurrenceNum;
     private String recurrenceInterval;
 
@@ -29,7 +26,6 @@ public class ReminderItem implements Comparable<ReminderItem> {
     private int daysAway;
     private boolean isRecurring;
     private boolean isSnoozed;
-    //private ArrayList<HistoryItem> historyItems;
     private boolean isHibernating;
     private Map<String, String> history;
 
@@ -56,11 +52,8 @@ public class ReminderItem implements Comparable<ReminderItem> {
 
         this.recurrenceString = recurrence.toString();
         this.isSnoozed = isSnoozed;
-        //this.historyItems = new ArrayList<>();
         this.isHibernating = isHibernating;
         this.history = history;
-
-        //Log.d(TAG, ": Reminder Item Constructed");
     }
 
     @Override
@@ -74,16 +67,10 @@ public class ReminderItem implements Comparable<ReminderItem> {
         LocalDate next = LocalDate.parse(nextOccurrence);
 
         daysAway = (int) now.until(next, ChronoUnit.DAYS);
-
-        //Period diff = Period.between(now, next);
-
-        //daysAway = diff.getDays();
     }
 
     public void updateRecurrencePeriod()
     {
-        //Log.d(TAG, ": updateRecurrencePeriod called");
-
         switch (recurrenceInterval)
         {
             case "Days":
@@ -102,8 +89,6 @@ public class ReminderItem implements Comparable<ReminderItem> {
                 recurrence = Period.ofYears(recurrenceNum);
                 return;
         }
-
-        //Log.d(TAG, ": recurrenceString: " + recurrenceString);
     }
 
     public void addToHistory(String dateString, String action)
@@ -111,7 +96,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
         history.put(dateString, action);
     }
 
-    /** Getters **/
+    /* Getters */
     public String getTitle() {
         return title;
     }
@@ -168,7 +153,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
         return history;
     }
 
-    /** Setters **/
+    /* Setters */
     public void setTitle(String title) {
         this.title = title;
     }

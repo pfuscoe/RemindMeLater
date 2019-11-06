@@ -2,6 +2,9 @@ package patrick.fuscoe.remindmelater.models;
 
 import com.google.firebase.Timestamp;
 
+/**
+ * Data model for individual to do items
+*/
 public class ToDoItem implements Comparable<ToDoItem> {
 
     private String itemName;

@@ -7,6 +7,9 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 
+/**
+ * Data model for user profiles.
+*/
 public class UserProfile {
 
     private String id;
@@ -27,12 +30,12 @@ public class UserProfile {
     {
         this.id = id;
         this.displayName = displayName;
-        this.subscriptions = new String[]{};
+        this.subscriptions = new String[0];
         this.reminderCategories = new HashMap<>();
         this.reminderHour = MainActivity.DEFAULT_REMINDER_TIME_HOUR;
         this.reminderMinute = MainActivity.DEFAULT_REMINDER_TIME_MINUTE;
         this.hibernateLength = MainActivity.DEFAULT_HIBERNATE_LENGTH;
-        this.friends = new String[]{};
+        this.friends = new String[0];
     }
 
     public UserProfile(String id, String displayName, String[] subscriptions,
@@ -88,7 +91,7 @@ public class UserProfile {
         reminderCategories.remove(categoryName);
     }
 
-    /** Getters and Setters **/
+    /* Getters and Setters */
     public String getId() {
         return id;
     }
