@@ -40,7 +40,6 @@ import android.widget.ProgressBar;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,6 @@ import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
-import patrick.fuscoe.remindmelater.ui.main.UserProfileViewModel;
 
 public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
 
@@ -60,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final String NOTIFICATION_CHANNEL_ID = "patrick.fuscoe.remindmelater.NOTIFICATION_CHANNEL_ID";
     public static final String ACTION_ALARM_RECEIVER = "patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver";
 
-    public static final String USER_PREF_REMINDER_TIME_HOUR = "reminderTimeHour";
-    public static final String USER_PREF_REMINDER_TIME_MINUTE = "reminderTimeMinute";
     public static final int DEFAULT_REMINDER_TIME_HOUR = 8;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
     public static final int DEFAULT_HIBERNATE_LENGTH = 14;
@@ -70,20 +66,14 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
     public static final int DEFAULT_NOTIFICATION_ID = 100;
 
-
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
-    //public static final String REMINDER_NEXT_OCCURRENCE = "patrick.fuscoe.remindmelater.REMINDER_NEXT_OCCURRENCE";
-    //public static final String REMINDER_ICON_ID = "patrick.fuscoe.remindmelater.REMINDER_ICON_ID";
     public static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
     public static final String BACK_PRESSED_FROM_REMINDER_DETAILS = "patrick.fuscoe.remindmelater.BACK_PRESSED_FROM_REMINDER_DETAILS";
     public static final String USER_PREFERENCES_UPDATED = "patrick.fuscoe.remindmelater.USER_PREFERENCES_UPDATED";
 
-    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
-    //private final String userId = auth.getUid();
-    //private final DocumentReference userDocRef = db.collection("users").document(userId);
 
     public static FirebaseAuth auth;
     public static String userId;
@@ -91,13 +81,10 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static DocumentReference remindersDocRef;
 
     private ProgressBar viewMainProgressBar;
-    //private UserProfileViewModel userProfileViewModel;
     private UserProfile userProfile;
     private String remindersDocId;
 
-    //public static SharedPreferences userPreferences;
     public static SharedPreferences reminderAlarmStorage;
-    //public static SharedPreferences reminderIconIds;
     public static SharedPreferences reminderIconNames;
     public static SharedPreferences reminderBroadcastIds;
     public static SharedPreferences reminderNotificationIds;
@@ -142,11 +129,10 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         Intent intent = getIntent();
 
+        // User entered login info from sign in activity
         if (intent.getBooleanExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, false))
         {
-            // TODO: Also need to load reminders to device storage..
             // Check if this is a new user by checking if user doc on cloud exists
-            // Note: Loading prefs, setting up tabs and loading alarms is called after cloud sync
             if (intent.hasExtra(FirebaseSignInActivity.DISPLAY_NAME))
             {
                 newUserDisplayName = intent.getStringExtra(FirebaseSignInActivity.DISPLAY_NAME);
@@ -154,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             checkIfNewUser();
         }
+        // User already signed-in
         else
         {
-            // User already signed-in
             if (intent.hasExtra(BACK_PRESSED_FROM_REMINDER_DETAILS))
             {
                 setRemindersTabActive = true;
@@ -167,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             }
 
             loadUserProfileFromCloud();
-            //loadUserPreferences();
         }
 
         Toolbar toolbarMain = (Toolbar) findViewById(R.id.toolbar_main);
@@ -177,22 +162,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
         reminderNotificationIds = getSharedPreferences(getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
-
-        /*
-        FloatingActionButton fab = findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
     }
-
-    // TODO: override onNewIntent() and set launch mode to deal with back pressing / duplicate alarms
-
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -288,21 +258,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void clearAllSharedPreferences()
     {
-        //userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
         reminderNotificationIds = getSharedPreferences(getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
 
-        //SharedPreferences.Editor userPreferencesEditor = userPreferences.edit();
-        //userPreferencesEditor.clear().commit();
-
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
         reminderAlarmStorageEditor.clear().commit();
-
-        //SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
-        //reminderIconIdsEditor.clear().commit();
 
         SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
         reminderIconNamesEditor.clear().commit();
@@ -325,17 +287,17 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                         if (task.isSuccessful())
                         {
                             DocumentSnapshot documentSnapshot = task.getResult();
+
+                            // User already exists
                             if (documentSnapshot.exists())
                             {
-                                // User already exists
                                 buildUserProfileObj(documentSnapshot);
-                                //saveUserPrefsToStorage();
                                 saveRemindersToStorage();
                                 setupTabs();
                             }
+                            // New user was created
                             else
                             {
-                                // New user was created
                                 createNewReminderDoc();
                             }
                         }
@@ -354,8 +316,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             DocumentSnapshot documentSnapshot = task.getResult();
                             buildUserProfileObj(documentSnapshot);
                             Log.d(TAG, "User Profile loaded from cloud");
-                            //loadReminderAlarms();
-                            //setReminderAlarms();
                             setupTabs();
                         }
                     }
@@ -477,19 +437,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     {
         reminderTimeHour = userProfile.getReminderHour();
         reminderTimeMinute = userProfile.getReminderMinute();
-
-        /*
-        userPreferences = getSharedPreferences(getString(R.string.user_preferences_file_key), Context.MODE_PRIVATE);
-
-        reminderTimeHour = userPreferences.getInt(USER_PREF_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_HOUR);
-        reminderTimeMinute = userPreferences.getInt(USER_PREF_REMINDER_TIME_MINUTE, DEFAULT_REMINDER_TIME_MINUTE);
-        */
-    }
-
-    public void saveUserPrefsToStorage()
-    {
-        // TODO: get user prefs from object and write to disk - need to use storage at all for user prefs?
-
     }
 
     public void saveRemindersToStorage()
@@ -557,19 +504,16 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public void writeRemindersToDisk()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
-        //SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
         SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
         SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
 
         for (ReminderItem reminderItem : reminderItemList)
         {
             reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
-            //reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
             reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
 
             int broadcastId = generateUniqueInt();
@@ -578,7 +522,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         // Using commit() because alarms are loaded immediately after write to disk from cloud
         reminderAlarmEditor.commit();
-        //reminderIconIdEditor.commit();
         reminderIconNamesEditor.commit();
         reminderBroadcastIdEditor.commit();
 
@@ -588,12 +531,10 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public void loadReminderAlarms()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
         reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
 
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
-        //Map<String, ?> reminderIconIdMap = reminderIconIds.getAll();
         Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
         Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
 
@@ -606,7 +547,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             String title = entry.getKey();
             String nextOccurrence = (String) entry.getValue();
 
-            //int iconId = (Integer) reminderIconIdMap.get(title);
             String iconName = (String) reminderIconNamesMap.get(title);
             int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
 
@@ -635,11 +575,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             Intent intent = new Intent(context, ReminderAlarmReceiver.class);
             intent.setAction(ACTION_ALARM_RECEIVER);
             intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
-            //intent.putExtra(REMINDER_ICON_ID, alarmItem.getIconId());
             intent.putExtra(REMINDER_ICON_NAME, alarmItem.getIconName());
-            //intent.putExtra(REMINDER_NEXT_OCCURRENCE, alarmItem.getNextOccurrence());
 
-            // TODO: Check alarmIntent Flag
             PendingIntent alarmIntent = PendingIntent.getBroadcast(context, alarmItem.getBroadcastId(), intent, 0);
 
             alarmIntentList.add(alarmIntent);
@@ -647,38 +584,22 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         }
     }
 
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+    private void createNotificationChannel()
+    {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.notification_channel_name);
             String description = getString(R.string.notification_channel_description);
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
-
-    /*
-    public static int generateUniqueInt()
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        long yesterday = calendar.getTimeInMillis();
-        return (int) (System.currentTimeMillis() - yesterday);
-    }
-    */
 
     public static int generateUniqueInt()
     {
         return (int) (Math.random() * 1000000);
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
 }
