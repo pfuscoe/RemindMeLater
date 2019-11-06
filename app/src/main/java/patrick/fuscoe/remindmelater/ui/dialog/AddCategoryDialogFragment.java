@@ -23,6 +23,9 @@ import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
+/**
+ * Dialog that handles UI for adding either new to do groups or reminder categories.
+*/
 public class AddCategoryDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.AddCategoryDialogFragment";

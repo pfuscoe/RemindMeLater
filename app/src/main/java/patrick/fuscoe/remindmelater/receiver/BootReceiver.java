@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-
+/**
+ * Notifies MainActivity when phone is rebooted so that reminder alarms can be set.
+*/
 public class BootReceiver extends BroadcastReceiver {
 
     private BootReceiverCallback bootListener;
