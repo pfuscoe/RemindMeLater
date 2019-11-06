@@ -622,6 +622,9 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         updateReminderItemObject();
 
+        Map<String, Object> reminderItemMap = FirebaseDocUtils.createReminderItemMap(reminderItem);
+
+        /*
         HashMap<String, Object> reminderItemMap = new HashMap<>();
         reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
         reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
@@ -634,6 +637,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
         reminderItemMap.put("isHibernating", reminderItem.isHibernating());
         reminderItemMap.put("history", reminderItem.getHistory());
+        */
 
         remindersDocRef.update(title, reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -661,26 +665,18 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public void saveReminderToSharedPreferences()
     {
-        //SharedPreferences reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        //SharedPreferences reminderAlarmStorage = MainActivity.reminderAlarmStorage;
         SharedPreferences.Editor reminderAlarmEditor = MainActivity.reminderAlarmStorage.edit();
         reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
         reminderAlarmEditor.apply();
-
-        //SharedPreferences reminderIconIds = MainActivity.reminderIconIds;
-        //SharedPreferences.Editor reminderIconIdEditor = reminderIconIds.edit();
-        //reminderIconIdEditor.putInt(reminderItem.getTitle(), reminderItem.getCategoryIcon());
-        //reminderIconIdEditor.apply();
 
         SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
         reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
         reminderIconNamesEditor.apply();
 
-        //SharedPreferences reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
-        //SharedPreferences reminderBroadcastIds = MainActivity.reminderBroadcastIds;
         SharedPreferences.Editor reminderBroadcastIdEditor = MainActivity.reminderBroadcastIds.edit();
 
         int broadcastId = MainActivity.generateUniqueInt();
+
         // TODO: Add check for existing id
         reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
         reminderBroadcastIdEditor.apply();
@@ -730,10 +726,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
         Context context = getApplicationContext();
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        //reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        //reminderIconIds = getSharedPreferences(getString(R.string.reminder_icon_ids_file_key), Context.MODE_PRIVATE);
-        //reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
-
         int broadcastId = MainActivity.reminderBroadcastIds.getInt(reminderTitle, 0);
 
         Intent intent = new Intent(context, ReminderAlarmReceiver.class);
@@ -766,9 +758,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
     {
         SharedPreferences.Editor reminderAlarmStorageEditor = MainActivity.reminderAlarmStorage.edit();
         reminderAlarmStorageEditor.remove(reminderTitle).commit();
-
-        //SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
-        //reminderIconIdsEditor.remove(reminderItem.getTitle()).commit();
 
         SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
         reminderIconNamesEditor.remove(reminderTitle).commit();

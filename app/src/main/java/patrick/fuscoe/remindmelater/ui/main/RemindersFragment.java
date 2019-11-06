@@ -232,6 +232,9 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                         {
                             if (!entry.getKey().contentEquals("userId"))
                             {
+                                ReminderItem reminderItem = FirebaseDocUtils.createReminderItemObj(entry);
+
+                                /*
                                 String title = entry.getKey();
                                 HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
 
@@ -255,6 +258,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                                 ReminderItem reminderItem = new ReminderItem(title, isRecurring,
                                         recurrenceNum, recurrenceInterval, nextOccurrence, category,
                                         categoryIconName, description, isSnoozed, isHibernating, history);
+                                */
 
                                 reminderListFromDoc.add(reminderItem);
                             }

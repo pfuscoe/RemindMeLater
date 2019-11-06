@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 
@@ -91,6 +92,45 @@ public class FirebaseDocUtils {
                 numPriorityOneItems, numUnfinishedItems, subscribers, toDoItems);
     }
 
+    public static Map<String, Object> createReminderItemMap(ReminderItem reminderItem)
+    {
+        Map<String, Object> reminderItemMap = new HashMap<>();
 
+        reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
+        reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
+        reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
+        reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
+        reminderItemMap.put("category", reminderItem.getCategory());
+        reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
+        reminderItemMap.put("description", reminderItem.getDescription());
+        reminderItemMap.put("isRecurring", reminderItem.isRecurring());
+        reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
+        reminderItemMap.put("isHibernating", reminderItem.isHibernating());
+        reminderItemMap.put("history", reminderItem.getHistory());
+
+        return reminderItemMap;
+    }
+
+    public static ReminderItem createReminderItemObj(Map.Entry<String, Object> entry)
+    {
+        String title = entry.getKey();
+
+        Map<String, Object> reminderItemMap = (Map<String, Object>) entry.getValue();
+
+        boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
+        int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
+        String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
+        String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
+        String category = (String) reminderItemMap.get("category");
+        String categoryIconName = (String) reminderItemMap.get("categoryIconName");
+        String description = (String) reminderItemMap.get("description");
+        boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
+        boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
+        Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
+
+        return new ReminderItem(title, isRecurring, recurrenceNum, recurrenceInterval,
+                nextOccurrence, category, categoryIconName, description, isSnoozed,
+                isHibernating, history);
+    }
 
 }
