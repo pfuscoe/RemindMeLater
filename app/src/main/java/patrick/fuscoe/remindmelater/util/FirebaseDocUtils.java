@@ -9,6 +9,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
+import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 
 public class FirebaseDocUtils {
@@ -65,7 +66,22 @@ public class FirebaseDocUtils {
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
-        toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+        //toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
+
+        ArrayList<ToDoItem> toDoItemArrayList = toDoGroup.getToDoItemArrayList();
+        Map<String, Object> toDoItemsMap = new HashMap<>();
+
+        for (ToDoItem item : toDoItemArrayList)
+        {
+            Map<String, Object> toDoItemMap = new HashMap<>();
+            toDoItemMap.put("priority", item.getPriority());
+            toDoItemMap.put("timestamp", item.getTimestamp());
+            toDoItemMap.put("done", item.isDone());
+
+            toDoItemsMap.put(item.getItemName(), toDoItemMap);
+        }
+
+        toDoGroupDoc.put("toDoItems", toDoItemsMap);
 
         return toDoGroupDoc;
     }

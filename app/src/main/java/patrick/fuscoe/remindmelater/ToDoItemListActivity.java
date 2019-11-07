@@ -387,6 +387,23 @@ public class ToDoItemListActivity extends AppCompatActivity implements
     {
         Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
 
+        /*
+        // Re-creating to do list map due to issue with type conversion in cloud database
+        Map<String, Object> toDoItemsMap = new HashMap<>();
+
+        for (ToDoItem item : toDoItemListUnsorted)
+        {
+            Map<String, Object> toDoItemMap = new HashMap<>();
+            toDoItemMap.put("priority", item.getPriority());
+            toDoItemMap.put("timestamp", item.getTimestamp());
+            toDoItemMap.put("done", item.isDone());
+
+            toDoItemsMap.put(item.getItemName(), toDoItemMap);
+        }
+
+        toDoGroupDoc.put("toDoItems", toDoItemsMap);
+        */
+
         db.collection("todogroups").document(toDoGroupId)
                 .set(toDoGroupDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
