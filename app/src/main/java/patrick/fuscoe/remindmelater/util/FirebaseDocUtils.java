@@ -63,9 +63,6 @@ public class FirebaseDocUtils {
         toDoGroupDoc.put("title", toDoGroup.getTitle());
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
-        toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
-        toDoGroupDoc.put("numUnfinishedItems", toDoGroup.getNumUnfinishedItems());
-        toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
         toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
@@ -79,8 +76,6 @@ public class FirebaseDocUtils {
         String title = documentSnapshot.getString("title");
         String iconName = documentSnapshot.getString("iconName");
         boolean shared = documentSnapshot.getBoolean("shared");
-        int numPriorityOneItems = documentSnapshot.get("numPriorityOneItems", int.class);
-        int numUnfinishedItems = documentSnapshot.get("numUnfinishedItems", int.class);
 
         ArrayList<String> subscribersList = (ArrayList<String>) documentSnapshot.get("subscribers");
 
@@ -88,8 +83,7 @@ public class FirebaseDocUtils {
 
         Map<String, Object> toDoItems = (Map<String, Object>) documentSnapshot.get("toDoItems");
 
-        return new ToDoGroup(id, title, iconName, shared,
-                numPriorityOneItems, numUnfinishedItems, subscribers, toDoItems);
+        return new ToDoGroup(id, title, iconName, shared, subscribers, toDoItems);
     }
 
     public static Map<String, Object> createReminderItemMap(ReminderItem reminderItem)

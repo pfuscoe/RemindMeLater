@@ -22,7 +22,6 @@ public class ToDoGroup {
     private boolean shared;
     private int numPriorityOneItems;
     private int numUnfinishedItems;
-    private int totalItems;
 
     private String[] subscribers;
 
@@ -42,26 +41,23 @@ public class ToDoGroup {
         this.shared = shared;
         this.numPriorityOneItems = 0;
         this.numUnfinishedItems = 0;
-        this.totalItems = 0;
         this.subscribers = new String[]{userId};
 
         this.toDoItemArrayList = new ArrayList<>();
         this.toDoItems = new HashMap<>();
     }
 
-    public ToDoGroup(String id, String title, String iconName, boolean shared, int numPriorityOneItems,
-                     int numUnfinishedItems, String[] subscribers, Map<String, Object> toDoItems)
+    public ToDoGroup(String id, String title, String iconName, boolean shared,
+                     String[] subscribers, Map<String, Object> toDoItems)
     {
         this.id = id;
         this.title = title;
         this.iconName = iconName;
         this.shared = shared;
-        this.numPriorityOneItems = numPriorityOneItems;
-        this.numUnfinishedItems = numUnfinishedItems;
+        this.numPriorityOneItems = 0;
+        this.numUnfinishedItems = 0;
         this.subscribers = subscribers;
         this.toDoItems = toDoItems;
-
-        this.totalItems = toDoItems.size();
 
         this.toDoItemArrayList = new ArrayList<>();
 
@@ -94,7 +90,6 @@ public class ToDoGroup {
     public void addToDoItem(ToDoItem toDoItem)
     {
         toDoItemArrayList.add(toDoItem);
-        totalItems++;
 
         if (!toDoItem.isDone())
         {
@@ -113,7 +108,6 @@ public class ToDoGroup {
     public void removeToDoItem(ToDoItem toDoItem)
     {
         toDoItemArrayList.remove(toDoItem);
-        totalItems--;
 
         // Update HashMap
         toDoItems.remove(toDoItem.getItemName());
@@ -182,10 +176,6 @@ public class ToDoGroup {
         return numUnfinishedItems;
     }
 
-    public int getTotalItems() {
-        return totalItems;
-    }
-
     public String[] getSubscribers() {
         return subscribers;
     }
@@ -222,10 +212,6 @@ public class ToDoGroup {
 
     public void setNumUnfinishedItems(int numUnfinishedItems) {
         this.numUnfinishedItems = numUnfinishedItems;
-    }
-
-    public void setTotalItems(int totalItems) {
-        this.totalItems = totalItems;
     }
 
     public void setId(String id) {

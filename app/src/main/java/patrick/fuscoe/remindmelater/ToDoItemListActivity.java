@@ -47,6 +47,7 @@ import patrick.fuscoe.remindmelater.ui.dialog.AddToDoItemDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoItemDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class ToDoItemListActivity extends AppCompatActivity implements
         AddToDoItemDialogFragment.AddToDoItemDialogListener,
@@ -349,16 +350,15 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         UpdateToDoItemListDisplay();
     }
 
+    /*
     private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
     {
+
         Map<String, Object> toDoGroupDoc = new HashMap<>();
 
         toDoGroupDoc.put("title", toDoGroup.getTitle());
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
-        toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
-        toDoGroupDoc.put("numUnfinishedItems", toDoGroup.getNumUnfinishedItems());
-        toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
 
         Map<String, Object> toDoItemsMap = new HashMap<>();
@@ -376,12 +376,16 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         //toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
         toDoGroupDoc.put("toDoItems", toDoItemsMap);
 
+
+        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
+
         return toDoGroupDoc;
     }
+    */
 
     private void commitToDoGroup()
     {
-        Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
 
         db.collection("todogroups").document(toDoGroupId)
                 .set(toDoGroupDoc)
