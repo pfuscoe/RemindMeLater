@@ -119,9 +119,26 @@ public class ToDoGroup {
         toDoItems.remove(toDoItem.getItemName());
     }
 
-    public void updateToDoItem(ToDoItem oldToDoItem, ToDoItem toDoItem)
+    public void updateToDoItem(ToDoItem oldToDoItem, ToDoItem updatedToDoItem)
     {
-        
+        int oldPriority = oldToDoItem.getPriority();
+        int newPriority = updatedToDoItem.getPriority();
+
+        if (oldPriority == 1 && newPriority != 1)
+        {
+            numPriorityOneItems--;
+        }
+        else if (oldPriority != 1 && newPriority == 1)
+        {
+            numPriorityOneItems++;
+        }
+
+        int position = toDoItemArrayList.indexOf(oldToDoItem);
+        toDoItemArrayList.set(position, updatedToDoItem);
+
+        // Update HashMap
+        toDoItems.remove(oldToDoItem.getItemName());
+        toDoItems.put(updatedToDoItem.getItemName(), String.valueOf(updatedToDoItem.getPriority()));
     }
 
     public void increaseNumPriorityOneItems()
@@ -132,6 +149,16 @@ public class ToDoGroup {
     public void decreaseNumPriorityOneItems()
     {
         numPriorityOneItems--;
+    }
+
+    public void increaseNumUnfinishedItems()
+    {
+        numUnfinishedItems++;
+    }
+
+    public void decreaseNumUnfinishedItems()
+    {
+        numUnfinishedItems--;
     }
 
     /* Getters */

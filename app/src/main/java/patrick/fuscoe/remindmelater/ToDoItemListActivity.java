@@ -290,19 +290,8 @@ public class ToDoItemListActivity extends AppCompatActivity implements
     {
         ToDoItem updatedToDoItem = new ToDoItem(itemName, priority);
 
-        int oldPriority = toDoItemToEdit.getPriority();
+        toDoGroup.updateToDoItem(toDoItemToEdit, updatedToDoItem);
 
-        if (oldPriority == 1 && priority != 1)
-        {
-            toDoGroup.decreaseNumPriorityOneItems();
-        }
-        else if (oldPriority != 1 && priority == 1)
-        {
-            toDoGroup.increaseNumPriorityOneItems();
-        }
-
-        toDoGroup.addToDoItem(updatedToDoItem);
-        toDoGroup.removeToDoItem(toDoItemToEdit);
         toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
         splitAndSortToDoItems();
 
@@ -318,13 +307,11 @@ public class ToDoItemListActivity extends AppCompatActivity implements
 
         toDoItemList.remove(toDoItem);
 
-        int numUnfinishedItems = toDoGroup.getNumUnfinishedItems();
-        toDoGroup.setNumUnfinishedItems(numUnfinishedItems - 1);
+        toDoGroup.decreaseNumUnfinishedItems();
 
         if (toDoItem.getPriority() == 1)
         {
-            int numPriorityOneItems = toDoGroup.getNumPriorityOneItems();
-            toDoGroup.setNumPriorityOneItems(numPriorityOneItems - 1);
+            toDoGroup.decreaseNumPriorityOneItems();
         }
 
         hasChanged = true;
@@ -340,13 +327,11 @@ public class ToDoItemListActivity extends AppCompatActivity implements
 
         toDoItemListDone.remove(toDoItem);
 
-        int numUnfinishedItems = toDoGroup.getNumUnfinishedItems();
-        toDoGroup.setNumUnfinishedItems(numUnfinishedItems + 1);
+        toDoGroup.increaseNumUnfinishedItems();
 
         if (toDoItem.getPriority() == 1)
         {
-            int numPriorityOneItems = toDoGroup.getNumPriorityOneItems();
-            toDoGroup.setNumPriorityOneItems(numPriorityOneItems + 1);
+            toDoGroup.increaseNumPriorityOneItems();
         }
 
         hasChanged = true;
