@@ -1,6 +1,5 @@
 package patrick.fuscoe.remindmelater;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,12 +30,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +45,9 @@ import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
+/**
+ * Manages UI and manipulation of individual to do items within a to do group (i.e. to do list)
+*/
 public class ToDoItemListActivity extends AppCompatActivity implements
         AddToDoItemDialogFragment.AddToDoItemDialogListener,
         EditToDoItemDialogFragment.EditToDoItemDialogListener {
@@ -70,30 +69,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements
     private ToDoItem toDoItemToEdit;
 
     private boolean hasChanged;
-
-    /*
-    // Handler and Runnable for use in implementing delay when marking to do item done
-    private static class MyHandler extends Handler {}
-    private final MyHandler markToDoItemDoneHandler = new MyHandler();
-
-    public static class MarkToDoItemDoneRunnable implements Runnable {
-        private final WeakReference<Activity> mActivity;
-
-        public MarkToDoItemDoneRunnable(Activity activity)
-        {
-            mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void run() {
-            Activity activity = mActivity.get();
-            if (activity != null)
-            {
-
-            }
-        }
-    }
-    */
 
 
     private ToDoItemClickListener toDoItemClickListener = new ToDoItemClickListener() {
@@ -128,8 +103,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements
                             markToDoItemDone(item);
                         }
                     }, 500);
-
-                    //markToDoItemDone(item);
                 }
             }
             else
@@ -189,18 +162,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         toDoItemListAdapter = new ToDoItemListAdapter(toDoItemList, toDoItemListDone, this, toDoItemClickListener);
         toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
 
-
-        /*
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(toDoGroup.getTitle());
     }
@@ -233,8 +194,6 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         menu.removeItem(R.id.menu_main_reorder);
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
         menu.removeItem(R.id.menu_main_tips);
-
-        // TODO: swap edit icon for delete and setup functionality to remove entire group
         menu.removeItem(R.id.menu_main_edit);
 
         return true;
@@ -350,59 +309,9 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         UpdateToDoItemListDisplay();
     }
 
-    /*
-    private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
-    {
-
-        Map<String, Object> toDoGroupDoc = new HashMap<>();
-
-        toDoGroupDoc.put("title", toDoGroup.getTitle());
-        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
-        toDoGroupDoc.put("shared", toDoGroup.isShared());
-        toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
-
-        Map<String, Object> toDoItemsMap = new HashMap<>();
-
-        for (ToDoItem item : toDoItemListUnsorted)
-        {
-            Map<String, Object> toDoItemMap = new HashMap<>();
-            toDoItemMap.put("priority", item.getPriority());
-            toDoItemMap.put("timestamp", item.getTimestamp());
-            toDoItemMap.put("done", item.isDone());
-
-            toDoItemsMap.put(item.getItemName(), toDoItemMap);
-        }
-
-        //toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
-        toDoGroupDoc.put("toDoItems", toDoItemsMap);
-
-
-        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
-
-        return toDoGroupDoc;
-    }
-    */
-
     private void commitToDoGroup()
     {
         Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
-
-        /*
-        // Re-creating to do list map due to issue with type conversion in cloud database
-        Map<String, Object> toDoItemsMap = new HashMap<>();
-
-        for (ToDoItem item : toDoItemListUnsorted)
-        {
-            Map<String, Object> toDoItemMap = new HashMap<>();
-            toDoItemMap.put("priority", item.getPriority());
-            toDoItemMap.put("timestamp", item.getTimestamp());
-            toDoItemMap.put("done", item.isDone());
-
-            toDoItemsMap.put(item.getItemName(), toDoItemMap);
-        }
-
-        toDoGroupDoc.put("toDoItems", toDoItemsMap);
-        */
 
         db.collection("todogroups").document(toDoGroupId)
                 .set(toDoGroupDoc)
@@ -424,12 +333,11 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         Toast.makeText(this, "To Do List updated: " + toDoGroup.getTitle(), Toast.LENGTH_LONG).show();
     }
 
-    public void showAddToDoItemDialog() {
-        // Create an instance of the dialog fragment and show it
+    public void showAddToDoItemDialog()
+    {
         FragmentManager fm = getSupportFragmentManager();
         AddToDoItemDialogFragment dialogFrag = new AddToDoItemDialogFragment();
 
-        //dialogFrag.setTargetFragment(ToDoItemListActivity.this, 300);
         dialogFrag.show(fm, AddToDoItemDialogFragment.TAG);
     }
 

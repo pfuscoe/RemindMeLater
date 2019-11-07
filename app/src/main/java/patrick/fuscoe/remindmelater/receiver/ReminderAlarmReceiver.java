@@ -50,9 +50,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
 
-    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    //private final String userId = auth.getUid();
 
     private FirebaseAuth auth;
     private String userId;
@@ -72,7 +70,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         this.context = context;
-        //int notificationId = (int) System.currentTimeMillis();
 
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
@@ -83,36 +80,14 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "MainActivity.REMINDER_TITLE: " + MainActivity.REMINDER_TITLE);
 
         reminderTitle = intent.getStringExtra(MainActivity.REMINDER_TITLE);
-        //int iconId = intent.getIntExtra(MainActivity.REMINDER_ICON_ID, R.drawable.category_note);
 
         Log.d(TAG, ": Alarm Received: " + reminderTitle);
 
         loadReminder();
-
-        /*
-        Intent remindersFragmentIntent = new Intent(context, RemindersFragment.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addNextIntentWithParentStack(remindersFragmentIntent);
-        PendingIntent remindersFragmentPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Setup send notification for received alarm
-        // Setup action buttons
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(iconId)
-                .setContentTitle(reminderTitle)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(remindersFragmentPendingIntent)
-                .setAutoCancel(true);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(notificationId, builder.build());
-        */
     }
 
     public void loadReminder()
     {
-        //RemindersViewModel remindersViewModel = new RemindersViewModel();
         reminders.whereEqualTo("userId", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -125,8 +100,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
                                 Log.d(TAG, ": remindersDocId: " + remindersDocId);
                                 buildReminderItem(document);
                                 sendNotification();
-
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -154,8 +127,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
         Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
 
-        //Log.d(TAG, ": recurrenceInterval: " + recurrenceInterval);
-
         reminderItem = new ReminderItem(reminderTitle, isRecurring, recurrenceNum,
                 recurrenceInterval, nextOccurrence, category,
                 categoryIconName, description, isSnoozed, isHibernating, history);
@@ -182,15 +153,11 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         Log.d(TAG, reminderTitle + ": notificationId: " + notificationId);
 
-        //Log.d(TAG, " reminderItem category icon name: " + reminderItem.getCategoryIconName());
-
         int iconId = context.getResources().getIdentifier(
                 reminderItem.getCategoryIconName(), "drawable", context.getPackageName());
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), iconId);
 
         Log.d(TAG, ": notificationId: " + notificationId);
-
-        //Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
 
         Gson gson = new Gson();
         String reminderItemString = gson.toJson(reminderItem);
@@ -219,11 +186,6 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         stackBuilder.addNextIntentWithParentStack(reminderDetailsIntent);
         PendingIntent reminderDetailsPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        /*
-        PendingIntent reminderDetailsPendingIntent = PendingIntent.getBroadcast(context,
-                0, reminderDetailsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        */
 
         // Notification Done Intent
         Intent doneIntent = new Intent(context, NotificationDoneReceiver.class);

@@ -12,6 +12,10 @@ import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 
+/**
+ * Handles creation of documents to be stored in Google FireStore and
+ * creation of Java objects from the cloud documents
+*/
 public class FirebaseDocUtils {
 
     public static Map<String, Object> createUserProfileDoc(UserProfile userProfile)
@@ -65,8 +69,6 @@ public class FirebaseDocUtils {
         toDoGroupDoc.put("iconName", toDoGroup.getIconName());
         toDoGroupDoc.put("shared", toDoGroup.isShared());
         toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
-
-        //toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
 
         ArrayList<ToDoItem> toDoItemArrayList = toDoGroup.getToDoItemArrayList();
         Map<String, Object> toDoItemsMap = new HashMap<>();

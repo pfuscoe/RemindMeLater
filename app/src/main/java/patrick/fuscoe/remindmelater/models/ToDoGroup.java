@@ -61,23 +61,14 @@ public class ToDoGroup {
 
         this.toDoItemArrayList = new ArrayList<>();
 
-        //Map<String, Map<String, Object>> toDoItemsMap = new HashMap<>();
-
         for (Map.Entry<String, Object> entry : toDoItems.entrySet())
         {
             String itemName = entry.getKey();
             Map<String, Object> toDoItemMap = (Map<String, Object>) entry.getValue();
-            //toDoItemsMap.put(itemName, (Map<String, Object>) entry.getValue());
-            int priority = Math.toIntExact((long)toDoItemMap.get("priority"));
-            //long priorityLong = (long) toDoItemMap.get("priority");
-            //int priority = Math.toIntExact(priorityLong);
 
+            int priority = Math.toIntExact((long)toDoItemMap.get("priority"));
             Timestamp timestamp = (Timestamp) toDoItemMap.get("timestamp");
             boolean done = (boolean) toDoItemMap.get("done");
-
-            //int priority = Math.toIntExact((long)toDoItemsMap.get(itemName).get("priority"));
-            //Timestamp timestamp = (Timestamp) toDoItemsMap.get(itemName).get("timestamp");
-            //boolean done = (boolean) toDoItemsMap.get(itemName).get("done");
 
             ToDoItem item = new ToDoItem(itemName, priority, timestamp, done);
             toDoItemArrayList.add(item);

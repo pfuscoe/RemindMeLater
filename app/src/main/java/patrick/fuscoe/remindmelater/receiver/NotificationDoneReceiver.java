@@ -12,10 +12,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
@@ -31,6 +35,8 @@ import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
+import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class NotificationDoneReceiver extends BroadcastReceiver {
 
@@ -40,7 +46,11 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
+    private FirebaseAuth auth;
+    private String userId;
+
     private DocumentReference remindersDocRef;
+    private DocumentReference userDocRef;
 
     private Context context;
     private int notificationId;
@@ -49,6 +59,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
     private SharedPreferences reminderIconNames;
     private SharedPreferences reminderBroadcastIds;
 
+    private UserProfile userProfile;
     private ReminderItem reminderItem;
     private String remindersDocId;
 
@@ -58,6 +69,10 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         this.context = context;
         this.notificationId = intent.getIntExtra(ReminderAlarmReceiver.EXTRA_NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID);
+
+        auth = FirebaseAuth.getInstance();
+        userId = auth.getUid();
+        userDocRef = db.collection("users").document(userId);
 
         Log.d(TAG, ": notificationId: " + notificationId);
 
@@ -88,6 +103,30 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
+    }
+
+    private void loadUserProfile()
+    {
+        userDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                            // TODO: move alarm stuff here (setup utils for re-use)
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Failed to retrieve user document from cloud");
+                        Toast.makeText(context, "Failed to retrieve user document from cloud. " +
+                                "Operation cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void initializeSharedPreferences()
@@ -254,7 +293,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         int broadcastId = reminderBroadcastIds.getInt(title, MainActivity.DEFAULT_REMINDER_BROADCAST_ID);
 
         ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
-                iconName, broadcastId, MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
+                iconName, broadcastId, userProfile.getReminderHour(), userProfile.getReminderMinute());
 
         long alarmTime = reminderAlarmItem.getAlarmCalendarObj().getTimeInMillis();
 
