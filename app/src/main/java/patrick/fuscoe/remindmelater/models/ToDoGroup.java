@@ -77,6 +77,16 @@ public class ToDoGroup {
 
             ToDoItem item = new ToDoItem(itemName, priority, timestamp, done);
             toDoItemArrayList.add(item);
+
+            if (!item.isDone())
+            {
+                this.numUnfinishedItems++;
+
+                if (item.getPriority() == 1)
+                {
+                    this.numPriorityOneItems++;
+                }
+            }
         }
     }
 
@@ -109,6 +119,20 @@ public class ToDoGroup {
         toDoItems.remove(toDoItem.getItemName());
     }
 
+    public void updateToDoItem(ToDoItem oldToDoItem, ToDoItem toDoItem)
+    {
+        
+    }
+
+    public void increaseNumPriorityOneItems()
+    {
+        numPriorityOneItems++;
+    }
+
+    public void decreaseNumPriorityOneItems()
+    {
+        numPriorityOneItems--;
+    }
 
     /* Getters */
     public String getTitle() {

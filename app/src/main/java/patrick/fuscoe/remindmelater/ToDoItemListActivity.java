@@ -289,6 +289,18 @@ public class ToDoItemListActivity extends AppCompatActivity implements
     public void editToDoItem(String itemName, int priority)
     {
         ToDoItem updatedToDoItem = new ToDoItem(itemName, priority);
+
+        int oldPriority = toDoItemToEdit.getPriority();
+
+        if (oldPriority == 1 && priority != 1)
+        {
+            toDoGroup.decreaseNumPriorityOneItems();
+        }
+        else if (oldPriority != 1 && priority == 1)
+        {
+            toDoGroup.increaseNumPriorityOneItems();
+        }
+
         toDoGroup.addToDoItem(updatedToDoItem);
         toDoGroup.removeToDoItem(toDoItemToEdit);
         toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
