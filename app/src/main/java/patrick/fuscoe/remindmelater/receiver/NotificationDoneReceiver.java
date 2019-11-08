@@ -42,9 +42,11 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 public class NotificationDoneReceiver extends BroadcastReceiver {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.NotificationDoneReceiver";
+
     public static final int DEFAULT_NOTIFICATION_ID = 100;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
     private DocumentReference remindersDocRef;
     private DocumentReference userDocRef;
@@ -81,7 +83,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
 
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
-        remindersDocRef = db.collection("reminders").document(remindersDocId);
+        remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
         // Get user profile from cloud and handle reminder updates and alarm management
         executeNotificationDoneAction();
