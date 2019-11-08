@@ -30,9 +30,16 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 
+/**
+ * Receives notification 'Snooze' tap action.
+ *
+ * Updates reminder in cloud, updates local device storage alarm data, and resets/deletes
+ * alarm accordingly.
+*/
 public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.NotificationSnoozeReceiver";
+
     public static final int DEFAULT_NOTIFICATION_ID = 101;
     public static final int DEFAULT_SNOOZE_DAYS = 1;
 

@@ -35,8 +35,8 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
 /**
  * Receives notification 'Done' tap action.
- * 
- * Updates reminder in cloud, updates local device storage for alarm info, and resets/deletes
+ *
+ * Updates reminder in cloud, updates local device storage alarm data, and resets
  * alarm accordingly.
 */
 public class NotificationDoneReceiver extends BroadcastReceiver {
@@ -45,20 +45,19 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
     public static final int DEFAULT_NOTIFICATION_ID = 100;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference remindersCollectionRef = db.collection("reminders");
-
-    private FirebaseAuth auth;
-    private String userId;
 
     private DocumentReference remindersDocRef;
     private DocumentReference userDocRef;
+
+    private FirebaseAuth auth;
+    private String userId;
+    private String remindersDocId;
 
     private Context context;
     private int notificationId;
 
     private UserProfile userProfile;
     private ReminderItem reminderItem;
-    private String remindersDocId;
 
 
     @Override
@@ -82,7 +81,7 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         reminderItem = gson.fromJson(reminderItemString, dataTypeReminderItem);
 
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
-        remindersDocRef = remindersCollectionRef.document(remindersDocId);
+        remindersDocRef = db.collection("reminders").document(remindersDocId);
 
         // Get user profile from cloud and handle reminder updates and alarm management
         executeNotificationDoneAction();
