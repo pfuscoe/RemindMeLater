@@ -7,13 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.core.app.NotificationManagerCompat;
+
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 
 /**
- * Handles reminder alarm management and local device storage syncing
+ * Handles reminder alarm management, cancelling notifications, and local device storage syncing
 */
 public class ReminderAlarmUtils {
 
@@ -24,6 +26,7 @@ public class ReminderAlarmUtils {
     private static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
 
     private static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
+    private static final int DEFAULT_NOTIFICATION_ID = 100;
 
     public static void saveReminderToSharedPreferences(Context context, ReminderItem reminderItem)
     {
@@ -110,11 +113,27 @@ public class ReminderAlarmUtils {
         Intent intent = new Intent(context, ReminderAlarmReceiver.class);
         intent.setAction(ACTION_ALARM_RECEIVER);
 
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(
+                context, broadcastId, intent, 0);
 
         alarmManager.cancel(alarmIntent);
 
         Log.d(TAG, " Alarm cancelled: " + reminderTitle);
+    }
+
+    public static void cancelNotification(Context context, String reminderTitle)
+    {
+        SharedPreferences reminderNotificationIds = context.getSharedPreferences(
+                context.getString(R.string.reminder_notification_ids_file_key),
+                Context.MODE_PRIVATE);
+
+        int notificationId = reminderNotificationIds.getInt(reminderTitle, DEFAULT_NOTIFICATION_ID);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
+
+        Log.d(TAG, "Notification cancelled for " + reminderTitle +
+                ". NotificationId: " + notificationId);
     }
 
 

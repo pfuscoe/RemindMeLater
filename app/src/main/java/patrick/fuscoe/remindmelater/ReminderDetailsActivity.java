@@ -1,17 +1,12 @@
 package patrick.fuscoe.remindmelater;
 
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
@@ -46,24 +41,28 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
-import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DatePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
+import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
+/**
+ * Manages UI for editing reminder details. Also handles cloud sync when saving changes or
+ * deleting a reminder.
+ *
+ * Can enter activity from MainActivity through RemindersFragment, or directly from
+ * notification tap.
+*/
 public class ReminderDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener, DatePickerDialogFragment.OnDateSetListener,
         AddCategoryDialogFragment.AddCategoryDialogListener,
@@ -71,22 +70,19 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderDetailsActivity";
 
-    //private static SharedPreferences reminderAlarmStorage;
-    //private static SharedPreferences reminderIconIds;
-    //private static SharedPreferences reminderBroadcastIds;
-
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference remindersCollectionRef = db.collection("reminders");
+    private final CollectionReference remindersCollectionRef =
+            db.collection("reminders");
     private final String userId = auth.getUid();
-    private final DocumentReference userDocRef = db.collection("users").document(userId);
+    private final DocumentReference userDocRef =
+            db.collection("users").document(userId);
 
     private String remindersDocId;
     private DocumentReference remindersDocRef;
 
     private ReminderItem reminderItem;
     private UserProfile userProfile;
-    private LocalDate dateShown;
 
     private ProgressBar viewProgressBar;
     private ConstraintLayout viewContentConstraintLayout;
@@ -140,30 +136,32 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
                 case R.id.view_reminder_details_button_cancel:
                     Log.d(TAG, ": Add/Edit Reminder Cancelled");
-                    Toast.makeText(getApplicationContext(), "Add/Edit Reminder Cancelled", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Add/Edit Reminder Cancelled",
+                            Toast.LENGTH_LONG).show();
                     onBackPressed();
                     return;
 
                 case R.id.view_reminder_details_button_save:
                     Log.d(TAG, "Save Clicked");
-                    //Toast.makeText(getApplicationContext(), "Saved Reminder: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
+
+                    // Calls onBackPressed
                     checkIfTitleChanged();
-                    // Note: onBackPressed on successful save
+
                     return;
             }
         }
     };
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+    {
+        // User selected recurrence in spinner
         if (parent.getId() == R.id.view_reminder_details_recurrence_spinner)
         {
             reminderItem.setRecurrenceInterval((String) parent.getItemAtPosition(pos));
             Log.d(TAG, ": Recurrence Interval changed.");
         }
+        // User selected reminder category in spinner
         else if (parent.getId() == R.id.view_reminder_details_category_spinner)
         {
             ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(pos);
@@ -177,7 +175,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
+        // do nothing
     }
 
     @Override
@@ -192,7 +190,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         startActivity(backIntent);
         finish();
-        //super.onBackPressed();
     }
 
     @Override
@@ -215,7 +212,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
         viewProgressBar = findViewById(R.id.view_reminder_details_progress_bar);
-        viewContentConstraintLayout = findViewById(R.id.view_reminder_details_content_constraint_layout);
+        viewContentConstraintLayout = findViewById(
+                R.id.view_reminder_details_content_constraint_layout);
         viewCategorySpinner = findViewById(R.id.view_reminder_details_category_spinner);
 
         // Entered activity from Reminders Fragment
@@ -236,6 +234,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         else
         {
             enteredActivityFromNotification = true;
+
+            // Fills views after user profile loaded from cloud
             loadUserProfile();
         }
 
@@ -250,7 +250,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
             getSupportActionBar().setTitle(reminderItem.getTitle());
         }
 
-        // Setup views, fields, buttons, etc.
+        // Setup views and fields
         viewTitle = findViewById(R.id.view_reminder_details_title);
         viewCategoryIcon = findViewById(R.id.view_reminder_details_category_icon);
         viewRecurringCheckbox = findViewById(R.id.view_reminder_details_checkbox_recurring);
@@ -266,28 +266,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurringCheckbox.setOnClickListener(btnClickListener);
         viewSnoozedCheckbox.setOnClickListener(btnClickListener);
         viewHibernatingCheckbox.setOnClickListener(btnClickListener);
-
-        /*
-        // Setup category select spinner
-        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
-                getApplicationContext(), userProfile.getReminderCategories());
-        viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
-        setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
-        viewCategorySpinner.setOnItemSelectedListener(this);
-        //reminderCategorySpinnerAdapter.notifyDataSetChanged();
-        */
-
-        // Setup Recurrence Spinner
-        //setupRecurrenceSpinner();
-
-        /*
-        viewRecurrenceSpinner = findViewById(R.id.view_reminder_details_recurrence_spinner);
-        ArrayAdapter<CharSequence> recurrenceAdapter = ArrayAdapter.createFromResource(this,
-                R.array.array_recurrence, android.R.layout.simple_spinner_item);
-        recurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewRecurrenceSpinner.setAdapter(recurrenceAdapter);
-        viewRecurrenceSpinner.setOnItemSelectedListener(this);
-        */
 
         // Setup Buttons and View Click Listeners
         viewAddNewCategory = findViewById(R.id.view_reminder_details_category_add);
@@ -346,18 +324,21 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
     }
 
-    public void updateCategorySelectSpinner()
+    private void updateCategorySelectSpinner()
     {
-        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
+        ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter =
+                new ReminderCategorySpinnerAdapter(
                 getApplicationContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
         setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
         viewCategorySpinner.setOnItemSelectedListener(this);
     }
 
-    public void setCategorySpinnerSelection(ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter)
+    private void setCategorySpinnerSelection(
+            ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter)
     {
-        List<ReminderCategory> reminderCategoryList = reminderCategorySpinnerAdapter.getReminderCategories();
+        List<ReminderCategory> reminderCategoryList =
+                reminderCategorySpinnerAdapter.getReminderCategories();
 
         int mainCategoryPosition = 0;
         int categoryPosition = 0;
@@ -393,7 +374,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurrenceSpinner.setOnItemSelectedListener(this);
     }
 
-    public void updateFields()
+    private void updateFields()
     {
         if (reminderItem.getTitle().equals(""))
         {
@@ -407,7 +388,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewRecurrenceNum.setText(String.valueOf(reminderItem.getRecurrenceNum()));
         Log.d(TAG, ": nextOccurrence.toString: " + reminderItem.getNextOccurrence());
         setViewDateDisplay(reminderItem.getNextOccurrence());
-        //viewDateDisplay.setText(reminderItem.getNextOccurrence());
         viewRecurringCheckbox.setChecked(reminderItem.isRecurring());
         viewSnoozedCheckbox.setChecked(reminderItem.isSnoozed());
         viewHibernatingCheckbox.setChecked(reminderItem.isHibernating());
@@ -420,7 +400,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         if (reminderItem.getCategoryIconName().equals("Main"))
         {
             viewCategoryIcon.setImageResource(getResources().getIdentifier(
-                    MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME, "drawable", getPackageName()));
+                    MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME, "drawable",
+                    getPackageName()));
         }
         else
         {
@@ -487,31 +468,24 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 openDeleteReminderDialog();
                 return true;
 
-                /*
-            case R.id.menu_main_user_settings:
-                Log.d(TAG, ": Menu item selected: " + item.getItemId());
-                return true;
-
-                 */
-
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void openAddReminderCategoryDialog()
+    private void openAddReminderCategoryDialog()
     {
         DialogFragment dialogFragment = new AddCategoryDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "addReminderCategory");
     }
 
-    public void openDatePicker()
+    private void openDatePicker()
     {
         DialogFragment dialogFragment = new DatePickerDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public void openDeleteReminderDialog()
+    private void openDeleteReminderDialog()
     {
         DialogFragment dialogFragment = new DeleteReminderDialogFragment();
         Bundle bundle = new Bundle();
@@ -530,12 +504,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewHibernatingIcon.setVisibility(View.INVISIBLE);
     }
 
-    public void setNextOccurrenceDate(LocalDate localDate)
+    private void setNextOccurrenceDate(LocalDate localDate)
     {
         String date = localDate.toString();
         reminderItem.setNextOccurrence(date);
         setViewDateDisplay(date);
-        //viewDateDisplay.setText(date);
     }
 
     private void setViewDateDisplay(String localDateString)
@@ -558,7 +531,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         if (!title.equals(reminderItem.getTitle()))
         {
-            Log.d(TAG, "Title has changed.  Old title: " + reminderItem.getTitle() + ". New title: " + title);
+            Log.d(TAG, "Title has changed.  Old title: " + reminderItem.getTitle() +
+                    ". New title: " + title);
             reminderTitleChanged = true;
             oldReminderTitle = reminderItem.getTitle();
 
@@ -578,7 +552,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     }
 
     // Get values from fields and update reminderItem object
-    public void updateReminderItemObject()
+    private void updateReminderItemObject()
     {
         String title = viewTitle.getText().toString();
         boolean isRecurring = viewRecurringCheckbox.isChecked();
@@ -603,53 +577,40 @@ public class ReminderDetailsActivity extends AppCompatActivity
         reminderItem.updateDaysAway(nextOccurrence);
     }
 
-    public void saveReminder()
+    private void saveReminder()
     {
         final String title = viewTitle.getText().toString();
 
         if (title.equals(""))
         {
-            Toast.makeText(this, "Cannot Save Reminder: You must enter a title", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Cannot Save Reminder: You must enter a title",
+                    Toast.LENGTH_LONG).show();
             return;
         }
-
-        /*
-        if (reminderTitleChanged)
-        {
-            deleteReminder(oldReminderTitle);
-        }
-        */
 
         updateReminderItemObject();
 
         Map<String, Object> reminderItemMap = FirebaseDocUtils.createReminderItemMap(reminderItem);
 
-        /*
-        HashMap<String, Object> reminderItemMap = new HashMap<>();
-        reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
-        reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
-        reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
-        reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
-        reminderItemMap.put("category", reminderItem.getCategory());
-        reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
-        reminderItemMap.put("description", reminderItem.getDescription());
-        reminderItemMap.put("isRecurring", reminderItem.isRecurring());
-        reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
-        reminderItemMap.put("isHibernating", reminderItem.isHibernating());
-        reminderItemMap.put("history", reminderItem.getHistory());
-        */
-
         remindersDocRef.update(title, reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Reminders DocumentSnapshot successfully updated: " + title);
+                        Log.d(TAG, "Reminders DocumentSnapshot successfully updated: "
+                                + reminderItem.getTitle());
 
-                        saveReminderToSharedPreferences();
-                        cancelReminderAlarm(title);
-                        cancelNotification(title);
-                        setReminderAlarm();
-                        Toast.makeText(getApplicationContext(), "Reminder Item Saved: " + title, Toast.LENGTH_SHORT).show();
+                        ReminderAlarmUtils.cancelReminderAlarm(getApplicationContext(),
+                                reminderItem.getTitle());
+                        ReminderAlarmUtils.cancelNotification(getApplicationContext(),
+                                reminderItem.getTitle());
+
+                        ReminderAlarmUtils.saveReminderToSharedPreferences(getApplicationContext(),
+                                reminderItem);
+                        ReminderAlarmUtils.setReminderAlarm(getApplicationContext(), reminderItem,
+                                userProfile.getReminderHour(), userProfile.getReminderMinute());
+
+                        Toast.makeText(getApplicationContext(), "Reminder Item Saved: " +
+                                title, Toast.LENGTH_SHORT).show();
 
                         onBackPressed();
                     }
@@ -658,33 +619,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        // TODO: handle local storage of reminder when cloud sync fails
+                        Toast.makeText(getApplicationContext(), "Action failed due to " +
+                                "network error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    public void saveReminderToSharedPreferences()
-    {
-        SharedPreferences.Editor reminderAlarmEditor = MainActivity.reminderAlarmStorage.edit();
-        reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
-        reminderAlarmEditor.apply();
-
-        SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
-        reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
-        reminderIconNamesEditor.apply();
-
-        SharedPreferences.Editor reminderBroadcastIdEditor = MainActivity.reminderBroadcastIds.edit();
-
-        int broadcastId = MainActivity.generateUniqueInt();
-
-        // TODO: Add check for existing id
-        reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
-        reminderBroadcastIdEditor.apply();
-
-        // TODO: using apply() for async saving. Check if commit() needed
-    }
-
-    public void deleteReminder(String reminderTitle)
+    private void deleteReminder(String reminderTitle)
     {
         final String title = reminderTitle;
         final boolean isReminderTitleChanged = reminderTitleChanged;
@@ -697,9 +638,11 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Successfully deleted reminder on cloud: " + title);
-                        cancelReminderAlarm(title);
-                        cancelNotification(title);
-                        removeReminderLocalStorage(title);
+
+                        ReminderAlarmUtils.cancelReminderAlarm(getApplicationContext(), title);
+                        ReminderAlarmUtils.cancelNotification(getApplicationContext(), title);
+                        ReminderAlarmUtils.deleteReminderFromSharedPreferences(
+                                getApplicationContext(), title);
 
                         if (isReminderTitleChanged)
                         {
@@ -707,7 +650,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
                         }
                         else
                         {
-                            Toast.makeText(getApplicationContext(), "Reminder Item Deleted: " + title, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Reminder Item Deleted: "
+                                    + title, Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         }
                     }
@@ -716,89 +660,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        Toast.makeText(getApplicationContext(), "Error syncing delete action to cloud. Delete cancelled.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error syncing delete " +
+                                "action to cloud. Delete cancelled.", Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    public void cancelReminderAlarm(String reminderTitle)
-    {
-        Context context = getApplicationContext();
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        int broadcastId = MainActivity.reminderBroadcastIds.getInt(reminderTitle, 0);
-
-        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
-        intent.setAction(MainActivity.ACTION_ALARM_RECEIVER);
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent, 0);
-
-        alarmManager.cancel(alarmIntent);
-
-        Log.d(TAG, " Alarm cancelled: " + reminderTitle);
-    }
-
-    public void cancelNotification(String reminderTitle)
-    {
-        Context context = getApplicationContext();
-
-        MainActivity.reminderNotificationIds = context.getSharedPreferences(
-                context.getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
-
-        int notificationId = MainActivity.reminderNotificationIds.getInt(
-                reminderTitle, MainActivity.DEFAULT_NOTIFICATION_ID);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.cancel(notificationId);
-
-        Log.d(TAG, "Notification cancelled for " + reminderTitle + ". NotificationId: " + notificationId);
-    }
-
-    public void removeReminderLocalStorage(String reminderTitle)
-    {
-        SharedPreferences.Editor reminderAlarmStorageEditor = MainActivity.reminderAlarmStorage.edit();
-        reminderAlarmStorageEditor.remove(reminderTitle).commit();
-
-        SharedPreferences.Editor reminderIconNamesEditor = MainActivity.reminderIconNames.edit();
-        reminderIconNamesEditor.remove(reminderTitle).commit();
-
-        SharedPreferences.Editor reminderBroadcastIdsEditor = MainActivity.reminderBroadcastIds.edit();
-        reminderBroadcastIdsEditor.remove(reminderTitle).commit();
-
-        Log.d(TAG, "Reminder removed from local storage: " + reminderTitle);
-    }
-
-    public void setReminderAlarm()
-    {
-        String title = reminderItem.getTitle();
-        Log.d(TAG, "In method setReminderAlarm. title: " + title);
-        String nextOccurrence = reminderItem.getNextOccurrence();
-        String iconName = reminderItem.getCategoryIconName();
-        int broadcastId = MainActivity.reminderBroadcastIds.getInt(
-                title, MainActivity.DEFAULT_REMINDER_BROADCAST_ID);
-
-        ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
-                iconName, broadcastId, MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute);
-
-        long alarmTime = reminderAlarmItem.getAlarmCalendarObj().getTimeInMillis();
-
-        // Set the alarm
-        Context context = getApplicationContext();
-        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
-        intent.setAction(MainActivity.ACTION_ALARM_RECEIVER);
-        intent.putExtra(MainActivity.REMINDER_TITLE, title);
-        intent.putExtra(MainActivity.REMINDER_ICON_NAME, iconName);
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
-
-        Log.d(TAG, "Alarm set for: " + reminderAlarmItem.getAlarmCalendarObj().toString());
-    }
-
-    public void saveUserProfile()
+    private void saveUserProfile()
     {
         Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
 
@@ -817,7 +685,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 });
     }
 
-    public void loadUserProfile()
+    private void loadUserProfile()
     {
         showProgressBar();
 
@@ -827,49 +695,17 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
-                            buildUserProfileObj(documentSnapshot);
+                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                            Log.d(TAG, "userProfile loaded from cloud");
+
                             updateCategorySelectSpinner();
                             setupRecurrenceSpinner();
                             updateFields();
+
                             hideProgressBar();
                         }
                     }
                 });
-    }
-
-    public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
-    {
-        userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-
-        /*
-        Map<String, Object> docMap = documentSnapshot.getData();
-
-        String id = documentSnapshot.getId();
-        String displayName = documentSnapshot.getString("displayName");
-
-        ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
-
-        String[] subscriptions = new String[subscriptionsList.size()];
-        subscriptions = subscriptionsList.toArray(subscriptions);
-
-        Map<String, String> reminderCategories =
-                (Map<String, String>) documentSnapshot.get("reminderCategories");
-
-        MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
-        MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
-
-        int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
-
-        ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
-        String[] friends;
-        friends = friendsList.toArray(new String[0]);
-
-        userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
-                hibernateLength, friends);
-        */
-
-        Log.d(TAG, ": userProfile loaded from cloud");
     }
 
     @Override
@@ -882,13 +718,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             if (categoryName.equals(""))
             {
-                Toast.makeText(this, "Add Reminder Category Failed: Category Name Must Not Be Blank", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Add Reminder Category Failed: Category Name " +
+                        "Must Not Be Blank", Toast.LENGTH_LONG).show();
                 return;
             }
 
             reminderItem.setCategory(categoryName);
 
-            //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
 
             if (selectedIconName.equals("default"))
@@ -904,9 +740,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
                     reminderItem.getCategoryIconName(), "drawable", getPackageName()));
 
             userProfile.addReminderCategory(categoryName, selectedIconName);
+
             saveUserProfile();
             updateCategorySelectSpinner();
-            Toast.makeText(getApplicationContext(), "New Reminder Category Added: " + categoryName, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getApplicationContext(), "New Reminder Category Added: "
+                    + categoryName, Toast.LENGTH_SHORT).show();
         }
         else if (dialog instanceof DeleteReminderDialogFragment)
         {
@@ -918,11 +757,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
     public void onDialogNegativeClick(DialogFragment dialog) {
         if (dialog instanceof AddCategoryDialogFragment)
         {
-            Toast.makeText(getApplicationContext(), "Add Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Add Reminder Category Cancelled",
+                    Toast.LENGTH_SHORT).show();
         }
         else if (dialog instanceof DeleteReminderDialogFragment)
         {
-            Toast.makeText(getApplicationContext(), "Delete Reminder Cancelled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Delete Reminder Cancelled",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
