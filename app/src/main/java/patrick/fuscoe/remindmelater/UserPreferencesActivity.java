@@ -68,6 +68,8 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private List<ReminderItem> reminderItemList;
 
+    private boolean hasReminderTimeOfDayChanged;
+
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
         @Override
@@ -103,6 +105,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         setContentView(R.layout.activity_user_preferences);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        hasReminderTimeOfDayChanged = false;
 
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
@@ -189,10 +193,19 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         Log.d(TAG, "onTimeSet: hourOfDay = " + hourOfDay + ". minute = " + minute);
 
-        userProfile.setReminderHour(hourOfDay);
-        userProfile.setReminderMinute(minute);
+        if (hourOfDay == userProfile.getReminderHour() && minute == userProfile.getReminderMinute())
+        {
+            hasReminderTimeOfDayChanged = false;
+        }
+        else
+        {
+            hasReminderTimeOfDayChanged = true;
 
-        setTimeDisplay();
+            userProfile.setReminderHour(hourOfDay);
+            userProfile.setReminderMinute(minute);
+
+            setTimeDisplay();
+        }
     }
 
     /*
@@ -308,7 +321,15 @@ public class UserPreferencesActivity extends AppCompatActivity
                         }
                         else
                         {
-                            goBackToMain();
+                            if (hasReminderTimeOfDayChanged)
+                            {
+                                goBackToMain();
+                            }
+                            else
+                            {
+                                goBackToMain();
+                            }
+
                         }
                     }
                 })

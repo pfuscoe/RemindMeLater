@@ -9,6 +9,9 @@ import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
@@ -85,20 +88,7 @@ public class ReminderAlarmUtils {
         ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
                 iconName, broadcastId, reminderTimeHour, reminderTimeMinute);
 
-        long alarmTime = reminderAlarmItem.getAlarmCalendarObj().getTimeInMillis();
-
-        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
-        intent.setAction(ACTION_ALARM_RECEIVER);
-        intent.putExtra(REMINDER_TITLE, title);
-        intent.putExtra(REMINDER_ICON_NAME, iconName);
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, broadcastId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
-
-        Log.d(TAG, "Alarm set for: " + reminderAlarmItem.getAlarmCalendarObj().toString());
+        setSingleReminderAlarm(context, reminderAlarmItem);
     }
 
     public static void cancelReminderAlarm(Context context, String reminderTitle)
@@ -134,6 +124,76 @@ public class ReminderAlarmUtils {
 
         Log.d(TAG, "Notification cancelled for " + reminderTitle +
                 ". NotificationId: " + notificationId);
+    }
+
+    public static void updateReminderAlarmsOnTimeSet(Context context, int reminderTimeHour,
+                                                     int reminderTimeMinute)
+    {
+        SharedPreferences reminderAlarmStorage = context.getSharedPreferences(
+                context.getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderIconNames = context.getSharedPreferences(
+                context.getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
+                context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+
+        Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
+        Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
+        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
+
+        ArrayList<ReminderAlarmItem> reminderAlarmItemList = new ArrayList<>();
+
+        Log.d(TAG, "Reminder Time of Day: " + reminderTimeHour + ":" + reminderTimeMinute);
+
+        for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
+        {
+            String title = entry.getKey();
+            String nextOccurrence = (String) entry.getValue();
+
+            String iconName = (String) reminderIconNamesMap.get(title);
+            int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
+
+            ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
+                    iconName, broadcastId, reminderTimeHour, reminderTimeMinute);
+
+            Log.d(TAG, "reminderAlarmItem: " + reminderAlarmItem.getTitle() + " rebuilt");
+
+            reminderAlarmItemList.add(reminderAlarmItem);
+        }
+
+        for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItemList)
+        {
+            setSingleReminderAlarm(context, reminderAlarmItem);
+        }
+    }
+
+    private static void setSingleReminderAlarm(Context context, ReminderAlarmItem reminderAlarmItem)
+    {
+        long alarmTime = reminderAlarmItem.getAlarmCalendarObj().getTimeInMillis();
+
+        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+        intent.setAction(ACTION_ALARM_RECEIVER);
+        intent.putExtra(REMINDER_TITLE, reminderAlarmItem.getTitle());
+        intent.putExtra(REMINDER_ICON_NAME, reminderAlarmItem.getIconName());
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context,
+                reminderAlarmItem.getBroadcastId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
+
+        Log.d(TAG, "Alarm set for: " + reminderAlarmItem.getAlarmCalendarObj().toString());
+    }
+
+    private static PendingIntent getAlarmIntent(Context context,
+                                                ReminderAlarmItem reminderAlarmItem)
+    {
+        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
+        intent.setAction(ACTION_ALARM_RECEIVER);
+        intent.putExtra(REMINDER_TITLE, reminderAlarmItem.getTitle());
+        intent.putExtra(REMINDER_ICON_NAME, reminderAlarmItem.getIconName());
+
+        return PendingIntent.getBroadcast(context, reminderAlarmItem.getBroadcastId(),
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 
