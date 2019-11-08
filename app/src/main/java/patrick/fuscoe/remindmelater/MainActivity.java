@@ -51,6 +51,7 @@ import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
+import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
 /**
  * The main entry point after the user signs in, except when the user goes directly to
@@ -552,6 +553,20 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
             alarmIntentList.add(alarmIntent);
             alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
+        }
+    }
+
+    private void cancelAllReminderAlarms()
+    {
+        Context context = getApplicationContext();
+
+        ArrayList<ReminderAlarmItem> reminderAlarmItems =
+                ReminderAlarmUtils.buildReminderAlarmItemList(context,
+                        userProfile.getReminderHour(), userProfile.getReminderMinute());
+
+        for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItems)
+        {
+            ReminderAlarmUtils.cancelReminderAlarm(context, reminderAlarmItem.getTitle());
         }
     }
 
