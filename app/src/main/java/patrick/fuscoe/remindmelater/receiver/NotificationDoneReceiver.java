@@ -36,8 +36,8 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 /**
  * Receives notification 'Done' tap action.
  *
- * Updates reminder in cloud, updates local device storage alarm data, and resets
- * alarm accordingly.
+ * Updates reminder in cloud, updates local device storage alarm data, and resets (or deletes)
+ * alarm.
 */
 public class NotificationDoneReceiver extends BroadcastReceiver {
 

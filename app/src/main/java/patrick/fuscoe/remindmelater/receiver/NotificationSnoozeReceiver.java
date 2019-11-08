@@ -33,8 +33,7 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 /**
  * Receives notification 'Snooze' tap action.
  *
- * Updates reminder in cloud, updates local device storage alarm data, and resets/deletes
- * alarm accordingly.
+ * Updates reminder in cloud, updates local device storage alarm data, and resets alarm.
 */
 public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
@@ -84,10 +83,10 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
         // Get user profile from cloud and handle reminder updates and alarm management
-        executeNotificationDoneAction();
+        executeNotificationSnoozeAction();
     }
 
-    private void executeNotificationDoneAction()
+    private void executeNotificationSnoozeAction()
     {
         userDocRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -98,7 +97,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
 
-                            updateReminderItem();
+                            updateReminderItemOnSnooze();
                             saveReminderItem();
 
                             NotificationManagerCompat notificationManager =
@@ -117,7 +116,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
                 });
     }
 
-    private void updateReminderItem()
+    private void updateReminderItemOnSnooze()
     {
         LocalDate now = LocalDate.now();
         LocalDate nextOccurrence = now.plusDays(DEFAULT_SNOOZE_DAYS);
