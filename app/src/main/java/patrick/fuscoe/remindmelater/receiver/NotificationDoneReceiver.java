@@ -37,6 +37,7 @@ import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
+import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
 public class NotificationDoneReceiver extends BroadcastReceiver {
 
@@ -91,6 +92,10 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
+        // Get user profile from cloud and handle reminder updates and alarm management
+        executeNotificationDoneAction();
+
+        /*
         if (reminderItem.isRecurring())
         {
             updateReminderItem();
@@ -103,9 +108,10 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
+        */
     }
 
-    private void loadUserProfile()
+    private void executeNotificationDoneAction()
     {
         userDocRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -115,7 +121,20 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
                         {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-                            // TODO: move alarm stuff here (setup utils for re-use)
+
+                            if (reminderItem.isRecurring())
+                            {
+                                updateReminderItem();
+                                saveReminderItem();
+                            }
+                            else
+                            {
+                                deleteReminder();
+                            }
+
+                            NotificationManagerCompat notificationManager =
+                                    NotificationManagerCompat.from(context);
+                            notificationManager.cancel(notificationId);
                         }
                     }
                 })
@@ -123,8 +142,8 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Failed to retrieve user document from cloud");
-                        Toast.makeText(context, "Failed to retrieve user document from cloud. " +
-                                "Operation cancelled", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Operation failed: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -141,21 +160,14 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
     private void updateReminderItem()
     {
-        // Using workaround to get recurrence since Gson doesn't support Period java class
         Log.d(TAG, ": reminderItem recurrenceString: " + reminderItem.getRecurrenceString());
 
         String recurrenceString = reminderItem.getRecurrenceString();
         Period recurrence = Period.parse(recurrenceString);
 
-        //Log.d(TAG, "recurrence Period.toString(): " + recurrence.toString());
-
         int daysUntilNext = recurrence.getDays();
         int monthsUntilNext = recurrence.getMonths();
         int yearsUntilNext = recurrence.getYears();
-
-        // TODO: Fix recurrence by either using val & interval or toString for new item property due to gson issues
-
-        //Log.d(TAG, ": daysUntilNext: " + daysUntilNext);
 
         LocalDate now = LocalDate.now();
         Log.d(TAG, ": now: " + now.toString());
@@ -165,52 +177,34 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
         nextOccurrence = nextOccurrence.plusYears(yearsUntilNext);
 
         reminderItem.setNextOccurrence(nextOccurrence.toString());
-
         Log.d(TAG, ": nextOccurrence: " + reminderItem.getNextOccurrence());
 
         reminderItem.setSnoozed(false);
         reminderItem.setHibernating(false);
-
-        //Log.d(TAG, "reminderItemToString: " + reminderItem.toString());
-
-        // TODO: Add action to history
     }
 
     private void saveReminderItem()
     {
-        HashMap<String, Object> reminderItemMap = new HashMap<>();
-        reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
-        reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
-        reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
-        reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
-        reminderItemMap.put("category", reminderItem.getCategory());
-        reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
-        reminderItemMap.put("description", reminderItem.getDescription());
-        reminderItemMap.put("isRecurring", reminderItem.isRecurring());
-        reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
-        reminderItemMap.put("isHibernating", reminderItem.isHibernating());
-        reminderItemMap.put("history", reminderItem.getHistory());
-
-        Log.d(TAG, "category: " + reminderItem.getCategory() +
-                ". categoryiconName: " + reminderItem.getCategoryIconName());
+        Map<String, Object> reminderItemMap = FirebaseDocUtils.createReminderItemMap(reminderItem);
 
         remindersDocRef.update(reminderItem.getTitle(), reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
-                        Toast.makeText(context, "Reminder Updated: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
-
-                        saveReminderToSharedPreferences();
-                        setReminderAlarm();
+                        ReminderAlarmUtils.saveReminderToSharedPreferences(context, reminderItem);
+                        ReminderAlarmUtils.setReminderAlarm(context, reminderItem,
+                                userProfile.getReminderHour(), userProfile.getReminderMinute());
+                        Toast.makeText(context, "Reminder Updated: " + reminderItem.getTitle(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        Toast.makeText(context, "Action failed due to network error: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
-                        // TODO: handle local storage of reminder when cloud sync fails
+                        Toast.makeText(context, "Action failed due to network error: " +
+                                e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -241,25 +235,29 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
 
     private void deleteReminder()
     {
+        final String reminderTitle = reminderItem.getTitle();
+
         Map<String, Object> removeReminderUpdate = new HashMap<>();
-        removeReminderUpdate.put(reminderItem.getTitle(), FieldValue.delete());
+        removeReminderUpdate.put(reminderTitle, FieldValue.delete());
 
         remindersDocRef.update(removeReminderUpdate)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Delete Reminder Success: Reminders DocumentSnapshot successfully updated!");
-                        cancelReminderAlarm();
-                        removeReminderLocalStorage();
-                        Toast.makeText(context, "Reminder Item Deleted: " + reminderItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        ReminderAlarmUtils.cancelReminderAlarm(context, reminderTitle);
+                        ReminderAlarmUtils.deleteReminderFromSharedPreferences(context,
+                                reminderTitle);
+                        Toast.makeText(context, "Reminder Deleted: " +
+                                reminderTitle, Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        Toast.makeText(context, "Action failed due to network error: " + reminderItem.getTitle(), Toast.LENGTH_LONG).show();
-                        // TODO: handle local storage of reminder when cloud sync fails
+                        Toast.makeText(context, "Action failed due to network error: " +
+                                e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -316,9 +314,6 @@ public class NotificationDoneReceiver extends BroadcastReceiver {
     {
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
         reminderAlarmStorageEditor.remove(reminderItem.getTitle()).apply();
-
-        //SharedPreferences.Editor reminderIconIdsEditor = reminderIconIds.edit();
-        //reminderIconIdsEditor.remove(reminderItem.getTitle()).commit();
 
         SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
         reminderIconNamesEditor.remove(reminderItem.getTitle()).apply();
