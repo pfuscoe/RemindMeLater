@@ -6,8 +6,8 @@ android {
         applicationId "patrick.fuscoe.remindmelater"
         minSdkVersion 26
         targetSdkVersion 28
-        versionCode 20191105
-        versionName "v0.92"
+        versionCode 20191107
+        versionName "v0.92b"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
