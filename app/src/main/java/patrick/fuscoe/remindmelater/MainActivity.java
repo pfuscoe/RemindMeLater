@@ -117,10 +117,14 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     private String newUserDisplayName;
 
+
     @Override
     public void bootReceived() {
-        loadReminderAlarms();
-        setReminderAlarms();
+        //loadReminderAlarms();
+        //setReminderAlarms();
+
+        // TODO: Should setup local storage of preferred time..
+        ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext(), );
     }
 
     @Override
@@ -194,9 +198,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
             Log.d(TAG, "userProfile Gson String: " + userProfileString);
 
-            updateReminderTimeOfDay();
-            loadReminderAlarms();
-            setReminderAlarms();
+            //updateReminderTimeOfDay();
+            //loadReminderAlarms();
+            //setReminderAlarms();
         }
 
         super.onNewIntent(intent);
@@ -277,16 +281,16 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         reminderNotificationIds = getSharedPreferences(getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
-        reminderAlarmStorageEditor.clear().commit();
+        reminderAlarmStorageEditor.clear().apply();
 
         SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
-        reminderIconNamesEditor.clear().commit();
+        reminderIconNamesEditor.clear().apply();
 
         SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
-        reminderBroadcastIdsEditor.clear().commit();
+        reminderBroadcastIdsEditor.clear().apply();
 
         SharedPreferences.Editor reminderNotificationIdsEditor = reminderNotificationIds.edit();
-        reminderNotificationIdsEditor.clear().commit();
+        reminderNotificationIdsEditor.clear().apply();
 
         Log.d(TAG, "All SharedPreferences cleared");
     }
@@ -304,7 +308,11 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             // User already exists
                             if (documentSnapshot.exists())
                             {
-                                buildUserProfileObj(documentSnapshot);
+                                userProfile = FirebaseDocUtils.createUserProfileObj(
+                                        documentSnapshot);
+                                reminderTimeHour = userProfile.getReminderHour();
+                                reminderTimeMinute = userProfile.getReminderMinute();
+
                                 saveRemindersToStorage();
                                 setupTabs();
                             }
@@ -327,22 +335,16 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                         if (task.isSuccessful())
                         {
                             DocumentSnapshot documentSnapshot = task.getResult();
-                            buildUserProfileObj(documentSnapshot);
+
+                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                            reminderTimeHour = userProfile.getReminderHour();
+                            reminderTimeMinute = userProfile.getReminderMinute();
+
                             Log.d(TAG, "User Profile loaded from cloud");
                             setupTabs();
                         }
                     }
                 });
-    }
-
-    public void buildUserProfileObj(DocumentSnapshot documentSnapshot)
-    {
-        userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-
-        reminderTimeHour = userProfile.getReminderHour();
-        reminderTimeMinute = userProfile.getReminderMinute();
-
-        Log.d(TAG, ": userProfile loaded from cloud");
     }
 
     public void createNewReminderDoc()
@@ -421,12 +423,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         getSupportActionBar().setTitle(title);
     }
 
-    public void updateReminderTimeOfDay()
-    {
-        reminderTimeHour = userProfile.getReminderHour();
-        reminderTimeMinute = userProfile.getReminderMinute();
-    }
-
     public void saveRemindersToStorage()
     {
         remindersCollectionRef.whereEqualTo("userId", userId)
@@ -443,8 +439,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                                 Log.d(TAG, "remindersDocId: " + remindersDocId);
                                 buildReminderItemList(document);
                                 writeRemindersToDisk();
-                                loadReminderAlarms();
-                                setReminderAlarms();
+
+                                ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
+                                        getApplicationContext(), userProfile.getReminderHour(),
+                                        userProfile.getReminderMinute());
+
+                                //loadReminderAlarms();
+                                //setReminderAlarms();
                             }
                         }
                         else
@@ -499,6 +500,20 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         Log.d(TAG, "Reminders written to storage");
     }
+
+    /*
+    private void setAllReminderAlarms()
+    {
+        ArrayList<ReminderAlarmItem> reminderAlarmItems = ReminderAlarmUtils.
+                buildReminderAlarmItemList(getApplicationContext(), userProfile.getReminderHour(),
+                        userProfile.getReminderMinute());
+
+        for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItems)
+        {
+            ReminderAlarmUtils.setSi
+        }
+    }
+    */
 
     public void loadReminderAlarms()
     {
