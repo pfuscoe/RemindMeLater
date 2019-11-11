@@ -41,6 +41,7 @@ import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
+import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
 public class UserPreferencesActivity extends AppCompatActivity
         implements TimePickerDialogFragment.OnTimeSetListener {
@@ -321,15 +322,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                         }
                         else
                         {
-                            if (hasReminderTimeOfDayChanged)
-                            {
-                                goBackToMain();
-                            }
-                            else
-                            {
-                                goBackToMain();
-                            }
-
+                            goBackToMain();
                         }
                     }
                 })
@@ -369,6 +362,13 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private void goBackToMain()
     {
+        if (hasReminderTimeOfDayChanged)
+        {
+            ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
+                    getApplicationContext(), userProfile.getReminderHour(),
+                    userProfile.getReminderMinute());
+        }
+
         Gson gson = new Gson();
         String userProfileString = gson.toJson(userProfile);
 
