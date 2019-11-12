@@ -140,32 +140,30 @@ public class UserPreferencesActivity extends AppCompatActivity
         String timeToDisplay;
         String minutesString;
 
-        if (userProfile.getReminderMinute() == 0)
+        if (minute == 0)
         {
             minutesString = "00";
         }
-        else if (userProfile.getReminderMinute() < 10)
+        else if (minute < 10)
         {
-            minutesString = "0" + (userProfile.getReminderMinute() % 10);
+            minutesString = "0" + (minute % 10);
         }
         else
         {
-            minutesString = String.valueOf(userProfile.getReminderMinute());
+            minutesString = String.valueOf(minute);
         }
 
-        if (userProfile.getReminderHour() == 0)
+        if (hourOfDay == 0)
         {
             timeToDisplay = "12 : " + minutesString + " AM";
         }
-        else if (userProfile.getReminderHour() < 12)
+        else if (hourOfDay < 12)
         {
-            timeToDisplay = userProfile.getReminderHour() + " : " +
-                    minutesString + " AM";
+            timeToDisplay = hourOfDay + " : " + minutesString + " AM";
         }
         else
         {
-            timeToDisplay = userProfile.getReminderHour() + " : " +
-                    minutesString + " PM";
+            timeToDisplay = hourOfDay + " : " + minutesString + " PM";
         }
 
         viewTimeDisplay.setText(timeToDisplay);

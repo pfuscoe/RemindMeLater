@@ -27,8 +27,8 @@ public class ReminderAlarmUtils {
     private static final String ACTION_ALARM_RECEIVER = "patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver";
     private static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     private static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
-    private static final String REMINDER_TIME_hOUR = "patrick.fuscoe.remindmelater.REMINDER_TIME_HOUR";
-    private static final String REMINDER_TIME_MINUTE = "patrick.fuscoe.remindmelater.REMINDER_TIME_MINUTE";
+    public static final String REMINDER_TIME_HOUR = "patrick.fuscoe.remindmelater.REMINDER_TIME_HOUR";
+    public static final String REMINDER_TIME_MINUTE = "patrick.fuscoe.remindmelater.REMINDER_TIME_MINUTE";
 
     private static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
     private static final int DEFAULT_NOTIFICATION_ID = 100;
@@ -191,7 +191,7 @@ public class ReminderAlarmUtils {
 
         ArrayList<ReminderAlarmItem> reminderAlarmItemList = new ArrayList<>();
 
-        int reminderTimeHour = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_hOUR);
+        int reminderTimeHour = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_HOUR);
         int reminderTimeMinute = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_MINUTE);
 
         Log.d(TAG, "Reminder Time of Day: " + reminderTimeHour + ":" + reminderTimeMinute);
@@ -222,7 +222,7 @@ public class ReminderAlarmUtils {
 
         SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
 
-        reminderTimeOfDayEditor.putInt(REMINDER_TIME_hOUR, hour);
+        reminderTimeOfDayEditor.putInt(REMINDER_TIME_HOUR, hour);
         reminderTimeOfDayEditor.putInt(REMINDER_TIME_MINUTE, minute);
 
         Log.d(TAG, "Reminder Time of Day saved to local device: - Hour: " + hour +

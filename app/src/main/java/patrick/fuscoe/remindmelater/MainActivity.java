@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderIconNames;
     public static SharedPreferences reminderBroadcastIds;
+    public static SharedPreferences reminderTimeOfDay;
     public static SharedPreferences reminderNotificationIds;
 
     private AlarmManager alarmManager;
@@ -275,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
         reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        reminderTimeOfDay = getSharedPreferences(getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
         reminderNotificationIds = getSharedPreferences(getString(R.string.reminder_notification_ids_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderAlarmStorageEditor = reminderAlarmStorage.edit();
@@ -285,6 +287,9 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
         SharedPreferences.Editor reminderBroadcastIdsEditor = reminderBroadcastIds.edit();
         reminderBroadcastIdsEditor.clear().apply();
+
+        SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
+        reminderTimeOfDayEditor.clear().apply();
 
         SharedPreferences.Editor reminderNotificationIdsEditor = reminderNotificationIds.edit();
         reminderNotificationIdsEditor.clear().apply();
@@ -307,8 +312,6 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             {
                                 userProfile = FirebaseDocUtils.createUserProfileObj(
                                         documentSnapshot);
-                                reminderTimeHour = userProfile.getReminderHour();
-                                reminderTimeMinute = userProfile.getReminderMinute();
 
                                 saveRemindersToStorage();
                                 setupTabs();
@@ -470,13 +473,19 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     public void writeRemindersToDisk()
     {
-        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
-        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key),
+                Context.MODE_PRIVATE);
+        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key),
+                Context.MODE_PRIVATE);
+        reminderBroadcastIds = getSharedPreferences(getString(
+                R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        reminderTimeOfDay = getSharedPreferences(getString(R.string.reminder_time_of_day_file_key),
+                Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
         SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
         SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
+        SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
 
         for (ReminderItem reminderItem : reminderItemList)
         {
@@ -487,10 +496,16 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
         }
 
+        reminderTimeOfDayEditor.putInt(ReminderAlarmUtils.REMINDER_TIME_HOUR,
+                userProfile.getReminderHour());
+        reminderTimeOfDayEditor.putInt(ReminderAlarmUtils.REMINDER_TIME_MINUTE,
+                userProfile.getReminderMinute());
+
         // Using commit() because alarms are loaded immediately after write to disk from cloud
         reminderAlarmEditor.commit();
         reminderIconNamesEditor.commit();
         reminderBroadcastIdEditor.commit();
+        reminderTimeOfDayEditor.commit();
 
         Log.d(TAG, "Reminders written to storage");
     }
