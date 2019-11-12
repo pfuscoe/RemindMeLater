@@ -13,6 +13,9 @@ import androidx.fragment.app.DialogFragment;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
 
+/**
+ * Dialog that handles UI for confirming delete of reminder categories
+ */
 public class DeleteReminderCategoryDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.DeleteReminderCategoryDialogFragment";

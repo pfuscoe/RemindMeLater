@@ -13,6 +13,9 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.R;
 
+/**
+ * Recycler adapter for viewing category icons in dialogs when adding new category
+ */
 public class AddCategoryIconSelectAdapter extends RecyclerView.Adapter<AddCategoryIconSelectAdapter.IconViewHolder> {
 
     private List<Integer> categoryIconList;

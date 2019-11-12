@@ -21,6 +21,9 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
+/**
+ * Dialog that handles UI for editing reminder categories
+ */
 public class EditReminderCategoryDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.EditReminderCategoryDialogFragment";
@@ -35,7 +38,7 @@ public class EditReminderCategoryDialogFragment extends DialogFragment {
     private RecyclerView.LayoutManager categoryIconRecyclerLayoutManager;
     private RecyclerView.Adapter categoryIconRecyclerAdapter;
 
-
+    // Borrows listener type from to do group edit dialog to simplify reuse with icon select adapter
     private EditToDoGroupDialogFragment.CategoryIconClickListener categoryIconClickListener = new EditToDoGroupDialogFragment.CategoryIconClickListener() {
         @Override
         public void onIconClicked(View v, int position) {
@@ -49,7 +52,6 @@ public class EditReminderCategoryDialogFragment extends DialogFragment {
 
             if (oldPos == position)
             {
-                //categoryIconListIsChecked.set(position, false);
                 selectedIcon = -1;
                 selectedIconPos = -1;
                 selectedIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
@@ -102,7 +104,6 @@ public class EditReminderCategoryDialogFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         String reminderCategoryName = bundle.getString("title");
-        //int groupIconId = bundle.getInt("iconId");
         String reminderCategoryIconName = bundle.getString("iconName");
 
         EditText viewReminderCategoryName = v.findViewById(R.id.dialog_category_edit_name);

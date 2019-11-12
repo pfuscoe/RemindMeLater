@@ -11,15 +11,17 @@ import androidx.fragment.app.DialogFragment;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
-import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
+/**
+ * Dialog that handles UI for confirming delete of individual reminders
+ */
 public class DeleteReminderDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.DeleteReminderDialogFragment";
 
     public interface DeleteReminderDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 
     DeleteReminderDialogListener listener;

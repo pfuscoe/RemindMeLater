@@ -11,6 +11,9 @@ import androidx.fragment.app.DialogFragment;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
+/**
+ * Dialog that handles UI for confirming delete of to do group (aka to do list)
+ */
 public class DeleteToDoGroupDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.DeleteToDoGroupDialogFragment";

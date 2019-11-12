@@ -10,6 +10,9 @@ import android.widget.DatePicker;
 
 import java.util.Calendar;
 
+/**
+ * Dialog that handles UI for picking dates
+ */
 public class DatePickerDialogFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
@@ -42,9 +45,8 @@ public class DatePickerDialogFragment extends DialogFragment
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
                 this, year, month, day);
 
-        // Allow only future dates to be chosen
+        // Allow only today or future dates to be chosen
         Calendar today = Calendar.getInstance();
-        //yesterday.add(Calendar.DATE, -1);
 
         datePickerDialog.getDatePicker().setMinDate(today.getTimeInMillis());
 
@@ -53,14 +55,10 @@ public class DatePickerDialogFragment extends DialogFragment
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date chosen by the user
-        // Setup date set action
         if (dateSetListener != null)
         {
             dateSetListener.onDateSet(view, year, month, day);
         }
-        // LocalDate localDate = LocalDate.of(year, month, day);
-        // setRecurrenceDate(localDate);
     }
 
 

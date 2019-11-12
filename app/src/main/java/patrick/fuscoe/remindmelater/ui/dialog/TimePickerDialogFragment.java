@@ -12,6 +12,9 @@ import androidx.fragment.app.DialogFragment;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 
+/**
+ * Dialog that handles UI for picking time of day
+ */
 public class TimePickerDialogFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 

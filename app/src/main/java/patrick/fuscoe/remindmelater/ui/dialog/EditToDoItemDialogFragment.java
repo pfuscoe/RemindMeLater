@@ -15,11 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 
+/**
+ * Dialog that handles UI for editing individual to do items
+ */
 public class EditToDoItemDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.EditToDoItemDialogFragment";
@@ -63,7 +65,6 @@ public class EditToDoItemDialogFragment extends DialogFragment {
         EditText viewItemName = v.findViewById(R.id.dialog_add_to_do_item_name);
         viewItemName.setText(itemName);
 
-        //RadioGroup viewPriorityRadioGroup = v.findViewById(R.id.dialog_add_to_do_item_radio_group);
         viewPriorityRadioHigh = v.findViewById(R.id.dialog_add_to_do_item_radio_high);
         viewPriorityRadioMedium = v.findViewById(R.id.dialog_add_to_do_item_radio_medium);
         viewPriorityRadioLow = v.findViewById(R.id.dialog_add_to_do_item_radio_low);

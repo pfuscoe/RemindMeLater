@@ -20,6 +20,9 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
+/**
+ * Dialog that handles UI for editing to do groups (aka to do lists)
+ */
 public class EditToDoGroupDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.EditToDoGroupDialogFragment";
@@ -51,7 +54,6 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
 
             if (oldPos == position)
             {
-                //categoryIconListIsChecked.set(position, false);
                 selectedIcon = -1;
                 selectedIconPos = -1;
                 selectedIconName = MainActivity.DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME;
@@ -98,7 +100,6 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
         String groupTitle = bundle.getString("title");
-        //int groupIconId = bundle.getInt("iconId");
         String groupIconName = bundle.getString("iconName");
 
         EditText viewGroupTitle = v.findViewById(R.id.dialog_category_edit_name);
@@ -139,11 +140,8 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public int getSelectedIconId() {
-        return selectedIcon;
-    }
-
     public String getSelectedIconName() {
         return selectedIconName;
     }
+
 }

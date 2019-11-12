@@ -24,7 +24,7 @@ import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
 /**
- * Dialog that handles UI for adding either new to do groups or reminder categories.
+ * Dialog that handles UI for adding either new to do groups or reminder categories
 */
 public class AddCategoryDialogFragment extends DialogFragment {
 
@@ -148,8 +148,6 @@ public class AddCategoryDialogFragment extends DialogFragment {
             dialogTitle = getString(R.string.dialog_add_category_title);
         }
 
-        //Bundle bundle = getArguments();
-
         categoryIconRecycler = v.findViewById(R.id.dialog_category_edit_recycler);
         categoryIconRecycler.setHasFixedSize(true);
 
@@ -176,11 +174,8 @@ public class AddCategoryDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public int getSelectedIconId() {
-        return selectedIcon;
-    }
-
     public String getSelectedIconName() {
         return selectedIconName;
     }
+
 }
