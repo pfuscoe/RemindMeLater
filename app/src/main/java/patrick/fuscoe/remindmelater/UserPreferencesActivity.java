@@ -65,6 +65,8 @@ public class UserPreferencesActivity extends AppCompatActivity
     private List<ReminderItem> reminderItemList;
 
     private boolean hasReminderTimeOfDayChanged;
+    private int hourOfDay;
+    private int minute;
 
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
@@ -187,10 +189,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         else
         {
             hasReminderTimeOfDayChanged = true;
-
-            userProfile.setReminderHour(hourOfDay);
-            userProfile.setReminderMinute(minute);
-
+            this.hourOfDay = hourOfDay;
+            this.minute = minute;
             setTimeDisplay();
         }
     }
@@ -276,6 +276,9 @@ public class UserPreferencesActivity extends AppCompatActivity
     {
         if (hasReminderTimeOfDayChanged)
         {
+            userProfile.setReminderHour(hourOfDay);
+            userProfile.setReminderMinute(minute);
+
             ReminderAlarmUtils.setReminderTimeOfDay(getApplicationContext(),
                     userProfile.getReminderHour(), userProfile.getReminderMinute());
 
