@@ -27,6 +27,8 @@ public class ReminderAlarmUtils {
     private static final String ACTION_ALARM_RECEIVER = "patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver";
     private static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     private static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
+    private static final String REMINDER_TIME_hOUR = "patrick.fuscoe.remindmelater.REMINDER_TIME_HOUR";
+    private static final String REMINDER_TIME_MINUTE = "patrick.fuscoe.remindmelater.REMINDER_TIME_MINUTE";
 
     private static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
     private static final int DEFAULT_NOTIFICATION_ID = 100;
@@ -166,10 +168,13 @@ public class ReminderAlarmUtils {
                 context.getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
                 context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderTimeOfDay = context.getSharedPreferences(
+                context.getString(R.string.reminder_time_of_day_file_key) Context.MODE_PRIVATE);
 
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
         Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
         Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
+        Map<String, ?> reminderTimeOfDayMap = reminderTimeOfDay.getAll();
 
         ArrayList<ReminderAlarmItem> reminderAlarmItemList = new ArrayList<>();
 
@@ -182,6 +187,9 @@ public class ReminderAlarmUtils {
 
             String iconName = (String) reminderIconNamesMap.get(title);
             int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
+
+            int reminderTimeHour = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_hOUR);
+            int reminderTimeMinute = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_MINUTE);
 
             ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
                     iconName, broadcastId, reminderTimeHour, reminderTimeMinute);
