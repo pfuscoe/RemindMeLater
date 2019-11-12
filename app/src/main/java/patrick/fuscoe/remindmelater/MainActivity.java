@@ -121,7 +121,12 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     @Override
     public void bootReceived() {
-        ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext());
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if (auth.getUid() != null)
+        {
+            ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext());
+        }
     }
 
     @Override
