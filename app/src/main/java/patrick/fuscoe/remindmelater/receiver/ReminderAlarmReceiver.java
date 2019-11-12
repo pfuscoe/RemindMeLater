@@ -7,28 +7,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
-import androidx.core.graphics.BitmapCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
@@ -36,8 +31,11 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
-import patrick.fuscoe.remindmelater.ui.main.RemindersViewModel;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
+/**
+ * Receives reminder alarms from device and creates notification
+*/
 public class ReminderAlarmReceiver extends BroadcastReceiver {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderAlarmReceiver";
@@ -114,37 +112,20 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
 
         Map<String, Object> docMap = document.getData();
 
-        /*
         for (Map.Entry<String, Object> entry : docMap.entrySet())
         {
             if (entry.getKey().equals(reminderTitle))
             {
+                reminderItem = FirebaseDocUtils.createReminderItemObj(entry);
 
+                return;
             }
         }
-        */
 
-        HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) docMap.get(reminderTitle);
-
-
-
-        /*
-        boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
-        int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
-        String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
-        String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
-        String category = (String) reminderItemMap.get("category");
-        String categoryIconName = (String) reminderItemMap.get("categoryIconName");
-        Log.d(TAG, "category: " + category + ". categoryiconName: " + categoryIconName);
-        String description = (String) reminderItemMap.get("description");
-        boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
-        boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
-        Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
-
-        reminderItem = new ReminderItem(reminderTitle, isRecurring, recurrenceNum,
-                recurrenceInterval, nextOccurrence, category,
-                categoryIconName, description, isSnoozed, isHibernating, history);
-        */
+        // Could not find reminder in docMap
+        Log.d(TAG, "Error: Could not find reminder in docMap of queryDocumentSnapshot");
+        Toast.makeText(context, "Reminder Alarm Error: Could not find reminder data for " +
+                reminderTitle + " in cloud database", Toast.LENGTH_LONG).show();
     }
 
     public void sendNotification()
