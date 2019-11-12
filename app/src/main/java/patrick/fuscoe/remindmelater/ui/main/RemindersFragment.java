@@ -207,6 +207,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Updates UI when Reminders are changed in FireStore
         remindersViewModel = ViewModelProviders.of(this).get(RemindersViewModel.class);
         LiveData<QuerySnapshot> remindersLiveData = remindersViewModel.getQuerySnapshotLiveData();
 
@@ -215,16 +216,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
             public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots != null)
                 {
-                    // Update UI views with data from snapshot
                     List<ReminderItem> reminderListFromDoc = new ArrayList<>();
-
-                    //Log.d(TAG, ": queryDocumentSnapshots size: " + queryDocumentSnapshots.size());
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
                     {
                         MainActivity.remindersDocRef = doc.getReference();
                         remindersDocId = doc.getId();
-                        //Log.d(TAG, ": remindersDocId: " + remindersDocId);
 
                         Map<String, Object> docMap = doc.getData();
 
@@ -234,39 +231,12 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                             {
                                 ReminderItem reminderItem = FirebaseDocUtils.createReminderItemObj(entry);
 
-                                /*
-                                String title = entry.getKey();
-                                HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
-
-                                boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
-                                int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
-                                //Log.d(TAG, ": recurrenceNum: " + recurrenceNum);
-                                String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
-
-                                String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
-
-                                String category = (String) reminderItemMap.get("category");
-                                String categoryIconName = (String) reminderItemMap.get("categoryIconName");
-                                //Log.d(TAG, ": categoryIconName: " + categoryIconName);
-
-                                String description = (String) reminderItemMap.get("description");
-
-                                boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
-                                boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
-                                Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
-
-                                ReminderItem reminderItem = new ReminderItem(title, isRecurring,
-                                        recurrenceNum, recurrenceInterval, nextOccurrence, category,
-                                        categoryIconName, description, isSnoozed, isHibernating, history);
-                                */
-
                                 reminderListFromDoc.add(reminderItem);
                             }
                         }
                     }
 
                     reminderItemList = reminderListFromDoc;
-                    //Log.d(TAG, ": reminderItemList size: " + reminderItemList.size());
 
                     if (tipsMenuItem != null)
                     {
@@ -299,6 +269,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
             }
         });
 
+        // Updates UI when use profile is changed in FireStore
         userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         LiveData<DocumentSnapshot> userProfileLiveData = userProfileViewModel.getDocumentSnapshotLiveData();
 
@@ -308,34 +279,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                 if (documentSnapshot != null)
                 {
                     userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-
-                    /*
-                    Map<String, Object> docMap = documentSnapshot.getData();
-
-                    String id = documentSnapshot.getId();
-                    String displayName = documentSnapshot.getString("displayName");
-
-                    ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
-
-                    String[] subscriptions = new String[subscriptionsList.size()];
-                    subscriptions = subscriptionsList.toArray(subscriptions);
-
-                    Map<String, String> reminderCategories =
-                            (Map<String, String>) documentSnapshot.get("reminderCategories");
-
-                    MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
-                    MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
-
-                    int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
-
-                    ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
-                    String[] friends;
-                    friends = friendsList.toArray(new String[0]);
-
-                    userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
-                            hibernateLength, friends);
-                    */
 
                     Log.d(TAG, "UserProfile loaded");
 

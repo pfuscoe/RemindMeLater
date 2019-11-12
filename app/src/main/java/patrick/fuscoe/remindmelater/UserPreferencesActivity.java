@@ -39,6 +39,9 @@ import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
+/**
+ * Manages UI for setting user preferences. Handles cloud sync when user hits save.
+*/
 public class UserPreferencesActivity extends AppCompatActivity
         implements TimePickerDialogFragment.OnTimeSetListener {
 

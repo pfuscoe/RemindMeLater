@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -32,7 +30,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,9 +39,7 @@ import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +54,12 @@ import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
+/**
+ * Manages UI for To Do Tab. Listens to FireStore for updates to subscribed To Do Lists and
+ * changes in user profile.
+ *
+ * Also handles Adding, Editing, Deleting and Reordering new To Do Lists.
+*/
 public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.AddCategoryDialogListener,
         EditToDoGroupDialogFragment.EditToDoGroupDialogListener,
         DeleteToDoGroupDialogFragment.DeleteToDoGroupDialogListener {
@@ -67,14 +68,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoFragment";
     public static final String TO_DO_GROUP = "patrick.fuscoe.remindmelater.TO_DO_GROUP";
 
-    //public static final int DEFAULT_CATEGORY_ICON = R.drawable.category_note;
-
-    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference toDoGroupsCollectionRef = db.collection("todogroups");
-
-    //private final String userId = auth.getUid();
-    //private final DocumentReference userDocRef = db.collection("users").document(userId);
 
     private RecyclerView toDoGroupsRecyclerView;
     private RecyclerView.Adapter toDoGroupsAdapter;
@@ -91,7 +86,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     private ToDoGroup toDoGroupToEdit;
     private ToDoGroup toDoGroupToDelete;
 
-    //private Menu optionsMenu;
     private MenuItem tipsMenuItem;
 
     private boolean editMode;
@@ -181,7 +175,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         viewToDoGroupsTipsWebview = root.findViewById(R.id.view_to_do_groups_tips_webview);
         viewToDoGroupsTipsWebview.loadUrl("file:///android_asset/tips_to_do_groups.html");
 
-        // Setup Toolbar
         setHasOptionsMenu(true);
 
         // Setup RecyclerView
@@ -193,15 +186,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         toDoGroupsAdapter = new ToDoGroupsAdapter(toDoGroupList, getContext(), toDoGroupClickListener);
         toDoGroupsRecyclerView.setAdapter(toDoGroupsAdapter);
-
-        /*
-        // Show Tips if To Groups List Empty
-        if (toDoGroupList.isEmpty() && !isTipsOn)
-        {
-            viewToDoGroupsTips.setVisibility(View.VISIBLE);
-            isTipsOn = true;
-        }
-        */
 
         ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
             @Override
@@ -219,7 +203,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
+                // Do nothing
             }
         };
 
@@ -233,6 +217,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Updates UI when To Do Groups are changed in FireStore
         toDoGroupsViewModel = ViewModelProviders.of(this).get(ToDoGroupsViewModel.class);
         LiveData<QuerySnapshot> toDoGroupsLiveData = toDoGroupsViewModel.getQuerySnapshotLiveData();
 
@@ -241,35 +226,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             public void onChanged(@Nullable QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots != null)
                 {
-                    // Update UI views with values from the snapshot
-                    // Convert data from snapshot form
-                    // into list of ToDoGroups then update data display
-
                     List<ToDoGroup> toDoGroupDocs = new ArrayList<>();
 
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments())
                     {
                         ToDoGroup toDoGroup = FirebaseDocUtils.createToDoGroupObj(documentSnapshot);
-
-                        /*
-                        String id = doc.getId();
-                        String title = doc.getString("title");
-                        String iconName = doc.getString("iconName");
-                        //int iconId = Math.toIntExact(doc.getLong("iconId"));
-                        boolean shared = doc.getBoolean("shared");
-                        int numPriorityOneItems = doc.get("numPriorityOneItems", int.class);
-                        int numUnfinishedItems = doc.get("numUnfinishedItems", int.class);
-                        //int totalItems = doc.get("totalItems", int.class);
-
-                        ArrayList<String> subscribersList = (ArrayList<String>) doc.get("subscribers");
-
-                        String[] subscribers = subscribersList.toArray(new String[0]);
-
-                        Map<String, Object> toDoItems = (Map<String, Object>) doc.get("toDoItems");
-
-                        ToDoGroup toDoGroup = new ToDoGroup(id, title, iconName, shared,
-                                numPriorityOneItems, numUnfinishedItems, subscribers, toDoItems);
-                        */
 
                         toDoGroupDocs.add(toDoGroup);
                     }
@@ -301,13 +262,13 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                         }
                     }
 
-                    //Log.d(TAG, ": toDoGroupList size: " + toDoGroupList.size());
                     updateToDoGroupDisplayOnReorder();
                     UpdateToDoGroupsDisplay();
                 }
             }
         });
 
+        // Updates UI when user profile is changed in FireStore
         userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
         LiveData<DocumentSnapshot> userProfileLiveData = userProfileViewModel.getDocumentSnapshotLiveData();
 
@@ -317,34 +278,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                 if (documentSnapshot != null)
                 {
                     userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-
-                    /*
-                    Map<String, Object> docMap = documentSnapshot.getData();
-
-                    String id = documentSnapshot.getId();
-                    String displayName = documentSnapshot.getString("displayName");
-
-                    ArrayList<String> subscriptionsList = (ArrayList<String>) docMap.get("subscriptions");
-
-                    String[] subscriptions = new String[subscriptionsList.size()];
-                    subscriptions = subscriptionsList.toArray(subscriptions);
-
-                    Map<String, String> reminderCategories =
-                            (Map<String, String>) documentSnapshot.get("reminderCategories");
-
-                    MainActivity.reminderTimeHour = Math.toIntExact((long) docMap.get("reminderHour"));
-                    MainActivity.reminderTimeMinute = Math.toIntExact((long) docMap.get("reminderMinute"));
-
-                    int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
-
-                    ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
-                    String[] friends;
-                    friends = friendsList.toArray(new String[0]);
-
-                    userProfile = new UserProfile(id, displayName, subscriptions, reminderCategories,
-                            MainActivity.reminderTimeHour, MainActivity.reminderTimeMinute,
-                            hibernateLength, friends);
-                    */
 
                     Log.d(TAG, "UserProfile loaded");
 
@@ -438,11 +371,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         toDoGroupsAdapter.notifyDataSetChanged();
     }
 
-    private void UpdateUserProfileDisplay()
-    {
-        
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -517,11 +445,13 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     {
         DocumentReference docRef = toDoGroupsCollectionRef.document();
         final String docId = docRef.getId();
-        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconName, false, MainActivity.auth.getUid());
+        final ToDoGroup toDoGroup = new ToDoGroup(docId, title, selectedIconName, false,
+                MainActivity.auth.getUid());
 
-        Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
+
         userProfile.addSubscription(docId);
-        Map<String, Object> userProfileDoc = buildUserDoc(userProfile);
+        Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
 
         commitAddToDoGroupBatch(docId, toDoGroupDoc, userProfileDoc);
 
@@ -532,8 +462,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     private void editToDoGroup(ToDoGroup toDoGroup)
     {
         String docId = toDoGroup.getId();
+        final String groupTitle = toDoGroup.getTitle();
 
-        Map<String, Object> toDoGroupDoc = buildToDoGroupDoc(toDoGroup);
+        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
 
         toDoGroupsCollectionRef.document(docId)
                 .set(toDoGroupDoc)
@@ -541,17 +472,19 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Toast.makeText(getContext(), groupTitle + " Updated", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(getContext(), "Failed to save changes for: " +
+                                groupTitle + ". " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
         Log.d(TAG, ": To Do Group " + toDoGroup.getTitle() + " saved");
-        Toast.makeText(getContext(), "To Do List Saved: " + toDoGroup.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     private void deleteToDoGroup(ToDoGroup toDoGroup)
@@ -560,46 +493,12 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         String groupTitle = toDoGroup.getTitle();
 
         userProfile.removeSubscription(docId);
-        Map<String, Object> userProfileDoc = buildUserDoc(userProfile);
+        Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
 
         commitDeleteToDoGroupBatch(docId, userProfileDoc);
 
         Log.d(TAG, ": To Do Group " + groupTitle + " deleted");
         Toast.makeText(getContext(), "To Do List Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
-    }
-
-    private Map<String, Object> buildToDoGroupDoc(ToDoGroup toDoGroup)
-    {
-        Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
-
-        /*
-        Map<String, Object> toDoGroupDoc = new HashMap<>();
-        toDoGroupDoc.put("title", toDoGroup.getTitle());
-        toDoGroupDoc.put("iconName", toDoGroup.getIconName());
-        toDoGroupDoc.put("shared", toDoGroup.isShared());
-        toDoGroupDoc.put("numPriorityOneItems", toDoGroup.getNumPriorityOneItems());
-        toDoGroupDoc.put("numUnfinishedItems", toDoGroup.getNumUnfinishedItems());
-        toDoGroupDoc.put("totalItems", toDoGroup.getTotalItems());
-        toDoGroupDoc.put("subscribers", Arrays.asList(toDoGroup.getSubscribers()));
-
-        toDoGroupDoc.put("toDoItems", toDoGroup.getToDoItems());
-        */
-
-        return toDoGroupDoc;
-    }
-
-    private Map<String, Object> buildUserDoc(UserProfile userProfile)
-    {
-        Map<String, Object> userProfileDoc = new HashMap<>();
-        userProfileDoc.put("displayName", userProfile.getDisplayName());
-        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
-        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
-        userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
-        userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
-        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
-        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
-
-        return userProfileDoc;
     }
 
     private void commitUserDoc(Map<String, Object> userProfileDoc)
@@ -657,7 +556,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
     public void onPause() {
         if (userFieldChanged)
         {
-            commitUserDoc(buildUserDoc(userProfile));
+            Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
+            commitUserDoc(userProfileDoc);
             userFieldChanged = false;
         }
 
@@ -666,13 +566,9 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
     public void showAddToDoGroupDialog()
     {
-        // Create an instance of the dialog fragment and show it
-        //FragmentManager fm = getFragmentManager();
         AddCategoryDialogFragment dialogFrag = new AddCategoryDialogFragment();
 
         dialogFrag.setTargetFragment(ToDoFragment.this, 300);
-        //dialogFrag.show(getChildFragmentManager(), AddCategoryDialogFragment.TAG);
-        //dialogFrag.show(getActivity().getSupportFragmentManager(), AddCategoryDialogFragment.TAG);
         dialogFrag.show(getFragmentManager(), AddCategoryDialogFragment.TAG);
     }
 
@@ -681,9 +577,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         EditToDoGroupDialogFragment dialogFragment = new EditToDoGroupDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString("title", toDoGroupToEdit.getTitle());
-        //bundle.putString("iconName", toDoGroupToEdit.getIconName());
         bundle.putString("iconName", toDoGroupToEdit.getIconName());
-        Log.d(TAG, ": called showEditToDoGroupDialog");
+        Log.d(TAG, "called showEditToDoGroupDialog");
 
         dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(ToDoFragment.this, 300);
@@ -701,9 +596,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         dialogFragment.show(getFragmentManager(), DeleteToDoGroupDialogFragment.TAG);
     }
 
-    // The dialog fragment receives a reference to this Activity through the
-    // Fragment.onAttach() callback, which it uses to call the following methods
-    // defined by the AddToDoGroupDialogFragment.AddToDoGroupDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         if (dialog instanceof AddCategoryDialogFragment)
@@ -718,7 +610,6 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                 return;
             }
 
-            //int selectedIconId = ((AddCategoryDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((AddCategoryDialogFragment) dialog).getSelectedIconName();
             if (selectedIconName.equals("default"))
             {
@@ -741,10 +632,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                 return;
             }
 
-            //int selectedIconId = ((EditToDoGroupDialogFragment) dialog).getSelectedIconId();
             String selectedIconName = ((EditToDoGroupDialogFragment) dialog).getSelectedIconName();
             toDoGroupToEdit.setTitle(newTitle);
-            //toDoGroupToEdit.setIconId(selectedIconId);
             toDoGroupToEdit.setIconName(selectedIconName);
 
             editToDoGroup(toDoGroupToEdit);
