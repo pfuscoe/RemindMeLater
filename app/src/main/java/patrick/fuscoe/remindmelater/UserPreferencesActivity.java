@@ -24,22 +24,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
-import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
@@ -62,7 +58,6 @@ public class UserPreferencesActivity extends AppCompatActivity
     private TextView viewSetTimeLabel;
     private TextView viewTimeDisplay;
     private Button btnSetTime;
-    //private Button btnClearEmptyReminderCategories;
     private View viewDividerBottom;
     private Button btnSave;
     private Button btnCancel;
@@ -81,15 +76,8 @@ public class UserPreferencesActivity extends AppCompatActivity
                     openTimePicker();
                     return;
 
-                    /*
-                case R.id.button_user_preferences_clear_empty_reminder_categories:
-                    clearEmptyReminderCategories();
-                    return;
-                    */
-
                 case R.id.button_user_preferences_save:
                     saveUserPrefs();
-                    //Toast.makeText(getApplicationContext(), userProfile.getDisplayName() + ": User Settings Updated", Toast.LENGTH_LONG).show();
                     return;
 
                 case R.id.button_user_preferences_cancel:
@@ -134,8 +122,6 @@ public class UserPreferencesActivity extends AppCompatActivity
 
         btnSetTime = findViewById(R.id.button_user_preferences_time);
         btnSetTime.setOnClickListener(btnClickListener);
-        //btnClearEmptyReminderCategories = findViewById(R.id.button_user_preferences_clear_empty_reminder_categories);
-        //btnClearEmptyReminderCategories.setOnClickListener(btnClickListener);
         btnSave = findViewById(R.id.button_user_preferences_save);
         btnSave.setOnClickListener(btnClickListener);
         btnCancel = findViewById(R.id.button_user_preferences_cancel);
@@ -209,73 +195,6 @@ public class UserPreferencesActivity extends AppCompatActivity
         }
     }
 
-    /*
-    public void clearEmptyReminderCategories()
-    {
-        MainActivity.remindersDocRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-
-                            Map<String, Object> docMap = documentSnapshot.getData();
-
-                            for (Map.Entry<String, Object> entry : docMap.entrySet())
-                            {
-                                if (!entry.getKey().contentEquals("userId"))
-                                {
-                                    String title = entry.getKey();
-                                    HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) entry.getValue();
-
-                                    boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
-                                    int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
-                                    String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
-                                    String nextOccurrence = (String) reminderItemMap.get("nextOccurrence");
-                                    String category = (String) reminderItemMap.get("category");
-                                    String categoryIconName = (String) reminderItemMap.get("categoryIconName");
-                                    String description = (String) reminderItemMap.get("description");
-                                    boolean isSnoozed = (boolean) reminderItemMap.get("isSnoozed");
-                                    boolean isHibernating = (boolean) reminderItemMap.get("isHibernating");
-                                    Map<String, String> history = (Map<String, String>) reminderItemMap.get("history");
-
-                                    ReminderItem reminderItem = new ReminderItem(title, isRecurring,
-                                            recurrenceNum, recurrenceInterval, nextOccurrence,
-                                            category, categoryIconName, description, isSnoozed,
-                                            isHibernating, history);
-
-                                    reminderItemList.add(reminderItem);
-                                }
-                            }
-
-                            Map<String, String> reminderCategories = new HashMap<>();
-                            reminderCategories.putAll(userProfile.getReminderCategories());
-
-                            for (Map.Entry<String, String> reminderCategory : reminderCategories.entrySet())
-                            {
-                                int numReminders = 0;
-
-                                for (ReminderItem reminderItem : reminderItemList)
-                                {
-                                    if (reminderCategory.getKey().equals(reminderItem.getCategory()))
-                                    {
-                                        numReminders++;
-                                    }
-                                }
-
-                                if (numReminders == 0)
-                                {
-                                    userProfile.removeReminderCategory(reminderCategory.getKey());
-                                    Log.d(TAG, reminderCategory.getKey() + " - Reminder Category Removed");
-                                }
-                            }
-                        }
-                    }
-                });
-    }
-    */
-
     public void saveUserPrefs()
     {
         showProgressBar();
@@ -295,18 +214,6 @@ public class UserPreferencesActivity extends AppCompatActivity
         }
 
         Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
-
-        /*
-        Map<String, Object> userProfileDoc = new HashMap<>();
-
-        userProfileDoc.put("displayName", displayName);
-        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
-        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
-        userProfileDoc.put("reminderHour", userProfile.getReminderHour());
-        userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
-        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
-        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
-        */
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -330,7 +237,8 @@ public class UserPreferencesActivity extends AppCompatActivity
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
-                        Toast.makeText(getApplicationContext(), "Failed to save user settings to cloud", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Failed to save user " +
+                                "settings to cloud", Toast.LENGTH_LONG).show();
                         hideProgressBar();
                     }
                 });
@@ -354,7 +262,11 @@ public class UserPreferencesActivity extends AppCompatActivity
                         }
                         else
                         {
-                            Log.d(TAG, "Failed to set display name in Firebase user profile (userProfile doc was updated though)");
+                            Log.d(TAG, "Failed to set display name in Firebase user profile " +
+                                    "(userProfile doc was updated though)");
+                            Toast.makeText(getApplicationContext(), "Failed to save user " +
+                                    "settings to cloud", Toast.LENGTH_LONG).show();
+                            hideProgressBar();
                         }
                     }
                 });
@@ -364,9 +276,10 @@ public class UserPreferencesActivity extends AppCompatActivity
     {
         if (hasReminderTimeOfDayChanged)
         {
-            ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
-                    getApplicationContext(), userProfile.getReminderHour(),
-                    userProfile.getReminderMinute());
+            ReminderAlarmUtils.setReminderTimeOfDay(getApplicationContext(),
+                    userProfile.getReminderHour(), userProfile.getReminderMinute());
+
+            ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext());
         }
 
         Gson gson = new Gson();

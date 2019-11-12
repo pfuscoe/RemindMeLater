@@ -120,11 +120,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
 
     @Override
     public void bootReceived() {
-        //loadReminderAlarms();
-        //setReminderAlarms();
-
-        // TODO: Should setup local storage of preferred time..
-        ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext(), );
+        ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext());
     }
 
     @Override
@@ -254,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
+                        cancelAllReminderAlarms();
                         clearAllSharedPreferences();
                         Intent intent = new Intent(MainActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
@@ -337,8 +334,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                             DocumentSnapshot documentSnapshot = task.getResult();
 
                             userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-                            reminderTimeHour = userProfile.getReminderHour();
-                            reminderTimeMinute = userProfile.getReminderMinute();
+                            ReminderAlarmUtils.setReminderTimeOfDay(getApplicationContext(),
+                                    userProfile.getReminderHour(), userProfile.getReminderMinute());
 
                             Log.d(TAG, "User Profile loaded from cloud");
                             setupTabs();
@@ -441,11 +438,8 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                                 writeRemindersToDisk();
 
                                 ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
-                                        getApplicationContext(), userProfile.getReminderHour(),
-                                        userProfile.getReminderMinute());
+                                        getApplicationContext());
 
-                                //loadReminderAlarms();
-                                //setReminderAlarms();
                             }
                         }
                         else
@@ -576,8 +570,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         Context context = getApplicationContext();
 
         ArrayList<ReminderAlarmItem> reminderAlarmItems =
-                ReminderAlarmUtils.buildReminderAlarmItemList(context,
-                        userProfile.getReminderHour(), userProfile.getReminderMinute());
+                ReminderAlarmUtils.buildReminderAlarmItemList(context);
 
         for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItems)
         {
