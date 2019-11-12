@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        cancelAllReminderAlarms();
+                        ReminderAlarmUtils.cancelAllReminderAlarms(getApplicationContext());
                         clearAllSharedPreferences();
                         Intent intent = new Intent(MainActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
@@ -509,6 +509,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     }
     */
 
+    /*
     public void loadReminderAlarms()
     {
         reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
@@ -565,6 +566,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
         }
     }
 
+
     private void cancelAllReminderAlarms()
     {
         Context context = getApplicationContext();
@@ -577,6 +579,7 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
             ReminderAlarmUtils.cancelReminderAlarm(context, reminderAlarmItem.getTitle());
         }
     }
+    */
 
     private void createNotificationChannel()
     {

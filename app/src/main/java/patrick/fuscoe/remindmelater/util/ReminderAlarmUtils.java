@@ -93,6 +93,22 @@ public class ReminderAlarmUtils {
         setSingleReminderAlarm(context, reminderAlarmItem);
     }
 
+    public static void cancelAllReminderAlarms(Context context)
+    {
+        SharedPreferences reminderAlarmStorage = context.getSharedPreferences(
+                context.getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
+
+        Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
+
+        for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
+        {
+            String reminderTitle = entry.getKey();
+
+            cancelReminderAlarm(context, reminderTitle);
+        }
+
+    }
+
     public static void cancelReminderAlarm(Context context, String reminderTitle)
     {
         SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
@@ -166,7 +182,7 @@ public class ReminderAlarmUtils {
         SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
                 context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
         SharedPreferences reminderTimeOfDay = context.getSharedPreferences(
-                context.getString(R.string.reminder_time_of_day_file_key) Context.MODE_PRIVATE);
+                context.getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
 
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
         Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
@@ -202,7 +218,7 @@ public class ReminderAlarmUtils {
     public static void setReminderTimeOfDay(Context context, int hour, int minute)
     {
         SharedPreferences reminderTimeOfDay = context.getSharedPreferences(
-                context.getString(R.string.reminder_time_of_day_file_key) Context.MODE_PRIVATE);
+                context.getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
 
