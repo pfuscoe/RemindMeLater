@@ -97,8 +97,6 @@ public class UserPreferencesActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        hasReminderTimeOfDayChanged = false;
-
         auth = FirebaseAuth.getInstance();
         userId = auth.getUid();
         userDocRef = db.collection("users").document(userId);
@@ -111,6 +109,10 @@ public class UserPreferencesActivity extends AppCompatActivity
         Log.d(TAG, "userProfileString in intent: " + userProfileString);
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
         Log.d(TAG, "User Profile obtained from intent");
+
+        hasReminderTimeOfDayChanged = false;
+        hourOfDay = userProfile.getReminderHour();
+        minute = userProfile.getReminderMinute();
 
         viewProgressBar = findViewById(R.id.view_user_preferences_progress_bar);
         viewDisplayNameLabel = findViewById(R.id.view_user_preferences_display_name_label);
