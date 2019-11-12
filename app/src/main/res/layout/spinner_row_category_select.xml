@@ -18,7 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:padding="@dimen/activity_horizontal_margin"
+        android:maxLines="2"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:text="Placeholder"
         android:textColor="@color/black" />
 

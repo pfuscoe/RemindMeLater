@@ -19,9 +19,12 @@
 
     <TextView
         android:id="@+id/view_row_reminder_category_edit_title"
-        android:layout_width="256dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
+        android:layout_marginEnd="64dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
