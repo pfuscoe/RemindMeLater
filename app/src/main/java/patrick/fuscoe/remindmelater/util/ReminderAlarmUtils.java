@@ -229,21 +229,6 @@ public class ReminderAlarmUtils {
                 " . Minute: " + minute);
     }
 
-    /*
-    private static PendingIntent getAlarmIntent(Context context,
-                                                ReminderAlarmItem reminderAlarmItem)
-    {
-        Intent intent = new Intent(context, ReminderAlarmReceiver.class);
-        intent.setAction(ACTION_ALARM_RECEIVER);
-        intent.putExtra(REMINDER_TITLE, reminderAlarmItem.getTitle());
-        intent.putExtra(REMINDER_ICON_NAME, reminderAlarmItem.getIconName());
-
-        return PendingIntent.getBroadcast(context, reminderAlarmItem.getBroadcastId(),
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-    */
-
-
     private static int generateUniqueInt()
     {
         return (int) (Math.random() * 1000000);

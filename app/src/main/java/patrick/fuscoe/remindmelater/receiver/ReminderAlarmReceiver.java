@@ -113,8 +113,22 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "reminderTitle: " + reminderTitle);
 
         Map<String, Object> docMap = document.getData();
+
+        /*
+        for (Map.Entry<String, Object> entry : docMap.entrySet())
+        {
+            if (entry.getKey().equals(reminderTitle))
+            {
+
+            }
+        }
+        */
+
         HashMap<String, Object> reminderItemMap = (HashMap<String, Object>) docMap.get(reminderTitle);
 
+
+
+        /*
         boolean isRecurring = (boolean) reminderItemMap.get("isRecurring");
         int recurrenceNum = Math.toIntExact((long) reminderItemMap.get("recurrenceNum"));
         String recurrenceInterval = (String) reminderItemMap.get("recurrenceInterval");
@@ -130,6 +144,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         reminderItem = new ReminderItem(reminderTitle, isRecurring, recurrenceNum,
                 recurrenceInterval, nextOccurrence, category,
                 categoryIconName, description, isSnoozed, isHibernating, history);
+        */
     }
 
     public void sendNotification()

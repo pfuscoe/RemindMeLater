@@ -23,16 +23,13 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,6 +46,10 @@ import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
+/**
+ * Manages UI for Reminders Tab. Listens to FireStore for updates to reminders and changes in
+ * user profile.
+*/
 public class RemindersFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -56,15 +57,11 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
     public static final String REMINDER_ITEM = "patrick.fuscoe.remindmelater.REMINDERS";
     public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
-    public static final String REMINDER_CATEGORIES_USED = "patrick.fuscoe.remindmelater.REMINDER_CATEGORIES_USED";
     public static final String REMINDER_ITEMS = "patrick.fuscoe.remindmelater.REMINDER_ITEMS";
 
-    //private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
-    //private final String userId = auth.getUid();
-    //private final DocumentReference userDocRef = db.collection("users").document(userId);
     private String remindersDocId;
 
     private Spinner viewCategorySpinner;
@@ -118,8 +115,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         {
             ReminderCategory reminderCategory = (ReminderCategory) parent.getItemAtPosition(position);
             selectedCategoryName = reminderCategory.getCategoryName();
-            //String categoryName = reminderCategory.getCategoryName();
-            //int iconId = reminderCategory.getIconId();
 
             List<ReminderItem> filteredReminderItemList =
                     filterReminderListByCategory(selectedCategoryName);
@@ -131,7 +126,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        // Do nothing
     }
 
     public static RemindersFragment newInstance(int index) {
@@ -150,15 +145,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
         editMode = false;
         isTipsOn = false;
-
-        /*
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
-        */
     }
 
     @Override
@@ -171,7 +157,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
         // Setup filter
         viewCategorySpinner = root.findViewById(R.id.view_reminders_spinner_filter);
-        //updateCategorySelectSpinner();
 
         viewRemindersTips = root.findViewById(R.id.view_reminders_tips);
         viewRemindersTipsWebView = root.findViewById(R.id.view_reminders_tips_webview);
@@ -190,15 +175,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
         remindersAdapter = new RemindersAdapter(reminderItemList, getContext(), reminderClickListener);
         remindersRecyclerView.setAdapter(remindersAdapter);
-
-        /*
-        // Show Tips if Reminders List Empty
-        if (reminderItemList.isEmpty() && !isTipsOn)
-        {
-            viewRemindersTips.setVisibility(View.VISIBLE);
-            isTipsOn = true;
-        }
-        */
 
         return root;
     }
@@ -305,7 +281,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter = new ReminderCategorySpinnerAdapter(
                 getContext(), userProfile.getReminderCategories());
         viewCategorySpinner.setAdapter(reminderCategorySpinnerAdapter);
-        //setCategorySpinnerSelection(reminderCategorySpinnerAdapter);
         viewCategorySpinner.setOnItemSelectedListener(this);
     }
 
@@ -358,7 +333,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                 return true;
 
             case R.id.menu_main_user_settings:
-                Log.d(TAG, ": Menu item selected: " + item.getItemId());
                 return true;
 
             case R.id.menu_main_edit_reminder_categories:
@@ -384,7 +358,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         String nextOccurrence = nextOccurrenceLocalDate.toString();
 
         String category = "Main";
-        //int categoryIcon = R.drawable.category_note;
         String categoryIconName = MainActivity.DEFAULT_REMINDER_CATEGORY_ICON_NAME;
         String description = "";
         boolean isSnoozed = false;
@@ -395,8 +368,6 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
         ReminderItem reminderItem = new ReminderItem(title, isRecurring, recurrenceNum,
                 recurrenceInterval, nextOccurrence, category, categoryIconName, description,
                 isSnoozed, isHibernating, history);
-
-        //reminderItemList.add(reminderItem);
 
         Intent intent = new Intent(getContext(), ReminderDetailsActivity.class);
         Gson gson = new Gson();
