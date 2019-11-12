@@ -20,6 +20,11 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
 
+/**
+ * Recycler adapter for viewing individual to do items in ToDoItemListActivity.
+ *
+ * Has 4 different ViewHolder classes for various recycler layouts.
+ */
 public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ToDoItemListAdapter";
@@ -167,7 +172,6 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position)
     {
@@ -183,11 +187,7 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             viewHolder.viewToDoItemName.setText(item.getItemName());
 
-            //int itemPriorityIconId = context.getResources().getIdentifier("checkbox_blank_outline", "drawable", context.getPackageName());
-            //viewHolder.viewToDoItemPriorityIcon.setImageResource(itemPriorityIconId);
-            //int itemPriorityIconColorId = selectItemPriorityIconColor(item.getPriority());
             ColorStateList colorStateList = selectItemPriorityCheckboxColor(item.getPriority());
-            //viewHolder.viewToDoItemPriorityIcon.setColorFilter(ContextCompat.getColor(context, itemPriorityIconColorId));
             viewHolder.viewToDoItemPriorityCheckbox.setButtonTintList(colorStateList);
 
             viewHolder.viewToDoItemEditIcon.setImageResource(R.drawable.action_pencil);
@@ -248,26 +248,6 @@ public class ToDoItemListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return TYPE_ITEM_DONE;
         }
     }
-
-    /*
-    private int selectItemPriorityIconColor(int priority)
-    {
-        switch (priority)
-        {
-            case 1:
-                return R.color.red;
-
-            case 2:
-                return R.color.orangeDark;
-
-            case 3:
-                return R.color.blue;
-
-            default:
-                return R.color.red;
-        }
-    }
-    */
 
     private ColorStateList selectItemPriorityCheckboxColor(int priority)
     {

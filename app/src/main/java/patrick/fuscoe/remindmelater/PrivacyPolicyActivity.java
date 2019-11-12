@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+/**
+ * Manages UI display of privacy policy page
+ */
 public class PrivacyPolicyActivity extends AppCompatActivity {
 
 private WebView viewPrivacyPolicyWebView;

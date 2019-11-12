@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+/**
+ * Manages UI display of terms of service page
+ */
 public class TermsOfServiceActivity extends AppCompatActivity {
 
     private WebView viewTermsOfServiceWebView;

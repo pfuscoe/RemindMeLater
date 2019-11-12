@@ -16,8 +16,10 @@ import java.util.Map;
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
-import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 
+/**
+ * Custom spinner adapter for reminder categories
+ */
 public class ReminderCategorySpinnerAdapter extends BaseAdapter {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderCategorySpinnerAdapter";

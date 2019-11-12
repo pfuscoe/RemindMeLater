@@ -12,6 +12,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import javax.annotation.Nullable;
 
+/**
+ * Generic class for managing listener for LiveData of document query
+ */
 public class FirebaseQueryLiveData extends LiveData<QuerySnapshot> {
     public static final String TAG = "patrick.fuscoe.remindmelater.FirebaseQueryLiveData";
 

@@ -12,6 +12,9 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import javax.annotation.Nullable;
 
+/**
+ * Generic class for managing listener for LiveData of individual document
+*/
 public class FirebaseDocumentLiveData extends LiveData<DocumentSnapshot> {
     public static final String TAG = "patrick.fuscoe.remindmelater.FirebaseDocumentLiveData";
 
