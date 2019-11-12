@@ -11,6 +11,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import patrick.fuscoe.remindmelater.FirebaseDocumentLiveData;
 
+/**
+ * ViewModel for LiveData of Firebase user profile
+ */
 public class UserProfileViewModel extends ViewModel {
 
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();

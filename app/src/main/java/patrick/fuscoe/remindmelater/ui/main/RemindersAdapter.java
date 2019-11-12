@@ -15,6 +15,9 @@ import java.util.List;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 
+/**
+ * Recycler adapter for viewing reminders in RemindersFragment of MainActivity
+ */
 public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.ReminderViewHolder> {
 
     private List<ReminderItem> reminderItemList;

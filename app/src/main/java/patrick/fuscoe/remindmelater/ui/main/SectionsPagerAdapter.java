@@ -10,8 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import patrick.fuscoe.remindmelater.R;
 
 /**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
+ * PagerAdapter for MainActivity tabs. Returns corresponding fragment.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -26,9 +25,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-
         if (position == 0)
         {
             return ToDoFragment.newInstance(position + 1);
@@ -47,7 +43,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
+        // Total of two tabs
         return 2;
     }
 }

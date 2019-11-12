@@ -18,6 +18,9 @@ import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 
+/**
+ * Recycler adapter for viewing reminder categories in ReminderCategoriesActivity
+ */
 public class ReminderCategoriesAdapter extends RecyclerView.Adapter<ReminderCategoriesAdapter.ReminderCategoryViewHolder> {
 
     private List<ReminderCategory> reminderCategoryList;

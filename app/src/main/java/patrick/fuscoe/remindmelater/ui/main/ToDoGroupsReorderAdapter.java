@@ -17,6 +17,10 @@ import java.util.List;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 
+/**
+ * Recycler adapter for viewing to do groups (aka to do lists) in reorder mode of ToDoFragment in
+ * MainActivity
+ */
 public class ToDoGroupsReorderAdapter extends RecyclerView.Adapter<ToDoGroupsReorderAdapter.ToDoGroupsReorderViewHolder> {
 
     private List<ToDoGroup> toDoGroupList;

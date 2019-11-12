@@ -16,6 +16,10 @@ import java.util.List;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 
+/**
+ * Recycler adapter for viewing to do groups (aka to do lists) in edit mode of ToDoFragment in
+ * MainActivity
+ */
 public class ToDoGroupsEditAdapter extends RecyclerView.Adapter<ToDoGroupsEditAdapter.ToDoGroupsEditViewHolder> {
 
     private List<ToDoGroup> toDoGroupList;
