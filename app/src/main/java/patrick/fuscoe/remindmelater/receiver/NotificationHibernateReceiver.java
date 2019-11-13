@@ -9,14 +9,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,7 +22,6 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
-import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
@@ -46,16 +41,11 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
     private DocumentReference remindersDocRef;
-    private DocumentReference userDocRef;
-
-    private FirebaseAuth auth;
-    private String userId;
     private String remindersDocId;
 
     private Context context;
     private int notificationId;
 
-    private UserProfile userProfile;
     private ReminderItem reminderItem;
 
 
@@ -64,10 +54,6 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
 
         this.context = context;
         this.notificationId = intent.getIntExtra(ReminderAlarmReceiver.EXTRA_NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID);
-
-        auth = FirebaseAuth.getInstance();
-        userId = auth.getUid();
-        userDocRef = db.collection("users").document(userId);
 
         Log.d(TAG, ": notificationId: " + notificationId);
 
@@ -82,38 +68,11 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
-        // Get user profile from cloud and handle reminder updates and alarm management
-        executeNotificationHibernateAction();
-    }
+        updateReminderItemOnHibernate();
+        saveReminderItem();
 
-    private void executeNotificationHibernateAction()
-    {
-        userDocRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-
-                            updateReminderItemOnHibernate();
-                            saveReminderItem();
-
-                            NotificationManagerCompat notificationManager =
-                                    NotificationManagerCompat.from(context);
-                            notificationManager.cancel(notificationId);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Failed to retrieve user document from cloud");
-                        Toast.makeText(context, "Operation failed: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
     }
 
     private void updateReminderItemOnHibernate()
@@ -136,8 +95,7 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
                         ReminderAlarmUtils.saveReminderToSharedPreferences(context, reminderItem);
-                        ReminderAlarmUtils.setReminderAlarm(context, reminderItem,
-                                userProfile.getReminderHour(), userProfile.getReminderMinute());
+                        ReminderAlarmUtils.setReminderAlarm(context, reminderItem);
                         Toast.makeText(context, "Reminder Updated: " + reminderItem.getTitle(),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -146,8 +104,8 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        Toast.makeText(context, "Action failed due to network error: " +
-                                e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Action failed: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }

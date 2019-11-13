@@ -46,16 +46,11 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
     private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
     private DocumentReference remindersDocRef;
-    private DocumentReference userDocRef;
-
-    private FirebaseAuth auth;
-    private String userId;
     private String remindersDocId;
 
     private Context context;
     private int notificationId;
 
-    private UserProfile userProfile;
     private ReminderItem reminderItem;
 
 
@@ -64,10 +59,6 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
 
         this.context = context;
         this.notificationId = intent.getIntExtra(ReminderAlarmReceiver.EXTRA_NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID);
-
-        auth = FirebaseAuth.getInstance();
-        userId = auth.getUid();
-        userDocRef = db.collection("users").document(userId);
 
         Log.d(TAG, ": notificationId: " + notificationId);
 
@@ -82,38 +73,11 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
         remindersDocId = intent.getStringExtra(ReminderAlarmReceiver.REMINDERS_DOC_ID);
         remindersDocRef = remindersCollectionRef.document(remindersDocId);
 
-        // Get user profile from cloud and handle reminder updates and alarm management
-        executeNotificationSnoozeAction();
-    }
+        updateReminderItemOnSnooze();
+        saveReminderItem();
 
-    private void executeNotificationSnoozeAction()
-    {
-        userDocRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-
-                            updateReminderItemOnSnooze();
-                            saveReminderItem();
-
-                            NotificationManagerCompat notificationManager =
-                                    NotificationManagerCompat.from(context);
-                            notificationManager.cancel(notificationId);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Failed to retrieve user document from cloud");
-                        Toast.makeText(context, "Operation failed: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
     }
 
     private void updateReminderItemOnSnooze()
@@ -136,8 +100,7 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
                         ReminderAlarmUtils.saveReminderToSharedPreferences(context, reminderItem);
-                        ReminderAlarmUtils.setReminderAlarm(context, reminderItem,
-                                userProfile.getReminderHour(), userProfile.getReminderMinute());
+                        ReminderAlarmUtils.setReminderAlarm(context, reminderItem);
                         Toast.makeText(context, "Reminder Updated: " + reminderItem.getTitle(),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -146,8 +109,8 @@ public class NotificationSnoozeReceiver extends BroadcastReceiver {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating reminders document", e);
-                        Toast.makeText(context, "Action failed due to network error: " +
-                                e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Action failed: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }

@@ -27,8 +27,12 @@ public class ReminderAlarmUtils {
     private static final String ACTION_ALARM_RECEIVER = "patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver";
     private static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     private static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
+
     public static final String REMINDER_TIME_HOUR = "patrick.fuscoe.remindmelater.REMINDER_TIME_HOUR";
     public static final String REMINDER_TIME_MINUTE = "patrick.fuscoe.remindmelater.REMINDER_TIME_MINUTE";
+
+    public static final int DEFAULT_REMINDER_TIME_HOUR = 8;
+    public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
 
     private static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
     private static final int DEFAULT_NOTIFICATION_ID = 100;
@@ -75,17 +79,23 @@ public class ReminderAlarmUtils {
         reminderBroadcastIdsEditor.remove(reminderTitle).apply();
     }
 
-    public static void setReminderAlarm(Context context, ReminderItem reminderItem,
-                                        int reminderTimeHour, int reminderTimeMinute)
+    public static void setReminderAlarm(Context context, ReminderItem reminderItem)
     {
         SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
                 context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderTimeOfDay = context.getSharedPreferences(
+                context.getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
 
         String title = reminderItem.getTitle();
 
         String nextOccurrence = reminderItem.getNextOccurrence();
         String iconName = reminderItem.getCategoryIconName();
         int broadcastId = reminderBroadcastIds.getInt(title, DEFAULT_REMINDER_BROADCAST_ID);
+
+        int reminderTimeHour = reminderTimeOfDay.getInt(REMINDER_TIME_HOUR,
+                DEFAULT_REMINDER_TIME_HOUR);
+        int reminderTimeMinute = reminderTimeOfDay.getInt(REMINDER_TIME_MINUTE,
+                DEFAULT_REMINDER_TIME_MINUTE);
 
         ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
                 iconName, broadcastId, reminderTimeHour, reminderTimeMinute);

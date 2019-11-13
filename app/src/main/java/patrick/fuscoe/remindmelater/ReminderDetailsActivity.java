@@ -606,8 +606,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
                         ReminderAlarmUtils.saveReminderToSharedPreferences(getApplicationContext(),
                                 reminderItem);
-                        ReminderAlarmUtils.setReminderAlarm(getApplicationContext(), reminderItem,
-                                userProfile.getReminderHour(), userProfile.getReminderMinute());
+                        ReminderAlarmUtils.setReminderAlarm(getApplicationContext(), reminderItem);
 
                         Toast.makeText(getApplicationContext(), "Reminder Item Saved: " +
                                 title, Toast.LENGTH_SHORT).show();
