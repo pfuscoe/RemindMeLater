@@ -13,32 +13,27 @@ import android.view.LayoutInflater;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
 
+/**
+ * Dialog that handles UI for adding new to do group (aka to do list)
+ */
 public class AddToDoGroupDialogFragment extends DialogFragment {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.AddToDoGroupDialogFragment";
 
-    /* The activity that creates an instance of this dialog fragment must
-     * implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it. */
     public interface AddToDoGroupDialogListener {
         void onDialogPositiveClick(DialogFragment dialog);
         void onDialogNegativeClick(DialogFragment dialog);
     }
 
-    // Use this instance of the interface to deliver action events
     AddToDoGroupDialogListener listener;
 
-    // Override the Fragment.onAttach() method to instantiate the AddToDoGroupDialogListener
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the AddToDoGroupDialogListener so we can send events to the host
-            //listener = (AddToDoGroupDialogListener) context;
+            // Use getTargetFragment when dialog opened from fragment
             listener = (AddToDoGroupDialogListener) getTargetFragment();
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(ToDoFragment.TAG
                     + " must implement AddToDoGroupDialogListener");
         }
@@ -48,14 +43,10 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_add_to_do_group, null))
                 .setTitle(R.string.dialog_add_to_do_group_title)
-                // Add action buttons
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -65,7 +56,6 @@ public class AddToDoGroupDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         listener.onDialogNegativeClick(AddToDoGroupDialogFragment.this);
-                        //AddToDoGroupDialogFragment.this.getDialog().cancel();
                     }
                 });
         return builder.create();
