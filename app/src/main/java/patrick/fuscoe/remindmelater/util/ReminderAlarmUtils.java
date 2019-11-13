@@ -221,9 +221,9 @@ public class ReminderAlarmUtils {
                 context.getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
-
         reminderTimeOfDayEditor.putInt(REMINDER_TIME_HOUR, hour);
         reminderTimeOfDayEditor.putInt(REMINDER_TIME_MINUTE, minute);
+        reminderTimeOfDayEditor.apply();
 
         Log.d(TAG, "Reminder Time of Day saved to local device: - Hour: " + hour +
                 " . Minute: " + minute);
