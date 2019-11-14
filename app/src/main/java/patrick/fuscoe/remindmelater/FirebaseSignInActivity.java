@@ -29,6 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+/**
+ * Launcher activity and main entry portal to app. Handles user authentication and redirects
+ * to MainActivity
+*/
 public class FirebaseSignInActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FirebaseSignInActivity";
@@ -59,7 +63,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private TextView viewForgotPasswordLink;
     private TextView viewCopyright;
 
-    private boolean userMustEnterLoginInfo;
     private boolean emailSignUpMode;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -84,7 +87,19 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     return;
 
                 case R.id.btn_sign_in_login:
-                    loginReturningUser();
+                    if (!loginFieldCheckPassed())
+                    {
+                        return;
+                    }
+
+                    if (emailSignUpMode)
+                    {
+                        signUpNewUserWithEmail();
+                    }
+                    else
+                    {
+                        loginReturningUser();
+                    }
                     return;
 
                 case R.id.btn_sign_in_with_google:
@@ -101,7 +116,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        userMustEnterLoginInfo = false;
         emailSignUpMode = false;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -147,14 +161,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    private void openNewUserSignUp()
-    {
-        Intent intent = new Intent(this, FirebaseNewUserSignUpActivity.class);
-        startActivity(intent);
-    }
-    */
-
     private void changeEmailSignUpMode()
     {
         if (emailSignUpMode)
@@ -172,7 +178,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             viewVerifyPassword.setVisibility(View.VISIBLE);
             btnLogin.setText(R.string.sign_up);
             btnSignInWithGoogle.setEnabled(false);
-            viewForgotPasswordLink.setVisibility(View.INVISIBLE);
+            viewForgotPasswordLink.setVisibility(View.GONE);
             viewEmailSignUpModeLink.setText(R.string.regular_sign_in_mode_link_text);
 
             emailSignUpMode = true;
@@ -224,20 +230,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private void loginReturningUser()
     {
         String email = viewEmail.getText().toString();
-
-        if (email.equals(""))
-        {
-            Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Email Address", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         String password = viewPassword.getText().toString();
-
-        if (password.equals(""))
-        {
-            Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Password", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         showProgressBar();
 
@@ -248,10 +241,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
-                            //updateUI(user);
                             if (user.isEmailVerified())
                             {
-                                //hideProgressBar();
                                 String userId = auth.getUid();
                                 Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                                 intent.putExtra(USER_ID, userId);
@@ -270,7 +261,61 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(FirebaseSignInActivity.this, "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+                        }
+                    }
+                });
+    }
+
+    private void signUpNewUserWithEmail()
+    {
+        String email = viewEmail.getText().toString();
+        String password = viewPassword.getText().toString();
+
+        showProgressBar();
+
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful())
+                        {
+                            Log.d(TAG, "createUserWithEmail:success");
+                            sendEmailVerification();
+                        }
+                        else
+                        {
+                            hideProgressBar();
+                            Log.w(TAG, "createUserWithEmail:failure");
+                            Toast.makeText(getApplicationContext(), "Create user with " +
+                                    "email failed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private void sendEmailVerification()
+    {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) { return; }
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email verification sent.");
+                            Toast.makeText(getApplicationContext(), "Please check your " +
+                                    "email to verify your account", Toast.LENGTH_LONG).show();
+                            logoutUser();
+                        }
+                        else
+                        {
+                            hideProgressBar();
+                            Log.w(TAG, "Failed to send verification email",
+                                    task.getException());
+                            Toast.makeText(getApplicationContext(), "Failed to send " +
+                                    "verification email. Please contact support",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -307,23 +352,18 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
-        //showProgressBar();
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //hideProgressBar();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            //FirebaseUser user = auth.getCurrentUser();
                             String userId = auth.getUid();
                             Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                             intent.putExtra(USER_ID, userId);
                             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
-                            //hideProgressBar();
                             startActivity(intent);
                             finish();
                         } else {
@@ -340,6 +380,44 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     {
         AuthUI.getInstance().signOut(this);
         hideProgressBar();
+    }
+
+    private boolean loginFieldCheckPassed()
+    {
+        String email = viewEmail.getText().toString();
+
+        if (email.equals(""))
+        {
+            Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Email Address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String password = viewPassword.getText().toString();
+
+        if (password.equals(""))
+        {
+            Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Password", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (emailSignUpMode)
+        {
+            String verifyPassword = viewVerifyPassword.getText().toString();
+
+            if (!verifyPassword.equals(password))
+            {
+                Toast.makeText(this, "Passwords do not match: Please verify that you entered the correct password", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+
+        if (!viewPrivacyTosCheckbox.isChecked())
+        {
+            Toast.makeText(this, "You must have read the Privacy Policy and agree to the Terms of Service before signing in", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
     private void showProgressBar()
