@@ -16,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,9 +28,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class FirebaseSignInActivity extends AppCompatActivity {
 
@@ -60,7 +55,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private TextView viewTosLink;
     private Button btnLogin;
     private com.google.android.gms.common.SignInButton btnSignInWithGoogle;
-    private TextView viewNewUserLink;
+    private TextView viewEmailSignUpModeLink;
     private TextView viewForgotPasswordLink;
     private TextView viewCopyright;
 
@@ -80,8 +75,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     openTos();
                     return;
 
-                case R.id.view_sign_in_new_user_link:
-                    openNewUserSignUp();
+                case R.id.view_sign_in_email_signup_mode_link:
+                    changeEmailSignUpMode();
                     return;
 
                 case R.id.view_sign_in_forgot_password_link:
@@ -126,13 +121,13 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewPrivacyTosCheckbox = findViewById(R.id.view_sign_in_privacy_tos_checkbox);
         viewPrivacyPolicyLink = findViewById(R.id.view_sign_in_privacy_policy);
         viewTosLink = findViewById(R.id.view_sign_in_tos);
-        viewNewUserLink = findViewById(R.id.view_sign_in_new_user_link);
+        viewEmailSignUpModeLink = findViewById(R.id.view_sign_in_email_signup_mode_link);
         viewForgotPasswordLink = findViewById(R.id.view_sign_in_forgot_password_link);
         btnLogin = findViewById(R.id.btn_sign_in_login);
         btnSignInWithGoogle = findViewById(R.id.btn_sign_in_with_google);
         viewCopyright = findViewById(R.id.view_sign_in_copyright);
 
-        viewNewUserLink.setOnClickListener(onClickListener);
+        viewEmailSignUpModeLink.setOnClickListener(onClickListener);
         viewForgotPasswordLink.setOnClickListener(onClickListener);
         btnLogin.setOnClickListener(onClickListener);
         btnSignInWithGoogle.setOnClickListener(onClickListener);
@@ -152,9 +147,47 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private void openNewUserSignUp()
     {
         Intent intent = new Intent(this, FirebaseNewUserSignUpActivity.class);
+        startActivity(intent);
+    }
+    */
+
+    private void changeEmailSignUpMode()
+    {
+        if (emailSignUpMode)
+        {
+            viewVerifyPassword.setVisibility(View.GONE);
+            btnLogin.setText(R.string.login);
+            btnSignInWithGoogle.setEnabled(true);
+            viewForgotPasswordLink.setVisibility(View.VISIBLE);
+            viewEmailSignUpModeLink.setText(R.string.new_user_sign_up);
+
+            emailSignUpMode = false;
+        }
+        else
+        {
+            viewVerifyPassword.setVisibility(View.VISIBLE);
+            btnLogin.setText(R.string.sign_up);
+            btnSignInWithGoogle.setEnabled(false);
+            viewForgotPasswordLink.setVisibility(View.INVISIBLE);
+            viewEmailSignUpModeLink.setText(R.string.regular_sign_in_mode_link_text);
+
+            emailSignUpMode = true;
+        }
+    }
+
+    private void openPrivacyPolicy()
+    {
+        Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(intent);
+    }
+
+    private void openTos()
+    {
+        Intent intent = new Intent(this, TermsOfServiceActivity.class);
         startActivity(intent);
     }
 
@@ -324,7 +357,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewTosLink.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.INVISIBLE);
         btnSignInWithGoogle.setVisibility(View.INVISIBLE);
-        viewNewUserLink.setVisibility(View.INVISIBLE);
+        viewEmailSignUpModeLink.setVisibility(View.INVISIBLE);
         viewForgotPasswordLink.setVisibility(View.INVISIBLE);
         viewCopyright.setVisibility(View.INVISIBLE);
     }
@@ -344,7 +377,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewTosLink.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
         btnSignInWithGoogle.setVisibility(View.VISIBLE);
-        viewNewUserLink.setVisibility(View.VISIBLE);
+        viewEmailSignUpModeLink.setVisibility(View.VISIBLE);
         viewForgotPasswordLink.setVisibility(View.VISIBLE);
         viewCopyright.setVisibility(View.VISIBLE);
     }

@@ -149,7 +149,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_login" />
 
     <TextView
-        android:id="@+id/view_sign_in_new_user_link"
+        android:id="@+id/view_sign_in_email_signup_mode_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -182,6 +182,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_new_user_link" />
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_email_signup_mode_link" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
