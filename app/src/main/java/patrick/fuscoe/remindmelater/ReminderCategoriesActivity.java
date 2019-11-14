@@ -21,12 +21,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
@@ -34,7 +31,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +44,12 @@ import patrick.fuscoe.remindmelater.ui.dialog.DeleteReminderCategoryDialogFragme
 import patrick.fuscoe.remindmelater.ui.dialog.EditReminderCategoryDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ReminderCategoriesAdapter;
 import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
+/**
+ * Manages UI and manipulation of reminder categories. Handles cloud sync to update user profile
+ * and reminders accordingly.
+ */
 public class ReminderCategoriesActivity extends AppCompatActivity implements
         AddCategoryDialogFragment.AddCategoryDialogListener,
         EditReminderCategoryDialogFragment.EditReminderCategoryDialogListener,
@@ -57,7 +58,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     public static final String TAG = "patrick.fuscoe.remindmelater.ReminderCategoriesActivity";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    //private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
     public static FirebaseAuth auth;
     public static String userId;
@@ -65,7 +65,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
     public static DocumentReference remindersDocRef;
 
     private RecyclerView viewReminderCategoriesRecycler;
-    private RecyclerView.Adapter reminderCategoriesRecyclerAdapter;
     private RecyclerView.LayoutManager reminderCategoriesRecyclerLayoutManager;
     private ReminderCategoriesAdapter reminderCategoriesAdapter;
 
@@ -142,8 +141,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         Log.d(TAG, "userProfileString: " + userProfileString);
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
 
-        //reminderCategoriesUsed = intent.getStringArrayListExtra(RemindersFragment.REMINDER_CATEGORIES_USED);
-
         Type dataTypeReminderItemList = new TypeToken<ArrayList<ReminderItem>>(){}.getType();
         String reminderItemListString = intent.getStringExtra(RemindersFragment.REMINDER_ITEMS);
         reminderItemList = gson.fromJson(reminderItemListString, dataTypeReminderItemList);
@@ -152,8 +149,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Reminder Categories");
-
-        //reminderCategoryList = new ArrayList<>();
 
         buildReminderCategoryList(userProfile.getReminderCategories());
         buildReminderCategoriesUsedList(userProfile.getReminderCategories());
@@ -172,8 +167,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         reminderCategoriesAdapter = new ReminderCategoriesAdapter(reminderCategoryList,
                 this, reminderCategoryClickListener);
         viewReminderCategoriesRecycler.setAdapter(reminderCategoriesAdapter);
-
-        //updateReminderCategoriesDisplay();
     }
 
     @Override
@@ -287,23 +280,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
                 Log.d(TAG, reminderItem.getTitle() + " Category and Icon updated");
             }
         }
-
-        /*
-        int index = reminderCategoryList.indexOf(reminderCategoryToEdit);
-        reminderCategoryList.set(index, updatedReminderCategory);
-        reminderCategoriesAdapter.notifyDataSetChanged();
-
-        remindersDocRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                        }
-                    }
-                });
-        */
     }
 
     public void deleteReminderCategory(ReminderCategory reminderCategory)
@@ -321,39 +297,12 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
         for (ReminderItem reminderItem : reminderItemList)
         {
-            HashMap<String, Object> reminderItemMap = new HashMap<>();
-
-            reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
-            reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
-            reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
-            reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
-            reminderItemMap.put("category", reminderItem.getCategory());
-            reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
-            reminderItemMap.put("description", reminderItem.getDescription());
-            reminderItemMap.put("isRecurring", reminderItem.isRecurring());
-            reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
-            reminderItemMap.put("isHibernating", reminderItem.isHibernating());
-            reminderItemMap.put("history", reminderItem.getHistory());
+            Map<String, Object> reminderItemMap = FirebaseDocUtils.createReminderItemMap(reminderItem);
 
             reminderDocMap.put(reminderItem.getTitle(), reminderItemMap);
         }
 
         return reminderDocMap;
-    }
-
-    private Map<String, Object> buildUserProfileDoc(UserProfile userProfile)
-    {
-        Map<String, Object> userProfileDoc = new HashMap<>();
-
-        userProfileDoc.put("displayName", userProfile.getDisplayName());
-        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
-        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
-        userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
-        userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
-        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
-        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
-
-        return userProfileDoc;
     }
 
     public void saveChanges(Map<String, Object> remindersDocMap, Map<String, Object> userProfileDocMap)
@@ -392,77 +341,7 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
                                 + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-        /*
-        Map<String, Object> reminderDocMap = new HashMap<>();
-
-        for (ReminderItem reminderItem : reminderItemList)
-        {
-            HashMap<String, Object> reminderItemMap = new HashMap<>();
-            reminderItemMap.put("recurrence", reminderItem.getRecurrenceString());
-            reminderItemMap.put("recurrenceNum", reminderItem.getRecurrenceNum());
-            reminderItemMap.put("recurrenceInterval", reminderItem.getRecurrenceInterval());
-            reminderItemMap.put("nextOccurrence", reminderItem.getNextOccurrence());
-            reminderItemMap.put("category", reminderItem.getCategory());
-            reminderItemMap.put("categoryIconName", reminderItem.getCategoryIconName());
-            reminderItemMap.put("description", reminderItem.getDescription());
-            reminderItemMap.put("isRecurring", reminderItem.isRecurring());
-            reminderItemMap.put("isSnoozed", reminderItem.isSnoozed());
-            reminderItemMap.put("isHibernating", reminderItem.isHibernating());
-            reminderItemMap.put("history", reminderItem.getHistory());
-
-            reminderDocMap.put(reminderItem.getTitle(), reminderItemMap);
-        }
-
-        remindersDocRef.set(reminderDocMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Reminders DocumentSnapshot successfully written!");
-                        updateUserProfileDoc();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                        Toast.makeText(getApplicationContext(), "Error saving data to cloud: "
-                                + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-        */
     }
-
-    /*
-    public void updateUserProfileDoc()
-    {
-        Map<String, Object> userProfileDoc = new HashMap<>();
-
-        userProfileDoc.put("displayName", userProfile.getDisplayName());
-        userProfileDoc.put("subscriptions", Arrays.asList(userProfile.getSubscriptions()));
-        userProfileDoc.put("reminderCategories", userProfile.getReminderCategories());
-        userProfileDoc.put("reminderHour", MainActivity.reminderTimeHour);
-        userProfileDoc.put("reminderMinute", MainActivity.reminderTimeMinute);
-        userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
-        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
-
-        userDocRef.set(userProfileDoc)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "UserProfile DocumentSnapshot successfully written!");
-                        Toast.makeText(getApplicationContext(), "Applied changes to Reminder Categories",
-                                Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
-    }
-    */
 
     private void openAddReminderCategoryDialog()
     {
@@ -512,11 +391,6 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
 
             buildReminderCategoryList(userProfile.getReminderCategories());
             updateReminderCategoriesDisplay();
-
-            //ReminderCategory reminderCategory = new ReminderCategory(categoryName, selectedIconName);
-
-            //reminderCategoryList.add(reminderCategory);
-            //reminderCategoriesAdapter.notifyDataSetChanged();
         }
         else if (dialogFragment instanceof EditReminderCategoryDialogFragment)
         {
@@ -571,7 +445,8 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         if (hasChanged)
         {
             Map<String, Object> remindersDocMap = buildRemindersDoc(reminderItemList);
-            Map<String, Object> userProfileDocMap = buildUserProfileDoc(userProfile);
+            Map<String, Object> userProfileDocMap = FirebaseDocUtils.
+                    createUserProfileDoc(userProfile);
 
             saveChanges(remindersDocMap, userProfileDocMap);
         }
