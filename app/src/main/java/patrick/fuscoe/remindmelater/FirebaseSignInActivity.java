@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -53,19 +54,32 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private TextView viewAppAuthor;
     private EditText viewEmail;
     private EditText viewPassword;
-    private TextView viewNewUserLink;
-    private TextView viewForgotPasswordLink;
+    private EditText viewVerifyPassword;
+    private CheckBox viewPrivacyTosCheckbox;
+    private TextView viewPrivacyPolicyLink;
+    private TextView viewTosLink;
     private Button btnLogin;
     private com.google.android.gms.common.SignInButton btnSignInWithGoogle;
+    private TextView viewNewUserLink;
+    private TextView viewForgotPasswordLink;
     private TextView viewCopyright;
 
     private boolean userMustEnterLoginInfo;
+    private boolean emailSignUpMode;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId())
             {
+                case R.id.view_sign_in_privacy_policy:
+                    openPrivacyPolicy();
+                    return;
+
+                case R.id.view_sign_in_tos:
+                    openTos();
+                    return;
+
                 case R.id.view_sign_in_new_user_link:
                     openNewUserSignUp();
                     return;
@@ -93,6 +107,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         userMustEnterLoginInfo = false;
+        emailSignUpMode = false;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
@@ -107,6 +122,10 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewAppAuthor = findViewById(R.id.view_sign_in_app_author);
         viewEmail = findViewById(R.id.view_sign_in_email);
         viewPassword = findViewById(R.id.view_sign_in_password);
+        viewVerifyPassword = findViewById(R.id.view_sign_in_verify_password);
+        viewPrivacyTosCheckbox = findViewById(R.id.view_sign_in_privacy_tos_checkbox);
+        viewPrivacyPolicyLink = findViewById(R.id.view_sign_in_privacy_policy);
+        viewTosLink = findViewById(R.id.view_sign_in_tos);
         viewNewUserLink = findViewById(R.id.view_sign_in_new_user_link);
         viewForgotPasswordLink = findViewById(R.id.view_sign_in_forgot_password_link);
         btnLogin = findViewById(R.id.btn_sign_in_login);
@@ -299,6 +318,10 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewAppAuthor.setVisibility(View.INVISIBLE);
         viewEmail.setVisibility(View.INVISIBLE);
         viewPassword.setVisibility(View.INVISIBLE);
+        viewVerifyPassword.setVisibility(View.INVISIBLE);
+        viewPrivacyTosCheckbox.setVisibility(View.INVISIBLE);
+        viewPrivacyPolicyLink.setVisibility(View.INVISIBLE);
+        viewTosLink.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.INVISIBLE);
         btnSignInWithGoogle.setVisibility(View.INVISIBLE);
         viewNewUserLink.setVisibility(View.INVISIBLE);
@@ -315,89 +338,15 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewAppAuthor.setVisibility(View.VISIBLE);
         viewEmail.setVisibility(View.VISIBLE);
         viewPassword.setVisibility(View.VISIBLE);
+        viewVerifyPassword.setVisibility(View.VISIBLE);
+        viewPrivacyTosCheckbox.setVisibility(View.VISIBLE);
+        viewPrivacyPolicyLink.setVisibility(View.VISIBLE);
+        viewTosLink.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
         btnSignInWithGoogle.setVisibility(View.VISIBLE);
         viewNewUserLink.setVisibility(View.VISIBLE);
         viewForgotPasswordLink.setVisibility(View.VISIBLE);
         viewCopyright.setVisibility(View.VISIBLE);
     }
-
-    /*
-    public void checkSignIn()
-    {
-        if (auth.getCurrentUser() != null)
-        {
-            // already signed in
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(CHECK_IF_NEW_USER, userMustEnterLoginInfo);
-            startActivity(intent);
-
-            finish();
-        }
-        else
-        {
-            // not signed in
-            userMustEnterLoginInfo = true;
-            beginSignIn();
-        }
-    }
-
-    public void beginSignIn()
-    {
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra(CHECK_IF_NEW_USER, userMustEnterLoginInfo);
-                startActivity(intent);
-
-                finish();
-
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-
-                // Sign in failed
-                if (response == null) {
-                    // User pressed back button
-                    Toast.makeText(this, R.string.sign_in_cancelled, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Toast.makeText(this, R.string.unknown_error, Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "Sign-in error: ", response.getError());
-            }
-        }
-    }
-    */
 
 }

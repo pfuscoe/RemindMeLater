@@ -20,7 +20,7 @@
         android:id="@+id/view_sign_in_app_icon"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,17 +79,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_sign_in_email" />
 
-    <Button
-        android:id="@+id/btn_sign_in_login"
+    <EditText
+        android:id="@+id/view_sign_in_verify_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:text="@string/login"
+        android:ems="14"
+        android:hint="@string/sign_up_verify_password"
+        android:inputType="textPassword"
+        android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_sign_in_password" />
+
+    <CheckBox
+        android:id="@+id/view_sign_in_privacy_tos_checkbox"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/sign_up_privacy_tos_checkbox_text"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/view_sign_in_email"
+        app:layout_constraintEnd_toEndOf="@+id/view_sign_in_email"
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_verify_password" />
+
+    <TextView
+        android:id="@+id/view_sign_in_privacy_policy"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/privacy_policy"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        app:layout_constraintStart_toStartOf="@+id/view_sign_in_email"
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_privacy_tos_checkbox" />
+
+    <TextView
+        android:id="@+id/view_sign_in_tos"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/tos"
+        android:textAlignment="center"
+        android:textColor="@color/blue"
+        app:layout_constraintStart_toEndOf="@+id/view_sign_in_privacy_policy"
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_privacy_tos_checkbox" />
+
+    <Button
+        android:id="@+id/btn_sign_in_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/login"
+        app:layout_constraintEnd_toEndOf="@+id/view_sign_in_password"
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_privacy_tos_checkbox" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_sign_in_with_google"
