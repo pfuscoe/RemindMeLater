@@ -166,9 +166,13 @@ public class UserPreferencesActivity extends AppCompatActivity
         {
             timeToDisplay = hourOfDay + " : " + minutesString + " AM";
         }
-        else
+        else if (hourOfDay == 12)
         {
             timeToDisplay = hourOfDay + " : " + minutesString + " PM";
+        }
+        else
+        {
+            timeToDisplay = (hourOfDay - 12) + " : " + minutesString + " PM";
         }
 
         viewTimeDisplay.setText(timeToDisplay);
@@ -192,6 +196,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         else
         {
             hasReminderTimeOfDayChanged = true;
+            userProfile.setReminderHour(hourOfDay);
+            userProfile.setReminderMinute(minute);
             this.hourOfDay = hourOfDay;
             this.minute = minute;
             setTimeDisplay();
@@ -279,9 +285,6 @@ public class UserPreferencesActivity extends AppCompatActivity
     {
         if (hasReminderTimeOfDayChanged)
         {
-            userProfile.setReminderHour(hourOfDay);
-            userProfile.setReminderMinute(minute);
-
             ReminderAlarmUtils.setReminderTimeOfDay(getApplicationContext(),
                     userProfile.getReminderHour(), userProfile.getReminderMinute());
 

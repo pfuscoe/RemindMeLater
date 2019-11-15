@@ -64,24 +64,21 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
  *
  * Launches in singleTask mode.
 */
-public class MainActivity extends AppCompatActivity implements BootReceiver.BootReceiverCallback {
+public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MainActivity";
 
     public static final String NOTIFICATION_CHANNEL_ID = "patrick.fuscoe.remindmelater.NOTIFICATION_CHANNEL_ID";
-    public static final String ACTION_ALARM_RECEIVER = "patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver";
 
     public static final int DEFAULT_REMINDER_TIME_HOUR = 8;
     public static final int DEFAULT_REMINDER_TIME_MINUTE = 0;
     public static final int DEFAULT_HIBERNATE_LENGTH = 14;
     public static final String DEFAULT_REMINDER_CATEGORY_ICON_NAME = "category_alarm";
     public static final String DEFAULT_TO_DO_GROUP_CATEGORY_ICON_NAME = "category_format_list_checkbox";
-    public static final int DEFAULT_REMINDER_BROADCAST_ID = 157;
     public static final int DEFAULT_NOTIFICATION_ID = 100;
 
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
-    public static final String REMINDER_ICON_NAME = "patrick.fuscoe.remindmelater.REMINDER_ICON_NAME";
     public static final String BACK_PRESSED_FROM_REMINDER_DETAILS = "patrick.fuscoe.remindmelater.BACK_PRESSED_FROM_REMINDER_DETAILS";
     public static final String USER_PREFERENCES_UPDATED = "patrick.fuscoe.remindmelater.USER_PREFERENCES_UPDATED";
 
@@ -103,31 +100,13 @@ public class MainActivity extends AppCompatActivity implements BootReceiver.Boot
     public static SharedPreferences reminderTimeOfDay;
     public static SharedPreferences reminderNotificationIds;
 
-    private AlarmManager alarmManager;
-
-    public List<ReminderAlarmItem> reminderAlarmItemList;
-    public List<PendingIntent> alarmIntentList;
-
     private List<ReminderItem> reminderItemList;
-
-    public static int reminderTimeHour;
-    public static int reminderTimeMinute;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private boolean setRemindersTabActive;
 
     private String newUserDisplayName;
 
-
-    @Override
-    public void bootReceived() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        if (auth.getUid() != null)
-        {
-            ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(getApplicationContext());
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
