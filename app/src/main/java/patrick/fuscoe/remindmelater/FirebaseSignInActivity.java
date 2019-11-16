@@ -148,6 +148,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewForgotPasswordLink.setOnClickListener(onClickListener);
         btnLogin.setOnClickListener(onClickListener);
         btnSignInWithGoogle.setOnClickListener(onClickListener);
+        viewPrivacyPolicyLink.setOnClickListener(onClickListener);
+        viewTosLink.setOnClickListener(onClickListener);
     }
 
     @Override
