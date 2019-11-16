@@ -313,6 +313,12 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             Log.d(TAG, "Email verification sent.");
                             Toast.makeText(getApplicationContext(), "Please check your " +
                                     "email to verify your account", Toast.LENGTH_LONG).show();
+
+                            if (emailSignUpMode)
+                            {
+                                changeEmailSignUpMode();
+                            }
+
                             logoutUser();
                         }
                         else
