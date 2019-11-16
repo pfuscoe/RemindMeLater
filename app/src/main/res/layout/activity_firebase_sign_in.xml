@@ -148,6 +148,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_login" />
 
+    <Button
+        android:id="@+id/btn_sign_in_email_sign_up_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/new_user_sign_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_with_google" />
+
+    <!--
     <TextView
         android:id="@+id/view_sign_in_email_signup_mode_link"
         android:layout_width="wrap_content"
@@ -159,18 +172,20 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_with_google" />
+    -->
 
     <TextView
         android:id="@+id/view_sign_in_forgot_password_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:text="@string/forgot_password"
         android:textColor="@color/blue"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_with_google" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_email_sign_up_mode" />
 
     <TextView
         android:id="@+id/view_sign_in_copyright"
@@ -182,6 +197,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_email_signup_mode_link" />
+        app:layout_constraintTop_toBottomOf="@+id/view_sign_in_forgot_password_link" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
