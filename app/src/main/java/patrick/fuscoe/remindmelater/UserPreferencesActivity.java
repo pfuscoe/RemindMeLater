@@ -181,6 +181,10 @@ public class UserPreferencesActivity extends AppCompatActivity
     private void openTimePicker()
     {
         DialogFragment dialogFragment = new TimePickerDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("hourOfDay", hourOfDay);
+        bundle.putInt("minute", minute);
+        dialogFragment.setArguments(bundle);
         dialogFragment.show(getSupportFragmentManager(), "timePicker");
     }
 

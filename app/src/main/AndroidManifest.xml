@@ -17,15 +17,6 @@
         <activity android:name=".TermsOfServiceActivity" />
         <activity android:name=".PrivacyPolicyActivity" />
         <activity
-            android:name=".FirebaseNewUserSignUpActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".FirebaseSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="patrick.fuscoe.remindmelater.FirebaseSignInActivity" />
-        </activity>
-        <activity
             android:name=".UserPreferencesActivity"
             android:label="@string/title_activity_user_preferences"
             android:parentActivityName=".MainActivity"

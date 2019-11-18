@@ -39,9 +39,13 @@ public class TimePickerDialogFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
+        Bundle bundle = getArguments();
+
+        int hourOfDay = bundle.getInt("hourOfDay");
+        int minute = bundle.getInt("minute");
+
         TimePickerDialog timePickerDialog = new TimePickerDialog(requireActivity(), this,
-                MainActivity.DEFAULT_REMINDER_TIME_HOUR, MainActivity.DEFAULT_REMINDER_TIME_MINUTE,
-                false);
+                hourOfDay, minute,false);
 
         return timePickerDialog;
     }
