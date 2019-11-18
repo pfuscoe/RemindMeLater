@@ -170,23 +170,23 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     {
         if (emailSignUpMode)
         {
-            viewVerifyPassword.setVisibility(View.GONE);
             btnLogin.setText(R.string.login);
             btnSignInWithGoogle.setEnabled(true);
             viewForgotPasswordLink.setVisibility(View.VISIBLE);
             //viewEmailSignUpModeLink.setText(R.string.new_user_sign_up);
             btnEmailSignUpMode.setText(R.string.new_user_sign_up);
+            viewVerifyPassword.setVisibility(View.GONE);
 
             emailSignUpMode = false;
         }
         else
         {
-            viewVerifyPassword.setVisibility(View.VISIBLE);
             btnLogin.setText(R.string.sign_up);
             btnSignInWithGoogle.setEnabled(false);
             viewForgotPasswordLink.setVisibility(View.GONE);
             //viewEmailSignUpModeLink.setText(R.string.regular_sign_in_mode_link_text);
             btnEmailSignUpMode.setText(R.string.regular_sign_in_mode_link_text);
+            viewVerifyPassword.setVisibility(View.VISIBLE);
 
             emailSignUpMode = true;
         }
@@ -314,11 +314,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Please check your " +
                                     "email to verify your account", Toast.LENGTH_LONG).show();
 
-                            if (emailSignUpMode)
-                            {
-                                changeEmailSignUpMode();
-                            }
-
                             logoutUser();
                         }
                         else
@@ -392,7 +387,17 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     public void logoutUser()
     {
         AuthUI.getInstance().signOut(this);
+
         hideProgressBar();
+
+        if (emailSignUpMode)
+        {
+            changeEmailSignUpMode();
+        }
+        else
+        {
+            viewVerifyPassword.setVisibility(View.GONE);
+        }
     }
 
     private boolean loginFieldCheckPassed()
