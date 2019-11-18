@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import patrick.fuscoe.remindmelater.MainActivity;
-
 /**
  * Dialog that handles UI for picking time of day
  */
