@@ -96,7 +96,7 @@ public class NotificationHibernateReceiver extends BroadcastReceiver {
                         Log.d(TAG, "Reminders DocumentSnapshot successfully updated!");
                         ReminderAlarmUtils.saveReminderToSharedPreferences(context, reminderItem);
                         ReminderAlarmUtils.setReminderAlarm(context, reminderItem);
-                        Toast.makeText(context, "Reminder Updated: " + reminderItem.getTitle(),
+                        Toast.makeText(context, "Reminder Hibernating: " + reminderItem.getTitle(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 })

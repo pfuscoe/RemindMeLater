@@ -169,7 +169,7 @@ public class ReminderAlarmReceiver extends BroadcastReceiver {
         }
         else
         {
-            contentRecurrenceString = "(Non-Recurring)";
+            contentRecurrenceString = "Non-Recurring";
         }
 
         contentTitleString = reminderTitle + "  (" + contentRecurrenceString + ")";
