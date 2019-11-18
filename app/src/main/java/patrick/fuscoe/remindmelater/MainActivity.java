@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                         clearAllSharedPreferences();
                         Intent intent = new Intent(MainActivity.this, FirebaseSignInActivity.class);
                         startActivity(intent);
-                        finishAffinity();
+                        finish();
                     }
                 });
     }
