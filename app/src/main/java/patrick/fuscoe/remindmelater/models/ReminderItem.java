@@ -169,6 +169,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
     public void setRecurrenceInterval(String recurrenceInterval) {
         this.recurrenceInterval = recurrenceInterval;
         updateRecurrencePeriod();
+        this.recurrenceString = recurrence.toString();
     }
 
     public void setNextOccurrence(String nextOccurrence) {

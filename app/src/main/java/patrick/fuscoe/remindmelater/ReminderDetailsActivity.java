@@ -511,6 +511,15 @@ public class ReminderDetailsActivity extends AppCompatActivity
         setViewDateDisplay(date);
     }
 
+    private void syncNextOccurrence()
+    {
+        String recurrenceNumString = viewRecurrenceNum.getText().toString();
+        int recurrenceNum = Integer.parseInt(recurrenceNumString);
+        String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
+
+
+    }
+
     private void setViewDateDisplay(String localDateString)
     {
         LocalDate localDate = LocalDate.parse(localDateString);
