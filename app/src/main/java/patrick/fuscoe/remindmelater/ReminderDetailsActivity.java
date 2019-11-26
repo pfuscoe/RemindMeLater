@@ -592,6 +592,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         Map<String, Object> reminderItemMap = FirebaseDocUtils.createReminderItemMap(reminderItem);
 
+        showProgressBar();
+
         remindersDocRef.update(title, reminderItemMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -617,6 +619,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        hideProgressBar();
                         Log.w(TAG, "Error updating reminders document", e);
                         Toast.makeText(getApplicationContext(), "Action failed due to " +
                                 "network error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -631,6 +634,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
         Map<String, Object> removeReminderUpdate = new HashMap<>();
         removeReminderUpdate.put(title, FieldValue.delete());
+
+        showProgressBar();
 
         remindersDocRef.update(removeReminderUpdate)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -658,6 +663,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        hideProgressBar();
                         Log.w(TAG, "Error updating reminders document", e);
                         Toast.makeText(getApplicationContext(), "Error syncing delete " +
                                 "action to cloud. Delete cancelled.", Toast.LENGTH_LONG).show();

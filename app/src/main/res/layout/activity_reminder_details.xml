@@ -104,6 +104,51 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_icon" />
 
+        <CheckBox
+            android:id="@+id/view_reminder_details_checkbox_recurring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/recurring"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
+
+        <EditText
+            android:id="@+id/view_reminder_details_recurrence_num"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:inputType="number"
+            android:text="##"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:selectAllOnFocus="true"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_checkbox_recurring"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
+
+        <Spinner
+            android:id="@+id/view_reminder_details_recurrence_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_num"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
+
+        <Button
+            android:id="@+id/view_reminder_details_sync_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="14dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="@string/reminder_details_sync_button_text"
+            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
+
         <TextView
             android:id="@+id/view_reminder_details_date_label"
             android:layout_width="wrap_content"
@@ -112,7 +157,7 @@
             android:layout_marginTop="28dp"
             android:text="@string/reminder_details_next_occurrence_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_checkbox_recurring" />
 
         <TextView
             android:id="@+id/view_reminder_details_date_display"
@@ -124,7 +169,7 @@
             android:textSize="18sp"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_date_label"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_checkbox_recurring" />
 
         <Button
             android:id="@+id/view_reminder_details_date_button"
@@ -135,54 +180,20 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:text="@string/reminder_details_date_button_text"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_date_display"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_category_date_divider" />
-
-        <CheckBox
-            android:id="@+id/view_reminder_details_checkbox_recurring"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/recurring"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label" />
-
-        <EditText
-            android:id="@+id/view_reminder_details_recurrence_num"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="18dp"
-            android:ems="10"
-            android:inputType="number"
-            android:text="##"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:selectAllOnFocus="true"
-            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_checkbox_recurring"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label" />
-
-        <Spinner
-            android:id="@+id/view_reminder_details_recurrence_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toEndOf="@+id/view_reminder_details_recurrence_num"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label" />
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_checkbox_recurring" />
 
         <View
             android:id="@+id/view_reminder_details_recurrence_snoozed_divider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/line_horizontal_dashed"
             android:layerType="software"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_checkbox_recurring" />
+            app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_date_label" />
 
         <CheckBox
             android:id="@+id/view_reminder_details_checkbox_snoozed"
