@@ -428,6 +428,18 @@ public class ReminderDetailsActivity extends AppCompatActivity
         viewHibernatingCheckbox.setChecked(reminderItem.isHibernating());
         viewDescription.setText(reminderItem.getDescription());
 
+        if (reminderItem.isSnoozed())
+        {
+            showSnoozed();
+            showHibernating();
+        }
+
+        if (reminderItem.isHibernating())
+        {
+            showSnoozed();
+            showHibernating();
+        }
+
         toggleRecurring();
         toggleSnoozed();
         toggleHibernating();
@@ -460,16 +472,6 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
             case "Years":
                 viewRecurrenceSpinner.setSelection(3);
-        }
-
-        if (reminderItem.isSnoozed())
-        {
-            showSnoozed();
-        }
-
-        if (reminderItem.isHibernating())
-        {
-            showHibernating();
         }
     }
 
