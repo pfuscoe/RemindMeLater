@@ -91,6 +91,7 @@ public class ReminderItem implements Comparable<ReminderItem> {
         }
     }
 
+
     public void addToHistory(String dateString, String action)
     {
         history.put(dateString, action);

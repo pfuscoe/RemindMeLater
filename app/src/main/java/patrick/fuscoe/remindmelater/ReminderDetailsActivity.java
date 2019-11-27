@@ -41,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ import patrick.fuscoe.remindmelater.ui.main.RemindersFragment;
 import patrick.fuscoe.remindmelater.ui.reminder.ReminderCategorySpinnerAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
+import patrick.fuscoe.remindmelater.util.ReminderTimeUtils;
 
 /**
  * Manages UI for editing reminder details. Also handles cloud sync when saving changes or
@@ -93,6 +95,7 @@ public class ReminderDetailsActivity extends AppCompatActivity
     private CheckBox viewRecurringCheckbox;
     private EditText viewRecurrenceNum;
     private Spinner viewRecurrenceSpinner;
+    private Button btnSyncNext;
     private TextView viewDateDisplay;
     private Button btnSetDate;
     private CheckBox viewSnoozedCheckbox;
@@ -124,6 +127,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
 
                 case R.id.view_reminder_details_checkbox_recurring:
                     toggleRecurring();
+                    return;
+
+                case R.id.view_reminder_details_sync_next:
+                    syncNextOccurrence();
                     return;
 
                 case R.id.view_reminder_details_checkbox_snoozed:
@@ -270,6 +277,8 @@ public class ReminderDetailsActivity extends AppCompatActivity
         // Setup Buttons and View Click Listeners
         viewAddNewCategory = findViewById(R.id.view_reminder_details_category_add);
         viewAddNewCategory.setOnClickListener(btnClickListener);
+        btnSyncNext = findViewById(R.id.view_reminder_details_sync_next);
+        btnSyncNext.setOnClickListener(btnClickListener);
         btnSetDate = findViewById(R.id.view_reminder_details_date_button);
         btnSetDate.setOnClickListener(btnClickListener);
         btnCancel = findViewById(R.id.view_reminder_details_button_cancel);
@@ -288,11 +297,13 @@ public class ReminderDetailsActivity extends AppCompatActivity
         {
             viewRecurrenceNum.setVisibility(View.VISIBLE);
             viewRecurrenceSpinner.setVisibility(View.VISIBLE);
+            btnSyncNext.setVisibility(View.VISIBLE);
         }
         else
         {
             viewRecurrenceNum.setVisibility(View.INVISIBLE);
             viewRecurrenceSpinner.setVisibility(View.INVISIBLE);
+            btnSyncNext.setVisibility(View.GONE);
         }
     }
 
@@ -517,7 +528,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
         int recurrenceNum = Integer.parseInt(recurrenceNumString);
         String recurrenceInterval = viewRecurrenceSpinner.getSelectedItem().toString();
 
+        Period recurrence = ReminderTimeUtils.createRecurrencePeriod(recurrenceNum,
+                recurrenceInterval);
 
+        LocalDate nextOccurrence = ReminderTimeUtils.calcNextOccurrenceFromRecurrence(recurrence);
+
+        setNextOccurrenceDate(nextOccurrence);
     }
 
     private void setViewDateDisplay(String localDateString)
