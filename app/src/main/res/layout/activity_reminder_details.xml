@@ -201,6 +201,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_snoozed_divider"
             android:text="@string/snoozed" />
@@ -211,6 +212,7 @@
             android:layout_height="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_checkbox_snoozed"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_snoozed_divider"
             app:srcCompat="@drawable/snooze" />
@@ -221,6 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_snoozed_icon"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_snoozed_divider"
             android:text="@string/hibernating" />
@@ -231,6 +234,7 @@
             android:layout_height="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/view_reminder_details_checkbox_hibernating"
             app:layout_constraintTop_toBottomOf="@+id/view_reminder_details_recurrence_snoozed_divider"
             app:srcCompat="@drawable/hibernate" />

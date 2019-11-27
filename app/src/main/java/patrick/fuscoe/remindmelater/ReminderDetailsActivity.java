@@ -335,6 +335,30 @@ public class ReminderDetailsActivity extends AppCompatActivity
         }
     }
 
+    private void showSnoozed()
+    {
+        viewSnoozedCheckbox.setVisibility(View.VISIBLE);
+        viewSnoozedIcon.setVisibility(View.VISIBLE);
+    }
+
+    private void hideSnoozed()
+    {
+        viewSnoozedCheckbox.setVisibility(View.GONE);
+        viewSnoozedIcon.setVisibility(View.GONE);
+    }
+
+    private void showHibernating()
+    {
+        viewHibernatingCheckbox.setVisibility(View.VISIBLE);
+        viewHibernatingIcon.setVisibility(View.VISIBLE);
+    }
+
+    private void hideHibernating()
+    {
+        viewHibernatingCheckbox.setVisibility(View.GONE);
+        viewHibernatingIcon.setVisibility(View.GONE);
+    }
+
     private void updateCategorySelectSpinner()
     {
         ReminderCategorySpinnerAdapter reminderCategorySpinnerAdapter =
@@ -438,12 +462,14 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 viewRecurrenceSpinner.setSelection(3);
         }
 
-        if (reminderItem.getTitle().equals(""))
+        if (reminderItem.isSnoozed())
         {
-            viewSnoozedCheckbox.setVisibility(View.GONE);
-            viewSnoozedIcon.setVisibility(View.GONE);
-            viewHibernatingCheckbox.setVisibility(View.GONE);
-            viewHibernatingIcon.setVisibility(View.GONE);
+            showSnoozed();
+        }
+
+        if (reminderItem.isHibernating())
+        {
+            showHibernating();
         }
     }
 
