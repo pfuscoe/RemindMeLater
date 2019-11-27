@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.util.List;
@@ -123,7 +124,6 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
         categoryIconRecyclerAdapter = new EditCategoryIconSelectAdapter(categoryIconList, categoryIconListIsChecked, getContext(), categoryIconClickListener);
         categoryIconRecycler.setAdapter(categoryIconRecyclerAdapter);
 
-
         builder.setView(v)
                 .setTitle(R.string.dialog_edit_to_do_group_title)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -137,7 +137,12 @@ public class EditToDoGroupDialogFragment extends DialogFragment {
                         listener.onDialogNegativeClick(EditToDoGroupDialogFragment.this);
                     }
                 });
-        return builder.create();
+
+        AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        return dialog;
     }
 
     public String getSelectedIconName() {

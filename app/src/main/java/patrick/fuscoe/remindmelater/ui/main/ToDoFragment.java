@@ -49,7 +49,6 @@ import patrick.fuscoe.remindmelater.ToDoItemListActivity;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddCategoryDialogFragment;
-import patrick.fuscoe.remindmelater.ui.dialog.AddToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
@@ -646,13 +645,17 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        if (dialog instanceof AddToDoGroupDialogFragment)
+        if (dialog instanceof AddCategoryDialogFragment)
         {
             Toast.makeText(getContext(), "Add To Do List Cancelled", Toast.LENGTH_SHORT).show();
         }
         else if (dialog instanceof EditToDoGroupDialogFragment)
         {
             Toast.makeText(getContext(), "Edit To Do List Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        else if (dialog instanceof DeleteToDoGroupDialogFragment)
+        {
+            Toast.makeText(getContext(), "Delete To Do List Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
 

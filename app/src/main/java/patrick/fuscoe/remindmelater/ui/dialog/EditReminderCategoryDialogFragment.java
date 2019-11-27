@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.util.List;
@@ -142,7 +143,11 @@ public class EditReminderCategoryDialogFragment extends DialogFragment {
                     }
                 });
 
-        return builder.create();
+        AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        return dialog;
     }
 
     public String getSelectedIconName() {

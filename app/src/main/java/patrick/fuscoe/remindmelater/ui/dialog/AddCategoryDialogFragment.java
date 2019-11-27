@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import patrick.fuscoe.remindmelater.ReminderDetailsActivity;
 import patrick.fuscoe.remindmelater.models.CategoryIconSet;
 
 /**
- * Dialog that handles UI for adding either new to do groups or reminder categories
+ * Dialog that handles UI for adding either new to do groups (aka lists) or reminder categories
 */
 public class AddCategoryDialogFragment extends DialogFragment {
 
@@ -171,7 +172,19 @@ public class AddCategoryDialogFragment extends DialogFragment {
                         listener.onDialogNegativeClick(AddCategoryDialogFragment.this);
                     }
                 });
-        return builder.create();
+
+        AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        return dialog;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     public String getSelectedIconName() {
