@@ -84,4 +84,5 @@
     <string name="reminder_time_of_day_file_key">patrick.fuscoe.remindmelater.REMINDER_TIME_OF_DAY</string>
     <string name="regular_sign_in_mode_link_text">Returning User or Google Sign In</string>
     <string name="reminder_details_sync_button_text">Sync</string>
+    <string name="resend_email_verification">Resend Email Verification</string>
 </resources>

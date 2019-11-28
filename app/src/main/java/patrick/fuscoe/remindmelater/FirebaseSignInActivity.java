@@ -62,6 +62,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     //private TextView viewEmailSignUpModeLink;
     private Button btnEmailSignUpMode;
     private TextView viewForgotPasswordLink;
+    private TextView viewResendEmailVerificationLink;
     private TextView viewCopyright;
 
     private boolean emailSignUpMode;
@@ -85,6 +86,10 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
                 case R.id.view_sign_in_forgot_password_link:
                     openForgotPassword();
+                    return;
+
+                case R.id.view_sign_in_resend_email_verification_link:
+                    resendEmailVerification();
                     return;
 
                 case R.id.btn_sign_in_login:
@@ -139,6 +144,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         //viewEmailSignUpModeLink = findViewById(R.id.view_sign_in_email_signup_mode_link);
         btnEmailSignUpMode = findViewById(R.id.btn_sign_in_email_sign_up_mode);
         viewForgotPasswordLink = findViewById(R.id.view_sign_in_forgot_password_link);
+        viewResendEmailVerificationLink = findViewById(
+                R.id.view_sign_in_resend_email_verification_link);
         btnLogin = findViewById(R.id.btn_sign_in_login);
         btnSignInWithGoogle = findViewById(R.id.btn_sign_in_with_google);
         viewCopyright = findViewById(R.id.view_sign_in_copyright);
@@ -146,6 +153,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         //viewEmailSignUpModeLink.setOnClickListener(onClickListener);
         btnEmailSignUpMode.setOnClickListener(onClickListener);
         viewForgotPasswordLink.setOnClickListener(onClickListener);
+        viewResendEmailVerificationLink.setOnClickListener(onClickListener);
         btnLogin.setOnClickListener(onClickListener);
         btnSignInWithGoogle.setOnClickListener(onClickListener);
         viewPrivacyPolicyLink.setOnClickListener(onClickListener);
@@ -173,6 +181,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             btnLogin.setText(R.string.login);
             btnSignInWithGoogle.setEnabled(true);
             viewForgotPasswordLink.setVisibility(View.VISIBLE);
+            viewResendEmailVerificationLink.setVisibility(View.VISIBLE);
             //viewEmailSignUpModeLink.setText(R.string.new_user_sign_up);
             btnEmailSignUpMode.setText(R.string.new_user_sign_up);
             viewVerifyPassword.setVisibility(View.GONE);
@@ -184,6 +193,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             btnLogin.setText(R.string.sign_up);
             btnSignInWithGoogle.setEnabled(false);
             viewForgotPasswordLink.setVisibility(View.GONE);
+            viewResendEmailVerificationLink.setVisibility(View.GONE);
             //viewEmailSignUpModeLink.setText(R.string.regular_sign_in_mode_link_text);
             btnEmailSignUpMode.setText(R.string.regular_sign_in_mode_link_text);
             viewVerifyPassword.setVisibility(View.VISIBLE);
@@ -329,6 +339,59 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                 });
     }
 
+    private void resendEmailVerification()
+    {
+        String email = viewEmail.getText().toString();
+        String password = viewPassword.getText().toString();
+
+        showProgressBar();
+
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInToResendEmail:success");
+                            FirebaseUser user = auth.getCurrentUser();
+                            if (user == null) { return; }
+
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "Email verification sent.");
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Please check your email to verify " +
+                                                                "your account",
+                                                        Toast.LENGTH_LONG).show();
+
+                                                logoutUser();
+                                            }
+                                            else
+                                            {
+                                                hideProgressBar();
+                                                Log.w(TAG, "Failed to send verification email",
+                                                        task.getException());
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Failed to send verification email. " +
+                                                                "Please contact support",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            // If sign in to resend Email fails, display a message to the user.
+                            hideProgressBar();
+                            Log.w(TAG, "signInToResendEmail:failure", task.getException());
+                            Toast.makeText(FirebaseSignInActivity.this,
+                                    "Authentication failed: " + task.getException().
+                                            getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void signInWithGoogle()
     {
         showProgressBar();
@@ -456,6 +519,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         //viewEmailSignUpModeLink.setVisibility(View.INVISIBLE);
         btnEmailSignUpMode.setVisibility(View.INVISIBLE);
         viewForgotPasswordLink.setVisibility(View.INVISIBLE);
+        viewResendEmailVerificationLink.setVisibility(View.INVISIBLE);
         viewCopyright.setVisibility(View.INVISIBLE);
     }
 
@@ -477,6 +541,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         //viewEmailSignUpModeLink.setVisibility(View.VISIBLE);
         btnEmailSignUpMode.setVisibility(View.VISIBLE);
         viewForgotPasswordLink.setVisibility(View.VISIBLE);
+        viewResendEmailVerificationLink.setVisibility(View.VISIBLE);
         viewCopyright.setVisibility(View.VISIBLE);
     }
 
