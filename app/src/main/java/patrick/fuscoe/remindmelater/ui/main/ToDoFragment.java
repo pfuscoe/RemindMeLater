@@ -379,7 +379,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
 
-        if (editMode)
+        if (editMode && !reorderMode)
         {
             viewIconEdit.setIcon(R.drawable.ic_menu_list);
         }
@@ -388,15 +388,28 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
             viewIconEdit.setIcon(R.drawable.ic_menu_edit);
         }
 
-        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
-
-        if (isTipsOn)
+        if (reorderMode)
         {
-            tipsMenuItem.setTitle(R.string.hide_tips);
+            menu.removeItem(R.id.menu_main_add);
+            menu.removeItem(R.id.menu_main_logout);
+            menu.removeItem(R.id.menu_main_user_settings);
+            menu.removeItem(R.id.menu_main_reorder);
+            menu.removeItem(R.id.menu_main_tips);
+
+            viewIconEdit.setIcon(R.drawable.ic_menu_close);
         }
         else
         {
-            tipsMenuItem.setTitle(R.string.show_tips);
+            tipsMenuItem = menu.findItem(R.id.menu_main_tips);
+
+            if (isTipsOn)
+            {
+                tipsMenuItem.setTitle(R.string.hide_tips);
+            }
+            else
+            {
+                tipsMenuItem.setTitle(R.string.show_tips);
+            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);
