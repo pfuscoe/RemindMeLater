@@ -59,7 +59,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private TextView viewTosLink;
     private Button btnLogin;
     private com.google.android.gms.common.SignInButton btnSignInWithGoogle;
-    //private TextView viewEmailSignUpModeLink;
     private Button btnEmailSignUpMode;
     private TextView viewForgotPasswordLink;
     private TextView viewResendEmailVerificationLink;
@@ -141,7 +140,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewPrivacyTosCheckbox = findViewById(R.id.view_sign_in_privacy_tos_checkbox);
         viewPrivacyPolicyLink = findViewById(R.id.view_sign_in_privacy_policy);
         viewTosLink = findViewById(R.id.view_sign_in_tos);
-        //viewEmailSignUpModeLink = findViewById(R.id.view_sign_in_email_signup_mode_link);
         btnEmailSignUpMode = findViewById(R.id.btn_sign_in_email_sign_up_mode);
         viewForgotPasswordLink = findViewById(R.id.view_sign_in_forgot_password_link);
         viewResendEmailVerificationLink = findViewById(
@@ -150,7 +148,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         btnSignInWithGoogle = findViewById(R.id.btn_sign_in_with_google);
         viewCopyright = findViewById(R.id.view_sign_in_copyright);
 
-        //viewEmailSignUpModeLink.setOnClickListener(onClickListener);
         btnEmailSignUpMode.setOnClickListener(onClickListener);
         viewForgotPasswordLink.setOnClickListener(onClickListener);
         viewResendEmailVerificationLink.setOnClickListener(onClickListener);
@@ -182,7 +179,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             btnSignInWithGoogle.setEnabled(true);
             viewForgotPasswordLink.setVisibility(View.VISIBLE);
             viewResendEmailVerificationLink.setVisibility(View.VISIBLE);
-            //viewEmailSignUpModeLink.setText(R.string.new_user_sign_up);
             btnEmailSignUpMode.setText(R.string.new_user_sign_up);
             viewVerifyPassword.setVisibility(View.GONE);
 
@@ -194,7 +190,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
             btnSignInWithGoogle.setEnabled(false);
             viewForgotPasswordLink.setVisibility(View.GONE);
             viewResendEmailVerificationLink.setVisibility(View.GONE);
-            //viewEmailSignUpModeLink.setText(R.string.regular_sign_in_mode_link_text);
             btnEmailSignUpMode.setText(R.string.regular_sign_in_mode_link_text);
             viewVerifyPassword.setVisibility(View.VISIBLE);
 
@@ -516,7 +511,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewTosLink.setVisibility(View.INVISIBLE);
         btnLogin.setVisibility(View.INVISIBLE);
         btnSignInWithGoogle.setVisibility(View.INVISIBLE);
-        //viewEmailSignUpModeLink.setVisibility(View.INVISIBLE);
         btnEmailSignUpMode.setVisibility(View.INVISIBLE);
         viewForgotPasswordLink.setVisibility(View.INVISIBLE);
         viewResendEmailVerificationLink.setVisibility(View.INVISIBLE);
@@ -538,7 +532,6 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         viewTosLink.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.VISIBLE);
         btnSignInWithGoogle.setVisibility(View.VISIBLE);
-        //viewEmailSignUpModeLink.setVisibility(View.VISIBLE);
         btnEmailSignUpMode.setVisibility(View.VISIBLE);
         viewForgotPasswordLink.setVisibility(View.VISIBLE);
         viewResendEmailVerificationLink.setVisibility(View.VISIBLE);
