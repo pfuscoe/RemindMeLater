@@ -50,6 +50,7 @@ public class UserProfile {
         this.reminderMinute = reminderMinute;
         this.hibernateLength = hibernateLength;
         this.friends = friends;
+        // TODO: add deviceToken
     }
 
 

@@ -29,6 +29,7 @@ public class FirebaseDocUtils {
         userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
         userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
         userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
+        // TODO: add token to doc
 
         return userProfileDoc;
     }

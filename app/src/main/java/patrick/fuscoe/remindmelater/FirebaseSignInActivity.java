@@ -28,6 +28,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 /**
  * Launcher activity and main entry portal to app. Handles user authentication and redirects
@@ -42,6 +44,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 223;
 
     public static final String USER_ID = "patrick.fuscoe.remindmelater.USER_ID";
+    public static final String DEVICE_TOKEN = "patrick.fuscoe.remindmelater.DEVICE_TOKEN";
 
     private FirebaseAuth auth;
 
@@ -255,12 +258,15 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             FirebaseUser user = auth.getCurrentUser();
                             if (user.isEmailVerified())
                             {
+                                getFirebaseDeviceToken();
+                                /*
                                 String userId = auth.getUid();
                                 Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                                 intent.putExtra(USER_ID, userId);
                                 intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
                                 startActivity(intent);
                                 finish();
+                                */
                             }
                             else
                             {
@@ -424,19 +430,48 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
+                            getFirebaseDeviceToken();
+                            /*
                             String userId = auth.getUid();
                             Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
                             intent.putExtra(USER_ID, userId);
                             intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
                             startActivity(intent);
                             finish();
+                            */
                         } else {
                             hideProgressBar();
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(FirebaseSignInActivity.this, "Google Authentication failed", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private void getFirebaseDeviceToken()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()) {
+                            String deviceToken = task.getResult().getToken();
+                            Log.d(TAG, "Device token received: " + deviceToken);
+                            String userId = auth.getUid();
+                            Intent intent = new Intent(FirebaseSignInActivity.this,
+                                    MainActivity.class);
+                            intent.putExtra(USER_ID, userId);
+                            intent.putExtra(DEVICE_TOKEN, deviceToken);
+                            intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            hideProgressBar();
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            Toast.makeText(FirebaseSignInActivity.this, "Failed to " +
+                                    "retrieve device token from Firebase. Please try again or " +
+                                    "contact support.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

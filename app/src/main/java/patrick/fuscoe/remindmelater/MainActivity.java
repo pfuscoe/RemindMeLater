@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static FirebaseAuth auth;
     public static String userId;
+    public static String deviceToken;
     public static DocumentReference userDocRef;
     public static DocumentReference remindersDocRef;
 
@@ -134,6 +135,11 @@ public class MainActivity extends AppCompatActivity {
             if (intent.hasExtra(FirebaseSignInActivity.DISPLAY_NAME))
             {
                 newUserDisplayName = intent.getStringExtra(FirebaseSignInActivity.DISPLAY_NAME);
+            }
+
+            if (intent.hasExtra(FirebaseSignInActivity.DEVICE_TOKEN))
+            {
+                deviceToken = intent.getStringExtra(FirebaseSignInActivity.DEVICE_TOKEN);
             }
 
             checkIfNewUser();
@@ -375,6 +381,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> friendsList = new ArrayList<>();
         userProfileDoc.put("friends", friendsList);
 
+        // TODO: add token to doc
+
         // Set new user profile
         String[] subscriptions = new String[0];
         subscriptions = subscriptionsList.toArray(subscriptions);
@@ -493,92 +501,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "Reminders written to storage");
     }
-
-    /*
-    private void setAllReminderAlarms()
-    {
-        ArrayList<ReminderAlarmItem> reminderAlarmItems = ReminderAlarmUtils.
-                buildReminderAlarmItemList(getApplicationContext(), userProfile.getReminderHour(),
-                        userProfile.getReminderMinute());
-
-        for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItems)
-        {
-            ReminderAlarmUtils.setSi
-        }
-    }
-    */
-
-    /*
-    public void loadReminderAlarms()
-    {
-        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
-        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
-        reminderBroadcastIds = getSharedPreferences(getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
-
-        Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
-        Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
-        Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
-
-        reminderAlarmItemList = new ArrayList<>();
-
-        Log.d(TAG, ": Reminder Time of Day: " + reminderTimeHour + ":" + reminderTimeMinute);
-
-        for (Map.Entry<String, ?> entry : reminderAlarmStorageMap.entrySet())
-        {
-            String title = entry.getKey();
-            String nextOccurrence = (String) entry.getValue();
-
-            String iconName = (String) reminderIconNamesMap.get(title);
-            int broadcastId = (Integer) reminderBroadcastIdMap.get(title);
-
-            ReminderAlarmItem reminderAlarmItem = new ReminderAlarmItem(title, nextOccurrence,
-                    iconName, broadcastId, reminderTimeHour, reminderTimeMinute);
-
-            Log.d(TAG, ": reminderAlarmItem: " + reminderAlarmItem.getTitle() + " built");
-
-            reminderAlarmItemList.add(reminderAlarmItem);
-        }
-    }
-
-    public void setReminderAlarms()
-    {
-        Context context = getApplicationContext();
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        alarmIntentList = new ArrayList<>();
-
-        for (ReminderAlarmItem alarmItem : reminderAlarmItemList)
-        {
-            Log.d(TAG, ": Alarm Calendar Object: " + alarmItem.getAlarmCalendarObj().toString());
-
-            long alarmTime = alarmItem.getAlarmCalendarObj().getTimeInMillis();
-
-            Intent intent = new Intent(context, ReminderAlarmReceiver.class);
-            intent.setAction(ACTION_ALARM_RECEIVER);
-            intent.putExtra(REMINDER_TITLE, alarmItem.getTitle());
-            intent.putExtra(REMINDER_ICON_NAME, alarmItem.getIconName());
-
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, alarmItem.getBroadcastId(), intent, 0);
-
-            alarmIntentList.add(alarmIntent);
-            alarmManager.set(AlarmManager.RTC, alarmTime, alarmIntent);
-        }
-    }
-
-
-    private void cancelAllReminderAlarms()
-    {
-        Context context = getApplicationContext();
-
-        ArrayList<ReminderAlarmItem> reminderAlarmItems =
-                ReminderAlarmUtils.buildReminderAlarmItemList(context);
-
-        for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItems)
-        {
-            ReminderAlarmUtils.cancelReminderAlarm(context, reminderAlarmItem.getTitle());
-        }
-    }
-    */
 
     private void createNotificationChannel()
     {
