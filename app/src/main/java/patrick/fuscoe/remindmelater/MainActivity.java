@@ -23,6 +23,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             if (intent.hasExtra(FirebaseSignInActivity.DEVICE_TOKEN))
             {
                 deviceToken = intent.getStringExtra(FirebaseSignInActivity.DEVICE_TOKEN);
+                Log.d(TAG, "deviceToken retrieved: " + deviceToken);
             }
 
             checkIfNewUser();
@@ -337,6 +341,26 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    private void checkFirebaseDeviceToken()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()) {
+                            deviceToken = task.getResult().getToken();
+                            Log.d(TAG, "Device token received: " + deviceToken);
+                        } else {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            Toast.makeText(MainActivity.this, "Failed to " +
+                                    "retrieve device token from Firebase. Please try logging out " +
+                                    "and logging in again or contact support.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
     public void createNewReminderDoc()
     {
         Map<String, Object> reminderDocMap = new HashMap<>();
@@ -381,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> friendsList = new ArrayList<>();
         userProfileDoc.put("friends", friendsList);
 
-        // TODO: add token to doc
+        userProfileDoc.put("deviceToken", deviceToken);
 
         // Set new user profile
         String[] subscriptions = new String[0];
@@ -392,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
 
         userProfile = new UserProfile(userId, newUserDisplayName, subscriptions,
                 reminderCategoriesMap, DEFAULT_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_MINUTE,
-                DEFAULT_HIBERNATE_LENGTH, friends);
+                DEFAULT_HIBERNATE_LENGTH, friends, deviceToken);
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

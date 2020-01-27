@@ -29,7 +29,7 @@ public class FirebaseDocUtils {
         userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
         userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
         userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
-        // TODO: add token to doc
+        userProfileDoc.put("deviceToken", userProfile.getDeviceToken());
 
         return userProfileDoc;
     }
@@ -58,8 +58,10 @@ public class FirebaseDocUtils {
         String[] friends;
         friends = friendsList.toArray(new String[0]);
 
+        String deviceToken = (String) docMap.get("deviceToken");
+
         return new UserProfile(id, displayName, subscriptions, reminderCategories,
-                reminderTimeHour, reminderTimeMinute, hibernateLength, friends);
+                reminderTimeHour, reminderTimeMinute, hibernateLength, friends, deviceToken);
     }
 
     public static Map<String, Object> createToDoGroupDoc(ToDoGroup toDoGroup)

@@ -20,6 +20,7 @@ public class UserProfile {
     private int reminderMinute;
     private int hibernateLength;
     private String[] friends;
+    private String deviceToken;
 
 
     public UserProfile() {
@@ -36,11 +37,12 @@ public class UserProfile {
         this.reminderMinute = MainActivity.DEFAULT_REMINDER_TIME_MINUTE;
         this.hibernateLength = MainActivity.DEFAULT_HIBERNATE_LENGTH;
         this.friends = new String[0];
+        this.deviceToken = "";
     }
 
     public UserProfile(String id, String displayName, String[] subscriptions,
                        Map<String, String> reminderCategories, int reminderHour, int reminderMinute,
-                       int hibernateLength, String[] friends)
+                       int hibernateLength, String[] friends, String deviceToken)
     {
         this.id = id;
         this.displayName = displayName;
@@ -50,7 +52,7 @@ public class UserProfile {
         this.reminderMinute = reminderMinute;
         this.hibernateLength = hibernateLength;
         this.friends = friends;
-        // TODO: add deviceToken
+        this.deviceToken = deviceToken;
     }
 
 
@@ -151,5 +153,13 @@ public class UserProfile {
 
     public void setFriends(String[] friends) {
         this.friends = friends;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 }
