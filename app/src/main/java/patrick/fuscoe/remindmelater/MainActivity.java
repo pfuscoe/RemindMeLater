@@ -308,7 +308,8 @@ public class MainActivity extends AppCompatActivity {
                                         documentSnapshot);
 
                                 saveRemindersToStorage();
-                                setupTabs();
+                                checkFirebaseDeviceToken();
+                                //setupTabs();
                             }
                             // New user was created
                             else
@@ -335,7 +336,8 @@ public class MainActivity extends AppCompatActivity {
                                     userProfile.getReminderHour(), userProfile.getReminderMinute());
 
                             Log.d(TAG, "User Profile loaded from cloud");
-                            setupTabs();
+                            //setupTabs();
+                            checkFirebaseDeviceToken();
                         }
                     }
                 });
@@ -350,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             deviceToken = task.getResult().getToken();
                             Log.d(TAG, "Device token received: " + deviceToken);
+                            updateDeviceTokenInDatabase();
                         } else {
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             Toast.makeText(MainActivity.this, "Failed to " +
@@ -357,6 +360,30 @@ public class MainActivity extends AppCompatActivity {
                                     "and logging in again or contact support.",
                                     Toast.LENGTH_LONG).show();
                         }
+                    }
+                });
+    }
+
+    private void updateDeviceTokenInDatabase()
+    {
+        userDocRef.update("deviceToken", deviceToken)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "deviceToken successfully updated in cloud: " +
+                                deviceToken);
+                        setupTabs();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Failed to update deviceToken in cloud: " + e.getMessage());
+                        Toast.makeText(MainActivity.this, "Failed to update " +
+                                "deviceToken in cloud. . Please try logging out and logging in " +
+                                "again or contact support to enable Friends List.",
+                                Toast.LENGTH_LONG).show();
+                        setupTabs();
                     }
                 });
     }
