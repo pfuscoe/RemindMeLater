@@ -14,7 +14,7 @@ public class FriendsActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FriendsActivity";
 
-    
+
 
 
     @Override
