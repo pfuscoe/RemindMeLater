@@ -24,7 +24,7 @@ import patrick.fuscoe.remindmelater.models.ReminderCategory;
  * Recycler adapter for viewing friends in FriendsActivity
  */
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendViewHolder> {
-    
+
     private List<Friend> friendList;
     private Context context;
 

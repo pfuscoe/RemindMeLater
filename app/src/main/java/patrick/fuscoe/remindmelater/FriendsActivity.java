@@ -2,11 +2,16 @@ package patrick.fuscoe.remindmelater;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,8 +21,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
+import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
 
 
 /**
@@ -38,9 +46,10 @@ public class FriendsActivity extends AppCompatActivity {
 
     private RecyclerView viewFriendsRecycler;
     private RecyclerView.LayoutManager friendsRecyclerLayoutManager;
-    //private FriendsAdapter friendsAdapter;
+    private FriendsAdapter friendsAdapter;
 
     private UserProfile userProfile;
+    public List<Friend> friendList;
 
 
     private FriendsClickListener friendsClickListener = new FriendsClickListener() {
@@ -60,7 +69,7 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        Toolbar toolbar = findViewById(R.id.toolbar_reminder_categories);
+        Toolbar toolbar = findViewById(R.id.toolbar_friends);
         setSupportActionBar(toolbar);
 
         auth = FirebaseAuth.getInstance();
@@ -79,6 +88,58 @@ public class FriendsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
 
+        buildFriendList(userProfile.getFriends());
 
+        viewFriendsRecycler = findViewById(R.id.view_friends_recycler);
+        viewFriendsRecycler.setHasFixedSize(true);
+
+        friendsRecyclerLayoutManager = new LinearLayoutManager(this);
+        viewFriendsRecycler.setLayoutManager(friendsRecyclerLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                viewFriendsRecycler.getContext(), DividerItemDecoration.VERTICAL);
+        viewFriendsRecycler.addItemDecoration(dividerItemDecoration);
+
+        friendsAdapter = new FriendsAdapter(friendList, this, friendsClickListener);
+        viewFriendsRecycler.setAdapter(friendsAdapter);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        menu.removeItem(R.id.menu_main_edit);
+        menu.removeItem(R.id.menu_main_logout);
+        menu.removeItem(R.id.menu_main_user_settings);
+        menu.removeItem(R.id.menu_main_reorder);
+        menu.removeItem(R.id.menu_main_edit_reminder_categories);
+        menu.removeItem(R.id.menu_main_tips);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_main_add:
+                openAddFriendDialog();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void updateFriendsDisplay()
+    {
+        friendsAdapter = new FriendsAdapter(friendList, this, friendsClickListener);
+        viewFriendsRecycler.setAdapter(friendsAdapter);
+
+        friendsAdapter.notifyDataSetChanged();
+    }
+
+    
+
 }
