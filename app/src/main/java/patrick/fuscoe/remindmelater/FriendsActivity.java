@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -42,6 +43,19 @@ public class FriendsActivity extends AppCompatActivity {
     private UserProfile userProfile;
 
 
+    private FriendsClickListener friendsClickListener = new FriendsClickListener() {
+        @Override
+        public void friendClicked(View v, int position) {
+
+            // TODO: setup click action
+
+        }
+    };
+
+    public interface FriendsClickListener {
+        void friendClicked(View v, int position);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,5 +78,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
+
+
     }
 }
