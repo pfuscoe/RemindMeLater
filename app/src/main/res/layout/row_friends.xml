@@ -6,32 +6,43 @@
     android:layout_width="match_parent"
     android:layout_height="64dp">
 
-    <ImageView
-        android:id="@+id/view_row_friends_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
-        android:id="@+id/view_row_friends_name"
+        android:id="@+id/view_row_friend_display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:maxLines="2"
         android:ellipsize="end"
         android:textAlignment="viewStart"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/view_row_friend_share_to_do_list_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Friend Name" />
+
+    <ImageView
+        android:id="@+id/view_row_friend_share_to_do_list_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/view_row_friend_share_reminder_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/view_row_friend_share_reminder_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/view_row_friend_delete_icon"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/view_row_friend_delete_icon"

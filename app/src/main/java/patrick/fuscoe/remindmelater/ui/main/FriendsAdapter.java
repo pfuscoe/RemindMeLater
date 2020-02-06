@@ -14,81 +14,92 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import patrick.fuscoe.remindmelater.FriendsActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ReminderCategoriesActivity;
+import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.ReminderCategory;
 
 /**
  * Recycler adapter for viewing friends in FriendsActivity
  */
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsViewHolder> {
-
-    // TODO: rewrite class for Friends
-
-    private List<ReminderCategory> reminderCategoryList;
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendViewHolder> {
+    
+    private List<Friend> friendList;
     private Context context;
 
-    private static ReminderCategoriesActivity.ReminderCategoryClickListener reminderCategoryClickListener;
+    private static FriendsActivity.FriendsClickListener friendsClickListener;
 
-    public static class FriendsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ConstraintLayout viewRowReminderCategoryLayout;
-        ImageView viewRowReminderCategoryIcon;
-        TextView viewRowReminderCategoryTitle;
-        ImageView viewRowReminderCategoryDeleteIcon;
+        ConstraintLayout viewRowFriendsLayout;
+        TextView viewRowFriendDisplayName;
+        ImageView viewRowFriendShareToDoListIcon;
+        ImageView viewRowFriendShareReminderIcon;
+        ImageView viewRowFriendDeleteIcon;
 
-        FriendsViewHolder(View v)
+        FriendViewHolder(View v)
         {
             super(v);
 
-            viewRowReminderCategoryLayout = v.findViewById(R.id.view_row_reminder_category_edit_layout);
-            viewRowReminderCategoryIcon = v.findViewById(R.id.view_row_reminder_category_edit_icon);
-            viewRowReminderCategoryTitle = v.findViewById(R.id.view_row_reminder_category_edit_title);
-            viewRowReminderCategoryDeleteIcon = v.findViewById(R.id.view_row_reminder_category_delete_icon);
+            viewRowFriendsLayout = v.findViewById(R.id.view_row_friends_layout);
+            viewRowFriendDisplayName = v.findViewById(R.id.view_row_friend_display_name);
+            viewRowFriendShareToDoListIcon = v.findViewById(R.id.view_row_friend_share_to_do_list_icon);
+            viewRowFriendShareReminderIcon = v.findViewById(R.id.view_row_friend_share_reminder_icon);
+            viewRowFriendDeleteIcon = v.findViewById(R.id.view_row_friend_delete_icon);
 
             v.setOnClickListener(this);
-            viewRowReminderCategoryDeleteIcon.setOnClickListener(this);
+            viewRowFriendShareToDoListIcon.setOnClickListener(this);
+            viewRowFriendShareReminderIcon.setOnClickListener(this);
+            viewRowFriendDeleteIcon.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            reminderCategoryClickListener.reminderCategoryClicked(v, this.getLayoutPosition());
+            friendsClickListener.friendClicked(v, this.getLayoutPosition());
         }
     }
 
-    public FriendsAdapter(List<ReminderCategory> reminderCategoryList, Context context,
-                          ReminderCategoriesActivity.ReminderCategoryClickListener reminderCategoryClickListener)
+    public FriendsAdapter(List<Friend> friendList, Context context,
+                          FriendsActivity.FriendsClickListener friendsClickListener)
     {
-        this.reminderCategoryList = reminderCategoryList;
+        this.friendList = friendList;
         this.context = context;
-        this.reminderCategoryClickListener = reminderCategoryClickListener;
+        this.friendsClickListener = friendsClickListener;
     }
 
     @NonNull
     @Override
-    public ReminderCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.row_reminder_category_edit, viewGroup, false);
+                .inflate(R.layout.row_friends, viewGroup, false);
 
-        return new ReminderCategoryViewHolder(v);
+        return new FriendViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReminderCategoryViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull FriendViewHolder holder, final int position) {
 
-        ReminderCategory reminderCategory = reminderCategoryList.get(position);
+        Friend friend = friendList.get(position);
 
-        holder.viewRowReminderCategoryTitle.setText(reminderCategory.getCategoryName());
+        holder.viewRowFriendDisplayName.setText(friend.getFriendDisplayName());
 
-        holder.viewRowReminderCategoryIcon.setImageResource(context.getResources().getIdentifier(
-                reminderCategory.getIconName(), "drawable", context.getPackageName()));
-        holder.viewRowReminderCategoryDeleteIcon.setImageResource(R.drawable.action_delete);
-        holder.viewRowReminderCategoryDeleteIcon.setColorFilter(ContextCompat.getColor(context, R.color.greyDark));
+        holder.viewRowFriendShareToDoListIcon.setImageResource(R.drawable.action_playlist_plus);
+        holder.viewRowFriendShareToDoListIcon.setColorFilter(ContextCompat.getColor(
+                context, R.color.greyDark));
+
+        holder.viewRowFriendShareReminderIcon.setImageResource(R.drawable.action_alarm_plus);
+        holder.viewRowFriendShareReminderIcon.setColorFilter(ContextCompat.getColor(
+                context, R.color.greyDark));
+
+        holder.viewRowFriendDeleteIcon.setImageResource(R.drawable.action_delete);
+        holder.viewRowFriendDeleteIcon.setColorFilter(ContextCompat.getColor(
+                context, R.color.greyDark));
     }
 
     @Override
     public int getItemCount() {
-        return reminderCategoryList.size();
+        return friendList.size();
     }
 }
