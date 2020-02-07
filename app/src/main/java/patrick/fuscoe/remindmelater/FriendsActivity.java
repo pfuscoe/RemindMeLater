@@ -2,10 +2,12 @@ package patrick.fuscoe.remindmelater;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,6 +30,7 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.dialog.AddFriendDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
 
 
@@ -34,7 +39,8 @@ import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
  * reminders to friends.
  */
 
-public class FriendsActivity extends AppCompatActivity {
+public class FriendsActivity extends AppCompatActivity implements
+        AddFriendDialogFragment.AddFriendDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FriendsActivity";
 
@@ -152,4 +158,44 @@ public class FriendsActivity extends AppCompatActivity {
         }
     }
 
+    private void openAddFriendDialog()
+    {
+        DialogFragment dialogFragment = new AddFriendDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "addFriend");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialogFragment) {
+
+        if (dialogFragment instanceof AddFriendDialogFragment)
+        {
+            Dialog dialogView = dialogFragment.getDialog();
+            EditText viewFriendEmail = dialogView.findViewById(R.id.dialog_add_friend_email);
+            EditText viewFriendNickname = dialogView.findViewById(R.id.dialog_add_friend_nickname);
+            String friendEmail = viewFriendEmail.getText().toString();
+            String friendNickname = viewFriendNickname.getText().toString();
+
+            if (friendEmail.equals(""))
+            {
+                Toast.makeText(this, "Add Friend Failed: Must enter an email address", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (friendNickname.equals(""))
+            {
+                Toast.makeText(this, "Add Friend Failed: Must enter a nickname", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // TODO: execute add friend (update userProfile, friendList, update display and save
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialogFragment) {
+        if (dialogFragment instanceof AddFriendDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Add Friend Cancelled", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

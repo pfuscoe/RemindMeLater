@@ -85,4 +85,5 @@
     <string name="regular_sign_in_mode_link_text">Returning User or Google Sign In</string>
     <string name="reminder_details_sync_button_text">Sync</string>
     <string name="resend_email_verification">Resend Email Verification</string>
+    <string name="dialog_add_new_friend">Add New Friend</string>
 </resources>
