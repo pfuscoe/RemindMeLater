@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import patrick.fuscoe.remindmelater.models.Friend;
@@ -140,6 +141,15 @@ public class FriendsActivity extends AppCompatActivity {
         friendsAdapter.notifyDataSetChanged();
     }
 
-    
+    // TODO: refactor friends in db from array to map
+    private void buildFriendList(String[] friends)
+    {
+        friendList = new ArrayList<>();
+
+        for (String friendId : friends)
+        {
+            //Friend friend = new Friend()
+        }
+    }
 
 }
