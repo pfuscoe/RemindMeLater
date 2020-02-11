@@ -173,4 +173,18 @@ public class FirebaseDocUtils {
                 isHibernating, history);
     }
 
+    public static Map<String, Object> createFriendRequestMessageDoc(String friendEmail,
+                                                                    UserProfile userProfile)
+    {
+        Map<String, Object> friendRequestMessageDoc = new HashMap<>();
+
+        friendRequestMessageDoc.put("messageType", "friendRequest");
+        friendRequestMessageDoc.put("friendEmail", friendEmail);
+        friendRequestMessageDoc.put("senderId", userProfile.getId());
+        friendRequestMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
+        friendRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+
+        return friendRequestMessageDoc;
+    }
+
 }

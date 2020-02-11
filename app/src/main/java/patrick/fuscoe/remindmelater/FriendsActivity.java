@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,11 +30,13 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddFriendDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 
 /**
@@ -147,6 +152,34 @@ public class FriendsActivity extends AppCompatActivity implements
         friendsAdapter.notifyDataSetChanged();
     }
 
+    // Write a message to FireStore to trigger cloud function
+    private void sendFriendRequestMessage(String friendEmail)
+    {
+        Map<String, Object> friendRequestMessageDocMap =
+                FirebaseDocUtils.createFriendRequestMessageDoc(friendEmail, userProfile);
+
+        db.collection("messages")
+                .add(friendRequestMessageDocMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Friend request message successfully written. FireStore" +
+                                " messageID: " + documentReference.getId());
+                        Toast.makeText(getApplicationContext(), "Friend request sent " +
+                                "successfully!", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing friend request document to cloud: " +
+                                e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error sending friend " +
+                                "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
     private void openAddFriendDialog()
     {
         DialogFragment dialogFragment = new AddFriendDialogFragment();
@@ -176,7 +209,7 @@ public class FriendsActivity extends AppCompatActivity implements
                 return;
             }
 
-            // TODO: execute add friend (update userProfile, friendList, update display and save)
+            sendFriendRequestMessage(friendEmail);
         }
     }
 
