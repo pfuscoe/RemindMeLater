@@ -230,6 +230,9 @@ public class MainActivity extends AppCompatActivity {
                 logoutUser();
                 return true;
 
+            case R.id.menu_main_friends:
+                openFriends();
+
             case R.id.menu_main_user_settings:
                 Log.d(TAG, "Menu: User Settings clicked");
                 openUserSettings();
@@ -257,6 +260,17 @@ public class MainActivity extends AppCompatActivity {
     public void openUserSettings()
     {
         Intent intent = new Intent(MainActivity.this, UserPreferencesActivity.class);
+        Gson gson = new Gson();
+
+        String userProfileString = gson.toJson(userProfile);
+        Log.d(TAG, "userProfileString: " + userProfileString);
+        intent.putExtra(USER_PROFILE, userProfileString);
+        startActivity(intent);
+    }
+
+    private void openFriends()
+    {
+        Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
         Gson gson = new Gson();
 
         String userProfileString = gson.toJson(userProfile);

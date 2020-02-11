@@ -123,6 +123,7 @@ public class FriendsActivity extends AppCompatActivity implements
 
         menu.removeItem(R.id.menu_main_edit);
         menu.removeItem(R.id.menu_main_logout);
+        menu.removeItem(R.id.menu_main_friends);
         menu.removeItem(R.id.menu_main_user_settings);
         menu.removeItem(R.id.menu_main_reorder);
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
