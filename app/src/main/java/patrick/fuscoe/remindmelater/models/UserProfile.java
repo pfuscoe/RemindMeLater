@@ -22,6 +22,9 @@ public class UserProfile {
     private String[] friends;
     private String deviceToken;
 
+    private ArrayList<Friend> friendArrayList;
+    private Map<String, Object> friendListMap;
+
 
     public UserProfile() {
 
@@ -42,7 +45,8 @@ public class UserProfile {
 
     public UserProfile(String id, String displayName, String[] subscriptions,
                        Map<String, String> reminderCategories, int reminderHour, int reminderMinute,
-                       int hibernateLength, String[] friends, String deviceToken)
+                       int hibernateLength, String[] friends, String deviceToken,
+                       Map<String, Object> friendListMap)
     {
         this.id = id;
         this.displayName = displayName;
@@ -53,6 +57,19 @@ public class UserProfile {
         this.hibernateLength = hibernateLength;
         this.friends = friends;
         this.deviceToken = deviceToken;
+
+        this.friendArrayList = new ArrayList<>();
+
+        for (Map.Entry<String, Object> entry : friendListMap.entrySet())
+        {
+            String friendId = entry.getKey();
+            Map<String, Object> friendMap = (Map<String, Object>) entry.getValue();
+
+            String friendNickname = (String) friendMap.get("friendNickname");
+
+            Friend friend = new Friend(friendId, friendNickname);
+        }
+
     }
 
 
@@ -70,6 +87,17 @@ public class UserProfile {
         subscriptions = tempList.toArray(new String[0]);
     }
 
+    public void addFriend(Friend friend)
+    {
+        friendArrayList.add(friend);
+    }
+
+    public void removeFriend(Friend friend)
+    {
+        friendArrayList.remove(friend);
+    }
+
+    /*
     public void addFriend(String friendId)
     {
         ArrayList<String> tempList = new ArrayList<>(Arrays.asList(friends));
@@ -83,6 +111,7 @@ public class UserProfile {
         tempList.remove(friendId);
         friends = tempList.toArray(new String[0]);
     }
+    */
 
     public void addReminderCategory(String categoryName, String categoryIconName)
     {
@@ -161,5 +190,9 @@ public class UserProfile {
 
     public void setDeviceToken(String deviceToken) {
         this.deviceToken = deviceToken;
+    }
+
+    public ArrayList<Friend> getFriendArrayList() {
+        return friendArrayList;
     }
 }

@@ -187,7 +187,7 @@ public class FriendsActivity extends AppCompatActivity implements
                 return;
             }
 
-            // TODO: execute add friend (update userProfile, friendList, update display and save
+            // TODO: execute add friend (update userProfile, friendList, update display and save)
         }
     }
 
