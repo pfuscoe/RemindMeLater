@@ -95,7 +95,7 @@ public class FriendsActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
 
-        buildFriendList(userProfile.getFriends());
+        friendList = userProfile.getFriendArrayList();
 
         viewFriendsRecycler = findViewById(R.id.view_friends_recycler);
         viewFriendsRecycler.setHasFixedSize(true);
@@ -145,17 +145,6 @@ public class FriendsActivity extends AppCompatActivity implements
         viewFriendsRecycler.setAdapter(friendsAdapter);
 
         friendsAdapter.notifyDataSetChanged();
-    }
-
-    // TODO: refactor friends in db from array to map
-    private void buildFriendList(String[] friends)
-    {
-        friendList = new ArrayList<>();
-
-        for (String friendId : friends)
-        {
-            //Friend friend = new Friend()
-        }
     }
 
     private void openAddFriendDialog()

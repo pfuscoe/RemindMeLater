@@ -83,7 +83,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
 
         Friend friend = friendList.get(position);
 
-        holder.viewRowFriendDisplayName.setText(friend.getFriendDisplayName());
+        holder.viewRowFriendDisplayName.setText(friend.getFriendNickname());
 
         holder.viewRowFriendShareToDoListIcon.setImageResource(R.drawable.action_playlist_plus);
         holder.viewRowFriendShareToDoListIcon.setColorFilter(ContextCompat.getColor(

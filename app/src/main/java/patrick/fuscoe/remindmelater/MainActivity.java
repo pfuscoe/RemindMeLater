@@ -438,12 +438,17 @@ public class MainActivity extends AppCompatActivity {
         String[] subscriptions = new String[0];
         subscriptions = subscriptionsList.toArray(subscriptions);
 
+        /*
         String[] friends;
         friends = friendsList.toArray(new String[0]);
+        */
+
+        Map<String, Object> friendListMap = new HashMap<>();
+        userProfileDoc.put("friendListMap", friendListMap);
 
         userProfile = new UserProfile(userId, newUserDisplayName, subscriptions,
                 reminderCategoriesMap, DEFAULT_REMINDER_TIME_HOUR, DEFAULT_REMINDER_TIME_MINUTE,
-                DEFAULT_HIBERNATE_LENGTH, friends, deviceToken);
+                DEFAULT_HIBERNATE_LENGTH, deviceToken, friendListMap);
 
         userDocRef.set(userProfileDoc)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

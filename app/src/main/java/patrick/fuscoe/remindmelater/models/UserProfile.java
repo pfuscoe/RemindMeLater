@@ -19,7 +19,7 @@ public class UserProfile {
     private int reminderHour;
     private int reminderMinute;
     private int hibernateLength;
-    private String[] friends;
+    //private String[] friends;
     private String deviceToken;
 
     private ArrayList<Friend> friendArrayList;
@@ -39,13 +39,13 @@ public class UserProfile {
         this.reminderHour = MainActivity.DEFAULT_REMINDER_TIME_HOUR;
         this.reminderMinute = MainActivity.DEFAULT_REMINDER_TIME_MINUTE;
         this.hibernateLength = MainActivity.DEFAULT_HIBERNATE_LENGTH;
-        this.friends = new String[0];
+        //this.friends = new String[0];
         this.deviceToken = "";
     }
 
     public UserProfile(String id, String displayName, String[] subscriptions,
                        Map<String, String> reminderCategories, int reminderHour, int reminderMinute,
-                       int hibernateLength, String[] friends, String deviceToken,
+                       int hibernateLength, String deviceToken,
                        Map<String, Object> friendListMap)
     {
         this.id = id;
@@ -55,7 +55,7 @@ public class UserProfile {
         this.reminderHour = reminderHour;
         this.reminderMinute = reminderMinute;
         this.hibernateLength = hibernateLength;
-        this.friends = friends;
+        //this.friends = friends;
         this.deviceToken = deviceToken;
 
         this.friendArrayList = new ArrayList<>();
@@ -176,6 +176,7 @@ public class UserProfile {
         this.hibernateLength = hibernateLength;
     }
 
+    /*
     public String[] getFriends() {
         return friends;
     }
@@ -183,6 +184,7 @@ public class UserProfile {
     public void setFriends(String[] friends) {
         this.friends = friends;
     }
+    */
 
     public String getDeviceToken() {
         return deviceToken;
@@ -195,4 +197,6 @@ public class UserProfile {
     public ArrayList<Friend> getFriendArrayList() {
         return friendArrayList;
     }
+
+
 }

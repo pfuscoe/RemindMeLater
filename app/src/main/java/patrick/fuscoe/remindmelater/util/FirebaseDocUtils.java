@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.ToDoItem;
@@ -28,8 +29,21 @@ public class FirebaseDocUtils {
         userProfileDoc.put("reminderHour", userProfile.getReminderHour());
         userProfileDoc.put("reminderMinute", userProfile.getReminderMinute());
         userProfileDoc.put("hibernateLength", userProfile.getHibernateLength());
-        userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
+        //userProfileDoc.put("friends", Arrays.asList(userProfile.getFriends()));
         userProfileDoc.put("deviceToken", userProfile.getDeviceToken());
+
+        ArrayList<Friend> friendArrayList = userProfile.getFriendArrayList();
+        Map<String, Object> friendListMap = new HashMap<>();
+
+        for (Friend friend : friendArrayList)
+        {
+            Map<String, Object> friendMap = new HashMap<>();
+            friendMap.put("friendNickname", friend.getFriendNickname());
+
+            friendListMap.put(friend.getFriendId(), friendMap);
+        }
+
+        userProfileDoc.put("friendListMap", friendListMap);
 
         return userProfileDoc;
     }
@@ -54,14 +68,25 @@ public class FirebaseDocUtils {
 
         int hibernateLength = Math.toIntExact((long) docMap.get("hibernateLength"));
 
+        /*
         ArrayList<String> friendsList = (ArrayList<String>) docMap.get("friends");
         String[] friends;
         friends = friendsList.toArray(new String[0]);
+        */
 
         String deviceToken = (String) docMap.get("deviceToken");
 
+        Map<String, Object> friendListMap = new HashMap<>();
+
+        // Check for missing field
+        if (documentSnapshot.contains("friendListMap"))
+        {
+            friendListMap = (Map<String, Object>) documentSnapshot.get("friendListMap");
+        }
+
         return new UserProfile(id, displayName, subscriptions, reminderCategories,
-                reminderTimeHour, reminderTimeMinute, hibernateLength, friends, deviceToken);
+                reminderTimeHour, reminderTimeMinute, hibernateLength, deviceToken,
+                friendListMap);
     }
 
     public static Map<String, Object> createToDoGroupDoc(ToDoGroup toDoGroup)
