@@ -218,6 +218,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        menu.removeItem(R.id.menu_main_friends);
+
         return true;
     }
 
@@ -230,9 +233,11 @@ public class MainActivity extends AppCompatActivity {
                 logoutUser();
                 return true;
 
+                /*
             case R.id.menu_main_friends:
                 openFriends();
                 return true;
+                */
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, "Menu: User Settings clicked");
