@@ -310,6 +310,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
         menu.removeItem(R.id.menu_main_edit);
         menu.removeItem(R.id.menu_main_reorder);
+        menu.removeItem(R.id.menu_main_friends);
 
         tipsMenuItem = menu.findItem(R.id.menu_main_tips);
 

@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-        menu.removeItem(R.id.menu_main_friends);
+        //menu.removeItem(R.id.menu_main_friends);
 
         return true;
     }

@@ -35,7 +35,7 @@ public class AddFriendDialogFragment extends DialogFragment {
             listener = (AddFriendDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(FriendsActivity.TAG
-                    + " must implement AddToDoItemDialogListener");
+                    + " must implement AddFriendDialogListener");
         }
     }
 
