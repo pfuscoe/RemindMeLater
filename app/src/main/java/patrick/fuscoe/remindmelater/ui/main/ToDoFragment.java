@@ -376,7 +376,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         inflater.inflate(R.menu.menu_main, menu);
 
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
-        menu.removeItem(R.id.menu_main_friends);
+        //menu.removeItem(R.id.menu_main_friends);
 
         MenuItem viewIconEdit = menu.findItem(R.id.menu_main_edit);
 

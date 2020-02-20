@@ -233,11 +233,9 @@ public class MainActivity extends AppCompatActivity {
                 logoutUser();
                 return true;
 
-                /*
             case R.id.menu_main_friends:
                 openFriends();
                 return true;
-                */
 
             case R.id.menu_main_user_settings:
                 Log.d(TAG, "Menu: User Settings clicked");
