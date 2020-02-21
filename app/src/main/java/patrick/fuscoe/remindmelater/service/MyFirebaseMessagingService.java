@@ -15,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
+import patrick.fuscoe.remindmelater.receiver.MessageNotificationAddFriendReceiver;
 
 /**
  * Receives firebase messages and generates notifications
@@ -22,6 +23,9 @@ import patrick.fuscoe.remindmelater.MainActivity;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MyFirebaseMessagingService";
+
+    public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
+    public static final String MESSAGE_ACTION_FRIEND_ADD = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_ADD";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -130,7 +134,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Add Friend Intent
-        //Intent friendConfirmIntent = new Intent()
+        Intent friendConfirmIntent = new Intent(this,
+                MessageNotificationAddFriendReceiver.class);
+        friendConfirmIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
+        friendConfirmIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        PendingIntent friendConfirmPendingIntent = PendingIntent.getBroadcast(this,
+                0, friendConfirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Deny Friend Intent
 

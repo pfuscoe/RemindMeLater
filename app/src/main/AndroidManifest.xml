@@ -113,6 +113,13 @@
                 <action android:name="patrick.fuscoe.remindmelater.receiver.NotificationHibernateReceiver" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.MessageNotificationAddFriendReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="patrick.fuscoe.remindmelater.receiver.MessageNotificationAddFriendReceiver" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".service.MyFirebaseMessagingService"
