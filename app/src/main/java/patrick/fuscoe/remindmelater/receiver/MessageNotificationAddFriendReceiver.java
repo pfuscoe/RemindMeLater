@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.core.app.NotificationManagerCompat;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,5 +39,9 @@ public class MessageNotificationAddFriendReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "notificationId: " + notificationId);
 
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(notificationId);
     }
 }

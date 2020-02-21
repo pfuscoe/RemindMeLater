@@ -15,7 +15,9 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
+import patrick.fuscoe.remindmelater.models.FirebaseMessage;
 import patrick.fuscoe.remindmelater.receiver.MessageNotificationAddFriendReceiver;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 /**
  * Receives firebase messages and generates notifications
@@ -83,7 +85,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         {
             case "friendRequest":
                 // TODO: Handle friend request
-                sendFriendRequestNotification(data);
+                FirebaseMessage message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                sendFriendRequestNotification(message);
                 return;
 
             case "friendConfirm":
@@ -112,7 +115,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void sendFriendRequestNotification(Map<String, String> data) {
+    private void sendFriendRequestNotification(FirebaseMessage message) {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 

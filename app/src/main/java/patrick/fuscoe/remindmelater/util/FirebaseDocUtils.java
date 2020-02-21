@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import patrick.fuscoe.remindmelater.models.FirebaseMessage;
 import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
@@ -185,6 +186,20 @@ public class FirebaseDocUtils {
         friendRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
 
         return friendRequestMessageDoc;
+    }
+
+    public static FirebaseMessage createFirebaseMessageObj(Map<String, String> data)
+    {
+        String messageType = data.get("messageType");
+        String friendEmail = data.get("friendEmail");
+        String senderId = data.get("senderId");
+        String senderDisplayName = data.get("senderDisplayName");
+        String senderDeviceToken = data.get("senderDeviceToken");
+
+        return new FirebaseMessage(messageType, friendEmail, senderId, senderDisplayName,
+                senderDeviceToken);
+
+        // TODO: make specific models for the 3 message types?
     }
 
 }
