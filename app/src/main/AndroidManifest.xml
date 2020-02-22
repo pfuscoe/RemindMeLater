@@ -114,7 +114,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receiver.MessageNotificationAddFriendReceiver"
+            android:name=".receiver.MessageNotificationActionReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="patrick.fuscoe.remindmelater.receiver.MessageNotificationAddFriendReceiver" />

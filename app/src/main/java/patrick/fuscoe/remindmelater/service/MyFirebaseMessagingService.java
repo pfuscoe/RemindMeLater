@@ -11,12 +11,13 @@ import androidx.core.app.TaskStackBuilder;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.models.FirebaseMessage;
-import patrick.fuscoe.remindmelater.receiver.MessageNotificationAddFriendReceiver;
+import patrick.fuscoe.remindmelater.receiver.MessageNotificationActionReceiver;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 /**
@@ -28,6 +29,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
     public static final String MESSAGE_ACTION_FRIEND_ADD = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_ADD";
+    public static final String FIREBASE_MESSAGE_STRING = "patrick.fuscoe.remindmelater.FIREBASE_MESSAGE_STRING";
+    public static final String MESSAGE_NOTIFICATION_ACTION_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_ACTION_TYPE";
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -84,7 +87,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         switch (messageType)
         {
             case "friendRequest":
-                // TODO: Handle friend request
                 FirebaseMessage message = FirebaseDocUtils.createFirebaseMessageObj(data);
                 sendFriendRequestNotification(message);
                 return;
@@ -129,7 +131,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String contentTitleString = "";
         String contentTextString = "";
 
+        Gson gson = new Gson();
+        String firebaseMessageString = gson.toJson(message);
+
+        Log.d(TAG, "Gson FirebaseMessageString: " + firebaseMessageString);
+
         // Notification Tap Intent
+        Intent emptyIntent = new Intent();
         Intent friendRequestIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntentWithParentStack(friendRequestIntent);
@@ -138,9 +146,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Notification Add Friend Intent
         Intent friendConfirmIntent = new Intent(this,
-                MessageNotificationAddFriendReceiver.class);
+                MessageNotificationActionReceiver.class);
         friendConfirmIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
         friendConfirmIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        friendConfirmIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "addFriend");
+        friendConfirmIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
         PendingIntent friendConfirmPendingIntent = PendingIntent.getBroadcast(this,
                 0, friendConfirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
