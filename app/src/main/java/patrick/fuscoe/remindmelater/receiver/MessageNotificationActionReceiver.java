@@ -68,6 +68,13 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
             case "addFriend":
                 // either add friend, send notification back, and they add friend or
                 // post message to cloud for server to add both friends
+                return;
+
+            case "denyFriend":
+                return;
+
+            default:
+                return;
         }
     }
 }

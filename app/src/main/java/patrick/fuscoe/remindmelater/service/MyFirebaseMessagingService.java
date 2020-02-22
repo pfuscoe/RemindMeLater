@@ -155,7 +155,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 0, friendConfirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Deny Friend Intent
-
+        Intent friendDenyIntent = new Intent(this,
+                MessageNotificationActionReceiver.class);
+        friendConfirmIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
+        friendConfirmIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        friendConfirmIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "denyFriend");
+        friendConfirmIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
+        PendingIntent friendDenyPendingIntent = PendingIntent.getBroadcast(this,
+                0, friendConfirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build Notification
 
