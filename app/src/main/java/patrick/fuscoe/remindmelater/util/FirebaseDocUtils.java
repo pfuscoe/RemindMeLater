@@ -184,6 +184,7 @@ public class FirebaseDocUtils {
         friendRequestMessageDoc.put("senderId", userProfile.getId());
         friendRequestMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
         friendRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+        friendRequestMessageDoc.put("toDoGroupId", "none");
 
         return friendRequestMessageDoc;
     }
@@ -195,11 +196,10 @@ public class FirebaseDocUtils {
         String senderId = data.get("senderId");
         String senderDisplayName = data.get("senderDisplayName");
         String senderDeviceToken = data.get("senderDeviceToken");
+        String toDoGroupId = data.get("toDoGroupId");
 
         return new FirebaseMessage(messageType, friendEmail, senderId, senderDisplayName,
-                senderDeviceToken);
-
-        // TODO: make specific models for the 3 message types?
+                senderDeviceToken, toDoGroupId);
     }
 
 }

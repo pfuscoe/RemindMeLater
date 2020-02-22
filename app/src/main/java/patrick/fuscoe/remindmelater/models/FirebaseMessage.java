@@ -10,6 +10,7 @@ public class FirebaseMessage {
     private String senderId;
     private String senderDisplayName;
     private String senderDeviceToken;
+    private String toDoGroupId;
 
 
     public FirebaseMessage() {
@@ -17,13 +18,14 @@ public class FirebaseMessage {
     }
 
     public FirebaseMessage(String messageType, String friendEmail, String senderId,
-                           String senderDisplayName, String senderDeviceToken)
+                           String senderDisplayName, String senderDeviceToken, String toDoGroupId)
     {
         this.messageType = messageType;
         this.friendEmail = friendEmail;
         this.senderId = senderId;
         this.senderDisplayName = senderDisplayName;
         this.senderDeviceToken = senderDeviceToken;
+        this.toDoGroupId = toDoGroupId;
     }
 
 
@@ -65,5 +67,13 @@ public class FirebaseMessage {
 
     public void setSenderDeviceToken(String senderDeviceToken) {
         this.senderDeviceToken = senderDeviceToken;
+    }
+
+    public String getToDoGroupId() {
+        return toDoGroupId;
+    }
+
+    public void setToDoGroupId(String toDoGroupId) {
+        this.toDoGroupId = toDoGroupId;
     }
 }
