@@ -4,18 +4,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.FirebaseMessage;
+import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.service.MyFirebaseMessagingService;
+import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 /**
  * Receives Firebase message notification 'Confirm' tap action on friend request.
@@ -76,5 +84,33 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
             default:
                 return;
         }
+    }
+
+    // Write a message to FireStore to trigger cloud function
+    private void sendFriendActionResponseMessage(String actionType)
+    {
+        Map<String, Object> createFriendActionResponseDoc =
+                FirebaseDocUtils.createFriendRequestMessageDoc(actionType, userProfile, firebaseMessage);
+
+        db.collection("messages")
+                .add(friendRequestMessageDocMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Friend request message successfully written. FireStore" +
+                                " messageID: " + documentReference.getId());
+                        Toast.makeText(getApplicationContext(), "Friend request sent " +
+                                "successfully!", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing friend request document to cloud: " +
+                                e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error sending friend " +
+                                "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

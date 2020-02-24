@@ -91,7 +91,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendFriendRequestNotification(message);
                 return;
 
-            case "friendConfirm":
+            case "friendNotify":
                 // TODO: Handle friend confirm
                 return;
 
@@ -99,7 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // TODO: Handle to do request
                 return;
 
-            case "shareToDoConfirm":
+            case "shareToDoNotify":
                 // TODO: Handle to do confirm
                 return;
 
@@ -107,7 +107,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // TODO: Handle reminder request
                 return;
 
-            case "reminderConfirm":
+            case "reminderNotify":
                 // TODO: Handle reminder confirm
                 return;
 

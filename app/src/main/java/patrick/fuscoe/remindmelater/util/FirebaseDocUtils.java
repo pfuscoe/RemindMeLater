@@ -202,4 +202,23 @@ public class FirebaseDocUtils {
                 senderDeviceToken, toDoGroupId);
     }
 
+    public static Map<String, Object> createFriendActionResponseDoc(String actionType,
+                                                                    UserProfile userProfile,
+                                                                    FirebaseMessage requestMessage)
+    {
+        Map<String, Object> friendActionResponseDoc = new HashMap<>();
+
+        friendActionResponseDoc.put("messageType", "friendActionResponse");
+        friendActionResponseDoc.put("friendEmail", requestMessage.getFriendEmail());
+        friendActionResponseDoc.put("senderId", userProfile.getId());
+        friendActionResponseDoc.put("senderDisplayName", userProfile.getDisplayName());
+        friendActionResponseDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+        friendActionResponseDoc.put("receiverDisplayName", requestMessage.getSenderDisplayName());
+        friendActionResponseDoc.put("receiverDeviceToken", requestMessage.getSenderDeviceToken());
+        friendActionResponseDoc.put("receiverId", requestMessage.getSenderId());
+        friendActionResponseDoc.put("toDoGroupId", "none");
+
+        return friendActionResponseDoc;
+    }
+
 }
