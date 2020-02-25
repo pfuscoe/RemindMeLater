@@ -86,20 +86,20 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
         }
     }
 
-    // Write a message to FireStore to trigger cloud function
+    // Write a message to FireStore that triggers cloud function to sync new friends
     private void sendFriendActionResponseMessage(String actionType)
     {
-        Map<String, Object> createFriendActionResponseDoc =
+        Map<String, Object> friendActionResponseDoc =
                 FirebaseDocUtils.createFriendRequestMessageDoc(actionType, userProfile, firebaseMessage);
 
         db.collection("messages")
-                .add(friendRequestMessageDocMap)
+                .add(friendActionResponseDoc)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "Friend request message successfully written. FireStore" +
                                 " messageID: " + documentReference.getId());
-                        Toast.makeText(getApplicationContext(), "Friend request sent " +
+                        Toast.makeText(context, "Friend request sent " +
                                 "successfully!", Toast.LENGTH_LONG).show();
                     }
                 })
@@ -108,7 +108,7 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Error writing friend request document to cloud: " +
                                 e.getMessage());
-                        Toast.makeText(getApplicationContext(), "Error sending friend " +
+                        Toast.makeText(context, "Error sending friend " +
                                 "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

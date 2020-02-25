@@ -6,9 +6,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -17,6 +24,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.models.FirebaseMessage;
+import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.MessageNotificationActionReceiver;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
@@ -31,6 +39,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String MESSAGE_ACTION_FRIEND_ADD = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_ADD";
     public static final String FIREBASE_MESSAGE_STRING = "patrick.fuscoe.remindmelater.FIREBASE_MESSAGE_STRING";
     public static final String MESSAGE_NOTIFICATION_ACTION_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_ACTION_TYPE";
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    public static FirebaseAuth auth;
+    public static String userId;
+    public static DocumentReference userDocRef;
+
+    private UserProfile userProfile;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -50,7 +66,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // ...
+
+        auth = FirebaseAuth.getInstance();
+        userId = auth.getUid();
+        userDocRef = db.collection("users").document(userId);
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
@@ -200,6 +219,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0, notificationBuilder.build());
         */
 
+    }
+
+    private void loadUserProfileFromCloud()
+    {
+        userDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+
+                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                            Log.d(TAG, "User Profile loaded from cloud");
+
+                            
+                        }
+                    }
+                });
     }
 
     private int generateUniqueInt()
