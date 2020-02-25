@@ -39,7 +39,7 @@ public class FirebaseDocUtils {
         for (Friend friend : friendArrayList)
         {
             Map<String, Object> friendMap = new HashMap<>();
-            friendMap.put("friendNickname", friend.getFriendNickname());
+            friendMap.put("friendDisplayName", friend.getFriendDisplayName());
 
             friendListMap.put(friend.getFriendId(), friendMap);
         }

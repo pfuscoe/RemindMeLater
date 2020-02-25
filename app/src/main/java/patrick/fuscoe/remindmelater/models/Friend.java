@@ -6,27 +6,27 @@ package patrick.fuscoe.remindmelater.models;
 
 public class Friend implements Comparable<Friend> {
 
-    private String friendNickname;
+    private String friendDisplayName;
     private String friendId;
-    private String friendEmail;
+    //private String friendEmail;
 
-    public Friend(String friendId, String friendNickname)
+    public Friend(String friendId, String friendDisplayName)
     {
         this.friendId = friendId;
-        this.friendNickname = friendNickname;
+        this.friendDisplayName = friendDisplayName;
     }
     
     @Override
     public int compareTo(Friend o) {
-        return this.getFriendNickname().compareTo(o.getFriendNickname());
+        return this.getFriendDisplayName().compareTo(o.getFriendDisplayName());
     }
 
-    public String getFriendNickname() {
-        return friendNickname;
+    public String getFriendDisplayName() {
+        return friendDisplayName;
     }
 
-    public void setFriendNickname(String friendNickname) {
-        this.friendNickname = friendNickname;
+    public void setFriendDisplayName(String friendDisplayName) {
+        this.friendDisplayName = friendDisplayName;
     }
 
     public String getFriendId() {
