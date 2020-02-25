@@ -4,9 +4,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 
@@ -23,6 +26,7 @@ import com.google.gson.Gson;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
+import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.FirebaseMessage;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.MessageNotificationActionReceiver;
@@ -35,9 +39,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.MyFirebaseMessagingService";
 
+    public static final String NOTIFICATION_CHANNEL_ID = "patrick.fuscoe.remindmelater.NOTIFICATION_CHANNEL_ID";
     public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
     public static final String MESSAGE_ACTION_FRIEND_ADD = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_ADD";
+    public static final String MESSAGE_ACTION_FRIEND_DENY = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_DENY";
     public static final String FIREBASE_MESSAGE_STRING = "patrick.fuscoe.remindmelater.FIREBASE_MESSAGE_STRING";
+    public static final String USER_PROFILE_STRING = "patrick.fuscoe.remindmelater.USER_PROFILE_STRING";
     public static final String MESSAGE_NOTIFICATION_ACTION_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_ACTION_TYPE";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -47,6 +54,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static DocumentReference userDocRef;
 
     private UserProfile userProfile;
+    private Map<String, String> messageData;
+    private String messageType;
+    private String contentTitleString;
+    private String contentTextString;
+    private String contentTextTemplate;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -79,34 +91,66 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            Map<String, String> data = remoteMessage.getData();
+            messageData = remoteMessage.getData();
 
-            if (!data.containsKey("messageType"))
+            if (!messageData.containsKey("messageType"))
             {
                 Log.d(TAG, "No Message Type specified in data.");
                 return;
             }
 
-            String messageType = data.get("messageType");
-
-            filterMessageType(messageType, data);
+            messageType = messageData.get("messageType");
         }
+        else
+        {
+            Log.d(TAG, "Message contains no data payload.");
+            return;
+        }
+
+        // Load user profile then filter the message by type
+        loadUserProfileFromCloud();
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            // TODO: implement notifications (with no actions) here?
         }
+    }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+    private void loadUserProfileFromCloud()
+    {
+        userDocRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                            Log.d(TAG, "User Profile loaded from cloud");
+                            filterMessageType(messageType, messageData);
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Failed to retrieve user profile from cloud: "
+                                    + task.getException());
+                        }
+                    }
+                });
     }
 
     private void filterMessageType(String messageType, Map<String, String> data)
     {
+        contentTitleString = "";
+        contentTextString = "";
+        contentTextTemplate = "";
+
         switch (messageType)
         {
             case "friendRequest":
                 FirebaseMessage message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                contentTitleString = "Friend Request";
+                contentTextTemplate = " has sent you a friend request.";
                 sendFriendRequestNotification(message);
                 return;
 
@@ -146,17 +190,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         int iconId = this.getResources().getIdentifier("message_friend_add",
                 "drawable", this.getPackageName());
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(this.getResources(), iconId);
-
-        String contentTitleString = "";
-        String contentTextString = "";
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         Gson gson = new Gson();
         String firebaseMessageString = gson.toJson(message);
+        String userProfileString = gson.toJson(userProfile);
 
         Log.d(TAG, "Gson FirebaseMessageString: " + firebaseMessageString);
+        Log.d(TAG, "Gson userProfileString: " + userProfileString);
+
+        contentTextString = message.getSenderDisplayName() + contentTextTemplate;
 
         // Notification Tap Intent
         Intent emptyIntent = new Intent();
+        PendingIntent emptyPendingIntent = PendingIntent.getBroadcast(this, 0,
+                emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Intent friendRequestIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntentWithParentStack(friendRequestIntent);
@@ -164,29 +213,45 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Add Friend Intent
-        Intent friendConfirmIntent = new Intent(this,
+        Intent friendAcceptIntent = new Intent(this,
                 MessageNotificationActionReceiver.class);
-        friendConfirmIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
-        friendConfirmIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
-        friendConfirmIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "addFriend");
-        friendConfirmIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
-        PendingIntent friendConfirmPendingIntent = PendingIntent.getBroadcast(this,
-                0, friendConfirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        friendAcceptIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
+        friendAcceptIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        friendAcceptIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "acceptFriend");
+        friendAcceptIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
+        friendAcceptIntent.putExtra(USER_PROFILE_STRING, userProfileString);
+        PendingIntent friendAcceptPendingIntent = PendingIntent.getBroadcast(this,
+                0, friendAcceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Deny Friend Intent
         Intent friendDenyIntent = new Intent(this,
                 MessageNotificationActionReceiver.class);
-        friendConfirmIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
-        friendConfirmIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
-        friendConfirmIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "denyFriend");
-        friendConfirmIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
+        friendDenyIntent.setAction(MESSAGE_ACTION_FRIEND_DENY + notificationId);
+        friendDenyIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        friendDenyIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "denyFriend");
+        friendDenyIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
+        friendDenyIntent.putExtra(USER_PROFILE_STRING, userProfileString);
         PendingIntent friendDenyPendingIntent = PendingIntent.getBroadcast(this,
-                0, friendConfirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                0, friendDenyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build Notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+                NOTIFICATION_CHANNEL_ID)
+                .setLargeIcon(largeIconBitmap)
+                .setSmallIcon(iconId)
+                .setContentTitle(contentTitleString)
+                .setContentText(contentTextString)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(emptyPendingIntent)
+                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setAutoCancel(false)
+                .setSound(defaultSoundUri)
+                .setVibrate(null)
+                .addAction(R.drawable.action_check, getString(R.string.accept), friendAcceptPendingIntent)
+                .addAction(R.drawable.ic_menu_close, getString(R.string.deny), friendDenyPendingIntent);
 
-
-
+        notificationManager.notify(notificationId, builder.build());
 
         /*
         Intent intent = new Intent(this, MainActivity.class);
@@ -219,25 +284,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0, notificationBuilder.build());
         */
 
-    }
-
-    private void loadUserProfileFromCloud()
-    {
-        userDocRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-
-                            userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
-                            Log.d(TAG, "User Profile loaded from cloud");
-
-                            
-                        }
-                    }
-                });
     }
 
     private int generateUniqueInt()

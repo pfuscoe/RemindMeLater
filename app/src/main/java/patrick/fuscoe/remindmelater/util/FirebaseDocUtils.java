@@ -209,6 +209,7 @@ public class FirebaseDocUtils {
         Map<String, Object> friendActionResponseDoc = new HashMap<>();
 
         friendActionResponseDoc.put("messageType", "friendActionResponse");
+        friendActionResponseDoc.put("actionType", actionType);
         friendActionResponseDoc.put("friendEmail", requestMessage.getFriendEmail());
         friendActionResponseDoc.put("senderId", userProfile.getId());
         friendActionResponseDoc.put("senderDisplayName", userProfile.getDisplayName());
