@@ -54,6 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static DocumentReference userDocRef;
 
     private UserProfile userProfile;
+    private FirebaseMessage message;
     private Map<String, String> messageData;
     private String messageType;
     private String contentTitleString;
@@ -148,7 +149,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         switch (messageType)
         {
             case "friendRequest":
-                FirebaseMessage message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                message = FirebaseDocUtils.createFirebaseMessageObj(data);
                 contentTitleString = "Friend Request";
                 contentTextTemplate = " has sent you a friend request.";
                 sendFriendRequestNotification(message);
@@ -156,6 +157,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             case "friendNotify":
                 // TODO: Handle friend confirm
+                message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                sendFriendNotifyNotification(message);
                 return;
 
             case "shareToDoRequest":
@@ -284,6 +287,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0, notificationBuilder.build());
         */
 
+    }
+
+    private void sendFriendNotifyNotification(FirebaseMessage message)
+    {
+        // TODO: generate notification to only inform user of request response
     }
 
     private int generateUniqueInt()

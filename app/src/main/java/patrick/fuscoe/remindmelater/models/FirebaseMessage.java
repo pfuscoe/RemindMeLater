@@ -6,6 +6,7 @@ package patrick.fuscoe.remindmelater.models;
 public class FirebaseMessage {
 
     private String messageType;
+    private String actionType;
     private String friendEmail;
     private String senderId;
     private String senderDisplayName;
@@ -17,10 +18,12 @@ public class FirebaseMessage {
 
     }
 
-    public FirebaseMessage(String messageType, String friendEmail, String senderId,
-                           String senderDisplayName, String senderDeviceToken, String toDoGroupId)
+    public FirebaseMessage(String messageType, String actionType, String friendEmail,
+                           String senderId, String senderDisplayName, String senderDeviceToken,
+                           String toDoGroupId)
     {
         this.messageType = messageType;
+        this.actionType = actionType;
         this.friendEmail = friendEmail;
         this.senderId = senderId;
         this.senderDisplayName = senderDisplayName;
@@ -35,6 +38,14 @@ public class FirebaseMessage {
 
     public void setMessageType(String messageType) {
         this.messageType = messageType;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
     }
 
     public String getFriendEmail() {

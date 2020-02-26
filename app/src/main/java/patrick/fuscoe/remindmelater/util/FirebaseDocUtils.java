@@ -180,6 +180,7 @@ public class FirebaseDocUtils {
         Map<String, Object> friendRequestMessageDoc = new HashMap<>();
 
         friendRequestMessageDoc.put("messageType", "friendRequest");
+        friendRequestMessageDoc.put("actionType", "none");
         friendRequestMessageDoc.put("friendEmail", friendEmail);
         friendRequestMessageDoc.put("senderId", userProfile.getId());
         friendRequestMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
@@ -192,14 +193,15 @@ public class FirebaseDocUtils {
     public static FirebaseMessage createFirebaseMessageObj(Map<String, String> data)
     {
         String messageType = data.get("messageType");
+        String actionType = data.get("actionType");
         String friendEmail = data.get("friendEmail");
         String senderId = data.get("senderId");
         String senderDisplayName = data.get("senderDisplayName");
         String senderDeviceToken = data.get("senderDeviceToken");
         String toDoGroupId = data.get("toDoGroupId");
 
-        return new FirebaseMessage(messageType, friendEmail, senderId, senderDisplayName,
-                senderDeviceToken, toDoGroupId);
+        return new FirebaseMessage(messageType, actionType, friendEmail, senderId,
+                senderDisplayName, senderDeviceToken, toDoGroupId);
     }
 
     public static Map<String, Object> createFriendActionResponseDoc(String actionType,
