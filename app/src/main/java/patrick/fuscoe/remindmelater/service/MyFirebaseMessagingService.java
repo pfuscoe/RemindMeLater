@@ -156,8 +156,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 return;
 
             case "friendNotify":
-                // TODO: Handle friend confirm
                 message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                contentTitleString = "Friend Response";
+
+                if (message.getActionType().equals("acceptFriend"))
+                {
+                    contentTextTemplate = " has accepted your friend request.";
+                }
+                else if (message.getActionType().equals("denyFriend"))
+                {
+                    contentTextTemplate = " has denied your friend request";
+                }
+
                 sendFriendNotifyNotification(message);
                 return;
 
@@ -292,6 +302,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendFriendNotifyNotification(FirebaseMessage message)
     {
         // TODO: generate notification to only inform user of request response
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        int notificationId = generateUniqueInt();
+        Log.d(TAG, "Message Notification Id: " + notificationId);
+
+        // TODO: set iconId depending on actionType
+        int iconId = this.getResources().getIdentifier("message_friend_add",
+                "drawable", this.getPackageName());
+        Bitmap largeIconBitmap = BitmapFactory.decodeResource(this.getResources(), iconId);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     }
 
     private int generateUniqueInt()
