@@ -65,9 +65,10 @@ public class UserProfile {
             String friendId = entry.getKey();
             Map<String, Object> friendMap = (Map<String, Object>) entry.getValue();
 
-            String friendNickname = (String) friendMap.get("friendNickname");
-
+            String friendNickname = (String) friendMap.get("friendDisplayName");
             Friend friend = new Friend(friendId, friendNickname);
+
+            friendArrayList.add(friend);
         }
 
     }
