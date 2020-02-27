@@ -40,9 +40,7 @@ exports.messageListener = functions.firestore
             try {
                 const receiverId = data.receiverId;
                 const receiverUserProfile = await getReceiverUserProfile(receiverId);
-                const receiverDeviceToken = data.receiverDeviceToken;
-                filterMessageType(messageId, data, messageType, receiverUserProfile,
-                    receiverDeviceToken);
+                filterMessageType(messageId, data, messageType, receiverUserProfile);
             }
             catch (error) {
                 console.log('Error handling request: ', error);
@@ -110,16 +108,15 @@ async function sendFriendRequest(messageId, data, receiverUserProfile)
 }
 
 
-async function filterMessageType(messageId, data, messageType, receiverUserProfile,
-    receiverDeviceToken) {
-
+async function filterMessageType(messageId, data, messageType, receiverUserProfile)
+{
 	switch (messageType) {
 		case "friendActionResponse":
             if (data.actionType == "acceptFriend")
             {
                 try {
                     const connectFriends = await connectFriends(messageId, data,
-                        messageType, receiverUserProfile, receiverDeviceToken);
+                        messageType, receiverUserProfile);
                 }
                 catch (error) {
                     console.log('Error syncing new friends in cloud: ', error);
@@ -134,8 +131,8 @@ async function filterMessageType(messageId, data, messageType, receiverUserProfi
 
             // send notification to original friend request sender
 
-            const sendFriendNotify = await sendFriendNotification(messageId, 
-                data, messageType, receiverUserProfile, receiverDeviceToken);
+            const sendFriendNotify = await sendFriendNotify(messageId, data,
+            	messageType, receiverUserProfile);
 
             return;
 
@@ -144,8 +141,7 @@ async function filterMessageType(messageId, data, messageType, receiverUserProfi
 	}
 }
 
-async function connectFriends(messageId, data, messageType, receiverUserProfile,
-    receiverDeviceToken)
+async function connectFriends(messageId, data, messageType, receiverUserProfile)
 {
     const senderId = data.senderId;
     const receiverId = data.receiverId;
@@ -172,8 +168,7 @@ async function connectFriends(messageId, data, messageType, receiverUserProfile,
 /* Sends a notification to user who originally sent friend request.
  * actionType contains whether it was accepted or denied.
 */
-async function sendFriendNotification(messageId, data, messageType, 
-    receiverUserProfile, receiverDeviceToken)
+async function sendFriendNotify(messageId, data, messageType, receiverUserProfile)
 {
     const receiverDeviceToken = receiverUserProfile.deviceToken;
     const messageType = "friendNotify";
