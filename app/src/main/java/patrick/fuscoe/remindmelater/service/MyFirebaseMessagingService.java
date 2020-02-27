@@ -1,11 +1,14 @@
 package patrick.fuscoe.remindmelater.service;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -107,6 +110,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Message contains no data payload.");
             return;
         }
+
+        createNotificationChannel();
 
         // Load user profile then filter the message by type
         loadUserProfileFromCloud();
@@ -348,6 +353,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setVibrate(null);
 
         notificationManager.notify(notificationId, builder.build());
+    }
+
+    private void createNotificationChannel()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_channel_name);
+            String description = getString(R.string.notification_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private int generateUniqueInt()
