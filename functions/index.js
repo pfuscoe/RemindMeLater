@@ -110,7 +110,7 @@ async function sendFriendRequest(messageId, data, receiverUserProfile)
 }
 
 
-function filterMessageType(messageId, data, messageType, receiverUserProfile,
+async function filterMessageType(messageId, data, messageType, receiverUserProfile,
     receiverDeviceToken) {
 
 	switch (messageType) {
