@@ -11,9 +11,9 @@ const db = admin.firestore();
 
 // Listen for writes to messages and call appropriate function
 exports.messageListener = functions.firestore
-    .document('messages/{messageId}').onWrite(async (change, context) => {
+    .document('messages/{messageId}').onCreate(async (snap, context) => {
         const messageId = context.params.messageId;
-        const data = change.after.data();
+        const data = snap.data();
         const messageType = data.messageType;
 
         console.log('New message received.\n messageId: ' + messageId +
@@ -108,41 +108,7 @@ async function sendFriendRequest(messageId, data, receiverUserProfile)
     return response;
 }
 
-
-async function filterMessageType(messageId, data, messageType, receiverUserProfile)
-{
-	switch (messageType) {
-		case "friendActionResponse":
-            if (data.actionType == "acceptFriend")
-            {
-                try {
-                    const connectFriends = await connectFriends(messageId, data,
-                        messageType, receiverUserProfile);
-                }
-                catch (error) {
-                    console.log('Error syncing new friends in cloud: ', error);
-                    // notify users of error
-                    return;
-                }
-            }
-            else if (data.actionType == "denyFriend")
-            {
-                // ...
-            }
-
-            // send notification to original friend request sender
-
-            const sendFriendNotify = await sendFriendNotify(messageId, data,
-            	messageType, receiverUserProfile);
-
-            return sendFriendNotify;
-
-		case "placeholder":
-            return;
-	}
-}
-
-async function connectFriends(messageId, data, messageType, receiverUserProfile)
+async function connectFriends(messageId, data, receiverUserProfile)
 {
     const senderId = data.senderId;
     const receiverId = data.receiverId;
@@ -163,13 +129,15 @@ async function connectFriends(messageId, data, messageType, receiverUserProfile)
         }
     }, {merge: true});
 
-    return batch.commit();
+    const commitBatch = await batch.commit();
+
+    return true;
 }
 
 /* Sends a notification to user who originally sent friend request.
  * actionType contains whether it was accepted or denied.
 */
-async function sendFriendNotify(messageId, data, messageType, receiverUserProfile)
+async function sendFriendNotify(messageId, data, receiverUserProfile)
 {
     const receiverDeviceToken = receiverUserProfile.deviceToken;
     const messageType = "friendNotify";
@@ -193,4 +161,36 @@ async function sendFriendNotify(messageId, data, messageType, receiverUserProfil
     const response = await admin.messaging().send(message);
     console.log('Successfully sent friend request. System message ID:', response);
     return response;
+}
+
+
+async function filterMessageType(messageId, data, messageType, receiverUserProfile)
+{
+	switch (messageType) {
+		case "friendActionResponse":
+            if (data.actionType == "acceptFriend")
+            {
+                try {
+                    connectFriends(messageId, data, receiverUserProfile);
+                }
+                catch (error) {
+                    console.log('Error syncing new friends in cloud: ', error);
+                    // notify users of error
+                    return;
+                }
+            }
+            else if (data.actionType == "denyFriend")
+            {
+                // ...
+            }
+
+            // send notification to original friend request sender
+
+            return sendFriendNotify(messageId, data, receiverUserProfile);
+
+		case "placeholder":
+            return;
+	}
+
+	return true;
 }

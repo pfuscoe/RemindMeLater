@@ -348,7 +348,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(friendNotifyPendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setVibrate(null);
 
