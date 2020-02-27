@@ -77,8 +77,9 @@ async function getReceiverUserProfile(receiverId)
 {
     let receiverRef = db.collection('users').doc(receiverId);
     const receiverUserDoc = await receiverRef.get();
+    const receiverUserProfile = receiverUserDoc.data();
     // check if doc does not exist here?
-    return receiverUserProfile = receiverUserDoc.data();
+    return receiverUserProfile;
 }
 
 async function sendFriendRequest(messageId, data, receiverUserProfile)
@@ -134,7 +135,7 @@ async function filterMessageType(messageId, data, messageType, receiverUserProfi
             const sendFriendNotify = await sendFriendNotify(messageId, data,
             	messageType, receiverUserProfile);
 
-            return;
+            return sendFriendNotify;
 
 		case "placeholder":
             return;
