@@ -158,16 +158,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case "friendNotify":
                 message = FirebaseDocUtils.createFirebaseMessageObj(data);
                 contentTitleString = "Friend Response";
-
-                if (message.getActionType().equals("acceptFriend"))
-                {
-                    contentTextTemplate = " has accepted your friend request.";
-                }
-                else if (message.getActionType().equals("denyFriend"))
-                {
-                    contentTextTemplate = " has denied your friend request";
-                }
-
                 sendFriendNotifyNotification(message);
                 return;
 
@@ -301,17 +291,63 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendFriendNotifyNotification(FirebaseMessage message)
     {
-        // TODO: generate notification to only inform user of request response
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
         int notificationId = generateUniqueInt();
         Log.d(TAG, "Message Notification Id: " + notificationId);
 
-        // TODO: set iconId depending on actionType
-        int iconId = this.getResources().getIdentifier("message_friend_add",
-                "drawable", this.getPackageName());
+        int iconId;
+
+        if (message.getActionType().equals("acceptFriend"))
+        {
+            iconId = this.getResources().getIdentifier("action_check","drawable",
+                    this.getPackageName());
+            contentTextTemplate = " has accepted your friend request.";
+        }
+        else
+        {
+            iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
+                    this.getPackageName());
+            contentTextTemplate = " has denied your friend request";
+        }
+
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(this.getResources(), iconId);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        Gson gson = new Gson();
+        String firebaseMessageString = gson.toJson(message);
+
+        Log.d(TAG, "Gson FirebaseMessageString: " + firebaseMessageString);
+
+        contentTextString = message.getSenderDisplayName() + contentTextTemplate;
+
+        // Notification Tap Intent
+        Intent emptyIntent = new Intent();
+        PendingIntent emptyPendingIntent = PendingIntent.getBroadcast(this, 0,
+                emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent friendNotifyIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(friendNotifyIntent);
+        PendingIntent friendNotifyPendingIntent = stackBuilder.getPendingIntent(
+                0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Build Notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
+                NOTIFICATION_CHANNEL_ID)
+                .setLargeIcon(largeIconBitmap)
+                .setSmallIcon(iconId)
+                .setContentTitle(contentTitleString)
+                .setContentText(contentTextString)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(friendNotifyPendingIntent)
+                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setAutoCancel(false)
+                .setSound(defaultSoundUri)
+                .setVibrate(null);
+
+        notificationManager.notify(notificationId, builder.build());
     }
 
     private int generateUniqueInt()
