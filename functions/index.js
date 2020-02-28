@@ -27,7 +27,7 @@ exports.messageListener = functions.firestore
                 const receiverUserProfile = await getReceiverUserProfile(receiverId);
                 //const receiverDeviceToken = receiverUserProfile.deviceToken;
                 // check for missing token here?
-                return sendFriendRequest(messageId, data, receiverUserProfile);
+                return sendFriendRequest(data, receiverUserProfile);
             }
             catch (error) {
                 console.log('Error sending friend request: ', error);
@@ -40,7 +40,7 @@ exports.messageListener = functions.firestore
             try {
                 const receiverId = data.receiverId;
                 const receiverUserProfile = await getReceiverUserProfile(receiverId);
-                filterMessageType(messageId, data, messageType, receiverUserProfile);
+                filterMessageType(data, receiverUserProfile);
             }
             catch (error) {
                 console.log('Error handling request: ', error);
@@ -82,7 +82,7 @@ async function getReceiverUserProfile(receiverId)
     return receiverUserProfile;
 }
 
-async function sendFriendRequest(messageId, data, receiverUserProfile)
+async function sendFriendRequest(data, receiverUserProfile)
 {
     const receiverDeviceToken = receiverUserProfile.deviceToken;
     const messageType = "friendRequest";
@@ -108,7 +108,66 @@ async function sendFriendRequest(messageId, data, receiverUserProfile)
     return response;
 }
 
-async function connectFriends(messageId, data, receiverUserProfile)
+async function filterMessageType(data, receiverUserProfile)
+{
+	const messageType = data.messageType;
+
+	switch (messageType) {
+		case "friendActionResponse":
+            if (data.actionType == "acceptFriend")
+            {
+                try {
+                    connectFriends(data);
+                }
+                catch (error) {
+                    console.log('Error syncing new friends in cloud: ', error);
+                    // TODO: notify users of error
+                    return;
+                }
+            }
+            else if (data.actionType == "denyFriend")
+            {
+                // ...
+            }
+
+            // send notification to original friend request sender
+            return sendFriendNotify(data, receiverUserProfile);
+
+        case "shareToDoRequest":
+        	try {
+        		sendShareToDoRequest(data, receiverUserProfile);
+        	}
+        	catch (error) {
+        		console.log('Error sending share to do request: ', error);
+        		// TODO: notify user of error
+        	}
+
+        	return sendFriendNotify(data, receiverUserProfile);
+
+        case "shareToDoActionResponse":
+        	if (data.actionType == "acceptToDoList")
+        	{
+        		try {
+        			shareToDoList(data);
+        		}
+        		catch (error) {
+        			console.log('Error adding new user to to do list in cloud: ', error);
+        			// TODO: notify users of error
+        			return;
+        		}
+        	}
+
+        	return sendFriendNotify(data, receiverUserProfile);
+
+		case "placeholder":
+            return;
+	}
+
+	return true;
+}
+
+/* Updates friends data in user profiles in FireStore */
+async function connectFriends(data)
 {
     const senderId = data.senderId;
     const receiverId = data.receiverId;
@@ -117,6 +176,7 @@ async function connectFriends(messageId, data, receiverUserProfile)
     let receiverUserDocRef = db.collection('users').doc(receiverId);
 
     let batch = db.batch();
+
     batch.update(senderUserDocRef, {
         ['friendListMap.' + receiverId]: {
             friendDisplayName: data.receiverDisplayName
@@ -134,10 +194,35 @@ async function connectFriends(messageId, data, receiverUserProfile)
     return true;
 }
 
-/* Sends a notification to user who originally sent friend request.
- * actionType contains whether it was accepted or denied.
-*/
-async function sendFriendNotify(messageId, data, receiverUserProfile)
+/* Updates to do list and user profiles in FireStore */
+async function shareToDoList(data)
+{
+	const senderId = data.senderId;
+    const receiverId = data.receiverId;
+    const toDoGroupId = data.toDoGroupId;
+
+    let senderUserDocRef = db.collection('users').doc(senderId);
+    let receiverUserDocRef = db.collection('users').doc(receiverId);
+    let toDoGroupDocRef = db.collection('todogroups').doc(toDoGroupId);
+
+    let batch = db.batch();
+
+    batch.update(senderUserDocRef, {
+    	subscriptions: admin.firestore.FieldValue.arrayUnion(toDoGroupId)
+    });
+
+    batch.update(toDoGroupDocRef, {
+    	subscribers: admin.firestore.FieldValue.arrayUnion(senderId);
+    })
+
+    const commitBatch = await batch.commit();
+
+    return true;
+}
+
+/* Sends a notification to user who originally sent the request.
+   actionType contains whether it was accepted or denied. */
+async function sendFriendNotify(data, receiverUserProfile)
 {
     const receiverDeviceToken = receiverUserProfile.deviceToken;
     const messageType = "friendNotify";
@@ -156,41 +241,34 @@ async function sendFriendNotify(messageId, data, receiverUserProfile)
         token: receiverDeviceToken
     };
 
-    console.log('Sending friend request. message: %j', message);
+    console.log('Sending friend notify message: %j', message);
 
     const response = await admin.messaging().send(message);
-    console.log('Successfully sent friend request. System message ID:', response);
+    console.log('Successfully sent friend notify message. System message ID:', response);
     return response;
 }
 
-
-async function filterMessageType(messageId, data, messageType, receiverUserProfile)
+async function sendShareToDoRequest(data, receiverUserProfile)
 {
-	switch (messageType) {
-		case "friendActionResponse":
-            if (data.actionType == "acceptFriend")
-            {
-                try {
-                    connectFriends(messageId, data, receiverUserProfile);
-                }
-                catch (error) {
-                    console.log('Error syncing new friends in cloud: ', error);
-                    // notify users of error
-                    return;
-                }
-            }
-            else if (data.actionType == "denyFriend")
-            {
-                // ...
-            }
+    const receiverDeviceToken = receiverUserProfile.deviceToken;
 
-            // send notification to original friend request sender
+    let message = {
+        data: {
+            messageType: data.messageType,
+            actionType: data.actionType,
+            friendEmail: data.friendEmail,
+            senderId: data.senderId,
+            senderDisplayName: data.senderDisplayName,
+            senderDeviceToken: data.senderDeviceToken,
+            receiverDisplayName: receiverUserProfile.displayName,
+            toDoGroupId: data.toDoGroupId
+        },
+        token: receiverDeviceToken
+    };
 
-            return sendFriendNotify(messageId, data, receiverUserProfile);
+    console.log('Sending share to do list request. message: %j', message);
 
-		case "placeholder":
-            return;
-	}
-
-	return true;
+    const response = await admin.messaging().send(message);
+    console.log('Successfully sent share to do list request. System message ID:', response);
+    return response;
 }
