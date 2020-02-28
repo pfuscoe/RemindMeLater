@@ -186,6 +186,7 @@ public class FirebaseDocUtils {
         friendRequestMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
         friendRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
         friendRequestMessageDoc.put("toDoGroupId", "none");
+        friendRequestMessageDoc.put("toDoGroupTitle", "none");
 
         return friendRequestMessageDoc;
     }
@@ -199,9 +200,10 @@ public class FirebaseDocUtils {
         String senderDisplayName = data.get("senderDisplayName");
         String senderDeviceToken = data.get("senderDeviceToken");
         String toDoGroupId = data.get("toDoGroupId");
+        String toDoGroupTitle = data.get("toDoGroupTitle");
 
         return new FirebaseMessage(messageType, actionType, friendEmail, senderId,
-                senderDisplayName, senderDeviceToken, toDoGroupId);
+                senderDisplayName, senderDeviceToken, toDoGroupId, toDoGroupTitle);
     }
 
     public static Map<String, Object> createFriendActionResponseDoc(String actionType,

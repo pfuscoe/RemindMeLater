@@ -96,7 +96,8 @@ async function sendFriendRequest(data, receiverUserProfile)
             senderDisplayName: data.senderDisplayName,
             senderDeviceToken: data.senderDeviceToken,
             receiverDisplayName: receiverUserProfile.displayName,
-            toDoGroupId: data.toDoGroupId
+            toDoGroupId: data.toDoGroupId,
+            toDoGroupTitle: data.toDoGroupTitle
         },
         token: receiverDeviceToken
     };
@@ -236,7 +237,8 @@ async function sendFriendNotify(data, receiverUserProfile)
             senderDisplayName: data.senderDisplayName,
             senderDeviceToken: data.senderDeviceToken,
             receiverDisplayName: receiverUserProfile.displayName,
-            toDoGroupId: data.toDoGroupId
+            toDoGroupId: data.toDoGroupId,
+            toDoGroupTitle: data.toDoGroupTitle
         },
         token: receiverDeviceToken
     };
@@ -261,7 +263,8 @@ async function sendShareToDoRequest(data, receiverUserProfile)
             senderDisplayName: data.senderDisplayName,
             senderDeviceToken: data.senderDeviceToken,
             receiverDisplayName: receiverUserProfile.displayName,
-            toDoGroupId: data.toDoGroupId
+            toDoGroupId: data.toDoGroupId,
+            toDoGroupTitle: data.toDoGroupTitle
         },
         token: receiverDeviceToken
     };
