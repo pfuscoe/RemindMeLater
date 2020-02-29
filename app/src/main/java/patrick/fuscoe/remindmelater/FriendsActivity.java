@@ -69,6 +69,21 @@ public class FriendsActivity extends AppCompatActivity implements
         public void friendClicked(View v, int position) {
 
             // TODO: setup click action
+            Friend friend = friendList.get(position);
+
+            switch (v.getId())
+            {
+                case R.id.view_row_friend_share_to_do_list_icon:
+                    return;
+
+                case R.id.view_row_friend_share_reminder_icon:
+                    // add share (copy) reminder feature here
+                    return;
+
+                case R.id.view_row_friend_delete_icon:
+                    // TODO: implement remove friend
+                    return;
+            }
 
         }
     };
