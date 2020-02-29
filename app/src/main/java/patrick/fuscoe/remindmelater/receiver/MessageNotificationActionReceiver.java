@@ -68,7 +68,7 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
                 MyFirebaseMessagingService.USER_PROFILE_STRING);
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
 
-        sendFriendActionResponseMessage(actionType);
+        sendActionResponseMessage();
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
@@ -93,11 +93,11 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
     }
     */
 
-    // Write a message to FireStore that triggers cloud function to sync new friends
-    private void sendFriendActionResponseMessage(String actionType)
+    // Write a message to FireStore that triggers cloud function
+    private void sendActionResponseMessage()
     {
         Map<String, Object> friendActionResponseDoc =
-                FirebaseDocUtils.createFriendActionResponseDoc(actionType, userProfile,
+                FirebaseDocUtils.createActionResponseDoc(actionType, userProfile,
                         firebaseMessage);
 
         db.collection("messages")

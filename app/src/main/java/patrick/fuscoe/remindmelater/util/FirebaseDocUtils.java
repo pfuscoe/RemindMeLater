@@ -206,24 +206,25 @@ public class FirebaseDocUtils {
                 senderDisplayName, senderDeviceToken, toDoGroupId, toDoGroupTitle);
     }
 
-    public static Map<String, Object> createFriendActionResponseDoc(String actionType,
-                                                                    UserProfile userProfile,
-                                                                    FirebaseMessage requestMessage)
+    public static Map<String, Object> createActionResponseDoc(String actionType,
+                                                              UserProfile userProfile,
+                                                              FirebaseMessage requestMessage)
     {
-        Map<String, Object> friendActionResponseDoc = new HashMap<>();
+        Map<String, Object> actionResponseDoc = new HashMap<>();
 
-        friendActionResponseDoc.put("messageType", "friendActionResponse");
-        friendActionResponseDoc.put("actionType", actionType);
-        friendActionResponseDoc.put("friendEmail", requestMessage.getFriendEmail());
-        friendActionResponseDoc.put("senderId", userProfile.getId());
-        friendActionResponseDoc.put("senderDisplayName", userProfile.getDisplayName());
-        friendActionResponseDoc.put("senderDeviceToken", userProfile.getDeviceToken());
-        friendActionResponseDoc.put("receiverDisplayName", requestMessage.getSenderDisplayName());
-        friendActionResponseDoc.put("receiverDeviceToken", requestMessage.getSenderDeviceToken());
-        friendActionResponseDoc.put("receiverId", requestMessage.getSenderId());
-        friendActionResponseDoc.put("toDoGroupId", "none");
+        actionResponseDoc.put("messageType", "friendActionResponse");
+        actionResponseDoc.put("actionType", actionType);
+        actionResponseDoc.put("friendEmail", requestMessage.getFriendEmail());
+        actionResponseDoc.put("senderId", userProfile.getId());
+        actionResponseDoc.put("senderDisplayName", userProfile.getDisplayName());
+        actionResponseDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+        actionResponseDoc.put("receiverDisplayName", requestMessage.getSenderDisplayName());
+        actionResponseDoc.put("receiverDeviceToken", requestMessage.getSenderDeviceToken());
+        actionResponseDoc.put("receiverId", requestMessage.getSenderId());
+        actionResponseDoc.put("toDoGroupId", requestMessage.getToDoGroupId());
+        actionResponseDoc.put("toDoGroupTitle", requestMessage.getToDoGroupTitle());
 
-        return friendActionResponseDoc;
+        return actionResponseDoc;
     }
 
 }

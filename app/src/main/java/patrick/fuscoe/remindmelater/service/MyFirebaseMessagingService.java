@@ -44,8 +44,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String NOTIFICATION_CHANNEL_ID = "patrick.fuscoe.remindmelater.NOTIFICATION_CHANNEL_ID";
     public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
-    public static final String MESSAGE_ACTION_FRIEND_ADD = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_ADD";
-    public static final String MESSAGE_ACTION_FRIEND_DENY = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_FRIEND_DENY";
+    public static final String MESSAGE_ACTION_ACCEPT = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_ACCEPT";
+    public static final String MESSAGE_ACTION_DENY = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_DENY";
     public static final String FIREBASE_MESSAGE_STRING = "patrick.fuscoe.remindmelater.FIREBASE_MESSAGE_STRING";
     public static final String USER_PROFILE_STRING = "patrick.fuscoe.remindmelater.USER_PROFILE_STRING";
     public static final String MESSAGE_NOTIFICATION_ACTION_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_ACTION_TYPE";
@@ -63,6 +63,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private String contentTitleString;
     private String contentTextString;
     private String contentTextTemplate;
+    private int iconId = 0;
+    private String positiveActionType;
+    private String negativeActionType;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -116,11 +119,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Load user profile then filter the message by type
         loadUserProfileFromCloud();
 
+        /*
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            // TODO: implement notifications (with no actions) here?
         }
+        */
     }
 
     private void loadUserProfileFromCloud()
@@ -150,13 +154,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         contentTitleString = "";
         contentTextString = "";
         contentTextTemplate = "";
+        positiveActionType = "";
+        negativeActionType = "";
 
         switch (messageType)
         {
             case "friendRequest":
                 message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                iconId = this.getResources().getIdentifier("message_friend_add",
+                        "drawable", this.getPackageName());
                 contentTitleString = "Friend Request";
                 contentTextTemplate = " has sent you a friend request.";
+                positiveActionType = "acceptFriend";
+                negativeActionType = "denyFriend";
                 sendRequestNotification(message);
                 return;
 
@@ -168,10 +178,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             case "shareToDoRequest":
                 message = FirebaseDocUtils.createFirebaseMessageObj(data);
-                // TODO: extract to do list title
+                iconId = this.getResources().getIdentifier("ic_menu_list","drawable",
+                        this.getPackageName());
                 contentTitleString = "Share To Do List Request";
-                contentTextTemplate = " would like to share ";
-                // TODO: Handle to do request
+                contentTextTemplate = " would like to share " + message.getToDoGroupTitle() +
+                        " with you.";
+                positiveActionType = "acceptToDoList";
+                negativeActionType = "denyToDoList";
+                sendRequestNotification(message);
                 return;
 
             case "shareToDoNotify":
@@ -199,8 +213,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         int notificationId = generateUniqueInt();
         Log.d(TAG, "Message Notification Id: " + notificationId);
 
-        int iconId = this.getResources().getIdentifier("message_friend_add",
-                "drawable", this.getPackageName());
+        if (message.getMessageType().equals("friendRequest"))
+        {
+            iconId = this.getResources().getIdentifier("message_friend_add",
+                    "drawable", this.getPackageName());
+        }
+        else if (message.getMessageType().equals("shareToDoRequest"))
+        {
+            iconId = this.getResources().getIdentifier("ic_menu_list","drawable",
+                    this.getPackageName());
+        }
+
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(this.getResources(), iconId);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -218,33 +241,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent emptyPendingIntent = PendingIntent.getBroadcast(this, 0,
                 emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent friendRequestIntent = new Intent(this, MainActivity.class);
+        Intent requestIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntentWithParentStack(friendRequestIntent);
+        stackBuilder.addNextIntentWithParentStack(requestIntent);
         PendingIntent friendRequestPendingIntent = stackBuilder.getPendingIntent(
                 0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Add Friend Intent
-        Intent friendAcceptIntent = new Intent(this,
+        Intent acceptIntent = new Intent(this,
                 MessageNotificationActionReceiver.class);
-        friendAcceptIntent.setAction(MESSAGE_ACTION_FRIEND_ADD + notificationId);
-        friendAcceptIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
-        friendAcceptIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "acceptFriend");
-        friendAcceptIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
-        friendAcceptIntent.putExtra(USER_PROFILE_STRING, userProfileString);
-        PendingIntent friendAcceptPendingIntent = PendingIntent.getBroadcast(this,
-                0, friendAcceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        acceptIntent.setAction(MESSAGE_ACTION_ACCEPT + notificationId);
+        acceptIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        acceptIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, positiveActionType);
+        acceptIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
+        acceptIntent.putExtra(USER_PROFILE_STRING, userProfileString);
+        PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(this,
+                0, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Notification Deny Friend Intent
-        Intent friendDenyIntent = new Intent(this,
+        Intent denyIntent = new Intent(this,
                 MessageNotificationActionReceiver.class);
-        friendDenyIntent.setAction(MESSAGE_ACTION_FRIEND_DENY + notificationId);
-        friendDenyIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
-        friendDenyIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "denyFriend");
-        friendDenyIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
-        friendDenyIntent.putExtra(USER_PROFILE_STRING, userProfileString);
-        PendingIntent friendDenyPendingIntent = PendingIntent.getBroadcast(this,
-                0, friendDenyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        denyIntent.setAction(MESSAGE_ACTION_DENY + notificationId);
+        denyIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        denyIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, negativeActionType);
+        denyIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
+        denyIntent.putExtra(USER_PROFILE_STRING, userProfileString);
+        PendingIntent denyPendingIntent = PendingIntent.getBroadcast(this,
+                0, denyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Build Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
@@ -260,8 +283,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(false)
                 .setSound(defaultSoundUri)
                 .setVibrate(null)
-                .addAction(R.drawable.action_check, getString(R.string.accept), friendAcceptPendingIntent)
-                .addAction(R.drawable.ic_menu_close, getString(R.string.deny), friendDenyPendingIntent);
+                .addAction(R.drawable.action_check, getString(R.string.accept), acceptPendingIntent)
+                .addAction(R.drawable.ic_menu_close, getString(R.string.deny), denyPendingIntent);
 
         notificationManager.notify(notificationId, builder.build());
     }
@@ -272,8 +295,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         int notificationId = generateUniqueInt();
         Log.d(TAG, "Message Notification Id: " + notificationId);
-
-        int iconId;
 
         if (message.getActionType().equals("acceptFriend"))
         {
