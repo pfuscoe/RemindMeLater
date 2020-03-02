@@ -33,8 +33,10 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.Friend;
+import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddFriendDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.ShareToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
@@ -45,7 +47,8 @@ import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
  */
 
 public class FriendsActivity extends AppCompatActivity implements
-        AddFriendDialogFragment.AddFriendDialogListener {
+        AddFriendDialogFragment.AddFriendDialogListener,
+        ShareToDoGroupDialogFragment.ShareToDoGroupDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FriendsActivity";
 
@@ -63,6 +66,8 @@ public class FriendsActivity extends AppCompatActivity implements
     private UserProfile userProfile;
     public List<Friend> friendList;
 
+    private ToDoGroup selectedToDoGroup;
+
 
     private FriendsClickListener friendsClickListener = new FriendsClickListener() {
         @Override
@@ -74,6 +79,7 @@ public class FriendsActivity extends AppCompatActivity implements
             switch (v.getId())
             {
                 case R.id.view_row_friend_share_to_do_list_icon:
+                    openShareToDoGroupDialog();
                     return;
 
                 case R.id.view_row_friend_share_reminder_icon:
@@ -91,6 +97,21 @@ public class FriendsActivity extends AppCompatActivity implements
     public interface FriendsClickListener {
         void friendClicked(View v, int position);
     }
+
+    public interface ShareToDoGroupSelectedListener {
+        void onToDoGroupSelected(DialogFragment dialogFragment, ToDoGroup toDoGroup);
+    }
+
+    private ShareToDoGroupSelectedListener shareToDoGroupSelectedListener =
+            new ShareToDoGroupSelectedListener() {
+        @Override
+        public void onToDoGroupSelected(DialogFragment dialogFragment, ToDoGroup toDoGroup)
+        {
+            selectedToDoGroup = toDoGroup;
+            dialogFragment.dismiss();
+            // TODO: confirmation? then execute share
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +223,13 @@ public class FriendsActivity extends AppCompatActivity implements
         dialogFragment.show(getSupportFragmentManager(), "addFriend");
     }
 
+    private void openShareToDoGroupDialog()
+    {
+        DialogFragment dialogFragment = new ShareToDoGroupDialogFragment(
+                shareToDoGroupSelectedListener);
+        dialogFragment.show(getSupportFragmentManager(), "shareToDoGroup");
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
 
@@ -233,7 +261,13 @@ public class FriendsActivity extends AppCompatActivity implements
     public void onDialogNegativeClick(DialogFragment dialogFragment) {
         if (dialogFragment instanceof AddFriendDialogFragment)
         {
-            Toast.makeText(getApplicationContext(), "Add Friend Cancelled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Add Friend Cancelled",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (dialogFragment instanceof ShareToDoGroupDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Share To Do List Cancelled",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

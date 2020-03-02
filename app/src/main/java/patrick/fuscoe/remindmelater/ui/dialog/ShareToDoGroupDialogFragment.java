@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import patrick.fuscoe.remindmelater.FriendsActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 
@@ -35,6 +36,7 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
     private RecyclerView.Adapter shareToDoGroupRecyclerAdapter;
 
     ShareToDoGroupDialogListener listener;
+    FriendsActivity.ShareToDoGroupSelectedListener shareToDoGroupSelectedListener;
 
     public interface ShareToDoGroupClickListener {
         void onToDoGroupClicked(View v, int position);
@@ -43,16 +45,22 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
     public interface ShareToDoGroupDialogListener {
         //void onDialogPositiveClick(DialogFragment dialog);
         void onDialogNegativeClick(DialogFragment dialog);
-        void onToDoGroupSelected(DialogFragment dialog);
     }
 
     private ShareToDoGroupClickListener shareToDoGroupClickListener = new ShareToDoGroupClickListener() {
         @Override
         public void onToDoGroupClicked(View v, int position) {
-            // TODO: implement click action
             selectedToDoGroup = toDoGroupList.get(position);
+            shareToDoGroupSelectedListener.onToDoGroupSelected(
+                    ShareToDoGroupDialogFragment.this, selectedToDoGroup);
         }
     };
+
+    public ShareToDoGroupDialogFragment(FriendsActivity.ShareToDoGroupSelectedListener
+                                                shareToDoGroupSelectedListener)
+    {
+        this.shareToDoGroupSelectedListener = shareToDoGroupSelectedListener;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -63,6 +71,8 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException("Host must implement ShareToDoGroupDialogListener");
         }
+
+        shareToDoGroupSelectedListener = (FriendsActivity.ShareToDoGroupSelectedListener) context;
     }
 
     @NonNull
@@ -104,9 +114,5 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-    }
-
-    public String getSelectedToDoGroupTitle() {
-        return selectedToDoGroup.getTitle();
     }
 }
