@@ -88,4 +88,5 @@
     <string name="dialog_add_new_friend">Add New Friend</string>
     <string name="accept">Accept</string>
     <string name="deny">Deny</string>
+    <string name="dialog_share_to_do_group_title">Share To Do List</string>
 </resources>
