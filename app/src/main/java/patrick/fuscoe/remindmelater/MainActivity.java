@@ -49,6 +49,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
+import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.BootReceiver;
 import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int DEFAULT_NOTIFICATION_ID = 100;
 
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
+    public static final String TO_DO_GROUP_LIST = "patrick.fuscoe.remindmelater.TO_DO_GROUP_LIST";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     public static final String BACK_PRESSED_FROM_REMINDER_DETAILS = "patrick.fuscoe.remindmelater.BACK_PRESSED_FROM_REMINDER_DETAILS";
     public static final String USER_PREFERENCES_UPDATED = "patrick.fuscoe.remindmelater.USER_PREFERENCES_UPDATED";
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences reminderNotificationIds;
 
     private List<ReminderItem> reminderItemList;
+    private List<ToDoGroup> toDoGroupList;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private boolean setRemindersTabActive;
@@ -279,7 +282,12 @@ public class MainActivity extends AppCompatActivity {
 
         String userProfileString = gson.toJson(userProfile);
         Log.d(TAG, "userProfileString: " + userProfileString);
+
+        String toDoGroupListString = gson.toJson(toDoGroupList);
+        Log.d(TAG, "toDoGroupListString: " + toDoGroupListString);
+
         intent.putExtra(USER_PROFILE, userProfileString);
+        intent.putExtra(TO_DO_GROUP_LIST, toDoGroupListString);
         startActivity(intent);
     }
 
@@ -594,4 +602,11 @@ public class MainActivity extends AppCompatActivity {
         return (int) (Math.random() * 1000000);
     }
 
+    public List<ToDoGroup> getToDoGroupList() {
+        return toDoGroupList;
+    }
+
+    public void setToDoGroupList(List<ToDoGroup> toDoGroupList) {
+        this.toDoGroupList = toDoGroupList;
+    }
 }

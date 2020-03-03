@@ -65,6 +65,7 @@ public class FriendsActivity extends AppCompatActivity implements
 
     private UserProfile userProfile;
     public List<Friend> friendList;
+    private List<ToDoGroup> toDoGroupList;
 
     private ToDoGroup selectedToDoGroup;
     private Friend selectedFriend;
@@ -133,6 +134,11 @@ public class FriendsActivity extends AppCompatActivity implements
         String userProfileString = intent.getStringExtra(MainActivity.USER_PROFILE);
         Log.d(TAG, "userProfileString: " + userProfileString);
         userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
+
+        Type dataTypeToDoGroupList = new TypeToken<List<ToDoGroup>>(){}.getType();
+        String toDoGroupListString = intent.getStringExtra(MainActivity.TO_DO_GROUP_LIST);
+        Log.d(TAG, "toDoGroupListString: " + toDoGroupListString);
+        toDoGroupList = gson.fromJson(toDoGroupListString, dataTypeToDoGroupList);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
@@ -254,7 +260,7 @@ public class FriendsActivity extends AppCompatActivity implements
 
     private void openShareToDoGroupDialog()
     {
-        DialogFragment dialogFragment = new ShareToDoGroupDialogFragment(
+        DialogFragment dialogFragment = new ShareToDoGroupDialogFragment(toDoGroupList,
                 shareToDoGroupSelectedListener);
         dialogFragment.show(getSupportFragmentManager(), "shareToDoGroup");
     }

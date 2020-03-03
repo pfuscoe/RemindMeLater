@@ -56,9 +56,11 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         }
     };
 
-    public ShareToDoGroupDialogFragment(FriendsActivity.ShareToDoGroupSelectedListener
+    public ShareToDoGroupDialogFragment(List<ToDoGroup> toDoGroupList,
+                                        FriendsActivity.ShareToDoGroupSelectedListener
                                                 shareToDoGroupSelectedListener)
     {
+        this.toDoGroupList = toDoGroupList;
         this.shareToDoGroupSelectedListener = shareToDoGroupSelectedListener;
     }
 

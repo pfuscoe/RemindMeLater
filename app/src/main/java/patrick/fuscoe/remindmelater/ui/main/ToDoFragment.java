@@ -235,6 +235,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
                     }
 
                     toDoGroupList = toDoGroupDocs;
+                    ((MainActivity) requireActivity()).setToDoGroupList(toDoGroupList);
 
                     if (tipsMenuItem != null)
                     {
@@ -280,7 +281,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
                     Log.d(TAG, "UserProfile loaded");
 
-                    ((MainActivity) getActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName() + "!");
+                    ((MainActivity) requireActivity()).setActionBarTitle("Hello, " + userProfile.getDisplayName() + "!");
 
                     updateToDoGroupDisplayOnReorder();
                     UpdateToDoGroupsDisplay();
