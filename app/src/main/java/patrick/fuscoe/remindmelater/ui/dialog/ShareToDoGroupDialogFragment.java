@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -91,6 +92,10 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
 
         shareToDoGroupRecyclerLayoutManager = new LinearLayoutManager(getContext());
         shareToDoGroupRecycler.setLayoutManager(shareToDoGroupRecyclerLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                shareToDoGroupRecycler.getContext(), DividerItemDecoration.VERTICAL);
+        shareToDoGroupRecycler.addItemDecoration(dividerItemDecoration);
 
         shareToDoGroupRecyclerAdapter = new ShareToDoGroupDialogAdapter(toDoGroupList,
                 getContext(), shareToDoGroupClickListener);
