@@ -67,14 +67,14 @@ public class FriendsActivity extends AppCompatActivity implements
     public List<Friend> friendList;
 
     private ToDoGroup selectedToDoGroup;
-
+    private Friend selectedFriend;
 
     private FriendsClickListener friendsClickListener = new FriendsClickListener() {
         @Override
         public void friendClicked(View v, int position) {
 
             // TODO: setup click action
-            Friend friend = friendList.get(position);
+            selectedFriend = friendList.get(position);
 
             switch (v.getId())
             {
@@ -110,6 +110,7 @@ public class FriendsActivity extends AppCompatActivity implements
             selectedToDoGroup = toDoGroup;
             dialogFragment.dismiss();
             // TODO: confirmation? then execute share
+            sendShareToDoRequestMessage(selectedFriend, selectedToDoGroup);
         }
     };
 
@@ -189,7 +190,7 @@ public class FriendsActivity extends AppCompatActivity implements
         friendsAdapter.notifyDataSetChanged();
     }
 
-    // Write a message to FireStore to trigger cloud function
+    // Write a message to FireStore to trigger cloud function for sending friend request
     private void sendFriendRequestMessage(String friendEmail)
     {
         Map<String, Object> friendRequestMessageDocMap =
@@ -212,6 +213,34 @@ public class FriendsActivity extends AppCompatActivity implements
                         Log.d(TAG, "Error writing friend request document to cloud: " +
                                 e.getMessage());
                         Toast.makeText(getApplicationContext(), "Error sending friend " +
+                                "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    // Write a message to FireStore to trigger cloud function for sending share to do request
+    private void sendShareToDoRequestMessage(Friend friend, ToDoGroup toDoGroup)
+    {
+        Map<String, Object> shareToDoRequestMessageDocMap =
+                FirebaseDocUtils.createShareToDoRequestMessageDoc(friend, userProfile, toDoGroup);
+
+        db.collection("messages")
+                .add(shareToDoRequestMessageDocMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Share to do request message successfully written. " +
+                                "FireStore messageID: " + documentReference.getId());
+                        Toast.makeText(getApplicationContext(), "Share to do request sent " +
+                                "successfully!", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing share to do request document to cloud: " +
+                                e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error sending share to do " +
                                 "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

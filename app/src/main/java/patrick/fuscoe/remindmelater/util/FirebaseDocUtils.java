@@ -227,4 +227,23 @@ public class FirebaseDocUtils {
         return actionResponseDoc;
     }
 
+    public static Map<String, Object> createShareToDoRequestMessageDoc(Friend friend,
+                                                                       UserProfile userProfile,
+                                                                       ToDoGroup toDoGroup)
+    {
+        Map<String, Object> shareToDoRequestMessageDoc = new HashMap<>();
+
+        shareToDoRequestMessageDoc.put("messageType", "shareToDoRequest");
+        shareToDoRequestMessageDoc.put("actionType", "none");
+        //shareToDoRequestMessageDoc.put("friendEmail", friendEmail);
+        shareToDoRequestMessageDoc.put("receiverId", friend.getFriendId());
+        shareToDoRequestMessageDoc.put("senderId", userProfile.getId());
+        shareToDoRequestMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
+        shareToDoRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+        shareToDoRequestMessageDoc.put("toDoGroupId", toDoGroup.getId());
+        shareToDoRequestMessageDoc.put("toDoGroupTitle", toDoGroup.getTitle());
+
+        return shareToDoRequestMessageDoc;
+    }
+
 }
