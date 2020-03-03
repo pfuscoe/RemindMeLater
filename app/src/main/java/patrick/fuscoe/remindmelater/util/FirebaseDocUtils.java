@@ -235,7 +235,7 @@ public class FirebaseDocUtils {
 
         shareToDoRequestMessageDoc.put("messageType", "shareToDoRequest");
         shareToDoRequestMessageDoc.put("actionType", "none");
-        //shareToDoRequestMessageDoc.put("friendEmail", friendEmail);
+        shareToDoRequestMessageDoc.put("friendEmail", "none");
         shareToDoRequestMessageDoc.put("receiverId", friend.getFriendId());
         shareToDoRequestMessageDoc.put("senderId", userProfile.getId());
         shareToDoRequestMessageDoc.put("senderDisplayName", userProfile.getDisplayName());

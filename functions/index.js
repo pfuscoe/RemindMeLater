@@ -213,7 +213,7 @@ async function shareToDoList(data)
     });
 
     batch.update(toDoGroupDocRef, {
-    	subscribers: admin.firestore.FieldValue.arrayUnion(senderId);
+    	subscribers: admin.firestore.FieldValue.arrayUnion(senderId)
     })
 
     const commitBatch = await batch.commit();
