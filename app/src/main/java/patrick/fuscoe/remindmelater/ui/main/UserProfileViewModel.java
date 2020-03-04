@@ -12,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import patrick.fuscoe.remindmelater.FirebaseDocumentLiveData;
 
 /**
- * ViewModel for LiveData of Firebase user profile
+ * ViewModel for LiveData of FireStore user profile document
  */
 public class UserProfileViewModel extends ViewModel {
 
