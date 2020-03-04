@@ -48,6 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String MESSAGE_ACTION_DENY = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_DENY";
     public static final String FIREBASE_MESSAGE_STRING = "patrick.fuscoe.remindmelater.FIREBASE_MESSAGE_STRING";
     public static final String USER_PROFILE_STRING = "patrick.fuscoe.remindmelater.USER_PROFILE_STRING";
+    public static final String MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE";
     public static final String MESSAGE_NOTIFICATION_ACTION_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_ACTION_TYPE";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -64,6 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private String contentTextString;
     private String contentTextTemplate;
     private int iconId = 0;
+    private String outgoingMessageType;
     private String positiveActionType;
     private String negativeActionType;
 
@@ -156,6 +158,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         contentTextTemplate = "";
         positiveActionType = "";
         negativeActionType = "";
+        outgoingMessageType = "";
 
         switch (messageType)
         {
@@ -165,6 +168,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         "drawable", this.getPackageName());
                 contentTitleString = "Friend Request";
                 contentTextTemplate = " has sent you a friend request.";
+                outgoingMessageType = "friendActionResponse";
                 positiveActionType = "acceptFriend";
                 negativeActionType = "denyFriend";
                 sendRequestNotification(message);
@@ -183,6 +187,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 contentTitleString = "Share To Do List Request";
                 contentTextTemplate = " would like to share " + message.getToDoGroupTitle() +
                         " with you.";
+                outgoingMessageType = "shareToDoActionResponse";
                 positiveActionType = "acceptToDoList";
                 negativeActionType = "denyToDoList";
                 sendRequestNotification(message);
@@ -252,6 +257,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 MessageNotificationActionReceiver.class);
         acceptIntent.setAction(MESSAGE_ACTION_ACCEPT + notificationId);
         acceptIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        acceptIntent.putExtra(MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE, outgoingMessageType);
         acceptIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, positiveActionType);
         acceptIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
         acceptIntent.putExtra(USER_PROFILE_STRING, userProfileString);
@@ -263,6 +269,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 MessageNotificationActionReceiver.class);
         denyIntent.setAction(MESSAGE_ACTION_DENY + notificationId);
         denyIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        denyIntent.putExtra(MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE, outgoingMessageType);
         denyIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, negativeActionType);
         denyIntent.putExtra(FIREBASE_MESSAGE_STRING, firebaseMessageString);
         denyIntent.putExtra(USER_PROFILE_STRING, userProfileString);

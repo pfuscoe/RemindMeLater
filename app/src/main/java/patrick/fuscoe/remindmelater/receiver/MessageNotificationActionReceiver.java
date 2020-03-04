@@ -42,6 +42,7 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
     private Context context;
     private int notificationId;
 
+    private String outgoingMessageType;
     private String actionType;
     private FirebaseMessage firebaseMessage;
     private UserProfile userProfile;
@@ -54,6 +55,8 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
                 DEFAULT_NOTIFICATION_ID);
         this.actionType = intent.getStringExtra(
                 MyFirebaseMessagingService.MESSAGE_NOTIFICATION_ACTION_TYPE);
+        this.outgoingMessageType = intent.getStringExtra(
+                MyFirebaseMessagingService.MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE);
 
         Log.d(TAG, "notificationId: " + notificationId);
 
@@ -97,8 +100,8 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
     private void sendActionResponseMessage()
     {
         Map<String, Object> friendActionResponseDoc =
-                FirebaseDocUtils.createActionResponseDoc(actionType, userProfile,
-                        firebaseMessage);
+                FirebaseDocUtils.createActionResponseDoc(outgoingMessageType, actionType,
+                        userProfile, firebaseMessage);
 
         db.collection("messages")
                 .add(friendActionResponseDoc)

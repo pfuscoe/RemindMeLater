@@ -143,7 +143,7 @@ async function filterMessageType(data, receiverUserProfile)
         		// TODO: notify user of error
         	}
 
-        	return sendFriendNotify(data, receiverUserProfile);
+        	return true;
 
         case "shareToDoActionResponse":
         	if (data.actionType == "acceptToDoList")

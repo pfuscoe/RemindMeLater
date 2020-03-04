@@ -206,13 +206,14 @@ public class FirebaseDocUtils {
                 senderDisplayName, senderDeviceToken, toDoGroupId, toDoGroupTitle);
     }
 
-    public static Map<String, Object> createActionResponseDoc(String actionType,
+    public static Map<String, Object> createActionResponseDoc(String outgoingMessageType,
+                                                              String actionType,
                                                               UserProfile userProfile,
                                                               FirebaseMessage requestMessage)
     {
         Map<String, Object> actionResponseDoc = new HashMap<>();
 
-        actionResponseDoc.put("messageType", "friendActionResponse");
+        actionResponseDoc.put("messageType", outgoingMessageType);
         actionResponseDoc.put("actionType", actionType);
         actionResponseDoc.put("friendEmail", requestMessage.getFriendEmail());
         actionResponseDoc.put("senderId", userProfile.getId());
