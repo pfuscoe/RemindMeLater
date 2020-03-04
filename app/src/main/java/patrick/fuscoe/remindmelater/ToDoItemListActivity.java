@@ -4,9 +4,12 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -198,6 +202,25 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         toDoGroupViewModelFactory = new ToDoGroupViewModelFactory(toDoGroupId);
         toDoGroupViewModel = ViewModelProviders.of(this, toDoGroupViewModelFactory)
                 .get(ToDoGroupViewModel.class);
+        LiveData<DocumentSnapshot> toDoGroupLiveData =
+                toDoGroupViewModel.getDocumentSnapshotLiveData();
+
+        toDoGroupLiveData.observe(this, new Observer<DocumentSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot != null)
+                {
+                    toDoGroup = FirebaseDocUtils.createToDoGroupObj(documentSnapshot);
+                    Log.d(TAG, "toDoGroup loaded");
+
+                    getSupportActionBar().setTitle(toDoGroup.getTitle());
+                    toDoItemListUnsorted = toDoGroup.getToDoItemArrayList();
+                    splitAndSortToDoItems();
+
+                    UpdateToDoItemListDisplay();
+                }
+            }
+        });
     }
 
     public void UpdateToDoItemListDisplay()
