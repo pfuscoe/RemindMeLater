@@ -8,11 +8,20 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp">
 
+    <View
+        android:id="@+id/dialog_share_to_do_group_top_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/greyLight" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dialog_share_to_do_group_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
