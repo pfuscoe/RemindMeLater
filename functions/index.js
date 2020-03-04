@@ -25,7 +25,6 @@ exports.messageListener = functions.firestore
             try {
                 const receiverId = await lookupReceiverId(data.friendEmail);
                 const receiverUserProfile = await getReceiverUserProfile(receiverId);
-                //const receiverDeviceToken = receiverUserProfile.deviceToken;
                 // check for missing token here?
                 return sendFriendRequest(data, receiverUserProfile);
             }
@@ -47,14 +46,12 @@ exports.messageListener = functions.firestore
             }
         }
 
-        /*
         try {
             const deleteMessage = await deleteMessage(messageId);
         }
         catch (error) {
             console.log('Error deleting message from cloud: ', error);
         }
-        */
 
         return null;
     });
@@ -113,7 +110,8 @@ async function filterMessageType(data, receiverUserProfile)
 {
 	const messageType = data.messageType;
 
-	switch (messageType) {
+	switch (messageType)
+	{
 		case "friendActionResponse":
             if (data.actionType == "acceptFriend")
             {
@@ -159,9 +157,6 @@ async function filterMessageType(data, receiverUserProfile)
         	}
 
         	return sendFriendNotify(data, receiverUserProfile);
-
-		case "placeholder":
-            return;
 	}
 
 	return true;
