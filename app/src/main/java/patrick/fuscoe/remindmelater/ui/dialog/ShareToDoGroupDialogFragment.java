@@ -74,8 +74,6 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException("Host must implement ShareToDoGroupDialogListener");
         }
-
-        //shareToDoGroupSelectedListener = (FriendsActivity.ShareToDoGroupSelectedListener) context;
     }
 
     @NonNull
