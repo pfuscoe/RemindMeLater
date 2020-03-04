@@ -69,6 +69,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements
     private ToDoItem toDoItemToEdit;
 
     private boolean hasChanged;
+    private boolean isShared;
 
 
     private ToDoItemClickListener toDoItemClickListener = new ToDoItemClickListener() {
@@ -148,6 +149,15 @@ public class ToDoItemListActivity extends AppCompatActivity implements
 
         hasChanged = false;
 
+        if (toDoGroup.getSubscribers().length > 1)
+        {
+            isShared = true;
+        }
+        else
+        {
+            isShared = false;
+        }
+
         // Setup RecyclerView
         toDoItemListRecyclerView = findViewById(R.id.view_to_do_item_list_recycler);
         toDoItemListRecyclerView.setHasFixedSize(false);
@@ -182,6 +192,11 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         toDoItemListRecyclerView.setAdapter(toDoItemListAdapter);
 
         toDoItemListAdapter.notifyDataSetChanged();
+
+        if (isShared)
+        {
+            commitToDoGroup();
+        }
     }
 
     @Override
