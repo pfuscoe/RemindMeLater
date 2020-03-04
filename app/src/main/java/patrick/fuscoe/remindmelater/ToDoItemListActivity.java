@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,8 @@ import patrick.fuscoe.remindmelater.models.ToDoItem;
 import patrick.fuscoe.remindmelater.ui.dialog.AddToDoItemDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.EditToDoItemDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.ToDoFragment;
+import patrick.fuscoe.remindmelater.ui.main.ToDoGroupViewModel;
+import patrick.fuscoe.remindmelater.ui.main.ToDoGroupViewModelFactory;
 import patrick.fuscoe.remindmelater.ui.todoitem.ToDoItemListAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
@@ -70,6 +73,9 @@ public class ToDoItemListActivity extends AppCompatActivity implements
 
     private boolean hasChanged;
     private boolean isShared;
+
+    private ToDoGroupViewModel toDoGroupViewModel;
+    private ToDoGroupViewModelFactory toDoGroupViewModelFactory;
 
 
     private ToDoItemClickListener toDoItemClickListener = new ToDoItemClickListener() {
@@ -152,6 +158,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         if (toDoGroup.getSubscribers().length > 1)
         {
             isShared = true;
+            loadToDoGroupObserver();
         }
         else
         {
@@ -184,6 +191,13 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         {
             showAddToDoItemDialog();
         }
+    }
+
+    private void loadToDoGroupObserver()
+    {
+        toDoGroupViewModelFactory = new ToDoGroupViewModelFactory(toDoGroupId);
+        toDoGroupViewModel = ViewModelProviders.of(this, toDoGroupViewModelFactory)
+                .get(ToDoGroupViewModel.class);
     }
 
     public void UpdateToDoItemListDisplay()
