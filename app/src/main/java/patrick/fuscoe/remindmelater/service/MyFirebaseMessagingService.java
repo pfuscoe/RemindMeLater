@@ -303,17 +303,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         int notificationId = generateUniqueInt();
         Log.d(TAG, "Message Notification Id: " + notificationId);
 
-        if (message.getActionType().equals("acceptFriend"))
+        switch (message.getActionType())
         {
-            iconId = this.getResources().getIdentifier("action_check","drawable",
-                    this.getPackageName());
-            contentTextTemplate = " has accepted your friend request.";
-        }
-        else
-        {
-            iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
-                    this.getPackageName());
-            contentTextTemplate = " has denied your friend request";
+            case "acceptFriend":
+                iconId = this.getResources().getIdentifier("action_check","drawable",
+                        this.getPackageName());
+                contentTextTemplate = " has accepted your friend request.";
+                break;
+
+            case "denyFriend":
+                iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
+                        this.getPackageName());
+                contentTextTemplate = " has denied your friend request";
+                break;
+
+            case "acceptToDoList":
+                iconId = this.getResources().getIdentifier("action_check","drawable",
+                        this.getPackageName());
+                contentTextTemplate = " has accepted your share to do list request.";
+                break;
+
+            case "denyToDoList":
+                iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
+                        this.getPackageName());
+                contentTextTemplate = " has denied your share to do list request";
+                break;
         }
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(this.getResources(), iconId);
