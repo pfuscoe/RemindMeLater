@@ -164,6 +164,10 @@ public class FriendsActivity extends AppCompatActivity implements
 
         friendsAdapter = new FriendsAdapter(friendList, this, friendsClickListener);
         viewFriendsRecycler.setAdapter(friendsAdapter);
+
+        viewFrameTips = findViewById(R.id.view_friends_tips);
+        viewTipsWebView = findViewById(R.id.view_friends_tips_webview);
+        viewTipsWebView.loadUrl("file:///android_asset/tips_friends.html");
     }
 
     @Override
@@ -177,12 +181,12 @@ public class FriendsActivity extends AppCompatActivity implements
         menu.removeItem(R.id.menu_main_user_settings);
         menu.removeItem(R.id.menu_main_reorder);
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
-        //menu.removeItem(R.id.menu_main_tips);
 
+        tipsMenuItem = menu.findItem(R.id.menu_main_tips);
 
         if (friendList.size() == 0)
         {
-            //showFriendsTips();
+            showFriendsTips();
         }
         else
         {
@@ -201,7 +205,8 @@ public class FriendsActivity extends AppCompatActivity implements
                 return true;
 
             case R.id.menu_main_tips:
-
+                toggleFriendsTips();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -323,6 +328,34 @@ public class FriendsActivity extends AppCompatActivity implements
         {
             Toast.makeText(getApplicationContext(), "Share To Do List Cancelled",
                     Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showFriendsTips()
+    {
+        viewFrameTips.setVisibility(View.VISIBLE);
+        viewFriendsRecycler.setVisibility(View.INVISIBLE);
+        tipsMenuItem.setTitle(R.string.hide_tips);
+        isTipsOn = true;
+    }
+
+    private void hideFriendsTips()
+    {
+        viewFrameTips.setVisibility(View.INVISIBLE);
+        viewFriendsRecycler.setVisibility(View.VISIBLE);
+        tipsMenuItem.setTitle(R.string.show_tips);
+        isTipsOn = false;
+    }
+
+    private void toggleFriendsTips()
+    {
+        if (isTipsOn)
+        {
+            hideFriendsTips();
+        }
+        else
+        {
+            showFriendsTips();
         }
     }
 }
