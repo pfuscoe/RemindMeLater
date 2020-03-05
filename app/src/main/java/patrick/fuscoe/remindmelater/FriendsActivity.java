@@ -297,19 +297,11 @@ public class FriendsActivity extends AppCompatActivity implements
         {
             Dialog dialogView = dialogFragment.getDialog();
             EditText viewFriendEmail = dialogView.findViewById(R.id.dialog_add_friend_email);
-            EditText viewFriendNickname = dialogView.findViewById(R.id.dialog_add_friend_nickname);
             String friendEmail = viewFriendEmail.getText().toString();
-            String friendNickname = viewFriendNickname.getText().toString();
 
             if (friendEmail.equals(""))
             {
                 Toast.makeText(this, "Add Friend Failed: Must enter an email address", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            if (friendNickname.equals(""))
-            {
-                Toast.makeText(this, "Add Friend Failed: Must enter a nickname", Toast.LENGTH_LONG).show();
                 return;
             }
 
