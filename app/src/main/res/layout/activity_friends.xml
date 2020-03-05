@@ -30,10 +30,46 @@
             android:id="@+id/view_friends_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Friends List:"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:text="Friend Name"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/view_friends_share_to_do_label"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:text="Share To Do List"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@+id/view_friends_send_reminder_label"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/view_friends_send_reminder_label"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:text="Send\nReminder"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@+id/view_friends_remove_friend_label"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/view_friends_remove_friend_label"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="8dp"
+            android:text="Remove\nFriend"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -41,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:background="@color/greyLight"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +90,7 @@
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="44dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
 
