@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -69,6 +71,11 @@ public class FriendsActivity extends AppCompatActivity implements
 
     private ToDoGroup selectedToDoGroup;
     private Friend selectedFriend;
+
+    private MenuItem tipsMenuItem;
+    private boolean isTipsOn;
+    private FrameLayout viewFrameTips;
+    private WebView viewTipsWebView;
 
     private FriendsClickListener friendsClickListener = new FriendsClickListener() {
         @Override
@@ -170,7 +177,17 @@ public class FriendsActivity extends AppCompatActivity implements
         menu.removeItem(R.id.menu_main_user_settings);
         menu.removeItem(R.id.menu_main_reorder);
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
-        menu.removeItem(R.id.menu_main_tips);
+        //menu.removeItem(R.id.menu_main_tips);
+
+
+        if (friendList.size() == 0)
+        {
+            //showFriendsTips();
+        }
+        else
+        {
+            isTipsOn = false;
+        }
 
         return true;
     }
@@ -182,6 +199,9 @@ public class FriendsActivity extends AppCompatActivity implements
             case R.id.menu_main_add:
                 openAddFriendDialog();
                 return true;
+
+            case R.id.menu_main_tips:
+
 
             default:
                 return super.onOptionsItemSelected(item);
