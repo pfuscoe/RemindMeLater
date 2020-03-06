@@ -116,7 +116,19 @@ public class FriendsActivity extends AppCompatActivity implements
         public void onToDoGroupSelected(DialogFragment dialogFragment, ToDoGroup toDoGroup)
         {
             selectedToDoGroup = toDoGroup;
-            // TODO: confirmation? then execute share
+
+            for (String subscriberId : selectedToDoGroup.getSubscribers())
+            {
+                if (selectedFriend.getFriendId().equals(subscriberId))
+                {
+                    Toast.makeText(getApplicationContext(), selectedFriend.
+                            getFriendDisplayName() + "is already subscribed to this list!",
+                            Toast.LENGTH_LONG).show();
+                    dialogFragment.dismiss();
+                    return;
+                }
+            }
+
             sendShareToDoRequestMessage(selectedFriend, selectedToDoGroup);
             dialogFragment.dismiss();
         }
