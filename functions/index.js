@@ -25,8 +25,7 @@ exports.messageListener = functions.firestore
             try {
                 const receiverId = await lookupReceiverId(data.friendEmail);
                 const receiverUserProfile = await getReceiverUserProfile(receiverId);
-                // check for missing token here?
-                return sendFriendRequest(data, receiverUserProfile);
+                const request = await sendFriendRequest(data, receiverUserProfile);
             }
             catch (error) {
                 console.log('Error sending friend request: ', error);
@@ -47,7 +46,7 @@ exports.messageListener = functions.firestore
         }
 
         try {
-            const deleteMessage = await deleteMessage(messageId);
+            const deleteAction = await deleteMessage(messageId);
         }
         catch (error) {
             console.log('Error deleting message from cloud: ', error);
@@ -60,7 +59,9 @@ exports.messageListener = functions.firestore
 async function deleteMessage(messageId)
 {
     let messageRef = db.collection('messages').doc(messageId);
-    return messageRef.delete();
+    const deleteAction = await messageRef.delete();
+    console.log('Deleted message from FireStore. messageId: ', messageId);
+    return true;
 }
 
 async function lookupReceiverId(friendEmail)
@@ -75,7 +76,6 @@ async function getReceiverUserProfile(receiverId)
     let receiverRef = db.collection('users').doc(receiverId);
     const receiverUserDoc = await receiverRef.get();
     const receiverUserProfile = receiverUserDoc.data();
-    // check if doc does not exist here?
     return receiverUserProfile;
 }
 
