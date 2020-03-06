@@ -122,7 +122,7 @@ public class FriendsActivity extends AppCompatActivity implements
                 if (selectedFriend.getFriendId().equals(subscriberId))
                 {
                     Toast.makeText(getApplicationContext(), selectedFriend.
-                            getFriendDisplayName() + "is already subscribed to this list!",
+                            getFriendDisplayName() + " is already subscribed to this list!",
                             Toast.LENGTH_LONG).show();
                     dialogFragment.dismiss();
                     return;
