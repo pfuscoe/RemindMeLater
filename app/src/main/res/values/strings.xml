@@ -90,4 +90,6 @@
     <string name="deny">Deny</string>
     <string name="dialog_share_to_do_group_title">Share To Do List</string>
     <string name="clear">Clear</string>
+    <string name="firebase_message_notification_channel_name">Remind Me Later Firebase Message Notifications</string>
+    <string name="firebase_message_notification_channel_description">Remind Me Later Firebase Message Notification Channel</string>
 </resources>

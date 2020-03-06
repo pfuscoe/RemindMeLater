@@ -116,9 +116,9 @@ public class FriendsActivity extends AppCompatActivity implements
         public void onToDoGroupSelected(DialogFragment dialogFragment, ToDoGroup toDoGroup)
         {
             selectedToDoGroup = toDoGroup;
-            dialogFragment.dismiss();
             // TODO: confirmation? then execute share
             sendShareToDoRequestMessage(selectedFriend, selectedToDoGroup);
+            dialogFragment.dismiss();
         }
     };
 

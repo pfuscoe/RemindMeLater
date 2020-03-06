@@ -383,8 +383,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void createNotificationChannel()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.notification_channel_name);
-            String description = getString(R.string.notification_channel_description);
+            CharSequence name = getString(R.string.firebase_message_notification_channel_name);
+            String description = getString(R.string.firebase_message_notification_channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
             channel.setDescription(description);
