@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater.models;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,6 +133,13 @@ public class ToDoGroup {
         // Update HashMap
         toDoItems.remove(oldToDoItem.getItemName());
         toDoItems.put(updatedToDoItem.getItemName(), String.valueOf(updatedToDoItem.getPriority()));
+    }
+
+    public void removeSubscriber(String subscriberId)
+    {
+        ArrayList<String> tempList = new ArrayList<>(Arrays.asList(subscribers));
+        tempList.remove(subscriberId);
+        subscribers = tempList.toArray(new String[0]);
     }
 
     public void increaseNumPriorityOneItems()

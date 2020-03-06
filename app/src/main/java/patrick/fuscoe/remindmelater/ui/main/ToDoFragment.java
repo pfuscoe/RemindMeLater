@@ -467,7 +467,7 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         userProfile.addSubscription(docId);
         Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
 
-        commitAddToDoGroupBatch(docId, toDoGroupDoc, userProfileDoc);
+        commitToDoGroupAndUserBatch(docId, toDoGroupDoc, userProfileDoc);
 
         Log.d(TAG, ": To Do Group " + title + " added");
         Toast.makeText(getContext(), "To Do List Added: " + title, Toast.LENGTH_LONG).show();
@@ -511,8 +511,11 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
 
         if (toDoGroup.getSubscribers().length > 1)
         {
-            // Remove to do group from subscriptions and remove user from to do group subscribers
-            // TODO: update toDoGroupDoc and commit batch with userProfile
+            // Remove user from this to do group without deleting the document in FireStore
+            toDoGroup.removeSubscriber(userProfile.getId());
+            Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
+
+            commitToDoGroupAndUserBatch(docId, toDoGroupDoc, userProfileDoc);
         }
         else
         {
@@ -543,7 +546,8 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         Log.d(TAG, userProfile.getDisplayName() + " User Profile Updated");
     }
 
-    private void commitAddToDoGroupBatch(String groupId, Map<String, Object> toDoGroupDoc, Map<String, Object> userProfileDoc)
+    private void commitToDoGroupAndUserBatch(String groupId, Map<String, Object> toDoGroupDoc,
+                                             Map<String, Object> userProfileDoc)
     {
         WriteBatch batch = db.batch();
         DocumentReference groupRef = toDoGroupsCollectionRef.document(groupId);
