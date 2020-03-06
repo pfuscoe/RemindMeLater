@@ -509,7 +509,16 @@ public class ToDoFragment extends Fragment implements AddCategoryDialogFragment.
         userProfile.removeSubscription(docId);
         Map<String, Object> userProfileDoc = FirebaseDocUtils.createUserProfileDoc(userProfile);
 
-        commitDeleteToDoGroupBatch(docId, userProfileDoc);
+        if (toDoGroup.getSubscribers().length > 1)
+        {
+            // Remove to do group from subscriptions and remove user from to do group subscribers
+            // TODO: update toDoGroupDoc and commit batch with userProfile
+        }
+        else
+        {
+            // Remove to do group from subscriptions and delete the document in FireStore
+            commitDeleteToDoGroupBatch(docId, userProfileDoc);
+        }
 
         Log.d(TAG, ": To Do Group " + groupTitle + " deleted");
         Toast.makeText(getContext(), "To Do List Deleted: " + groupTitle, Toast.LENGTH_LONG).show();
