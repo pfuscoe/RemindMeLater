@@ -23,7 +23,7 @@ exports.messageListener = functions.firestore
         if (messageType == "friendRequest")
         {
             try {
-                const receiverId = await lookupReceiverId(data.friendEmail);
+                const receiverId = await lookupIdByEmail(data.friendEmail);
                 const receiverUserProfile = await getReceiverUserProfile(receiverId);
                 const request = await sendFriendRequest(data, receiverUserProfile);
             }
@@ -64,7 +64,7 @@ async function deleteMessage(messageId)
     return true;
 }
 
-async function lookupReceiverId(friendEmail)
+async function lookupIdByEmail(friendEmail)
 {
     const userRecord = await admin.auth().getUserByEmail(friendEmail);
     console.log('Found user. Id: ', userRecord.uid);
