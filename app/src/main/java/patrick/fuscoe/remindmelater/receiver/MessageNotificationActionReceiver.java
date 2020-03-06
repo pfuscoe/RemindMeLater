@@ -55,6 +55,15 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
                 DEFAULT_NOTIFICATION_ID);
         this.actionType = intent.getStringExtra(
                 MyFirebaseMessagingService.MESSAGE_NOTIFICATION_ACTION_TYPE);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        if (actionType.equals("clear"))
+        {
+            notificationManager.cancel(notificationId);
+            return;
+        }
+
         this.outgoingMessageType = intent.getStringExtra(
                 MyFirebaseMessagingService.MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE);
 
@@ -73,7 +82,6 @@ public class MessageNotificationActionReceiver extends BroadcastReceiver {
 
         sendActionResponseMessage();
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(notificationId);
     }
 

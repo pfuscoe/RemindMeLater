@@ -46,6 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String EXTRA_NOTIFICATION_ID = "patrick.fuscoe.remindmelater.EXTRA_NOTIFICATION_ID";
     public static final String MESSAGE_ACTION_ACCEPT = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_ACCEPT";
     public static final String MESSAGE_ACTION_DENY = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_DENY";
+    public static final String MESSAGE_ACTION_CLEAR = "patrick.fuscoe.remindmelater.MESSAGE_ACTION_CLEAR";
     public static final String FIREBASE_MESSAGE_STRING = "patrick.fuscoe.remindmelater.FIREBASE_MESSAGE_STRING";
     public static final String USER_PROFILE_STRING = "patrick.fuscoe.remindmelater.USER_PROFILE_STRING";
     public static final String MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_OUTGOING_MESSAGE_TYPE";
@@ -351,6 +352,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent friendNotifyPendingIntent = stackBuilder.getPendingIntent(
                 0, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // Notification Clear Intent
+        Intent denyIntent = new Intent(this,
+                MessageNotificationActionReceiver.class);
+        denyIntent.setAction(MESSAGE_ACTION_CLEAR + notificationId);
+        denyIntent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+        denyIntent.putExtra(MESSAGE_NOTIFICATION_ACTION_TYPE, "clear");
+        PendingIntent clearPendingIntent = PendingIntent.getBroadcast(this,
+                0, denyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         // Build Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
                 NOTIFICATION_CHANNEL_ID)
@@ -364,7 +374,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setVibrate(null);
+                .setVibrate(null)
+                .addAction(R.drawable.ic_menu_close, getString(R.string.clear), clearPendingIntent);
 
         notificationManager.notify(notificationId, builder.build());
     }
