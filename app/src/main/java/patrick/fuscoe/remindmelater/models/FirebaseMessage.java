@@ -13,6 +13,8 @@ public class FirebaseMessage {
     private String senderDeviceToken;
     private String toDoGroupId;
     private String toDoGroupTitle;
+    private String reminderDocId;
+    private String reminderTitle;
 
 
     public FirebaseMessage() {
@@ -21,7 +23,8 @@ public class FirebaseMessage {
 
     public FirebaseMessage(String messageType, String actionType, String friendEmail,
                            String senderId, String senderDisplayName, String senderDeviceToken,
-                           String toDoGroupId, String toDoGroupTitle)
+                           String toDoGroupId, String toDoGroupTitle, String reminderDocId,
+                           String reminderTitle)
     {
         this.messageType = messageType;
         this.actionType = actionType;
@@ -31,6 +34,8 @@ public class FirebaseMessage {
         this.senderDeviceToken = senderDeviceToken;
         this.toDoGroupId = toDoGroupId;
         this.toDoGroupTitle = toDoGroupTitle;
+        this.reminderDocId = reminderDocId;
+        this.reminderTitle = reminderTitle;
     }
 
 
@@ -96,5 +101,21 @@ public class FirebaseMessage {
 
     public void setToDoGroupTitle(String toDoGroupTitle) {
         this.toDoGroupTitle = toDoGroupTitle;
+    }
+
+    public String getReminderDocId() {
+        return reminderDocId;
+    }
+
+    public void setReminderDocId(String reminderDocId) {
+        this.reminderDocId = reminderDocId;
+    }
+
+    public String getReminderTitle() {
+        return reminderTitle;
+    }
+
+    public void setReminderTitle(String reminderTitle) {
+        this.reminderTitle = reminderTitle;
     }
 }

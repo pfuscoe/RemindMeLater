@@ -187,6 +187,8 @@ public class FirebaseDocUtils {
         friendRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
         friendRequestMessageDoc.put("toDoGroupId", "none");
         friendRequestMessageDoc.put("toDoGroupTitle", "none");
+        friendRequestMessageDoc.put("reminderDocId", "none");
+        friendRequestMessageDoc.put("reminderTitle", "none");
 
         return friendRequestMessageDoc;
     }
@@ -201,9 +203,12 @@ public class FirebaseDocUtils {
         String senderDeviceToken = data.get("senderDeviceToken");
         String toDoGroupId = data.get("toDoGroupId");
         String toDoGroupTitle = data.get("toDoGroupTitle");
+        String reminderDocId = data.get("reminderDocId");
+        String reminderTitle = data.get("reminderTitle");
 
         return new FirebaseMessage(messageType, actionType, friendEmail, senderId,
-                senderDisplayName, senderDeviceToken, toDoGroupId, toDoGroupTitle);
+                senderDisplayName, senderDeviceToken, toDoGroupId, toDoGroupTitle, reminderDocId,
+                reminderTitle);
     }
 
     public static Map<String, Object> createActionResponseDoc(String outgoingMessageType,
@@ -228,9 +233,8 @@ public class FirebaseDocUtils {
         return actionResponseDoc;
     }
 
-    public static Map<String, Object> createShareToDoRequestMessageDoc(Friend friend,
-                                                                       UserProfile userProfile,
-                                                                       ToDoGroup toDoGroup)
+    public static Map<String, Object> createShareToDoRequestMessageDoc(
+            Friend friend, UserProfile userProfile, ToDoGroup toDoGroup)
     {
         Map<String, Object> shareToDoRequestMessageDoc = new HashMap<>();
 
@@ -243,8 +247,30 @@ public class FirebaseDocUtils {
         shareToDoRequestMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
         shareToDoRequestMessageDoc.put("toDoGroupId", toDoGroup.getId());
         shareToDoRequestMessageDoc.put("toDoGroupTitle", toDoGroup.getTitle());
+        shareToDoRequestMessageDoc.put("reminderDocId", "none");
+        shareToDoRequestMessageDoc.put("reminderTitle", "none");
 
         return shareToDoRequestMessageDoc;
+    }
+
+    public static Map<String, Object> createSendReminderMessageDoc(
+            Friend friend, UserProfile userProfile, String reminderDocId, String reminderTitle)
+    {
+        Map<String, Object> sendReminderMessageDoc = new HashMap<>();
+
+        sendReminderMessageDoc.put("messageType", "shareToDoRequest");
+        sendReminderMessageDoc.put("actionType", "none");
+        sendReminderMessageDoc.put("friendEmail", "none");
+        sendReminderMessageDoc.put("receiverId", friend.getFriendId());
+        sendReminderMessageDoc.put("senderId", userProfile.getId());
+        sendReminderMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
+        sendReminderMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+        sendReminderMessageDoc.put("toDoGroupId", "none");
+        sendReminderMessageDoc.put("toDoGroupTitle", "none");
+        sendReminderMessageDoc.put("reminderDocId", reminderDocId);
+        sendReminderMessageDoc.put("reminderTitle", reminderTitle);
+
+        return sendReminderMessageDoc;
     }
 
 }
