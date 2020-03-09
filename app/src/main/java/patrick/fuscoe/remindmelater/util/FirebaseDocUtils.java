@@ -260,7 +260,7 @@ public class FirebaseDocUtils {
     {
         Map<String, Object> sendReminderMessageDoc = new HashMap<>();
 
-        sendReminderMessageDoc.put("messageType", "shareToDoRequest");
+        sendReminderMessageDoc.put("messageType", "sendReminderRequest");
         sendReminderMessageDoc.put("actionType", "none");
         sendReminderMessageDoc.put("friendEmail", "none");
         sendReminderMessageDoc.put("receiverId", friend.getFriendId());
