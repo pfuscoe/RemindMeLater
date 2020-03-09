@@ -199,7 +199,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 return;
 
             case "reminderRequest":
-                // TODO: Handle reminder request
+                message = FirebaseDocUtils.createFirebaseMessageObj(data);
+                iconId = this.getResources().getIdentifier("action_alarm_plus",
+                        "drawable", this.getPackageName());
+                contentTitleString = "Received Reminder Request";
+                contentTextTemplate = " has sent you a reminder: " + message.getReminderTitle();
+                outgoingMessageType = "sendReminderActionResponse";
+                positiveActionType = "acceptReminder";
+                negativeActionType = "denyReminder";
+                sendRequestNotification(message);
                 return;
 
             case "reminderNotify":
@@ -218,17 +226,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         int notificationId = generateUniqueInt();
         Log.d(TAG, "Message Notification Id: " + notificationId);
-
-        if (message.getMessageType().equals("friendRequest"))
-        {
-            iconId = this.getResources().getIdentifier("message_friend_add",
-                    "drawable", this.getPackageName());
-        }
-        else if (message.getMessageType().equals("shareToDoRequest"))
-        {
-            iconId = this.getResources().getIdentifier("ic_menu_list","drawable",
-                    this.getPackageName());
-        }
 
         Bitmap largeIconBitmap = BitmapFactory.decodeResource(this.getResources(), iconId);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -328,6 +325,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
                         this.getPackageName());
                 contentTextTemplate = " has denied your share to do list request";
+                break;
+
+            case "acceptReminder":
+                iconId = this.getResources().getIdentifier("action_check","drawable",
+                        this.getPackageName());
+                contentTextTemplate = " has accepted your send reminder request.";
+                break;
+
+            case "denyReminder":
+                iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
+                        this.getPackageName());
+                contentTextTemplate = " has denied your send reminder request";
                 break;
         }
 

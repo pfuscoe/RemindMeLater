@@ -211,10 +211,9 @@ public class FirebaseDocUtils {
                 reminderTitle);
     }
 
-    public static Map<String, Object> createActionResponseDoc(String outgoingMessageType,
-                                                              String actionType,
-                                                              UserProfile userProfile,
-                                                              FirebaseMessage requestMessage)
+    public static Map<String, Object> createActionResponseDoc(
+            String outgoingMessageType, String actionType, UserProfile userProfile,
+            FirebaseMessage requestMessage, String targetReminderDocId)
     {
         Map<String, Object> actionResponseDoc = new HashMap<>();
 
@@ -229,6 +228,9 @@ public class FirebaseDocUtils {
         actionResponseDoc.put("receiverId", requestMessage.getSenderId());
         actionResponseDoc.put("toDoGroupId", requestMessage.getToDoGroupId());
         actionResponseDoc.put("toDoGroupTitle", requestMessage.getToDoGroupTitle());
+        actionResponseDoc.put("reminderDocId", requestMessage.getReminderDocId());
+        actionResponseDoc.put("reminderTitle", requestMessage.getReminderTitle());
+        actionResponseDoc.put("targetReminderDocId", targetReminderDocId);
 
         return actionResponseDoc;
     }
