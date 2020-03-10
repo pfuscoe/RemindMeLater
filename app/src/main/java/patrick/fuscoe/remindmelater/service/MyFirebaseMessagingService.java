@@ -210,8 +210,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendRequestNotification(message);
                 return;
 
-            case "reminderNotify":
-                // TODO: Handle reminder confirm
+            case "reminderAcceptedMessage":
+                // TODO: Cloud updated successfully, reset alarms
                 return;
 
             default:
