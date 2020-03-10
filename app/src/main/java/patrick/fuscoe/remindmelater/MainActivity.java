@@ -523,8 +523,14 @@ public class MainActivity extends AppCompatActivity {
                                 remindersDocRef = document.getReference();
                                 remindersDocId = document.getId();
                                 Log.d(TAG, "remindersDocId: " + remindersDocId);
-                                buildReminderItemList(document);
-                                writeRemindersToDisk();
+
+                                reminderItemList = ReminderAlarmUtils.buildReminderItemList(
+                                        document);
+                                ReminderAlarmUtils.writeRemindersToDisk(getApplicationContext(),
+                                        reminderItemList);
+
+                                //buildReminderItemList(document);
+                                //writeRemindersToDisk();
 
                                 ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
                                         getApplicationContext());
@@ -540,6 +546,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
     public void buildReminderItemList(QueryDocumentSnapshot document)
     {
         reminderItemList = new ArrayList<>();
@@ -595,6 +602,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "Reminders written to storage");
     }
+    */
 
     private void createNotificationChannel()
     {

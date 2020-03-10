@@ -9,7 +9,10 @@ import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.R;
@@ -237,6 +240,66 @@ public class ReminderAlarmUtils {
 
         Log.d(TAG, "Reminder Time of Day saved to local device: - Hour: " + hour +
                 " . Minute: " + minute);
+    }
+
+    public static List<ReminderItem> buildReminderItemList(QueryDocumentSnapshot documentSnapshot)
+    {
+        List<ReminderItem> reminderItemList = new ArrayList<>();
+
+        Map<String, Object> docMap = documentSnapshot.getData();
+
+        for (Map.Entry<String, Object> entry : docMap.entrySet())
+        {
+            if (!entry.getKey().equals("userId"))
+            {
+                ReminderItem reminderItem = FirebaseDocUtils.createReminderItemObj(entry);
+
+                reminderItemList.add(reminderItem);
+            }
+        }
+
+        return reminderItemList;
+    }
+
+    public static void writeRemindersToDisk(Context context, List<ReminderItem> reminderItemList)
+    {
+        SharedPreferences reminderAlarmStorage = context.getSharedPreferences(context.getString(
+                R.string.reminders_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderIconNames = context.getSharedPreferences(context.getString(
+                R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderBroadcastIds = context.getSharedPreferences(context.getString(
+                R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
+        //SharedPreferences reminderTimeOfDay = context.getSharedPreferences(context.getString(
+        //        R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
+        SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
+        SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
+        //SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
+
+        for (ReminderItem reminderItem : reminderItemList)
+        {
+            reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
+            reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
+
+            int broadcastId = generateUniqueInt();
+            reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
+        }
+
+        /*
+        reminderTimeOfDayEditor.putInt(ReminderAlarmUtils.REMINDER_TIME_HOUR,
+                userProfile.getReminderHour());
+        reminderTimeOfDayEditor.putInt(ReminderAlarmUtils.REMINDER_TIME_MINUTE,
+                userProfile.getReminderMinute());
+        */
+
+        // Using commit() because alarms are loaded immediately after write to disk from cloud
+        reminderAlarmEditor.commit();
+        reminderIconNamesEditor.commit();
+        reminderBroadcastIdEditor.commit();
+        //reminderTimeOfDayEditor.commit();
+
+        Log.d(TAG, "Reminders written to storage");
     }
 
     private static int generateUniqueInt()
