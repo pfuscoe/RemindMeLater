@@ -19,21 +19,27 @@ import androidx.core.app.TaskStackBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.MainActivity;
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.models.FirebaseMessage;
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.receiver.MessageNotificationActionReceiver;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
+import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 
 /**
  * Receives firebase messages and generates notifications
@@ -53,6 +59,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String MESSAGE_NOTIFICATION_ACTION_TYPE = "patrick.fuscoe.remindmelater.MESSAGE_NOTIFICATION_ACTION_TYPE";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference remindersCollectionRef = db.collection("reminders");
 
     public static FirebaseAuth auth;
     public static String userId;
@@ -210,8 +217,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendRequestNotification(message);
                 return;
 
-            case "reminderAcceptedMessage":
-                // TODO: Cloud updated successfully, reset alarms
+            case "resetReminderAlarms":
+                saveRemindersToStorage();
                 return;
 
             default:
@@ -400,6 +407,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void saveRemindersToStorage()
+    {
+        remindersCollectionRef.whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful())
+                        {
+                            for (QueryDocumentSnapshot document : task.getResult())
+                            {
+                                //remindersDocRef = document.getReference();
+                                String remindersDocId = document.getId();
+                                Log.d(TAG, "remindersDocId: " + remindersDocId);
+
+                                List<ReminderItem> reminderItemList = ReminderAlarmUtils.
+                                        buildReminderItemList(document);
+                                ReminderAlarmUtils.writeRemindersToDisk(getApplicationContext(),
+                                        reminderItemList);
+
+                                ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
+                                        getApplicationContext());
+                            }
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Error getting documents: " + task.getException());
+                        }
+                    }
+                });
     }
 
     private int generateUniqueInt()
