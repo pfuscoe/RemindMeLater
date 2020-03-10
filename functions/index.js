@@ -174,6 +174,7 @@ async function filterMessageType(data, receiverUserProfile)
         	return sendFriendNotify(data, receiverUserProfile);
 
         case "sendReminderActionResponse":
+
         	if (data.actionType == "acceptReminder")
         	{
         		try {
@@ -182,6 +183,14 @@ async function filterMessageType(data, receiverUserProfile)
         		catch (error) {
         			console.log('Error copying reminder to other user: ', error);
         			// TODO: notify users of error
+        			return;
+        		}
+
+        		try {
+        			sendResetReminderAlarmsMessage(data);
+        		}
+        		catch (error) {
+        			console.log('Error sending reset reminder alarms message: ', error);
         			return;
         		}
         	}
@@ -352,5 +361,25 @@ async function sendReminderRequest(data, receiverUserProfile)
 
     const response = await admin.messaging().send(message);
     console.log('Successfully sent reminder request. System message ID:', response);
+    return response;
+}
+
+async function sendResetReminderAlarmsMessage(data)
+{
+    const receiverDeviceToken = data.senderDeviceToken;
+    const messageType = "resetReminderAlarms";
+
+    let message = {
+        data: {
+            messageType: messageType,
+            actionType: data.actionType
+        },
+        token: receiverDeviceToken
+    };
+
+    console.log('Sending reset reminder alarms message: %j', message);
+
+    const response = await admin.messaging().send(message);
+    console.log('Successfully sent reset reminder alarms message. System message ID:', response);
     return response;
 }
