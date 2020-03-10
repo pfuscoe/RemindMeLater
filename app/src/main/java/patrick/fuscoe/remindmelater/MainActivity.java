@@ -378,8 +378,20 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             deviceToken = task.getResult().getToken();
                             Log.d(TAG, "Device token received: " + deviceToken);
-                            updateDeviceTokenInDatabase();
-                        } else {
+
+                            if (!deviceToken.equals(userProfile.getDeviceToken()))
+                            {
+                                Log.d(TAG, "Device token has changed. Updating FireStore");
+                                updateDeviceTokenInDatabase();
+                            }
+                            else
+                            {
+                                Log.d(TAG, "Device token has not changed.");
+                                setupTabs();
+                            }
+                        }
+                        else
+                        {
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             Toast.makeText(MainActivity.this, "Failed to " +
                                     "retrieve device token from Firebase. Please try logging out " +
