@@ -95,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
     public static String deviceToken;
     public static DocumentReference userDocRef;
     public static DocumentReference remindersDocRef;
+    public static String remindersDocId;
 
     private ProgressBar viewMainProgressBar;
     private UserProfile userProfile;
-    private String remindersDocId;
 
     public static SharedPreferences reminderAlarmStorage;
     public static SharedPreferences reminderIconNames;
@@ -628,5 +628,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void setToDoGroupList(List<ToDoGroup> toDoGroupList) {
         this.toDoGroupList = toDoGroupList;
+    }
+
+    public static DocumentReference getRemindersDocRef() {
+        return remindersDocRef;
+    }
+
+    public static void setRemindersDocRef(DocumentReference remindersDocRef) {
+        MainActivity.remindersDocRef = remindersDocRef;
+    }
+
+    public String getRemindersDocId() {
+        return remindersDocId;
+    }
+
+    public static void setRemindersDocId(String remindersDocId) {
+        MainActivity.remindersDocId = remindersDocId;
     }
 }

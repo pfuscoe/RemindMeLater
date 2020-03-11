@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.Friend;
+import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddFriendDialogFragment;
@@ -68,20 +69,27 @@ public class FriendsActivity extends AppCompatActivity implements
     private UserProfile userProfile;
     public List<Friend> friendList;
     private List<ToDoGroup> toDoGroupList;
+    private List<ReminderItem> reminderItemList;
 
-    private ToDoGroup selectedToDoGroup;
     private Friend selectedFriend;
+    private ToDoGroup selectedToDoGroup;
+    private ReminderItem selectedReminderItem;
+    private String remindersDocId;
 
     private MenuItem tipsMenuItem;
     private boolean isTipsOn;
     private FrameLayout viewFrameTips;
     private WebView viewTipsWebView;
 
+
+    public interface FriendsClickListener {
+        void friendClicked(View v, int position);
+    }
+
     private FriendsClickListener friendsClickListener = new FriendsClickListener() {
         @Override
         public void friendClicked(View v, int position) {
 
-            // TODO: setup click action
             selectedFriend = friendList.get(position);
 
             switch (v.getId())
@@ -91,20 +99,16 @@ public class FriendsActivity extends AppCompatActivity implements
                     return;
 
                 case R.id.view_row_friend_share_reminder_icon:
-                    // add share (copy) reminder feature here
+                    // TODO: implement send reminder
+                    openSendReminderDialog();
                     return;
 
                 case R.id.view_row_friend_delete_icon:
                     // TODO: implement remove friend
                     return;
             }
-
         }
     };
-
-    public interface FriendsClickListener {
-        void friendClicked(View v, int position);
-    }
 
     public interface ShareToDoGroupSelectedListener {
         void onToDoGroupSelected(DialogFragment dialogFragment, ToDoGroup toDoGroup);
@@ -129,7 +133,27 @@ public class FriendsActivity extends AppCompatActivity implements
                 }
             }
 
+            // TODO: Prompt user to confirm share to do list
+
             sendShareToDoRequestMessage(selectedFriend, selectedToDoGroup);
+            dialogFragment.dismiss();
+        }
+    };
+
+    public interface SendReminderSelectedListener {
+        void onReminderSelected(DialogFragment dialogFragment, ReminderItem reminderItem);
+    }
+
+    private SendReminderSelectedListener sendReminderSelectedListener =
+            new SendReminderSelectedListener() {
+        @Override
+        public void onReminderSelected(DialogFragment dialogFragment, ReminderItem reminderItem)
+        {
+            selectedReminderItem = reminderItem;
+
+            // TODO: Prompt user to confirm send reminder
+
+            sendReminderRequestMessage(selectedFriend, remindersDocId, selectedReminderItem);
             dialogFragment.dismiss();
         }
     };
@@ -158,6 +182,8 @@ public class FriendsActivity extends AppCompatActivity implements
         String toDoGroupListString = intent.getStringExtra(MainActivity.TO_DO_GROUP_LIST);
         Log.d(TAG, "toDoGroupListString: " + toDoGroupListString);
         toDoGroupList = gson.fromJson(toDoGroupListString, dataTypeToDoGroupList);
+
+        // TODO: get reminder list and reminderDocId
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
@@ -284,6 +310,36 @@ public class FriendsActivity extends AppCompatActivity implements
                         Log.d(TAG, "Error writing share to do request document to cloud: " +
                                 e.getMessage());
                         Toast.makeText(getApplicationContext(), "Error sending share to do " +
+                                "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    // Write a message to FireStore to trigger cloud function for sending reminder request
+    private void sendReminderRequestMessage(Friend friend, String reminderDocId,
+                                            ReminderItem reminderItem)
+    {
+        Map<String, Object> sendReminderRequestMessageDocMap = FirebaseDocUtils.
+                createSendReminderMessageDoc(friend, userProfile, reminderDocId,
+                        selectedReminderItem.getTitle());
+
+        db.collection("messages")
+                .add(sendReminderRequestMessageDocMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Send reminder request message successfully written. " +
+                                "FireStore messageID: " + documentReference.getId());
+                        Toast.makeText(getApplicationContext(), "Send reminder request sent " +
+                                "successfully!", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing Send reminder request document to cloud: " +
+                                e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error sending reminder " +
                                 "request to cloud: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

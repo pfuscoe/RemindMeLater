@@ -196,8 +196,9 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments())
                     {
-                        MainActivity.remindersDocRef = doc.getReference();
+                        MainActivity.setRemindersDocRef(doc.getReference());
                         remindersDocId = doc.getId();
+                        MainActivity.setRemindersDocId(remindersDocId);
 
                         Map<String, Object> docMap = doc.getData();
 
