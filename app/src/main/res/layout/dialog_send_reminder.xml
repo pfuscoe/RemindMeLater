@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_send_reminder_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp">
+
+    <View
+        android:id="@+id/dialog_send_reminder_top_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/greyLight" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dialog_send_reminder_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+</LinearLayout>

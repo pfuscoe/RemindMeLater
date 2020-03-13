@@ -92,4 +92,5 @@
     <string name="clear">Clear</string>
     <string name="firebase_message_notification_channel_name">Remind Me Later Firebase Message Notifications</string>
     <string name="firebase_message_notification_channel_description">Remind Me Later Firebase Message Notification Channel</string>
+    <string name="dialog_send_reminder_title">Send Reminder</string>
 </resources>
