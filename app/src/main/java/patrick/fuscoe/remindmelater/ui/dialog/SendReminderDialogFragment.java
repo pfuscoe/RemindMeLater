@@ -2,9 +2,11 @@ package patrick.fuscoe.remindmelater.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,6 +95,32 @@ public class SendReminderDialogFragment extends DialogFragment {
                 sendReminderRecycler.getContext(), DividerItemDecoration.VERTICAL);
         sendReminderRecycler.addItemDecoration(dividerItemDecoration);
 
-        
+        sendReminderRecyclerAdapter = new SendReminderDialogAdapter(reminderItemList,
+                getContext(), sendReminderClickListener);
+        sendReminderRecycler.setAdapter(sendReminderRecyclerAdapter);
+
+        builder.setView(v)
+                .setTitle(dialogTitle)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.onDialogNegativeClick(
+                                SendReminderDialogFragment.this);
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        return dialog;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getDialog().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 }

@@ -39,6 +39,7 @@ import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddFriendDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.SendReminderDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.ShareToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
@@ -99,7 +100,6 @@ public class FriendsActivity extends AppCompatActivity implements
                     return;
 
                 case R.id.view_row_friend_share_reminder_icon:
-                    // TODO: implement send reminder
                     openSendReminderDialog();
                     return;
 
@@ -358,6 +358,13 @@ public class FriendsActivity extends AppCompatActivity implements
         dialogFragment.show(getSupportFragmentManager(), "shareToDoGroup");
     }
 
+    private void openSendReminderDialog()
+    {
+        DialogFragment dialogFragment = new SendReminderDialogFragment(reminderItemList,
+                sendReminderSelectedListener);
+        dialogFragment.show(getSupportFragmentManager(), "sendReminder");
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
 
@@ -387,6 +394,11 @@ public class FriendsActivity extends AppCompatActivity implements
         else if (dialogFragment instanceof ShareToDoGroupDialogFragment)
         {
             Toast.makeText(getApplicationContext(), "Share To Do List Cancelled",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (dialogFragment instanceof SendReminderDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Send Reminder Cancelled",
                     Toast.LENGTH_SHORT).show();
         }
     }
