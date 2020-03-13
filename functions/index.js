@@ -270,9 +270,21 @@ async function copyReminder(data)
 	const reminderDocData = retrieveReminderDoc.data();
 	const reminderObject = reminderDocData.reminderTitle;
 
+	const categoryValue = "Main";
+	const categoryIconNameValue = "category_alarm";
+
+	// Add the reminder object to the receiver's reminders document
 	const updateTargetReminderDoc = await targetReminderDocRef.update({
 		reminderTitle: reminderObject
 	});
+
+	// Reset the category of the new reminder to 'Main' to avoid category conflicts
+	const resetReminderCategory = await targetReminderDocRef.update({
+		reminderTitle: {
+			category: categoryValue,
+			categoryIconName: categoryIconNameValue
+		}
+	}, {merge: true});
 
 	return true;
 }
