@@ -214,6 +214,7 @@ public class RemindersFragment extends Fragment implements AdapterView.OnItemSel
                     }
 
                     reminderItemList = reminderListFromDoc;
+                    ((MainActivity) requireActivity()).setReminderItemList(reminderItemList);
 
                     if (tipsMenuItem != null)
                     {
