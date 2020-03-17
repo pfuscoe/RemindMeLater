@@ -52,7 +52,8 @@ import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 public class FriendsActivity extends AppCompatActivity implements
         AddFriendDialogFragment.AddFriendDialogListener,
-        ShareToDoGroupDialogFragment.ShareToDoGroupDialogListener {
+        ShareToDoGroupDialogFragment.ShareToDoGroupDialogListener,
+        SendReminderDialogFragment.SendReminderDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FriendsActivity";
 
