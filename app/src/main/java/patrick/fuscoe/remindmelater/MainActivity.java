@@ -645,4 +645,12 @@ public class MainActivity extends AppCompatActivity {
     public static void setRemindersDocId(String remindersDocId) {
         MainActivity.remindersDocId = remindersDocId;
     }
+
+    public List<ReminderItem> getReminderItemList() {
+        return reminderItemList;
+    }
+
+    public void setReminderItemList(List<ReminderItem> reminderItemList) {
+        this.reminderItemList = reminderItemList;
+    }
 }
