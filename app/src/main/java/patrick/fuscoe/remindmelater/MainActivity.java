@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String USER_PROFILE = "patrick.fuscoe.remindmelater.USER_PROFILE";
     public static final String TO_DO_GROUP_LIST = "patrick.fuscoe.remindmelater.TO_DO_GROUP_LIST";
     public static final String REMINDER_ITEM_LIST = "patrick.fuscoe.remindmelater.REMINDER_ITEM_LIST";
+    public static final String REMINDERS_DOC_ID = "patrick.fuscoe.remindmelater.REMINDERS_DOC_ID";
     public static final String REMINDER_TITLE = "patrick.fuscoe.remindmelater.REMINDER_TITLE";
     public static final String BACK_PRESSED_FROM_REMINDER_DETAILS = "patrick.fuscoe.remindmelater.BACK_PRESSED_FROM_REMINDER_DETAILS";
     public static final String USER_PREFERENCES_UPDATED = "patrick.fuscoe.remindmelater.USER_PREFERENCES_UPDATED";
@@ -293,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(USER_PROFILE, userProfileString);
         intent.putExtra(TO_DO_GROUP_LIST, toDoGroupListString);
         intent.putExtra(REMINDER_ITEM_LIST, reminderItemListString);
+        intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
         startActivity(intent);
     }
 

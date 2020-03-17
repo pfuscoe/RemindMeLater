@@ -184,7 +184,12 @@ public class FriendsActivity extends AppCompatActivity implements
         Log.d(TAG, "toDoGroupListString: " + toDoGroupListString);
         toDoGroupList = gson.fromJson(toDoGroupListString, dataTypeToDoGroupList);
 
-        // TODO: get reminder list and reminderDocId
+        Type dataTypeReminderItemList = new TypeToken<List<ReminderItem>>(){}.getType();
+        String reminderItemListString = intent.getStringExtra(MainActivity.REMINDER_ITEM_LIST);
+        Log.d(TAG, "reminderItemListString: " + reminderItemListString);
+        reminderItemList = gson.fromJson(reminderItemListString, dataTypeReminderItemList);
+
+        remindersDocId = intent.getStringExtra(MainActivity.REMINDERS_DOC_ID);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
