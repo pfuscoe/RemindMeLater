@@ -337,13 +337,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case "acceptReminder":
                 iconId = this.getResources().getIdentifier("action_check","drawable",
                         this.getPackageName());
-                contentTextTemplate = " has accepted your send reminder request.";
+                contentTextTemplate = " has accepted your reminder request.";
                 break;
 
             case "denyReminder":
                 iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
                         this.getPackageName());
-                contentTextTemplate = " has denied your send reminder request";
+                contentTextTemplate = " has denied your reminder request";
                 break;
         }
 
