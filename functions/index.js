@@ -196,6 +196,19 @@ async function filterMessageType(data, receiverUserProfile)
         	}
 
         	return sendFriendNotify(data, receiverUserProfile);
+
+        case "removeFriend":
+        	try {
+        		removeFriends(data);
+        		// TODO: notify sender of success
+        	}
+        	catch (error) {
+        		console.log('Error removing friends: ', error);
+        		// TODO: notify user of error
+        		return;
+        	}
+
+        	return sendFriendNotify(data, receiverUserProfile);
 	}
 
 	return true;
@@ -222,6 +235,32 @@ async function connectFriends(data)
         ['friendListMap.' + senderId]: {
             friendDisplayName: data.senderDisplayName
         }
+    }, {merge: true});
+
+    const commitBatch = await batch.commit();
+
+    return true;
+}
+
+/* Remove users from each others friends list */
+async function removeFriends(data)
+{
+	const senderId = data.senderId;
+    const receiverId = data.receiverId;
+
+    let senderUserDocRef = db.collection('users').doc(senderId);
+    let receiverUserDocRef = db.collection('users').doc(receiverId);
+
+    let FieldValue = require('firebase-admin').firestore.FieldValue;
+
+    let batch = db.batch();
+
+    batch.update(senderUserDocRef, {
+    	['friendListMap.' + receiverId]: FieldValue.delete()
+    }, {merge: true});
+
+    batch.update(receiverUserDocRef, {
+    	['friendListMap.' + senderId]: FieldValue.delete()
     }, {merge: true});
 
     const commitBatch = await batch.commit();
