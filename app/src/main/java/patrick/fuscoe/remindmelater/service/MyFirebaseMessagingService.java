@@ -205,7 +205,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // TODO: Handle to do confirm
                 return;
 
-            case "reminderRequest":
+            case "sendReminderRequest":
                 message = FirebaseDocUtils.createFirebaseMessageObj(data);
                 iconId = this.getResources().getIdentifier("action_alarm_plus",
                         "drawable", this.getPackageName());
