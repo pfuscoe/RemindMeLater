@@ -235,11 +235,19 @@ public class FriendsActivity extends AppCompatActivity implements
                 {
                     userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
                     friendList = userProfile.getFriendArrayList();
-                    invalidateOptionsMenu();
 
                     Log.d(TAG, "UserProfile loaded");
 
                     updateFriendsDisplay();
+                    
+                    if (friendList.size() == 0)
+                    {
+                        showFriendsTips();
+                    }
+                    else
+                    {
+                        hideFriendsTips();
+                    }
                 }
             }
         });
