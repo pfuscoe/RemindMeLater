@@ -95,7 +95,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
 
         holder.viewRowFriendDeleteIcon.setImageResource(R.drawable.action_delete);
         holder.viewRowFriendDeleteIcon.setColorFilter(ContextCompat.getColor(
-                context, R.color.greyDark));
+                context, R.color.greyDim));
     }
 
     @Override
