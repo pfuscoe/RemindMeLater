@@ -93,4 +93,6 @@
     <string name="firebase_message_notification_channel_name">Remind Me Later Firebase Message Notifications</string>
     <string name="firebase_message_notification_channel_description">Remind Me Later Firebase Message Notification Channel</string>
     <string name="dialog_send_reminder_title">Send Reminder</string>
+    <string name="dialog_remove_friend">Remove Friend</string>
+    <string name="remove">Remove</string>
 </resources>

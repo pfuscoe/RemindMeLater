@@ -39,6 +39,7 @@ import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.AddFriendDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.RemoveFriendDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.SendReminderDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.ShareToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
@@ -53,7 +54,8 @@ import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 public class FriendsActivity extends AppCompatActivity implements
         AddFriendDialogFragment.AddFriendDialogListener,
         ShareToDoGroupDialogFragment.ShareToDoGroupDialogListener,
-        SendReminderDialogFragment.SendReminderDialogListener {
+        SendReminderDialogFragment.SendReminderDialogListener,
+        RemoveFriendDialogFragment.RemoveFriendDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.FriendsActivity";
 
@@ -105,7 +107,7 @@ public class FriendsActivity extends AppCompatActivity implements
                     return;
 
                 case R.id.view_row_friend_delete_icon:
-                    // TODO: implement remove friend
+                    openRemoveFriendDialog();
                     return;
             }
         }
@@ -352,7 +354,7 @@ public class FriendsActivity extends AppCompatActivity implements
     }
 
     // Write a message to FireStore to trigger cloud function for removing a friend
-    private void removeFriendMessage(final Friend friend, UserProfile userProfile)
+    private void sendRemoveFriendMessage(final Friend friend, UserProfile userProfile)
     {
         Map<String, Object> removeFriendMessageDoc = FirebaseDocUtils.
                 createRemoveFriendMessageDoc(friend, userProfile);
@@ -400,6 +402,12 @@ public class FriendsActivity extends AppCompatActivity implements
         dialogFragment.show(getSupportFragmentManager(), "sendReminder");
     }
 
+    private void openRemoveFriendDialog()
+    {
+        DialogFragment dialogFragment = new RemoveFriendDialogFragment(selectedFriend);
+        dialogFragment.show(getSupportFragmentManager(), "removeFriend");
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
 
@@ -416,6 +424,10 @@ public class FriendsActivity extends AppCompatActivity implements
             }
 
             sendFriendRequestMessage(friendEmail);
+        }
+        else if (dialogFragment instanceof RemoveFriendDialogFragment)
+        {
+            sendRemoveFriendMessage(selectedFriend, userProfile);
         }
     }
 
@@ -434,6 +446,11 @@ public class FriendsActivity extends AppCompatActivity implements
         else if (dialogFragment instanceof SendReminderDialogFragment)
         {
             Toast.makeText(getApplicationContext(), "Send Reminder Cancelled",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (dialogFragment instanceof RemoveFriendDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Remove Friend Cancelled",
                     Toast.LENGTH_SHORT).show();
         }
     }
