@@ -275,4 +275,24 @@ public class FirebaseDocUtils {
         return sendReminderMessageDoc;
     }
 
+    public static Map<String, Object> createRemoveFriendMessageDoc(Friend friend,
+                                                                   UserProfile userProfile)
+    {
+        Map<String, Object> removeFriendMessageDoc = new HashMap<>();
+
+        removeFriendMessageDoc.put("messageType", "removeFriend");
+        removeFriendMessageDoc.put("actionType", "none");
+        removeFriendMessageDoc.put("friendEmail", "none");
+        removeFriendMessageDoc.put("receiverId", friend.getFriendId());
+        removeFriendMessageDoc.put("senderId", userProfile.getId());
+        removeFriendMessageDoc.put("senderDisplayName", userProfile.getDisplayName());
+        removeFriendMessageDoc.put("senderDeviceToken", userProfile.getDeviceToken());
+        removeFriendMessageDoc.put("toDoGroupId", "none");
+        removeFriendMessageDoc.put("toDoGroupTitle", "none");
+        removeFriendMessageDoc.put("reminderDocId", "none");
+        removeFriendMessageDoc.put("reminderTitle", "none");
+
+        return removeFriendMessageDoc;
+    }
+
 }
