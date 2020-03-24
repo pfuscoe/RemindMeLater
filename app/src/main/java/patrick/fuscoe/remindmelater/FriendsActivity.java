@@ -234,6 +234,8 @@ public class FriendsActivity extends AppCompatActivity implements
                 if (documentSnapshot != null)
                 {
                     userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+                    friendList = userProfile.getFriendArrayList();
+                    invalidateOptionsMenu();
 
                     Log.d(TAG, "UserProfile loaded");
 
