@@ -319,7 +319,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case "denyFriend":
                 iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
                         this.getPackageName());
-                contentTextTemplate = " has denied your friend request";
+                contentTextTemplate = " has denied your friend request.";
                 break;
 
             case "acceptToDoList":
@@ -331,7 +331,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case "denyToDoList":
                 iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
                         this.getPackageName());
-                contentTextTemplate = " has denied your share to do list request";
+                contentTextTemplate = " has denied your share to do list request.";
                 break;
 
             case "acceptReminder":
@@ -343,7 +343,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             case "denyReminder":
                 iconId = this.getResources().getIdentifier("ic_menu_close","drawable",
                         this.getPackageName());
-                contentTextTemplate = " has denied your reminder request";
+                contentTextTemplate = " has denied your reminder request.";
+                break;
+
+            case "removeFriend":
+                contentTitleString = "Removed as Friend";
+                iconId = this.getResources().getIdentifier("message_friend_add",
+                        "drawable", this.getPackageName());
+                contentTextTemplate = " has removed you as a friend.";
                 break;
         }
 
