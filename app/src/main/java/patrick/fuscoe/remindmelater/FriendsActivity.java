@@ -351,6 +351,35 @@ public class FriendsActivity extends AppCompatActivity implements
                 });
     }
 
+    // Write a message to FireStore to trigger cloud function for removing a friend
+    private void removeFriendMessage(final Friend friend, UserProfile userProfile)
+    {
+        Map<String, Object> removeFriendMessageDoc = FirebaseDocUtils.
+                createRemoveFriendMessageDoc(friend, userProfile);
+
+        db.collection("messages")
+                .add(removeFriendMessageDoc)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Remove friend message successfully written. " +
+                                "FireStore messageID: " + documentReference.getId());
+                        Toast.makeText(getApplicationContext(), friend.getFriendDisplayName() +
+                                " has been removed.", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing remove friend message document to cloud: " +
+                                e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error removing friend: " +
+                                e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+
     private void openAddFriendDialog()
     {
         DialogFragment dialogFragment = new AddFriendDialogFragment();
