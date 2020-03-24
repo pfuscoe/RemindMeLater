@@ -281,7 +281,7 @@ public class FirebaseDocUtils {
         Map<String, Object> removeFriendMessageDoc = new HashMap<>();
 
         removeFriendMessageDoc.put("messageType", "removeFriend");
-        removeFriendMessageDoc.put("actionType", "none");
+        removeFriendMessageDoc.put("actionType", "removeFriend");
         removeFriendMessageDoc.put("friendEmail", "none");
         removeFriendMessageDoc.put("receiverId", friend.getFriendId());
         removeFriendMessageDoc.put("senderId", userProfile.getId());
