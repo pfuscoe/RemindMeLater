@@ -1,9 +1,14 @@
 package patrick.fuscoe.remindmelater;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +30,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,6 +49,7 @@ import patrick.fuscoe.remindmelater.ui.dialog.RemoveFriendDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.SendReminderDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.ShareToDoGroupDialogFragment;
 import patrick.fuscoe.remindmelater.ui.main.FriendsAdapter;
+import patrick.fuscoe.remindmelater.ui.main.UserProfileViewModel;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 
 
@@ -65,6 +72,8 @@ public class FriendsActivity extends AppCompatActivity implements
     private static String userId;
     private static DocumentReference userDocRef;
     private static DocumentReference remindersDocRef;
+
+    private UserProfileViewModel userProfileViewModel;
 
     private RecyclerView viewFriendsRecycler;
     private RecyclerView.LayoutManager friendsRecyclerLayoutManager;
@@ -214,6 +223,24 @@ public class FriendsActivity extends AppCompatActivity implements
         viewFrameTips = findViewById(R.id.view_friends_tips);
         viewTipsWebView = findViewById(R.id.view_friends_tips_webview);
         viewTipsWebView.loadUrl("file:///android_asset/tips_friends.html");
+
+        // Updates UI when use profile is changed in FireStore
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        LiveData<DocumentSnapshot> userProfileLiveData = userProfileViewModel.getDocumentSnapshotLiveData();
+
+        userProfileLiveData.observe(this, new Observer<DocumentSnapshot>() {
+            @Override
+            public void onChanged(@Nullable DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot != null)
+                {
+                    userProfile = FirebaseDocUtils.createUserProfileObj(documentSnapshot);
+
+                    Log.d(TAG, "UserProfile loaded");
+
+                    updateFriendsDisplay();
+                }
+            }
+        });
     }
 
     @Override
