@@ -20,6 +20,7 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.FriendsActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 
 /**
@@ -31,6 +32,7 @@ public class SendReminderDialogFragment extends DialogFragment {
 
     private List<ReminderItem> reminderItemList;
     private ReminderItem selectedReminder;
+    private Friend friend;
 
     private RecyclerView sendReminderRecycler;
     private RecyclerView.LayoutManager sendReminderRecyclerLayoutManager;
@@ -57,10 +59,11 @@ public class SendReminderDialogFragment extends DialogFragment {
         }
     };
 
-    public SendReminderDialogFragment(List<ReminderItem> reminderItemList,
+    public SendReminderDialogFragment(Friend friend, List<ReminderItem> reminderItemList,
                                       FriendsActivity.SendReminderSelectedListener
                                               sendReminderSelectedListener)
     {
+        this.friend = friend;
         this.reminderItemList = reminderItemList;
         this.sendReminderSelectedListener = sendReminderSelectedListener;
     }
@@ -83,7 +86,7 @@ public class SendReminderDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_send_reminder, null);
 
-        String dialogTitle = getString(R.string.dialog_send_reminder_title);
+        String dialogTitle = getString(R.string.dialog_send_reminder_title) + " to " + friend.getFriendDisplayName();
 
         sendReminderRecycler = v.findViewById(R.id.dialog_send_reminder_recycler);
         sendReminderRecycler.setHasFixedSize(true);

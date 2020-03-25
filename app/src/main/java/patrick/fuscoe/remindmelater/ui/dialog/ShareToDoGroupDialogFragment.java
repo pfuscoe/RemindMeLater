@@ -20,6 +20,7 @@ import java.util.List;
 
 import patrick.fuscoe.remindmelater.FriendsActivity;
 import patrick.fuscoe.remindmelater.R;
+import patrick.fuscoe.remindmelater.models.Friend;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 
 /**
@@ -31,6 +32,7 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
 
     private List<ToDoGroup> toDoGroupList;
     private ToDoGroup selectedToDoGroup;
+    private Friend friend;
 
     private RecyclerView shareToDoGroupRecycler;
     private RecyclerView.LayoutManager shareToDoGroupRecyclerLayoutManager;
@@ -57,10 +59,11 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         }
     };
 
-    public ShareToDoGroupDialogFragment(List<ToDoGroup> toDoGroupList,
+    public ShareToDoGroupDialogFragment(Friend friend, List<ToDoGroup> toDoGroupList,
                                         FriendsActivity.ShareToDoGroupSelectedListener
                                                 shareToDoGroupSelectedListener)
     {
+        this.friend = friend;
         this.toDoGroupList = toDoGroupList;
         this.shareToDoGroupSelectedListener = shareToDoGroupSelectedListener;
     }
@@ -83,7 +86,7 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_share_to_do_group, null);
 
-        String dialogTitle = getString(R.string.dialog_share_to_do_group_title);
+        String dialogTitle = getString(R.string.dialog_share_to_do_group_title) + " to " + friend.getFriendDisplayName();
 
         shareToDoGroupRecycler = v.findViewById(R.id.dialog_share_to_do_group_recycler);
         shareToDoGroupRecycler.setHasFixedSize(true);

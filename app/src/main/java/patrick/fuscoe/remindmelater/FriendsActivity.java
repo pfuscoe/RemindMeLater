@@ -421,15 +421,15 @@ public class FriendsActivity extends AppCompatActivity implements
 
     private void openShareToDoGroupDialog()
     {
-        DialogFragment dialogFragment = new ShareToDoGroupDialogFragment(toDoGroupList,
-                shareToDoGroupSelectedListener);
+        DialogFragment dialogFragment = new ShareToDoGroupDialogFragment(selectedFriend,
+                toDoGroupList, shareToDoGroupSelectedListener);
         dialogFragment.show(getSupportFragmentManager(), "shareToDoGroup");
     }
 
     private void openSendReminderDialog()
     {
-        DialogFragment dialogFragment = new SendReminderDialogFragment(reminderItemList,
-                sendReminderSelectedListener);
+        DialogFragment dialogFragment = new SendReminderDialogFragment(selectedFriend,
+                reminderItemList, sendReminderSelectedListener);
         dialogFragment.show(getSupportFragmentManager(), "sendReminder");
     }
 
