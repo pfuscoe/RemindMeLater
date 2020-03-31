@@ -421,8 +421,28 @@ public class FriendsActivity extends AppCompatActivity implements
 
     private void openShareToDoGroupDialog()
     {
+        List<ToDoGroup> FilteredToDoGroupList = new ArrayList<>();
+
+        for (ToDoGroup toDoGroup : toDoGroupList)
+        {
+            boolean alreadySharing = false;
+
+            for (String userId : toDoGroup.getSubscribers())
+            {
+                if (userId.equals(selectedFriend.getFriendId()))
+                {
+                    alreadySharing = true;
+                }
+            }
+
+            if (!alreadySharing)
+            {
+                FilteredToDoGroupList.add(toDoGroup);
+            }
+        }
+
         DialogFragment dialogFragment = new ShareToDoGroupDialogFragment(selectedFriend,
-                toDoGroupList, shareToDoGroupSelectedListener);
+                FilteredToDoGroupList, shareToDoGroupSelectedListener);
         dialogFragment.show(getSupportFragmentManager(), "shareToDoGroup");
     }
 
