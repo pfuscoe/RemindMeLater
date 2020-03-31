@@ -86,7 +86,8 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_share_to_do_group, null);
 
-        String dialogTitle = getString(R.string.dialog_share_to_do_group_title) + " to " + friend.getFriendDisplayName();
+        String dialogTitle = getString(R.string.dialog_share_to_do_group_title) + " with " + 
+                friend.getFriendDisplayName();
 
         shareToDoGroupRecycler = v.findViewById(R.id.dialog_share_to_do_group_recycler);
         shareToDoGroupRecycler.setHasFixedSize(true);
