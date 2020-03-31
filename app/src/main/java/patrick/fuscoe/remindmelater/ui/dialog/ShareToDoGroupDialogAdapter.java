@@ -87,11 +87,55 @@ public class ShareToDoGroupDialogAdapter extends RecyclerView.Adapter<ShareToDoG
 
         holder.viewShareToDoGroupTitle.setText(toDoGroup.getTitle());
 
-        // TODO: setup image handling for icon-right
+        String numBoxIconString = selectNumBoxIconName(toDoGroup);
+        int boxIconId = context.getResources().getIdentifier(numBoxIconString, "drawable",
+                context.getPackageName());
+
+        holder.viewShareToDoGroupIconRight.setImageResource(boxIconId);
+        holder.viewShareToDoGroupIconRight.setColorFilter(ContextCompat.getColor(context,
+                R.color.grey));
     }
 
     @Override
     public int getItemCount() {
         return toDoGroupList.size();
+    }
+
+    private String selectNumBoxIconName(ToDoGroup toDoGroup)
+    {
+        int numUnfinishedItems = toDoGroup.getNumUnfinishedItems();
+
+        switch (numUnfinishedItems)
+        {
+            case 0:
+                return "numeric_0_box_multiple_outline";
+
+            case 1:
+                return "numeric_1_box_multiple_outline";
+
+            case 2:
+                return "numeric_2_box_multiple_outline";
+
+            case 3:
+                return "numeric_3_box_multiple_outline";
+
+            case 4:
+                return "numeric_4_box_multiple_outline";
+
+            case 5:
+                return "numeric_5_box_multiple_outline";
+
+            case 6:
+                return "numeric_6_box_multiple_outline";
+
+            case 7:
+                return "numeric_7_box_multiple_outline";
+
+            case 8:
+                return "numeric_8_box_multiple_outline";
+
+            default:
+                return "numeric_9_plus_box_multiple_outline";
+        }
     }
 }
