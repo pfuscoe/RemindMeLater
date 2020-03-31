@@ -8,7 +8,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import patrick.fuscoe.remindmelater.R;
 import patrick.fuscoe.remindmelater.ToDoItemListActivity;
@@ -43,8 +47,9 @@ public class AddToDoItemDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.dialog_add_to_do_item, null);
 
-        builder.setView(inflater.inflate(R.layout.dialog_add_to_do_item, null))
+        builder.setView(v)
                 .setTitle(R.string.dialog_add_to_do_item_title)
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
