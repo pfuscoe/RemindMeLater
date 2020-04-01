@@ -73,6 +73,8 @@ public class SendReminderDialogAdapter extends RecyclerView.Adapter<SendReminder
     @Override
     public void onBindViewHolder(@NonNull SendReminderViewHolder holder, int position) {
         ReminderItem reminderItem = reminderItemList.get(position);
+        int daysAway = reminderItem.getDaysAway();
+        String daysAwayString = Integer.toString(daysAway);
 
         holder.viewSendReminderIcon.setImageDrawable(ContextCompat.getDrawable(context,
                 context.getResources().getIdentifier(reminderItem.getCategoryIconName(),
@@ -82,7 +84,7 @@ public class SendReminderDialogAdapter extends RecyclerView.Adapter<SendReminder
 
         holder.viewSendReminderTitle.setText(reminderItem.getTitle());
 
-        // TODO: setup snooze icon / days away handling here
+        holder.viewSendReminderDaysAway.setText(daysAwayString);
     }
 
     @Override
