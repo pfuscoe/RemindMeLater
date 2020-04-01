@@ -89,6 +89,11 @@ public class UserPreferencesActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), "Edit User Settings Cancelled", Toast.LENGTH_LONG).show();
                     onBackPressed();
                     return;
+
+                case R.id.view_user_preferences_delete_account:
+                    // TODO: Setup delete account functionality
+                    //openConfirmDeleteAccountDialog();
+                    return;
             }
         }
     };
@@ -280,6 +285,29 @@ public class UserPreferencesActivity extends AppCompatActivity
                             Toast.makeText(getApplicationContext(), "Failed to save user " +
                                     "settings to cloud", Toast.LENGTH_LONG).show();
                             hideProgressBar();
+                        }
+                    }
+                });
+    }
+
+    private void deleteUserAccount()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                            Toast.makeText(getApplicationContext(), "User account deleted " +
+                                    "for Remind Me Later", Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Could not delete user " +
+                                    "account: " + task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
