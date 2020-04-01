@@ -77,6 +77,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements
 
     private boolean hasChanged;
     private boolean isShared;
+    private boolean justOpened;
 
     private ToDoGroupViewModel toDoGroupViewModel;
     private ToDoGroupViewModelFactory toDoGroupViewModelFactory;
@@ -158,6 +159,7 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         Log.d(TAG, "toDoGroupId: " + toDoGroupId);
 
         hasChanged = false;
+        justOpened = true;
 
         if (toDoGroup.getSubscribers().length > 1)
         {
@@ -230,9 +232,16 @@ public class ToDoItemListActivity extends AppCompatActivity implements
 
         toDoItemListAdapter.notifyDataSetChanged();
 
-        if (isShared)
+        if (!justOpened)
         {
-            commitToDoGroup();
+            if (isShared)
+            {
+                commitToDoGroup();
+            }
+        }
+        else
+        {
+            justOpened = false;
         }
     }
 
