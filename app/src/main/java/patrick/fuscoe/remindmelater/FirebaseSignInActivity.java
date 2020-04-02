@@ -174,6 +174,23 @@ public class FirebaseSignInActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (intent.hasExtra(UserPreferencesActivity.USER_ACCOUNT_DELETED))
+        {
+            if (user != null)
+            {
+                showProgressBar();
+
+                logoutUser();
+            }
+        }
+    }
+
     private void changeEmailSignUpMode()
     {
         if (emailSignUpMode)

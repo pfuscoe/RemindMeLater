@@ -48,7 +48,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     public static final String TAG = "patrick.fuscoe.remindmelater.UserPreferencesActivity";
 
-    private static final String USER_ACCOUNT_DELETED = "patrick.fuscoe.remindmelater.USER_ACCOUNT_DELETED";
+    public static final String USER_ACCOUNT_DELETED = "patrick.fuscoe.remindmelater.USER_ACCOUNT_DELETED";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
