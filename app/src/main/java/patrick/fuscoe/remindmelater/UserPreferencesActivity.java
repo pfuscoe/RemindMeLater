@@ -35,6 +35,7 @@ import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.UserProfile;
+import patrick.fuscoe.remindmelater.ui.dialog.DeleteAccountDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
@@ -46,6 +47,8 @@ public class UserPreferencesActivity extends AppCompatActivity
         implements TimePickerDialogFragment.OnTimeSetListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.UserPreferencesActivity";
+
+    private static final String USER_ACCOUNT_DELETED = "patrick.fuscoe.remindmelater.USER_ACCOUNT_DELETED";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -91,8 +94,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                     return;
 
                 case R.id.view_user_preferences_delete_account:
-                    // TODO: Setup delete account functionality
-                    //openConfirmDeleteAccountDialog();
+                    openConfirmDeleteAccountDialog();
                     return;
             }
         }
@@ -290,8 +292,16 @@ public class UserPreferencesActivity extends AppCompatActivity
                 });
     }
 
+    private void openConfirmDeleteAccountDialog()
+    {
+        DialogFragment dialogFragment = new DeleteAccountDialogFragment(userProfile);
+        dialogFragment.show(getSupportFragmentManager(), "deleteAccount");
+    }
+
     private void deleteUserAccount()
     {
+        showProgressBar();
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         user.delete()
@@ -302,12 +312,15 @@ public class UserPreferencesActivity extends AppCompatActivity
                             Log.d(TAG, "User account deleted.");
                             Toast.makeText(getApplicationContext(), "User account deleted " +
                                     "for Remind Me Later", Toast.LENGTH_LONG).show();
+                            clearUserDataFromFireStore();
+                            goBackToSignIn();
                         }
                         else
                         {
                             Toast.makeText(getApplicationContext(), "Could not delete user " +
                                     "account: " + task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
+                            hideProgressBar();
                         }
                     }
                 });
@@ -331,6 +344,21 @@ public class UserPreferencesActivity extends AppCompatActivity
         intent.putExtra(MainActivity.USER_PROFILE, userProfileString);
         startActivity(intent);
         finish();
+    }
+
+    private void clearUserDataFromFireStore()
+    {
+        // TODO: delete reminder doc
+        // TODO: unsubscribe from all to do lists (and check if only user)
+        // TODO: delete user profile doc
+    }
+
+    private void goBackToSignIn()
+    {
+        Intent intent = new Intent(getApplicationContext(), FirebaseSignInActivity.class);
+        intent.putExtra(USER_ACCOUNT_DELETED, true);
+        startActivity(intent);
+        finishAndRemoveTask();
     }
 
     private void showProgressBar()
