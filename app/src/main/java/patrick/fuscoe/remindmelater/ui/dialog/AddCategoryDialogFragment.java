@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.List;
@@ -40,6 +41,8 @@ public class AddCategoryDialogFragment extends DialogFragment {
     private RecyclerView categoryIconRecycler;
     private RecyclerView.LayoutManager categoryIconRecyclerLayoutManager;
     private RecyclerView.Adapter categoryIconRecyclerAdapter;
+
+    private EditText viewCategoryName;
 
     private Context context;
 
@@ -132,7 +135,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
         selectedIcon = -1;
         selectedIconPos = -1;
 
-        EditText viewCategoryName = v.findViewById(R.id.dialog_category_edit_name);
+        viewCategoryName = v.findViewById(R.id.dialog_category_edit_name);
 
         String dialogTitle;
 
@@ -164,7 +167,7 @@ public class AddCategoryDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDialogPositiveClick(AddCategoryDialogFragment.this);
+                        //listener.onDialogPositiveClick(AddCategoryDialogFragment.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -178,6 +181,32 @@ public class AddCategoryDialogFragment extends DialogFragment {
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null)
+        {
+            Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: Check input, if ok then call listener.onPosClick and dismiss()
+                    String categoryNameString = viewCategoryName.getText().toString();
+                    if (categoryNameString.equals(""))
+                    {
+                        viewCategoryName.setError("Please enter a title.");
+                    }
+                    else
+                    {
+                        listener.onDialogPositiveClick(AddCategoryDialogFragment.this);
+                    }
+                }
+            });
+        }
     }
 
     @Override
