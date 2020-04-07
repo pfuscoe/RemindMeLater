@@ -194,7 +194,6 @@ public class AddCategoryDialogFragment extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: Check input, if ok then call listener.onPosClick and dismiss()
                     String categoryNameString = viewCategoryName.getText().toString();
                     if (categoryNameString.equals(""))
                     {
