@@ -540,7 +540,8 @@ public class MainActivity extends AppCompatActivity {
                                 //writeRemindersToDisk();
 
                                 ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
-                                        getApplicationContext());
+                                        getApplicationContext(), userProfile.getReminderHour(),
+                                        userProfile.getReminderMinute());
 
                             }
                         }
