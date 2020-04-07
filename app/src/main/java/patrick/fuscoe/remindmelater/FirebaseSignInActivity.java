@@ -516,7 +516,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
         if (email.equals(""))
         {
-            Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Email Address", Toast.LENGTH_SHORT).show();
+            viewEmail.setError("Please enter your email address.");
+            //Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Email Address", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -524,7 +525,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
         if (password.equals(""))
         {
-            Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Password", Toast.LENGTH_SHORT).show();
+            viewPassword.setError("Please enter your password.");
+            //Toast.makeText(FirebaseSignInActivity.this, "Please Enter Your Password", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -534,13 +536,15 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
             if (!verifyPassword.equals(password))
             {
-                Toast.makeText(this, "Passwords do not match: Please verify that you entered the correct password", Toast.LENGTH_LONG).show();
+                viewVerifyPassword.setError("Passwords do not match: Please verify that you entered the correct password.");
+                //Toast.makeText(this, "Passwords do not match: Please verify that you entered the correct password", Toast.LENGTH_LONG).show();
                 return false;
             }
         }
 
         if (!viewPrivacyTosCheckbox.isChecked())
         {
+            viewPrivacyTosCheckbox.setError("You must have read the Privacy Policy and agree to the Terms of Service before signing in.");
             Toast.makeText(this, "You must have read the Privacy Policy and agree to the Terms of Service before signing in", Toast.LENGTH_LONG).show();
             return false;
         }
