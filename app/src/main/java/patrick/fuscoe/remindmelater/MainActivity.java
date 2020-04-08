@@ -531,6 +531,10 @@ public class MainActivity extends AppCompatActivity {
                                 remindersDocId = document.getId();
                                 Log.d(TAG, "remindersDocId: " + remindersDocId);
 
+                                ReminderAlarmUtils.setReminderTimeOfDay(getApplicationContext(),
+                                        userProfile.getReminderHour(),
+                                        userProfile.getReminderMinute());
+
                                 reminderItemList = ReminderAlarmUtils.buildReminderItemList(
                                         document);
                                 ReminderAlarmUtils.writeRemindersToDisk(getApplicationContext(),
@@ -540,8 +544,7 @@ public class MainActivity extends AppCompatActivity {
                                 //writeRemindersToDisk();
 
                                 ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
-                                        getApplicationContext(), userProfile.getReminderHour(),
-                                        userProfile.getReminderMinute());
+                                        getApplicationContext());
 
                             }
                         }

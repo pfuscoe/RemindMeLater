@@ -157,10 +157,10 @@ public class ReminderAlarmUtils {
                 ". NotificationId: " + notificationId);
     }
 
-    public static void updateReminderAlarmsOnTimeSet(Context context, int reminderhour, int reminderMinute)
+    public static void updateReminderAlarmsOnTimeSet(Context context)
     {
         ArrayList<ReminderAlarmItem> reminderAlarmItemList =
-                buildReminderAlarmItemList(context, reminderhour, reminderMinute);
+                buildReminderAlarmItemList(context);
 
         for (ReminderAlarmItem reminderAlarmItem : reminderAlarmItemList)
         {
@@ -186,8 +186,7 @@ public class ReminderAlarmUtils {
         Log.d(TAG, "Alarm set for: " + reminderAlarmItem.getAlarmCalendarObj().toString());
     }
 
-    public static ArrayList<ReminderAlarmItem> buildReminderAlarmItemList(
-            Context context, int reminderHour, int reminderMinute)
+    public static ArrayList<ReminderAlarmItem> buildReminderAlarmItemList(Context context)
     {
         SharedPreferences reminderAlarmStorage = context.getSharedPreferences(
                 context.getString(R.string.reminders_file_key), Context.MODE_PRIVATE);
@@ -195,18 +194,18 @@ public class ReminderAlarmUtils {
                 context.getString(R.string.reminder_icon_names_file_key), Context.MODE_PRIVATE);
         SharedPreferences reminderBroadcastIds = context.getSharedPreferences(
                 context.getString(R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
-        //SharedPreferences reminderTimeOfDay = context.getSharedPreferences(
-        //      context.getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
+        SharedPreferences reminderTimeOfDay = context.getSharedPreferences(
+                context.getString(R.string.reminder_time_of_day_file_key), Context.MODE_PRIVATE);
 
         Map<String, ?> reminderAlarmStorageMap = reminderAlarmStorage.getAll();
         Map<String, ?> reminderIconNamesMap = reminderIconNames.getAll();
         Map<String, ?> reminderBroadcastIdMap = reminderBroadcastIds.getAll();
-        //Map<String, ?> reminderTimeOfDayMap = reminderTimeOfDay.getAll();
+        Map<String, ?> reminderTimeOfDayMap = reminderTimeOfDay.getAll();
 
         ArrayList<ReminderAlarmItem> reminderAlarmItemList = new ArrayList<>();
 
-        //int reminderTimeHour = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_HOUR);
-        //int reminderTimeMinute = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_MINUTE);
+        int reminderHour = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_HOUR);
+        int reminderMinute = (Integer) reminderTimeOfDayMap.get(REMINDER_TIME_MINUTE);
 
         Log.d(TAG, "Reminder Time of Day: " + reminderHour + ":" + reminderMinute);
 
@@ -237,7 +236,7 @@ public class ReminderAlarmUtils {
         SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
         reminderTimeOfDayEditor.putInt(REMINDER_TIME_HOUR, hour);
         reminderTimeOfDayEditor.putInt(REMINDER_TIME_MINUTE, minute);
-        reminderTimeOfDayEditor.apply();
+        reminderTimeOfDayEditor.commit();
 
         Log.d(TAG, "Reminder Time of Day saved to local device: - Hour: " + hour +
                 " . Minute: " + minute);
