@@ -18,12 +18,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_main_logout"
-        android:orderInCategory="100"
-        android:title="Logout"
-        app:showAsAction="collapseActionView" />
-
-    <item
         android:id="@+id/menu_main_friends"
         android:orderInCategory="100"
         android:title="Friends"
@@ -51,6 +45,12 @@
         android:id="@+id/menu_main_tips"
         android:orderInCategory="100"
         android:title="@string/show_tips"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/menu_main_logout"
+        android:orderInCategory="100"
+        android:title="Logout"
         app:showAsAction="collapseActionView" />
 
 </menu>
