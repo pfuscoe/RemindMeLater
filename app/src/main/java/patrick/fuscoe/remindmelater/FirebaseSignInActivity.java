@@ -322,7 +322,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             hideProgressBar();
                             Log.w(TAG, "createUserWithEmail:failure");
                             Toast.makeText(getApplicationContext(), "Create user with " +
-                                    "email failed", Toast.LENGTH_LONG).show();
+                                    "email failed: " + task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
