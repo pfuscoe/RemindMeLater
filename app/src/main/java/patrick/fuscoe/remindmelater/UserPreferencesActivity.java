@@ -23,8 +23,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -51,6 +54,8 @@ public class UserPreferencesActivity extends AppCompatActivity
     public static final String USER_ACCOUNT_DELETED = "patrick.fuscoe.remindmelater.USER_ACCOUNT_DELETED";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference toDoGroupsRef = db.collection("todogroups");
+    private final CollectionReference remindersRef = db.collection("reminders");
 
     public static FirebaseAuth auth;
     public static String userId;
@@ -348,9 +353,20 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private void clearUserDataFromFireStore()
     {
+        WriteBatch batch = db.batch();
+        
         // TODO: delete reminder doc
+        final Query remindersQuery = remindersRef.whereEqualTo("userId", MainActivity.userId);
+
+
         // TODO: unsubscribe from all to do lists (and check if only user)
+        final Query toDoGroupsQuery = toDoGroupsRef.whereArrayContains("subscribers", userId);
+
+
         // TODO: delete user profile doc
+        batch.delete(userDocRef);
+
+
     }
 
     private void goBackToSignIn()
