@@ -27,6 +27,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import patrick.fuscoe.remindmelater.models.ReminderItem;
+import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteAccountDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
@@ -47,7 +50,8 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
  * Manages UI for setting user preferences. Handles cloud sync when user hits save.
 */
 public class UserPreferencesActivity extends AppCompatActivity
-        implements TimePickerDialogFragment.OnTimeSetListener {
+        implements TimePickerDialogFragment.OnTimeSetListener,
+        DeleteAccountDialogFragment.DeleteAccountDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.UserPreferencesActivity";
 
@@ -60,6 +64,9 @@ public class UserPreferencesActivity extends AppCompatActivity
     public static FirebaseAuth auth;
     public static String userId;
     public static DocumentReference userDocRef;
+    private static String remindersDocId;
+    private List<String> toDoGroupIds;
+    private List<ToDoGroup> toDoGroupList;
 
     private UserProfile userProfile;
 
@@ -318,7 +325,6 @@ public class UserPreferencesActivity extends AppCompatActivity
                             Toast.makeText(getApplicationContext(), "User account deleted " +
                                     "for Remind Me Later", Toast.LENGTH_LONG).show();
                             clearUserDataFromFireStore();
-                            goBackToSignIn();
                         }
                         else
                         {
@@ -353,20 +359,93 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private void clearUserDataFromFireStore()
     {
+        getRemindersDocumentId();
+
         WriteBatch batch = db.batch();
-        
-        // TODO: delete reminder doc
-        final Query remindersQuery = remindersRef.whereEqualTo("userId", MainActivity.userId);
 
+        // Delete the user's reminders document
+        batch.delete(remindersRef.document(remindersDocId));
 
-        // TODO: unsubscribe from all to do lists (and check if only user)
-        final Query toDoGroupsQuery = toDoGroupsRef.whereArrayContains("subscribers", userId);
+        // Remove user from any shared to do lists and delete all private lists
+        for (ToDoGroup toDoGroup : toDoGroupList)
+        {
+            if (toDoGroup.getSubscribers().length > 1)
+            {
+                toDoGroup.removeSubscriber(userProfile.getId());
+                Map<String, Object> toDoGroupDoc = FirebaseDocUtils.createToDoGroupDoc(toDoGroup);
+                batch.set(toDoGroupsRef.document(toDoGroup.getId()), toDoGroupDoc);
+            }
+            else
+            {
+                batch.delete(toDoGroupsRef.document(toDoGroup.getId()));
+            }
+        }
 
-
-        // TODO: delete user profile doc
+        // Delete the user profile document
         batch.delete(userDocRef);
 
+        batch.commit()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful())
+                        {
+                            Log.d(TAG, "Successfully cleared user data from FireStore");
+                            goBackToSignIn();
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Error deleting data from FireStore: " +
+                                    task.getException().getMessage());
+                            hideProgressBar();
+                            Toast.makeText(getApplicationContext(), "Error deleting data" +
+                                    " from FireStore: " + task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
 
+    private void getRemindersDocumentId()
+    {
+        final Query remindersQuery = remindersRef.whereEqualTo("userId", MainActivity.userId);
+        remindersQuery.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                remindersDocId = document.getId();
+                                getToDoGroups();
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void getToDoGroups()
+    {
+        toDoGroupList = new ArrayList<>();
+
+        final Query toDoGroupsQuery = toDoGroupsRef.whereArrayContains("subscribers", userId);
+        toDoGroupsQuery.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                ToDoGroup toDoGroup = FirebaseDocUtils.createToDoGroupObj(document);
+                                toDoGroupList.add(toDoGroup);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void goBackToSignIn()
@@ -375,6 +454,23 @@ public class UserPreferencesActivity extends AppCompatActivity
         intent.putExtra(USER_ACCOUNT_DELETED, true);
         startActivity(intent);
         finishAndRemoveTask();
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialogFragment) {
+        if (dialogFragment instanceof DeleteAccountDialogFragment)
+        {
+            deleteUserAccount();
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialogFragment) {
+        if (dialogFragment instanceof DeleteAccountDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Delete account cancelled.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showProgressBar()
