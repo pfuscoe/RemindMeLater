@@ -324,7 +324,9 @@ public class UserPreferencesActivity extends AppCompatActivity
                             Log.d(TAG, "User account deleted.");
                             Toast.makeText(getApplicationContext(), "User account deleted " +
                                     "for Remind Me Later", Toast.LENGTH_LONG).show();
-                            clearUserDataFromFireStore();
+
+                            // Get all document id's then clear data from FireStore
+                            getRemindersDocumentId();
                         }
                         else
                         {
@@ -357,10 +359,51 @@ public class UserPreferencesActivity extends AppCompatActivity
         finish();
     }
 
+    private void getRemindersDocumentId()
+    {
+        final Query remindersQuery = remindersRef.whereEqualTo("userId", MainActivity.userId);
+        remindersQuery.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                remindersDocId = document.getId();
+                                getToDoGroups();
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void getToDoGroups()
+    {
+        toDoGroupList = new ArrayList<>();
+
+        final Query toDoGroupsQuery = toDoGroupsRef.whereArrayContains("subscribers", userId);
+        toDoGroupsQuery.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                ToDoGroup toDoGroup = FirebaseDocUtils.createToDoGroupObj(document);
+                                toDoGroupList.add(toDoGroup);
+                                clearUserDataFromFireStore();
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
     private void clearUserDataFromFireStore()
     {
-        getRemindersDocumentId();
-
         WriteBatch batch = db.batch();
 
         // Delete the user's reminders document
@@ -399,50 +442,8 @@ public class UserPreferencesActivity extends AppCompatActivity
                                     task.getException().getMessage());
                             hideProgressBar();
                             Toast.makeText(getApplicationContext(), "Error deleting data" +
-                                    " from FireStore: " + task.getException().getMessage(),
+                                            " from FireStore: " + task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-
-    private void getRemindersDocumentId()
-    {
-        final Query remindersQuery = remindersRef.whereEqualTo("userId", MainActivity.userId);
-        remindersQuery.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                remindersDocId = document.getId();
-                                getToDoGroups();
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
-    private void getToDoGroups()
-    {
-        toDoGroupList = new ArrayList<>();
-
-        final Query toDoGroupsQuery = toDoGroupsRef.whereArrayContains("subscribers", userId);
-        toDoGroupsQuery.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                ToDoGroup toDoGroup = FirebaseDocUtils.createToDoGroupObj(document);
-                                toDoGroupList.add(toDoGroup);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
