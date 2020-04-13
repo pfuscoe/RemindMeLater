@@ -273,23 +273,19 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
-                            if (user.isEmailVerified())
-                            {
-                                getFirebaseDeviceToken();
-                                /*
-                                String userId = auth.getUid();
-                                Intent intent = new Intent(FirebaseSignInActivity.this, MainActivity.class);
-                                intent.putExtra(USER_ID, userId);
-                                intent.putExtra(FirebaseSignInActivity.CHECK_IF_NEW_USER, true);
-                                startActivity(intent);
-                                finish();
-                                */
-                            }
-                            else
-                            {
-                                Toast.makeText(FirebaseSignInActivity.this, "Please check your email to verify your account before logging in", Toast.LENGTH_LONG).show();
-                                logoutUser();
-                            }
+
+//                            if (user.isEmailVerified())
+//                            {
+//                                getFirebaseDeviceToken();
+//                            }
+//                            else
+//                            {
+//                                Toast.makeText(FirebaseSignInActivity.this, "Please check your email to verify your account before logging in", Toast.LENGTH_LONG).show();
+//                                logoutUser();
+//                            }
+
+                            getFirebaseDeviceToken();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             hideProgressBar();
@@ -315,7 +311,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                         if (task.isSuccessful())
                         {
                             Log.d(TAG, "createUserWithEmail:success");
-                            sendEmailVerification();
+//                            sendEmailVerification();
                         }
                         else
                         {
