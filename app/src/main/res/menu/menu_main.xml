@@ -48,6 +48,18 @@
         app:showAsAction="collapseActionView" />
 
     <item
+        android:id="@+id/menu_main_privacy"
+        android:orderInCategory="100"
+        android:title="Privacy"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/menu_main_feedback"
+        android:orderInCategory="100"
+        android:title="Feedback"
+        app:showAsAction="collapseActionView" />
+
+    <item
         android:id="@+id/menu_main_logout"
         android:orderInCategory="100"
         android:title="Logout"
