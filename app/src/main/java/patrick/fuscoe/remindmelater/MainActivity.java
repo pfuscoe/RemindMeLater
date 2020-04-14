@@ -246,6 +246,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Menu: User Settings clicked");
                 openUserSettings();
                 return true;
+
+            case R.id.menu_main_privacy:
+                openPrivacyPolicy();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -295,6 +299,12 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(TO_DO_GROUP_LIST, toDoGroupListString);
         intent.putExtra(REMINDER_ITEM_LIST, reminderItemListString);
         intent.putExtra(REMINDERS_DOC_ID, remindersDocId);
+        startActivity(intent);
+    }
+
+    private void openPrivacyPolicy()
+    {
+        Intent intent = new Intent(this, PrivacyPolicyActivity.class);
         startActivity(intent);
     }
 
