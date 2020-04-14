@@ -508,6 +508,10 @@ public class ReminderDetailsActivity extends AppCompatActivity
                 openDeleteReminderDialog();
                 return true;
 
+            case R.id.menu_main_privacy:
+                openPrivacyPolicy();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -824,6 +828,12 @@ public class ReminderDetailsActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "Delete Reminder Cancelled",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openPrivacyPolicy()
+    {
+        Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(intent);
     }
 
     private void showProgressBar()

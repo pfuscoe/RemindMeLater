@@ -193,6 +193,10 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
                 openAddReminderCategoryDialog();
                 return true;
 
+            case R.id.menu_main_privacy:
+                openPrivacyPolicy();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -437,6 +441,12 @@ public class ReminderCategoriesActivity extends AppCompatActivity implements
         {
             Toast.makeText(getApplicationContext(), "Delete Reminder Category Cancelled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openPrivacyPolicy()
+    {
+        Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(intent);
     }
 
     @Override

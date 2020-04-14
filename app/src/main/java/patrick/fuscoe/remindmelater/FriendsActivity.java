@@ -271,8 +271,6 @@ public class FriendsActivity extends AppCompatActivity implements
         return true;
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -283,6 +281,10 @@ public class FriendsActivity extends AppCompatActivity implements
 
             case R.id.menu_main_tips:
                 toggleFriendsTips();
+                return true;
+
+            case R.id.menu_main_privacy:
+                openPrivacyPolicy();
                 return true;
 
             default:
@@ -412,7 +414,6 @@ public class FriendsActivity extends AppCompatActivity implements
                 });
     }
 
-
     private void openAddFriendDialog()
     {
         DialogFragment dialogFragment = new AddFriendDialogFragment();
@@ -504,6 +505,12 @@ public class FriendsActivity extends AppCompatActivity implements
             Toast.makeText(getApplicationContext(), "Remove Friend Cancelled",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openPrivacyPolicy()
+    {
+        Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(intent);
     }
 
     private void showFriendsTips()
