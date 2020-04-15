@@ -257,6 +257,8 @@ public class ToDoItemListActivity extends AppCompatActivity implements
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
         menu.removeItem(R.id.menu_main_tips);
         menu.removeItem(R.id.menu_main_edit);
+        menu.removeItem(R.id.menu_main_privacy);
+        menu.removeItem(R.id.menu_main_feedback);
 
         return true;
     }
