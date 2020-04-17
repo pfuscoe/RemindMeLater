@@ -49,7 +49,7 @@ public class UserFeedbackActivity extends AppCompatActivity {
         radioOtherFeedback = findViewById(R.id.radio_button_user_feedback_other_feedback);
         viewFeedbackField = findViewById(R.id.view_user_feedback_field);
         btnSendFeedback = findViewById(R.id.button_user_feedback_send);
-        
+
         btnSendFeedback.setOnClickListener(btnClickListener);
         viewDescription.setText(R.string.user_feedback_description);
 
