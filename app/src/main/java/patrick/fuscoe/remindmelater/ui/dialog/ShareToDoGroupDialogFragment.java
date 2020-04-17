@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
     private ToDoGroup selectedToDoGroup;
     private Friend friend;
 
+    private TextView viewRecipientText;
     private RecyclerView shareToDoGroupRecycler;
     private RecyclerView.LayoutManager shareToDoGroupRecyclerLayoutManager;
     private RecyclerView.Adapter shareToDoGroupRecyclerAdapter;
@@ -86,8 +88,11 @@ public class ShareToDoGroupDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_share_to_do_group, null);
 
-        String dialogTitle = getString(R.string.dialog_share_to_do_group_title) + " with " +
-                friend.getFriendDisplayName();
+        String dialogTitle = getString(R.string.dialog_share_to_do_group_title);
+        String recipientText = "Recipient: " + friend.getFriendDisplayName();
+
+        viewRecipientText = v.findViewById(R.id.view_share_to_do_group_recipient_text);
+        viewRecipientText.setText(recipientText);
 
         shareToDoGroupRecycler = v.findViewById(R.id.dialog_share_to_do_group_recycler);
         shareToDoGroupRecycler.setHasFixedSize(true);

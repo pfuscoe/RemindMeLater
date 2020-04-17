@@ -9,23 +9,21 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp">
 
-    <!--
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="24dp">
 
         <TextView
-            android:id="@+id/view_share_to_do_group_label"
+            android:id="@+id/view_share_to_do_group_recipient_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="0dp"
-            android:text="Select a To do List:"
+            android:text="Recipient Text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    -->
 
     <View
         android:id="@+id/dialog_share_to_do_group_top_divider"
