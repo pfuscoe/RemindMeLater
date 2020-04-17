@@ -77,6 +77,7 @@ public class UserPreferencesActivity extends AppCompatActivity
     private TextView viewTimeDisplay;
     private Button btnSetTime;
     private View viewDividerBottom;
+    private TextView viewDeleteAccount;
     private Button btnSave;
     private Button btnCancel;
 
@@ -145,6 +146,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         viewDisplayName.setText(userProfile.getDisplayName());
         viewTimeDisplay = findViewById(R.id.view_user_preferences_time_display);
         setTimeDisplay();
+        viewDeleteAccount = findViewById(R.id.view_user_preferences_delete_account);
 
         btnSetTime = findViewById(R.id.button_user_preferences_time);
         btnSetTime.setOnClickListener(btnClickListener);
@@ -152,6 +154,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         btnSave.setOnClickListener(btnClickListener);
         btnCancel = findViewById(R.id.button_user_preferences_cancel);
         btnCancel.setOnClickListener(btnClickListener);
+        viewDeleteAccount.setOnClickListener(btnClickListener);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(userProfile.getDisplayName() + ":  Settings");
