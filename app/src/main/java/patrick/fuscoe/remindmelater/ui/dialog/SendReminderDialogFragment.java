@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ public class SendReminderDialogFragment extends DialogFragment {
     private ReminderItem selectedReminder;
     private Friend friend;
 
+    private TextView viewRecipientText;
     private RecyclerView sendReminderRecycler;
     private RecyclerView.LayoutManager sendReminderRecyclerLayoutManager;
     private RecyclerView.Adapter sendReminderRecyclerAdapter;
@@ -86,7 +88,10 @@ public class SendReminderDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_send_reminder, null);
 
-        String dialogTitle = getString(R.string.dialog_send_reminder_title) + " to " + friend.getFriendDisplayName();
+        String dialogTitle = getString(R.string.dialog_send_reminder_title);
+        String recipientText = "Recipient: " + friend.getFriendDisplayName();
+        viewRecipientText = v.findViewById(R.id.view_send_reminder_recipient_text);
+        viewRecipientText.setText(recipientText);
 
         sendReminderRecycler = v.findViewById(R.id.dialog_send_reminder_recycler);
         sendReminderRecycler.setHasFixedSize(true);
