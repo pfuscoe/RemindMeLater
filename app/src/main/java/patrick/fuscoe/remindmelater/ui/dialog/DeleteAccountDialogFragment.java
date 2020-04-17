@@ -53,8 +53,8 @@ public class DeleteAccountDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_confirm_basic, null);
 
-        String confirmText = "Are you sure you want to delete the Remind Me Later account for " +
-                userProfile.getDisplayName() + " ?  This cannot be undone!";
+        String confirmText = "Are you sure you want to delete the account for " +
+                userProfile.getDisplayName() + "?  This cannot be undone!";
 
         TextView viewConfirmText = v.findViewById(R.id.view_confirm_basic_text);
         viewConfirmText.setText(confirmText);
