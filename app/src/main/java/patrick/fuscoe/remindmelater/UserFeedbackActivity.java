@@ -11,11 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 public class UserFeedbackActivity extends AppCompatActivity {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.UserFeedbackActivity";
 
+    private TextView viewDescription;
     private RadioGroup radioGroupUserFeedback;
     private RadioButton radioReportBug;
     private RadioButton radioOtherFeedback;
@@ -41,6 +43,7 @@ public class UserFeedbackActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        viewDescription = findViewById(R.id.view_user_feedback_description);
         radioGroupUserFeedback = findViewById(R.id.radio_group_user_feedback);
         radioReportBug = findViewById(R.id.radio_button_user_feedback_report_bug);
         radioOtherFeedback = findViewById(R.id.radio_button_user_feedback_other_feedback);
@@ -48,6 +51,7 @@ public class UserFeedbackActivity extends AppCompatActivity {
         btnSendFeedback = findViewById(R.id.button_user_feedback_send);
         
         btnSendFeedback.setOnClickListener(btnClickListener);
+        viewDescription.setText(R.string.user_feedback_description);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Send Feedback");

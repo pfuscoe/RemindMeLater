@@ -250,6 +250,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_main_privacy:
                 openPrivacyPolicy();
                 return true;
+
+            case R.id.menu_main_feedback:
+                openUserFeedback();
         }
 
         return super.onOptionsItemSelected(item);
@@ -305,6 +308,12 @@ public class MainActivity extends AppCompatActivity {
     private void openPrivacyPolicy()
     {
         Intent intent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(intent);
+    }
+
+    private void openUserFeedback()
+    {
+        Intent intent = new Intent(this, UserFeedbackActivity.class);
         startActivity(intent);
     }
 

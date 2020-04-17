@@ -95,7 +95,7 @@
     <string name="dialog_send_reminder_title">Send Reminder</string>
     <string name="dialog_remove_friend">Remove Friend</string>
     <string name="remove">Remove</string>
-    <string name="user_feedback_description">Enter feedback in the field below to email the developer directly at info@patrickfuscoe.com. All comments are welcome!</string>
+    <string name="user_feedback_description">Enter feedback in the field below to email the developer. All comments are welcome!</string>
     <string name="user_feedback_radio_label_report_bug">Report Bug</string>
     <string name="user_feedback_radio_label_other_feedback">Other Feedback</string>
     <string name="send">Send</string>
