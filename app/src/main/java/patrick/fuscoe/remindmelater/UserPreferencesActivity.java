@@ -330,7 +330,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
                             // Get all document id's then clear data from FireStore
                             //getRemindersDocumentId();
-                            goBackToMain();
+                            goBackToSignIn();
                         }
                         else
                         {
