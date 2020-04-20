@@ -69,6 +69,8 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     private boolean emailSignUpMode;
 
+    private static boolean emailVerifyDisabled = true;
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -274,17 +276,22 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
 
-//                            if (user.isEmailVerified())
-//                            {
-//                                getFirebaseDeviceToken();
-//                            }
-//                            else
-//                            {
-//                                Toast.makeText(FirebaseSignInActivity.this, "Please check your email to verify your account before logging in", Toast.LENGTH_LONG).show();
-//                                logoutUser();
-//                            }
-
-                            getFirebaseDeviceToken();
+                            if (!emailVerifyDisabled)
+                            {
+                                if (user.isEmailVerified())
+                                {
+                                    getFirebaseDeviceToken();
+                                }
+                                else
+                                {
+                                    Toast.makeText(FirebaseSignInActivity.this, "Please check your email to verify your account before logging in", Toast.LENGTH_LONG).show();
+                                    logoutUser();
+                                }
+                            }
+                            else
+                            {
+                                getFirebaseDeviceToken();
+                            }
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -311,7 +318,15 @@ public class FirebaseSignInActivity extends AppCompatActivity {
                         if (task.isSuccessful())
                         {
                             Log.d(TAG, "createUserWithEmail:success");
-//                            sendEmailVerification();
+
+                            if (!emailVerifyDisabled)
+                            {
+                                sendEmailVerification();
+                            }
+                            else
+                            {
+                                getFirebaseDeviceToken();
+                            }
                         }
                         else
                         {
