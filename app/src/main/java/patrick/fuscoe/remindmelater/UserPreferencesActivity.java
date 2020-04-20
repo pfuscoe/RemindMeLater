@@ -315,7 +315,7 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private void deleteUserAccount()
     {
-        showProgressBar();
+        //showProgressBar();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -329,7 +329,8 @@ public class UserPreferencesActivity extends AppCompatActivity
                                     "for Remind Me Later", Toast.LENGTH_LONG).show();
 
                             // Get all document id's then clear data from FireStore
-                            getRemindersDocumentId();
+                            //getRemindersDocumentId();
+                            goBackToMain();
                         }
                         else
                         {
@@ -364,6 +365,8 @@ public class UserPreferencesActivity extends AppCompatActivity
 
     private void getRemindersDocumentId()
     {
+        showProgressBar();
+
         final Query remindersQuery = remindersRef.whereEqualTo("userId", MainActivity.userId);
         remindersQuery.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -377,6 +380,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            hideProgressBar();
                         }
                     }
                 });
@@ -400,6 +404,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            hideProgressBar();
                         }
                     }
                 });
@@ -437,7 +442,8 @@ public class UserPreferencesActivity extends AppCompatActivity
                         if (task.isSuccessful())
                         {
                             Log.d(TAG, "Successfully cleared user data from FireStore");
-                            goBackToSignIn();
+                            //goBackToSignIn();
+                            deleteUserAccount();
                         }
                         else
                         {
@@ -464,7 +470,8 @@ public class UserPreferencesActivity extends AppCompatActivity
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
         if (dialogFragment instanceof DeleteAccountDialogFragment)
         {
-            deleteUserAccount();
+            //deleteUserAccount();
+            getRemindersDocumentId();
         }
     }
 
@@ -487,6 +494,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         viewTimeDisplay.setVisibility(View.INVISIBLE);
         btnSetTime.setVisibility(View.INVISIBLE);
         viewDividerBottom.setVisibility(View.INVISIBLE);
+        viewDeleteAccount.setVisibility(View.INVISIBLE);
         btnSave.setVisibility(View.INVISIBLE);
         btnCancel.setVisibility(View.INVISIBLE);
     }
@@ -501,6 +509,7 @@ public class UserPreferencesActivity extends AppCompatActivity
         viewTimeDisplay.setVisibility(View.VISIBLE);
         btnSetTime.setVisibility(View.VISIBLE);
         viewDividerBottom.setVisibility(View.VISIBLE);
+        viewDeleteAccount.setVisibility(View.VISIBLE);
         btnSave.setVisibility(View.VISIBLE);
         btnCancel.setVisibility(View.VISIBLE);
     }
