@@ -74,7 +74,7 @@ public class AddToDoItemDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        AlertDialog dialog = (AlertDialog) getDialog();
+        final AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null)
         {
             Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
@@ -89,6 +89,7 @@ public class AddToDoItemDialogFragment extends DialogFragment {
                     else
                     {
                         listener.onDialogPositiveClick(AddToDoItemDialogFragment.this);
+                        dialog.cancel();
                     }
                 }
             });
