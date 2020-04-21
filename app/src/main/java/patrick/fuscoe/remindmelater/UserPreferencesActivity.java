@@ -334,8 +334,20 @@ public class UserPreferencesActivity extends AppCompatActivity
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "User re-authenticated.");
-                        getRemindersDocumentId();
+                        if (task.isSuccessful())
+                        {
+                            Log.d(TAG, "User re-authenticated.");
+                            getRemindersDocumentId();
+                        }
+                        else
+                        {
+                            Log.d(TAG, "Re-authenticate failed.");
+                            /*
+                            Toast.makeText(getApplicationContext(), "Re-authentication " +
+                                    "failed: " + task.getException().getMessage(),
+                                    Toast.LENGTH_LONG);
+                            */
+                        }
                     }
                 });
     }
