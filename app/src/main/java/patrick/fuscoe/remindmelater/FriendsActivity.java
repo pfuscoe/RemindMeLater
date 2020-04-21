@@ -256,6 +256,8 @@ public class FriendsActivity extends AppCompatActivity implements
         menu.removeItem(R.id.menu_main_user_settings);
         menu.removeItem(R.id.menu_main_reorder);
         menu.removeItem(R.id.menu_main_edit_reminder_categories);
+        menu.removeItem(R.id.menu_main_feedback);
+        menu.removeItem(R.id.menu_main_privacy);
 
         tipsMenuItem = menu.findItem(R.id.menu_main_tips);
 
