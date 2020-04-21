@@ -1,5 +1,6 @@
 package patrick.fuscoe.remindmelater;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -42,6 +45,7 @@ import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
 import patrick.fuscoe.remindmelater.ui.dialog.DeleteAccountDialogFragment;
+import patrick.fuscoe.remindmelater.ui.dialog.ReAuthenticateDialogFragment;
 import patrick.fuscoe.remindmelater.ui.dialog.TimePickerDialogFragment;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
@@ -51,7 +55,8 @@ import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
 */
 public class UserPreferencesActivity extends AppCompatActivity
         implements TimePickerDialogFragment.OnTimeSetListener,
-        DeleteAccountDialogFragment.DeleteAccountDialogListener {
+        DeleteAccountDialogFragment.DeleteAccountDialogListener,
+        ReAuthenticateDialogFragment.ReAuthenticateDialogListener {
 
     public static final String TAG = "patrick.fuscoe.remindmelater.UserPreferencesActivity";
 
@@ -313,6 +318,28 @@ public class UserPreferencesActivity extends AppCompatActivity
         dialogFragment.show(getSupportFragmentManager(), "deleteAccount");
     }
 
+    private void openReauthenticateDialog()
+    {
+        DialogFragment dialogFragment = new ReAuthenticateDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "reauthenticateUser");
+    }
+
+    private void reauthenticateUser(String email, String password)
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "User re-authenticated.");
+                        getRemindersDocumentId();
+                    }
+                });
+    }
+
     private void deleteUserAccount()
     {
         //showProgressBar();
@@ -471,7 +498,19 @@ public class UserPreferencesActivity extends AppCompatActivity
         if (dialogFragment instanceof DeleteAccountDialogFragment)
         {
             //deleteUserAccount();
-            getRemindersDocumentId();
+            //getRemindersDocumentId();
+            openReauthenticateDialog();
+        }
+        else if (dialogFragment instanceof ReAuthenticateDialogFragment)
+        {
+            Dialog dialogView = dialogFragment.getDialog();
+            EditText viewEmail = dialogView.findViewById(R.id.dialog_re_authenticate_email);
+            EditText viewPassword = dialogView.findViewById(R.id.dialog_re_authenticate_password);
+
+            String email = viewEmail.getText().toString();
+            String password = viewPassword.getText().toString();
+
+            reauthenticateUser(email, password);
         }
     }
 
@@ -480,6 +519,11 @@ public class UserPreferencesActivity extends AppCompatActivity
         if (dialogFragment instanceof DeleteAccountDialogFragment)
         {
             Toast.makeText(getApplicationContext(), "Delete account cancelled.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (dialogFragment instanceof ReAuthenticateDialogFragment)
+        {
+            Toast.makeText(getApplicationContext(), "Authentication cancelled.",
                     Toast.LENGTH_SHORT).show();
         }
     }
