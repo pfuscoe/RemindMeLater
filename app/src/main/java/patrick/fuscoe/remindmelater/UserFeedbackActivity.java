@@ -65,9 +65,9 @@ public class UserFeedbackActivity extends AppCompatActivity {
         String feedbackText = viewFeedbackField.getText().toString();
 
         Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:info@patrickfuscoe.com"));
         intent.putExtra(Intent.EXTRA_SUBJECT, feedbackSubject);
         intent.putExtra(Intent.EXTRA_TEXT, feedbackText);
-        intent.setData(Uri.parse("mailto:info@patrickfuscoe.com"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
