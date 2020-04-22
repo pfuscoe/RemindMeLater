@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UserFeedbackActivity extends AppCompatActivity {
 
@@ -22,6 +24,7 @@ public class UserFeedbackActivity extends AppCompatActivity {
     private RadioButton radioReportBug;
     private RadioButton radioOtherFeedback;
     private EditText viewFeedbackField;
+    private TextView viewRateAppLink;
     private Button btnSendFeedback;
 
     private View.OnClickListener btnClickListener = new View.OnClickListener() {
@@ -29,6 +32,10 @@ public class UserFeedbackActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId())
             {
+                case R.id.view_user_feedback_store_page_link:
+                    openStorePage();
+                    return;
+
                 case R.id.button_user_feedback_send:
                     sendFeedback();
                     return;
@@ -48,8 +55,10 @@ public class UserFeedbackActivity extends AppCompatActivity {
         radioReportBug = findViewById(R.id.radio_button_user_feedback_report_bug);
         radioOtherFeedback = findViewById(R.id.radio_button_user_feedback_other_feedback);
         viewFeedbackField = findViewById(R.id.view_user_feedback_field);
+        viewRateAppLink = findViewById(R.id.view_user_feedback_store_page_link);
         btnSendFeedback = findViewById(R.id.button_user_feedback_send);
 
+        viewRateAppLink.setOnClickListener(btnClickListener);
         btnSendFeedback.setOnClickListener(btnClickListener);
         viewDescription.setText(R.string.user_feedback_description);
 
@@ -70,6 +79,19 @@ public class UserFeedbackActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TEXT, feedbackText);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    // Direct user to the Play Store page
+    private void openStorePage()
+    {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent storePageIntent = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(storePageIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Cannot find app in Play Store",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private String processRadioCheckedId(int radioCheckedId)
