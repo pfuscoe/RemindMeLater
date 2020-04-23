@@ -482,17 +482,7 @@ public class UserPreferencesActivity extends AppCompatActivity
                         if (task.isSuccessful())
                         {
                             Log.d(TAG, "Successfully cleared user data from FireStore");
-                            //goBackToSignIn();
-
-                            // Delay to prevent permission denied errors from batch write
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    deleteUserAccount();
-                                }
-                            }, 2000);
-
-                            //deleteUserAccount();
+                            deleteUserAccount();
                         }
                         else
                         {
