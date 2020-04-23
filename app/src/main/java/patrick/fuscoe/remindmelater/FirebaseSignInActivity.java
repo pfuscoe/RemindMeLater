@@ -69,7 +69,7 @@ public class FirebaseSignInActivity extends AppCompatActivity {
 
     private boolean emailSignUpMode;
 
-    private static boolean emailVerifyDisabled = true;
+    private static boolean emailVerifyDisabled = false;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
