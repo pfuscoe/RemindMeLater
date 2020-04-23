@@ -3,6 +3,7 @@ package patrick.fuscoe.remindmelater;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -482,7 +483,16 @@ public class UserPreferencesActivity extends AppCompatActivity
                         {
                             Log.d(TAG, "Successfully cleared user data from FireStore");
                             //goBackToSignIn();
-                            deleteUserAccount();
+
+                            // Delay to prevent permission denied errors from batch write
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    deleteUserAccount();
+                                }
+                            }, 2000);
+
+                            //deleteUserAccount();
                         }
                         else
                         {

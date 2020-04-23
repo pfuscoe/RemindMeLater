@@ -73,12 +73,15 @@ public class UserFeedbackActivity extends AppCompatActivity {
         String feedbackSubject = processRadioCheckedId(radioCheckedId);
         String feedbackText = viewFeedbackField.getText().toString();
 
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:info@patrickfuscoe.com"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, feedbackSubject);
-        intent.putExtra(Intent.EXTRA_TEXT, feedbackText);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+        selectorIntent.setData(Uri.parse("mailto:"));
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@patrickfuscoe.com"});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, feedbackSubject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, feedbackText);
+        emailIntent.setSelector(selectorIntent);
+        startActivity(Intent.createChooser(emailIntent, "Email the developer:"));
     }
 
     // Direct user to the Play Store page
