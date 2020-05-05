@@ -151,14 +151,7 @@ public class MainActivity extends AppCompatActivity {
         // User already signed-in
         else
         {
-            if (intent.hasExtra(BACK_PRESSED_FROM_REMINDER_DETAILS))
-            {
-                setRemindersTabActive = true;
-            }
-            else
-            {
-                setRemindersTabActive = false;
-            }
+            setRemindersTabActive = intent.hasExtra(BACK_PRESSED_FROM_REMINDER_DETAILS);
 
             loadUserProfileFromCloud();
         }
