@@ -1,9 +1,7 @@
 package patrick.fuscoe.remindmelater;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,12 +45,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import patrick.fuscoe.remindmelater.models.ReminderAlarmItem;
 import patrick.fuscoe.remindmelater.models.ReminderItem;
 import patrick.fuscoe.remindmelater.models.ToDoGroup;
 import patrick.fuscoe.remindmelater.models.UserProfile;
-import patrick.fuscoe.remindmelater.receiver.BootReceiver;
-import patrick.fuscoe.remindmelater.receiver.ReminderAlarmReceiver;
 import patrick.fuscoe.remindmelater.ui.main.SectionsPagerAdapter;
 import patrick.fuscoe.remindmelater.util.FirebaseDocUtils;
 import patrick.fuscoe.remindmelater.util.ReminderAlarmUtils;
@@ -193,10 +188,6 @@ public class MainActivity extends AppCompatActivity {
             String userProfileString = intent.getStringExtra(USER_PROFILE);
             userProfile = gson.fromJson(userProfileString, dataTypeUserProfile);
             Log.d(TAG, "userProfile Gson String: " + userProfileString);
-
-            //updateReminderTimeOfDay();
-            //loadReminderAlarms();
-            //setReminderAlarms();
         }
 
         super.onNewIntent(intent);
@@ -223,8 +214,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-
-        //menu.removeItem(R.id.menu_main_friends);
 
         return true;
     }
@@ -361,8 +350,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 saveRemindersToStorage();
                                 checkFirebaseDeviceToken();
-                                //setupTabs();
                             }
+
                             // New user was created
                             else
                             {
@@ -388,7 +377,6 @@ public class MainActivity extends AppCompatActivity {
                                     userProfile.getReminderHour(), userProfile.getReminderMinute());
 
                             Log.d(TAG, "User Profile loaded from cloud");
-                            //setupTabs();
                             checkFirebaseDeviceToken();
                         }
                     }
@@ -502,11 +490,6 @@ public class MainActivity extends AppCompatActivity {
         String[] subscriptions = new String[0];
         subscriptions = subscriptionsList.toArray(subscriptions);
 
-        /*
-        String[] friends;
-        friends = friendsList.toArray(new String[0]);
-        */
-
         Map<String, Object> friendListMap = new HashMap<>();
         userProfileDoc.put("friendListMap", friendListMap);
 
@@ -559,9 +542,6 @@ public class MainActivity extends AppCompatActivity {
                                 ReminderAlarmUtils.writeRemindersToDisk(getApplicationContext(),
                                         reminderItemList);
 
-                                //buildReminderItemList(document);
-                                //writeRemindersToDisk();
-
                                 ReminderAlarmUtils.updateReminderAlarmsOnTimeSet(
                                         getApplicationContext());
 
@@ -576,64 +556,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*
-    public void buildReminderItemList(QueryDocumentSnapshot document)
-    {
-        reminderItemList = new ArrayList<>();
-
-        Map<String, Object> docMap = document.getData();
-
-        for (Map.Entry<String, Object> entry : docMap.entrySet())
-        {
-            if (!entry.getKey().equals("userId"))
-            {
-                ReminderItem reminderItem = FirebaseDocUtils.createReminderItemObj(entry);
-
-                reminderItemList.add(reminderItem);
-            }
-        }
-    }
-
-    public void writeRemindersToDisk()
-    {
-        reminderAlarmStorage = getSharedPreferences(getString(R.string.reminders_file_key),
-                Context.MODE_PRIVATE);
-        reminderIconNames = getSharedPreferences(getString(R.string.reminder_icon_names_file_key),
-                Context.MODE_PRIVATE);
-        reminderBroadcastIds = getSharedPreferences(getString(
-                R.string.reminder_broadcast_ids_file_key), Context.MODE_PRIVATE);
-        reminderTimeOfDay = getSharedPreferences(getString(R.string.reminder_time_of_day_file_key),
-                Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor reminderAlarmEditor = reminderAlarmStorage.edit();
-        SharedPreferences.Editor reminderIconNamesEditor = reminderIconNames.edit();
-        SharedPreferences.Editor reminderBroadcastIdEditor = reminderBroadcastIds.edit();
-        SharedPreferences.Editor reminderTimeOfDayEditor = reminderTimeOfDay.edit();
-
-        for (ReminderItem reminderItem : reminderItemList)
-        {
-            reminderAlarmEditor.putString(reminderItem.getTitle(), reminderItem.getNextOccurrence());
-            reminderIconNamesEditor.putString(reminderItem.getTitle(), reminderItem.getCategoryIconName());
-
-            int broadcastId = generateUniqueInt();
-            reminderBroadcastIdEditor.putInt(reminderItem.getTitle(), broadcastId);
-        }
-
-        reminderTimeOfDayEditor.putInt(ReminderAlarmUtils.REMINDER_TIME_HOUR,
-                userProfile.getReminderHour());
-        reminderTimeOfDayEditor.putInt(ReminderAlarmUtils.REMINDER_TIME_MINUTE,
-                userProfile.getReminderMinute());
-
-        // Using commit() because alarms are loaded immediately after write to disk from cloud
-        reminderAlarmEditor.commit();
-        reminderIconNamesEditor.commit();
-        reminderBroadcastIdEditor.commit();
-        reminderTimeOfDayEditor.commit();
-
-        Log.d(TAG, "Reminders written to storage");
-    }
-    */
-
     private void createNotificationChannel()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -647,21 +569,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static int generateUniqueInt()
-    {
-        return (int) (Math.random() * 1000000);
-    }
-
-    public List<ToDoGroup> getToDoGroupList() {
-        return toDoGroupList;
-    }
-
     public void setToDoGroupList(List<ToDoGroup> toDoGroupList) {
         this.toDoGroupList = toDoGroupList;
-    }
-
-    public static DocumentReference getRemindersDocRef() {
-        return remindersDocRef;
     }
 
     public static void setRemindersDocRef(DocumentReference remindersDocRef) {
@@ -674,10 +583,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setRemindersDocId(String remindersDocId) {
         MainActivity.remindersDocId = remindersDocId;
-    }
-
-    public List<ReminderItem> getReminderItemList() {
-        return reminderItemList;
     }
 
     public void setReminderItemList(List<ReminderItem> reminderItemList) {
