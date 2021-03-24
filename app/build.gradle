@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "patrick.fuscoe.remindmelater"
         minSdkVersion 26
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 20210324
         versionName "v1.01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
