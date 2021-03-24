@@ -1,6 +1,6 @@
 // Google Cloud Functions for Remind Me Later Firestore Event Triggers
 
-/** WORK IN PROGRESS **/
+// Note: Upgraded to Node.js 12 on 3/24/21
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
